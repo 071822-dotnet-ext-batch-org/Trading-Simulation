@@ -23,7 +23,7 @@ Create Table Portfolios
 	privacyLevel int not null,
 	type int not null DEFAULT 0,
 	originalLiquid money not null,
-	currrentInvestment money not null,
+	currentInvestment money not null,
 	liquid money not null,
 	currentTotal money not null,
 	symbols int not null,
@@ -33,7 +33,7 @@ Create Table Portfolios
 
 Create Table Investments
 (
-	InvestmentID uniqueidentifier Primary Key not null DEFAULT newid(),
+	investmentID uniqueidentifier Primary Key not null DEFAULT newid(),
 	fk_portfolioID uniqueidentifier not null Foreign Key References Portfolios(portfolioID),
 	symbol nvarchar (max) not null,
 	amountInvested decimal not null,
@@ -113,7 +113,7 @@ Create Table LikesPosts
 Create Table LikesComments
 (
 	likesCommentsID uniqueidentifier Primary Key not null DEFAULT newid(),
-	fk_commentID uniqueidentifier not null Foreign Key References Comments(commentsID),
+	fk_commentID uniqueidentifier not null Foreign Key References Comments(commentID),
 	fk_userID nvarchar (max) not null References Users(userID),
 	dateCreated datetime not null DEFAULT CURRENT_TIMESTAMP,
 	dateModified datetime not null DEFAULT CURRENT_TIMESTAMP
