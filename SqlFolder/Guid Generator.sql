@@ -1,0 +1,1 @@
+select newId() --generates a guid
