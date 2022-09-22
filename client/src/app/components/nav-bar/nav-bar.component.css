@@ -1,16 +1,25 @@
 .center{
-  justify-content: center;
-  align-items: center;
-  padding-right: 50px;
+  background-color: wheat;
+  position: top;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
 }
 
+footer{
+  background: wheat;
+  position: bottom;
+  text-align: center;
+
+}
+/*
 section {
   display: table;
 }
 
 .example-label {
   display: table-cell;
-  font-size: 14px;
+  font-size: 15px;
   margin-left: 8px;
   min-width: 120px;
 }
@@ -34,4 +43,4 @@ section {
   display: flex;
   justify-content: center;
   width: 120px;
-}
+} */
