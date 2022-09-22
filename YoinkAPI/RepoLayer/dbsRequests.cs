@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace RepoLayer
 {
-    public class dbsRequests
+    public class dbsRequests : IdbsRequests
     {
         private readonly IConfiguration _config;
         private readonly SqlConnection _conn;
@@ -19,7 +19,7 @@ namespace RepoLayer
             _config = config;
             _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
         }
-        
+
         public async Task<Profile?> GetProfileByUserIDAsync(string userID)
         {
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Profiles WHERE fk_userID = @userid ", _conn))
@@ -80,7 +80,7 @@ namespace RepoLayer
             }
         }
 
-        
+
 
     }
 }

@@ -1,6 +1,9 @@
+using BusinessLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Models;
+using RepoLayer;
 using Swashbuckle.AspNetCore.Filters;
 using System.Security.Claims;
 
@@ -11,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddScoped<IdbsRequests, dbsRequests>();
+builder.Services.AddScoped<IYoinkBusinessLayer, YoinkBusinessLayer>();
 
 builder.Services.AddSwaggerGen(options =>
 {
