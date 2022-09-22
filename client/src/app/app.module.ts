@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
+import { EchartsxModule } from 'echarts-for-angular';
 
 
 
@@ -28,7 +29,8 @@ import { BuySellComponent } from './components/buy-sell/buy-sell.component';
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    EchartsxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

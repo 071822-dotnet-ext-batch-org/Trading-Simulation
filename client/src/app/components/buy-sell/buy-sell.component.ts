@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EchartsxModule } from 'echarts-for-angular';
 
 @Component({
   selector: 'app-buy-sell',
@@ -8,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class BuySellComponent implements OnInit {
 
   constructor() { }
+
 
   ngOnInit(): void {
   }
