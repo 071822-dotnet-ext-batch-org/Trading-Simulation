@@ -1,6 +1,6 @@
 Create Table Users
 (
-	userID uniqueidentifier Primary Key,
+	userID nvarchar (max) not null Primary Key,
 	role int not null DEFAULT 0,
 	dateCreated datetime not null DEFAULT CURRENT_TIMESTAMP,
 	dateModified datetime not null DEFAULT CURRENT_TIMESTAMP
@@ -9,7 +9,7 @@ Create Table Users
 Create Table Profiles
 (
 	profileID uniqueidentifier Primary Key not null DEFAULT newid(), --make sure all the guids have a newid generator
-	fk_userID uniqueidentifier not null Foreign Key References Users(userID),
+	fk_userID nvarchar (max) not null Foreign Key References Users(userID),
 	name nvarchar (max) not null,
 	email nvarchar (max) not null,
 	privacyLevel int not null
@@ -18,7 +18,7 @@ Create Table Profiles
 Create Table Portfolios
 (
 	portfolioID uniqueidentifier Primary Key not null DEFAULT newid(),
-	fk_userID uniqueidentifier not null Foreign Key References Users(userID),
+	fk_userID nvarchar (max) not null Foreign Key References Users(userID),
 	name nvarchar (max) not null,
 	privacyLevel int not null,
 	type int not null DEFAULT 0,
@@ -73,15 +73,15 @@ Create Table Sells
 Create Table Friends
 (
 	friendID uniqueidentifier Primary Key not null DEFAULT newid(),
-	fk_user1ID uniqueidentifier References Users(userID),
-	fk_user2ID uniqueidentifier References Users(userID),
+	fk_user1ID nvarchar (max) not null References Users(userID),
+	fk_user2ID nvarchar (max) not null References Users(userID),
 	dateFriended datetime not null DEFAULT CURRENT_TIMESTAMP,
 )
 
 Create Table Posts
 (
 	postID uniqueidentifier Primary Key not null DEFAULT newid(),
-	fk_userID uniqueidentifier References Users(userID),
+	fk_userID nvarchar (max) not null References Users(userID),
 	title nvarchar (100) not null, --set the conventional limit
 	content nvarchar (max) not null, --set the conventional limit
 	likes int not null,
@@ -93,7 +93,7 @@ Create Table Posts
 Create Table Comments
 (
 	commentID uniqueidentifier Primary Key not null DEFAULT newid(),
-	fk_userID uniqueidentifier References Users(userID),
+	fk_userID nvarchar (max) not null References Users(userID),
 	fk_postID  uniqueidentifier not null Foreign Key References Posts(postID),
 	content nvarchar (150) not null, --set the conventional limit (150)
 	likes int not null,
@@ -105,7 +105,7 @@ Create Table LikesPosts
 (
 	likesPostsID uniqueidentifier Primary Key not null DEFAULT newid(),
 	fk_postID uniqueidentifier not null Foreign Key References Posts(postID),
-	fk_userID  uniqueidentifier References Users(userID),
+	fk_userID  nvarchar (max) not nullReferences Users(userID),
 	dateCreated datetime not null DEFAULT CURRENT_TIMESTAMP,
 	dateModified datetime not null DEFAULT CURRENT_TIMESTAMP
 )
@@ -114,7 +114,7 @@ Create Table LikesComments
 (
 	likesCommentsID uniqueidentifier Primary Key not null DEFAULT newid(),
 	fk_commentID uniqueidentifier not null Foreign Key References Comments(commentID),
-	fk_userID uniqueidentifier References Users(userID),
+	fk_userID nvarchar (max) not null References Users(userID),
 	dateCreated datetime not null DEFAULT CURRENT_TIMESTAMP,
 	dateModified datetime not null DEFAULT CURRENT_TIMESTAMP
 )
