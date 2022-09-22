@@ -17,7 +17,7 @@ namespace Models
         {
         }
 
-        public Buy(Guid? buyID, Guid? fk_portfolioID, string? symbol, decimal? currentPrice, decimal? amountBought, decimal? priceBought, DateTime? dateBought, decimal? pnl)
+        public Buy(Guid? buyID, Guid? fk_portfolioID, string? symbol, decimal? currentPrice, decimal? amountBought, decimal? priceBought, DateTime? dateBought)
         {
             this.BuyID = buyID;
             this.Fk_PortfolioID = fk_portfolioID;
