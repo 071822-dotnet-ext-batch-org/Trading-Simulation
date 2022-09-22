@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 
-<section>
-  <div class="center">
-    <span>
-    <button mat-button color="primary" (click)="'/'">Home</button></span>
-    <span><button mat-button color="primary" (click)="'/'">Portfolio</button></span>
-    <button mat-button color="primary" (click)="'/'">Buy/Sell</button>
-    <button mat-button color="primary" (click)="'/'">News</button>
-    <button mat-button color="primary" (click)="'/'">Posts</button>
-    <button mat-button color="primary" (click)="'/'">Friends</button>
-    <button mat-button color="primary" (click)="'/'">Sign In</button>
-    <button mat-button color="primary" (click)="'/'">Sign Out</button>
-    <button mat-button color="primary" (click)="'/'">Register</button>
+<nav>
+  <div class="center"> <!-- font size needs to be changed here -->
+    <a><button style="font-size: 20px" mat-button color="primary" (click)="'/'">Home</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/Portfolio'">Portfolio</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/BuySell'">Buy/Sell</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/News'">News</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/Posts'">Posts</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'">Friends</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/Profile'">Profile</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignIn'">Sign In</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/Register'">Register</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">Sign Out</button></a>
   </div>
-</section>
+</nav>
+<body>
+</body>
+<footer>
+    <p>Yoink!</p>
+    <p>123 Main st</p>
+    <p>New York, New York 10001</p>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">About Us</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">Social Media</button></a>
+</footer>

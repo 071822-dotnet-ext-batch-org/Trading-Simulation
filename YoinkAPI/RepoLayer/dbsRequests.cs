@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace RepoLayer
 {
-    public class dbsRequests
+    public class dbsRequests : IdbsRequests
     {
         private readonly IConfiguration _config;
         private readonly SqlConnection _conn;
@@ -122,6 +122,7 @@ namespace RepoLayer
                 return buyList;
             }
         }
+
 
         public async Task<bool?> AddNewSellAsync(Guid PortfolioId, string Symbol, decimal amountSold, decimal priceSold, DateTime dateSold)
         {
