@@ -16,15 +16,16 @@ import { MatListModule } from '@angular/material/list';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
+import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-
-    PortfolioComponent
-    NavBarComponent
+    PortfolioComponent,
+    NavBarComponent,
+    BuySellComponent
 
   ],
   imports: [
