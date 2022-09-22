@@ -17,7 +17,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
-
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -41,7 +41,9 @@ import { BuySellComponent } from './components/buy-sell/buy-sell.component';
     MatListModule
 
     MatCardModule,
-    MatMenuModule
+
+    MatMenuModule,
+    RouterModule
 
   ],
   providers: [],
