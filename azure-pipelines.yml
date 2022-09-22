@@ -20,15 +20,25 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
-
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'Yoink_SonarCloud_Connection'
+    organization: 'yoinkp3'
+    scannerMode: 'MSBuild'
+    projectKey: 'YoinkP3_Yoink-Pipline'
+    projectName: 'Yoink Pipeline'
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
+- task: SonarCloudAnalyze@1
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
