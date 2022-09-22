@@ -1,5 +1,5 @@
 --chris
-ALTER TRIGGER averagebuy
+CREATE TRIGGER averagebuy
 ON Buys
 AFTER INSERT
 As
@@ -35,24 +35,62 @@ AS
 	SET currentPrice = (SELECT currentPrice from inserted)
 	WHERE symbol = (SELECT symbol FROM inserted)
 GO
-
-CREATE TRIGGER totalPNLAfterBuy
-ON [dbo].[Buys]
-AFTER INSERT
-AS 
-	UPDATE [dbo].[Investments]
-	SET totalPNL = (SELECT PNL from inserted) + totalPNL
-	WHERE symbol = (SELECT symbol FROM inserted)
-GO
+-->>>>>>new stuff
+--TODO 
+--CREATE TRIGGER totalPNLAfterBuy
+--ON [dbo].[Buys]
+--AFTER INSERT
+--AS 
+--	UPDATE [dbo].[Investments]
+--	SET totalPNL = aver) + PNL --avg priceb * amountb = baseline >=< currentprice * amountb
+--	WHERE symbol = (SELECT symbol FROM inserted)
+--GO
 
 CREATE TRIGGER totalPNLAfterSell
 ON [dbo].[Sells]
 AFTER INSERT
 AS 
 	UPDATE [dbo].[Investments]
-	SET totalPNL = totalPNL - (SELECT PNL from inserted)
+	SET totalPNL = PNL - ()
 	WHERE symbol = (SELECT symbol FROM inserted)
 GO
+-- ^^^^^^^^^^^^^^^^^^^^^^^
+CREATE TRIGGER updateLiquidAfterBuy
+ON [dbo].[Buys]
+AFTER INSERT
+AS 
+	UPDATE [dbo].[Portfolios]
+	SET liquid = (SELECT priceBought from inserted) - liquid
+	WHERE symbol = (SELECT symbol FROM inserted)
+GO
+
+CREATE TRIGGER updateLiquidAfterSell
+ON [dbo].[Sells]
+AFTER INSERT
+AS 
+	UPDATE [dbo].[Portfolios]
+	SET liquid = (SELECT priceSold from inserted) - liquid
+	WHERE symbol = (SELECT symbol FROM inserted)
+GO
+
+CREATE TRIGGER updateCurrentTotal
+ON [dbo].[Investments]
+AFTER UPDATE
+AS 
+	UPDATE [dbo].[Portfolios]
+	SET currentTotal = liquid + currentInvestment
+	WHERE symbol = (SELECT symbol FROM inserted)
+GO
+
+CREATE TRIGGER updateCurrentInvestment
+ON [dbo].[Investments]
+AFTER UPDATE
+AS 
+	UPDATE [dbo].[Portfolios]
+	SET currentInvestment = currentInvestment + (SELECT amountInvested FROM inserted)
+	WHERE symbol = (SELECT symbol FROM inserted)
+GO
+-->>>>>>new stuff
 
 --Mohammad
 CREATE TRIGGER curramountboughttrigger
