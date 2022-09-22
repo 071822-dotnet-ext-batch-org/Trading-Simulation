@@ -11,8 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
-import { EchartsxModule } from 'echarts-for-angular';
-
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -30,7 +29,7 @@ import { EchartsxModule } from 'echarts-for-angular';
     MatIconModule,
     MatCardModule,
     MatMenuModule,
-    EchartsxModule
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

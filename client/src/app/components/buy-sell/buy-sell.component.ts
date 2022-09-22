@@ -1,5 +1,7 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { EchartsxModule } from 'echarts-for-angular';
+import { GoogleChartsModule } from 'angular-google-charts';
+
 
 @Component({
   selector: 'app-buy-sell',
@@ -12,6 +14,7 @@ export class BuySellComponent implements OnInit {
 
 
   ngOnInit(): void {
+    CUSTOM_ELEMENTS_SCHEMA
   }
 
 }
