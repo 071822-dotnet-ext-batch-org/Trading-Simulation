@@ -1,10 +1,10 @@
 ﻿namespace Models;
 public class User
 {
-    string? userID;
-    int? role;
-    DateTime? dateCreated;
-    DateTime? dateModified;
+    public string? UserID { get; set; }
+    public int? Role { get; set; }
+    public DateTime? DateCreated { get; set; }
+    public DateTime? DateModified { get; set; }
 
     public User()
     {
@@ -12,9 +12,9 @@ public class User
 
     public User(string? userID, int? role, DateTime? dateCreated, DateTime? dateModified)
     {
-        this.userID = userID;
-        this.role = role;
-        this.dateCreated = dateCreated;
-        this.dateModified = dateModified;
+        this.UserID = userID;
+        this.Role = role;
+        this.DateCreated = dateCreated;
+        this.DateModified = dateModified;
     }
 }
