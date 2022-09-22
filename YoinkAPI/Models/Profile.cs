@@ -2,7 +2,7 @@ using System;
 
 namespace Models
 {
-    public class Profiles
+    public class Profile
     {
 
         public Guid? ProfileID { get; set; }
@@ -11,11 +11,11 @@ namespace Models
         public string? Email { get; set; }
         public int? PrivacyLevel { get; set; }
 
-        public Profiles()
+        public Profile()
         {
         }
 
-        public Profiles(Guid? profileID, string? fk_UserID, string? name, string? email, int? privacyLevel)
+        public Profile(Guid? profileID, string? fk_UserID, string? name, string? email, int? privacyLevel)
         {
             this.ProfileID = profileID;
             this.Fk_UserID = fk_UserID;

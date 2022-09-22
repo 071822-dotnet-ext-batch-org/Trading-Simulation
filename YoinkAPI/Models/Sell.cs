@@ -2,7 +2,7 @@ using System;
 
 namespace Models
 {
-    public class Sells
+    public class Sell
     {
 
         public Guid? SellID { get; set; }
@@ -13,11 +13,11 @@ namespace Models
         public DateTime? DateSold { get; set; }
         public decimal? PNL { get; set; }
 
-        public Sells()
+        public Sell()
         {
         }
 
-        public Sells(Guid? sellID, Guid? fk_PortfolioID, string? symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold, decimal? pNL)
+        public Sell(Guid? sellID, Guid? fk_PortfolioID, string? symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold, decimal? pNL)
         {
             this.SellID = sellID;
             this.Fk_PortfolioID = fk_PortfolioID;
