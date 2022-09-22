@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace RepoLayer
 {
-    public class dbsRequests
+    public class dbsRequests : IdbsRequests
     {
         private readonly IConfiguration _config;
         private readonly SqlConnection _conn;
@@ -19,7 +19,7 @@ namespace RepoLayer
             _config = config;
             _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
         }
-        
+
         public async Task<Profile?> GetProfileByUserIDAsync(string userID)
         {
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Profiles WHERE fk_userID = @userid ", _conn))
@@ -61,6 +61,7 @@ namespace RepoLayer
 
         public async Task<Profile?> EditProfileAsync(string userID, string Name, string Email, int Privacy)
         {
+
             using (SqlCommand command = new SqlCommand($"UPDATE Profiles SET (fk_userID = @userid, name =@name, email = @email, privacyLevel = @privacy)", _conn))
             {
                 command.Parameters.AddWithValue("@userid", userID);
@@ -80,6 +81,72 @@ namespace RepoLayer
             }
             
         }
+        public async Task<Buy?> AddNewBuyAsync(Guid PortfolioId, string Symbol, decimal CurrentPrice, decimal AmountBought, decimal PriceBought, DateTime DateBought)
+        {
+            using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_Portfolio, symbol, currentPrice, amountBought, priceBought, dateBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought, @datebought)", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioid", PortfolioId);
+                command.Parameters.AddWithValue("@symbol", Symbol);
+                command.Parameters.AddWithValue("@currentprice", CurrentPrice);
+                command.Parameters.AddWithValue("@amountbought", AmountBought);
+                command.Parameters.AddWithValue("@pricebought", PriceBought);
+                command.Parameters.AddWithValue("@dateBought", DateBought);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                if (ret.Read())
+                {
+                    Buy b = new Buy(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDateTime(6));
+                    return b;
+                }
+                _conn.Close();
+                return null;
+            }
+        }
+        public async Task<List<Buy?>> GetAllBuyBySymbolAsync(string value)
+        {
+            List<Buy?> buyList = new List<Buy?>();
+            using (SqlCommand command = new SqlCommand("Select * from Buy where symbol = @symbol", _conn))
+            {
+                command.Parameters.AddWithValue("@symbol", value);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Buy b = new Buy(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDateTime(6));
+
+                    buyList.Add(b);
+
+                }
+
+                _conn.Close();
+                return buyList;
+            }
+        }
+
+
+        public async Task<bool?> AddNewSellAsync(Guid PortfolioId, string Symbol, decimal amountSold, decimal priceSold, DateTime dateSold)
+        {
+            using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_Portfolio, symbol, amountSold, priceSold, dateSold) VALUES (@portfolioid, @symbol, @amountSold, @priceSold, @dateSold)", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioid", PortfolioId);
+                command.Parameters.AddWithValue("@symbol", Symbol);
+                command.Parameters.AddWithValue("@amountSold", amountSold);
+                command.Parameters.AddWithValue("@priceSold", priceSold);
+                command.Parameters.AddWithValue("@dateSold", dateSold);
     
+                _conn.Open();
+                int  ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {_conn.Close();
+                    return true;
+                  
+                }
+                  return false;
+            
+            }
+            
+                
+        }
     }
 }
