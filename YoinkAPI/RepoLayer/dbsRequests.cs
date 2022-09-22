@@ -79,7 +79,9 @@ namespace RepoLayer
                 _conn.Close();
                 return null;
             }
+            
         }
+
         public async Task<Buy?> AddNewBuyAsync(Guid PortfolioId, string Symbol, decimal CurrentPrice, decimal AmountBought, decimal PriceBought, DateTime DateBought)
         {
             using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_Portfolio, symbol, currentPrice, amountBought, priceBought, dateBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought, @datebought)", _conn))
