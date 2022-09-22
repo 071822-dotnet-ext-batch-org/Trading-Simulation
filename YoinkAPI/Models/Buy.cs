@@ -4,7 +4,7 @@ namespace Models
 {
     public class Buy
     {
-     
+
         public Guid? BuyID { get; set; }
         public Guid? Fk_PortfolioID { get; set; }
         public string? Symbol { get; set; }
@@ -17,7 +17,7 @@ namespace Models
         {
         }
 
-        public Buy(Guid? buyID, Guid? fk_portfolioID, string? symbol, decimal? currentPrice, decimal? amountBought, decimal? priceBought, DateTime? dateBought, decimal? pnl)
+        public Buy(Guid? buyID, Guid? fk_portfolioID, string? symbol, decimal? currentPrice, decimal? amountBought, decimal? priceBought, DateTime? dateBought)
         {
             this.BuyID = buyID;
             this.Fk_PortfolioID = fk_portfolioID;
