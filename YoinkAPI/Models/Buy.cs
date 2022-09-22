@@ -4,7 +4,7 @@ namespace Models
 {
     public class Buy
     {
-     
+
         public Guid? BuyID { get; set; }
         public Guid? Fk_PortfolioID { get; set; }
         public string? Symbol { get; set; }
