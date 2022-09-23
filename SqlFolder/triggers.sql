@@ -1,20 +1,12 @@
 --chris
-CREATE TRIGGER averagebuy
+CREATE TRIGGER averageBuy
 ON Buys
 AFTER INSERT
 As
     UPDATE Investments
-    SET averageBuyPrice = (currentPrice * (SELECT amountBought FROM inserted) + amountInvested)/totalAmountBought
+    SET averageBuyPrice = ((currentPrice * (SELECT amountBought FROM inserted)) + amountInvested)/totalAmountBought
     WHERE symbol =(SELECT symbol FROM inserted)
-GO
-
-CREATE TRIGGER averageSell
-ON Sells
-After INSERT
-As
-    UPDATE Investments
-    SET averageSellPrice = (currentPrice *totalAmountSold)/currentAmount
-    WHERE symbol =(SELECT symbol FROM inserted)
+GO;
 
 --Mikael
 
@@ -113,7 +105,7 @@ GO
 
 --Emmanuel
 CREATE TRIGGER onTotalAmtAfterbuy
-ON Dbo.Buys
+ON [dbo].[Buys]
 AFTER INSERT
 AS
    UPDATE DBO.Investments
@@ -122,7 +114,7 @@ AS
 GO
 
 CREATE TRIGGER onDateBought
-ON Dbo.Buys
+ON [dbo].[Buys]
 AFTER INSERT
 AS
    UPDATE DBO.Portfolios
@@ -131,7 +123,7 @@ AS
 GO
 
 CREATE TRIGGER onTotalAmtAftersell
-ON Dbo.Sells
+ON [dbo].[Sells]
 AFTER INSERT
 AS
    UPDATE DBO.Investments
@@ -140,7 +132,7 @@ AS
 GO
 
 CREATE TRIGGER onDateSold
-ON Dbo.Sells
+ON [dbo].[Sells]
 AFTER INSERT
 AS
    UPDATE DBO.Portfolios
@@ -148,3 +140,10 @@ AS
    WHERE symbols = (SELECT symbols FROM inserted)
 GO
 
+CREATE TRIGGER AddLikesToPost
+ON [dbo].[LikesPosts]
+AFTER INSERT 
+AS 
+    UPDATE [dbo].[Posts]
+    SET likes = likes +1
+WHERE postID=(SELECT postID FROM inserted);

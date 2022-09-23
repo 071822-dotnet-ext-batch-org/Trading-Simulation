@@ -12,7 +12,7 @@ import { HomeComponent } from './components/home/home.component';
 const routes: Routes = [
   {path: 'Portfolio', component: PortfolioComponent},
   {path: '', component: HomeComponent},
-  {path: 'Home', component: HomeComponent}
+  {path: 'Home', component: HomeComponent},
   {path: "BuySell", component: BuySellComponent},
 
 ];

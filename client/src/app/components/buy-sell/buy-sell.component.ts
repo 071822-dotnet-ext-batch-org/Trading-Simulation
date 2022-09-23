@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { GoogleChartsModule } from 'angular-google-charts';
+
 
 
 @Component({
@@ -9,6 +9,10 @@ import { GoogleChartsModule } from 'angular-google-charts';
   styleUrls: ['./buy-sell.component.css']
 })
 export class BuySellComponent implements OnInit {
+
+  title = '';
+  type = '';
+  
 
   constructor() { }
 
