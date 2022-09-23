@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BuySellComponent } from '../buy-sell/buy-sell.component';
+import { AuthService } from '@auth0/auth0-angular';
 
 
 
@@ -14,7 +15,7 @@ import { BuySellComponent } from '../buy-sell/buy-sell.component';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor() { }
+  constructor(public auth:AuthService) { }
 
   ngOnInit(): void {
   }
