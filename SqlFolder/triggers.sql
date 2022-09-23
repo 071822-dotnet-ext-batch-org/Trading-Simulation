@@ -35,7 +35,7 @@ AS
 	SET currentPrice = (SELECT currentPrice from inserted)
 	WHERE symbol = (SELECT symbol FROM inserted)
 GO
-
+-->>>>>>new stuff
 --TODO 
 --CREATE TRIGGER totalPNLAfterBuy
 --ON [dbo].[Buys]
@@ -75,10 +75,10 @@ GO
 
 CREATE TRIGGER updateCurrentTotal
 ON [dbo].[Investments]
-AFTER INSERT
+AFTER UPDATE
 AS 
 	UPDATE [dbo].[Portfolios]
-	SET currentTotal = 
+	SET currentTotal = liquid + currentInvestment
 	WHERE symbol = (SELECT symbol FROM inserted)
 GO
 
@@ -90,8 +90,7 @@ AS
 	SET currentInvestment = currentInvestment + (SELECT amountInvested FROM inserted)
 	WHERE symbol = (SELECT symbol FROM inserted)
 GO
-
-
+-->>>>>>new stuff
 
 --Mohammad
 CREATE TRIGGER curramountboughttrigger

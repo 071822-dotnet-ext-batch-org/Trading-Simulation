@@ -81,6 +81,10 @@ namespace RepoLayer
             }
             
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> c89bb4f050bb43b28f513ac1f0674c9b04469228
         public async Task<Buy?> AddNewBuyAsync(Guid PortfolioId, string Symbol, decimal CurrentPrice, decimal AmountBought, decimal PriceBought, DateTime DateBought)
         {
             using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_Portfolio, symbol, currentPrice, amountBought, priceBought, dateBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought, @datebought)", _conn))
@@ -134,19 +138,45 @@ namespace RepoLayer
                 command.Parameters.AddWithValue("@amountSold", amountSold);
                 command.Parameters.AddWithValue("@priceSold", priceSold);
                 command.Parameters.AddWithValue("@dateSold", dateSold);
-    
+
                 _conn.Open();
-                int  ret = await command.ExecuteNonQueryAsync();
+                int ret = await command.ExecuteNonQueryAsync();
                 if (ret > 0)
-                {_conn.Close();
+                {
+                    _conn.Close();
                     return true;
-                  
+
                 }
-                  return false;
-            
+                return false;
+
             }
-            
-                
+
+
         }
+        public async Task<List<Sell?>> GetAllSellBySymbolAsync(string value)
+        {
+            List<Sell?> SellList = new List<Sell?>();
+            using (SqlCommand command = new SqlCommand("Select * from Sell where symbol = @symbol", _conn))
+            {
+                command.Parameters.AddWithValue("@symbol", value);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Sell b = new Sell(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDateTime(5), ret.GetDecimal(6));
+
+                    SellList.Add(b);
+
+                }
+
+                _conn.Close();
+                return SellList;
+            }
+        }
+<<<<<<< HEAD
+=======
+
+>>>>>>> c89bb4f050bb43b28f513ac1f0674c9b04469228
     }
 }
