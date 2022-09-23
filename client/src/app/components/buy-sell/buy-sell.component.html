@@ -1,1 +1,40 @@
-<p>buy-sell works!</p>
+<h1>Buy/Sell Works!</h1>
+<!---
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition"
+
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef> Ticker Symbol </th>
+    <td mat-cell *matCellDef="let element"> {{ADD.INFO} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Quantity </th>
+    <td mat-cell *matCellDef="let element"> {{ADD.INFO}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="weight">
+    <th mat-header-cell *matHeaderCellDef> Current Price </th>
+    <td mat-cell *matCellDef="let element"> {{ADD.INFO}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="symbol">
+    <th mat-header-cell *matHeaderCellDef> Ave. Bought Price</th>
+    <td mat-cell *matCellDef="let element"> {{ADD.INFO}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="symbol">
+    <th mat-header-cell *matHeaderCellDef> Total Investment</th>
+    <td mat-cell *matCellDef="let element"> {{ ADD.INFO }} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+-->
+
+<google-chart #chart [title]="title" [type]="type" [data]="data" [columnNames]="columnNames" [options]="options"
+  [width]="width" [height]="height">
+</google-chart>
