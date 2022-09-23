@@ -13,23 +13,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
-
-import { HomeComponent } from './components/home/home.component';
 import { DefaultComponent } from './components/default/default.component';
 import { RouterModule } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
-
-
-
 
 
 @NgModule({
@@ -38,12 +34,13 @@ import { UserComponent } from './components/user/user.component';
     PortfolioComponent,
     NavBarComponent,
     BuySellComponent,
+    HomeComponent,
+    FooterComponent,
     SigninComponent,
     SignOutComponent,
     RegisterComponent,
     AuthButtonComponent,
     UserComponent,
-    HomeComponent,
     DefaultComponent
 
 
@@ -67,7 +64,8 @@ import { UserComponent } from './components/user/user.component';
     MatListModule,
     MatCardModule,
     MatMenuModule,
-    RouterModule
+    RouterModule,
+    
 
   ],
   providers: [],
