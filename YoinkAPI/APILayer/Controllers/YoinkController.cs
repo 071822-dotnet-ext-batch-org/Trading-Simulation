@@ -14,9 +14,9 @@ namespace APILayer.Controllers
     public class YoinkController : ControllerBase
     {
         private readonly IYoinkBusinessLayer _businessLayer;
-        public YoinkController (IYoinkBusinessLayer iybl)
+        public YoinkController(IYoinkBusinessLayer iybl)
         {
-            this._businessLayer = iybl;   
+            this._businessLayer = iybl;
         }
 
 
@@ -30,16 +30,16 @@ namespace APILayer.Controllers
                 Profile? newProfile = await this._businessLayer.CreateProfileAsync(auth0Id, p);
                 return (newProfile);
             }
-            else return BadRequest(p); 
+            else return BadRequest(p);
         }
 
 
         [HttpGet("GetProfileByUserIDAsync")]
         public async Task<Profile?> GetProfileByUserIDAsync()
         {
-                string? auth0Id = User.Identity?.Name;
-                Profile? retrievedProfile = await this._businessLayer.GetProfileByUserIDAsync(auth0Id);
-                return (retrievedProfile);
+            string? auth0Id = User.Identity?.Name;
+            Profile? retrievedProfile = await this._businessLayer.GetProfileByUserIDAsync(auth0Id);
+            return (retrievedProfile);
         }
 
         [HttpPut("EditProfileAsync")]
@@ -51,7 +51,7 @@ namespace APILayer.Controllers
                 Profile? updatedProfile = await this._businessLayer.EditProfileAsync(auth0Id, p);
                 return (updatedProfile);
             }
-            else return BadRequest(p);  
+            else return BadRequest(p);
         }
 
 
@@ -75,23 +75,32 @@ namespace APILayer.Controllers
             return (retrievedPortfolio);
         }
 
-       
+
+        [HttpPost("AddNewBuyAsync")]
+        public async Task<ActionResult<Buy>> AddNewBuyAsync(Buy buy)
+        {
+            if (ModelState.IsValid)
+            {
+                Buy? newBuy = await this._businessLayer.AddNewBuyAsync(buy);
+                return (newBuy);
+            }
+            else return BadRequest(buy);
+        }
+
+
+        [HttpPost("AddNewSellAsync")]
+        public async Task<ActionResult<Sell>> AddNewSellAsync(Sell? sell)
+        {
+            if (ModelState.IsValid)
+            {
+                Sell? newSell = await this._businessLayer.AddNewSellAsync(sell);
+                return (newSell);
+            }
+            else return BadRequest(sell);
+        }
 
 
 
-
-
-        //[HttpPost("BuyAsync")]
-        //public async ActionResult<bool> BuyAsync(Buy buy)
-        //{}
-
-        //[HttpPost("SellAsync")]
-        //public async ActionResult<bool> BuyAsync(Sell sell)
-        //{}
     }
-
-
-
-
 
 }

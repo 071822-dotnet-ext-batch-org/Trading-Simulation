@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AuthModule } from '@auth0/auth0-angular'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,18 +13,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-
-import { GoogleChartsModule } from 'angular-google-charts';
-
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
-
-import { HomeComponent } from './components/home/home.component';
 import { DefaultComponent } from './components/default/default.component';
 import { RouterModule } from '@angular/router';
-
+import { HomeComponent } from './components/home/home.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { SigninComponent } from './components/signin/signin.component';
+import { SignOutComponent } from './components/sign-out/sign-out.component';
+import { RegisterComponent } from './components/register/register.component';
+import { AuthButtonComponent } from './components/auth-button/auth-button.component';
+import { UserComponent } from './components/user/user.component';
 
 
 @NgModule({
@@ -33,13 +35,27 @@ import { RouterModule } from '@angular/router';
     NavBarComponent,
     BuySellComponent,
     HomeComponent,
+    FooterComponent,
+    SigninComponent,
+    SignOutComponent,
+    RegisterComponent,
+    AuthButtonComponent,
+    UserComponent,
     DefaultComponent
+
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+
+    AuthModule.forRoot({
+      domain: 'dev-pxtkabk5.us.auth0.com',
+      clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
+
+    }),
+
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
@@ -49,7 +65,8 @@ import { RouterModule } from '@angular/router';
     GoogleChartsModule,
     MatCardModule,
     MatMenuModule,
-    RouterModule
+    RouterModule,
+    
 
   ],
   providers: [],
