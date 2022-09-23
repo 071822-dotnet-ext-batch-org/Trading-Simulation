@@ -9,6 +9,8 @@ namespace BusinessLayer
 {
     public interface IYoinkBusinessLayer
     {
+        Task<Buy?> AddNewBuyAsync(Buy? buy);
+        Task<Sell?> AddNewSellAsync(Sell? sell);
         Task<Portfolio?> CreatePortfolioAsync(string? auth0Id, Portfolio? p);
         Task<Profile> CreateProfileAsync(string? auth0Id, ProfileDto? p);
         Task<Profile> EditProfileAsync(string? auth0Id, ProfileDto? p);
