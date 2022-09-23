@@ -13,7 +13,7 @@ export class SigninComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  login(): void {
+  signin(): void {
     this.auth.loginWithRedirect();
   }
 

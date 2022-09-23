@@ -14,7 +14,7 @@ export class SignOutComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  logout():void{
+  signout():void{
     this.auth.logout({
       returnTo: this.doc.location.origin
     });

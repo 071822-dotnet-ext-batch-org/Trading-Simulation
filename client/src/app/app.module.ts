@@ -21,6 +21,11 @@ import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignOutComponent } from './components/sign-out/sign-out.component';
+import { RegisterComponent } from './components/register/register.component';
+import { AuthButtonComponent } from './components/auth-button/auth-button.component';
+import { UserComponent } from './components/user/user.component';
+
+
 
 
 @NgModule({
@@ -30,7 +35,12 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
     NavBarComponent,
     BuySellComponent,
     SigninComponent,
-    SignOutComponent
+    SignOutComponent,
+    RegisterComponent,
+    AuthButtonComponent,
+    UserComponent,
+
+ 
 
   ],
   imports: [
