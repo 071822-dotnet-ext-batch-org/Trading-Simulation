@@ -38,7 +38,7 @@ import { BuySellComponent } from './components/buy-sell/buy-sell.component';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
 
     MatCardModule,
     MatMenuModule
