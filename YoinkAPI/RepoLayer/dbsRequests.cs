@@ -81,6 +81,75 @@ namespace RepoLayer
             }
             
         }
+        public async Task<Portfolio?> GetPortfolioByUserIDAsync(string userID)
+        {
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ", _conn))
+            {
+                command.Parameters.AddWithValue("@userid", userID);
+                _conn.Open();
+
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                if (ret.Read())
+                {
+                    Portfolio p = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDateTime(10), ret.GetDateTime(11));
+                    return p;
+                }
+                _conn.Close();
+                return null;
+            }
+        }
+        public async Task<Portfolio?> CreatePortfolioAsync(Guid PortfolioID, string UserID, string Name, int PrivacyLevel, int Type, decimal OriginalLiquid, decimal CurrentInvestment, decimal Liquid, decimal CurrentTotal, int Symbols)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Profiles (portfolioID, fk_userID, name, privacyLevel, type, originalLiquid, currentInvestment, liquid, currentTotal, symbols) VALUES (@portfolioid, @userid, @name, @privacylevel, @type, @originalliquid, @currentinvestment, @liquid, @currenttotal, @symbols)", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioid", PortfolioID);                
+                command.Parameters.AddWithValue("@userid", UserID);
+                command.Parameters.AddWithValue("@name", Name);
+                command.Parameters.AddWithValue("@privacylevel", PrivacyLevel);
+                command.Parameters.AddWithValue("@originalliquid", OriginalLiquid);
+                command.Parameters.AddWithValue("@currentinvestment", CurrentInvestment);
+                command.Parameters.AddWithValue("@liquid", Liquid);
+                command.Parameters.AddWithValue("@currenttotal", CurrentTotal);
+                command.Parameters.AddWithValue("@symbols", Symbols);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 1)
+                {
+                    Portfolio p = new Portfolio();
+                    return p;
+                }
+                _conn.Close();
+                return null;
+            }
+        }
+        
+        public async Task<Portfolio?> EditPortfolioAsync(string UserID, string Name, int PrivacyLevel, int Type, decimal OriginalLiquid, decimal CurrentInvestment, decimal Liquid, decimal CurrentTotal, int Symbols)
+        {
+
+            using (SqlCommand command = new SqlCommand($"UPDATE Portfolios SET (fk_userID = @userid, name = @name, privacyLevel = @privacylevel, type = @type, originalLiquid = @originalliquid, currentInvestment = @currentinvestment, liquid = @liquid, currentTotal = @currenttotal, symbols = @symbols)", _conn))
+            {            
+                command.Parameters.AddWithValue("@userid", UserID);
+                command.Parameters.AddWithValue("@name", Name);
+                command.Parameters.AddWithValue("@privacylevel", PrivacyLevel);
+                command.Parameters.AddWithValue("@originalliquid", OriginalLiquid);
+                command.Parameters.AddWithValue("@currentinvestment", CurrentInvestment);
+                command.Parameters.AddWithValue("@liquid", Liquid);
+                command.Parameters.AddWithValue("@currenttotal", CurrentTotal);
+                command.Parameters.AddWithValue("@symbols", Symbols);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 1)
+                {
+                    Portfolio p = new Portfolio();
+                    return p;
+                }
+                _conn.Close();
+                return null;
+            }
+        }
+        
         public async Task<Buy?> AddNewBuyAsync(Guid PortfolioId, string Symbol, decimal CurrentPrice, decimal AmountBought, decimal PriceBought, DateTime DateBought)
         {
             using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_Portfolio, symbol, currentPrice, amountBought, priceBought, dateBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought, @datebought)", _conn))
@@ -102,6 +171,7 @@ namespace RepoLayer
                 return null;
             }
         }
+        
         public async Task<List<Buy?>> GetAllBuyBySymbolAsync(string value)
         {
             List<Buy?> buyList = new List<Buy?>();
