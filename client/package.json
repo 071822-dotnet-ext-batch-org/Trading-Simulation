@@ -29,6 +29,7 @@
     "highcharts-angular": "^3.0.0",
 
     "angular-google-charts": "^2.2.3",
+    "auth0-angular": "github:auth0/auth0-angular",
     "echarts": "^5.3.3",
     "echarts-gl": "^2.0.9",
     "ngx-echarts": "^14.0.0",

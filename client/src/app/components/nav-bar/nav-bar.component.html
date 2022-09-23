@@ -1,30 +1,21 @@
-<!DOCTYPE html>
+
 
 <nav>
   <div class="center"> <!-- font size needs to be changed here -->
-    <a><button style="font-size: 20px" mat-button color="primary" (click)="'/'">Home</button></a>
-    <a><button style="font-size:large" mat-button color="primary" [routerLink]="'/Portfolio'" routerLinkActive="active"(click)="'/Portfolio'">Portfolio</button></a>
-    
 
-   
-    <a><button style="font-size:large" mat-button color="primary" [routerLink]="'/BuySell'" routerLinkActive="active">Buy/Sell</button></a>
-
+ 
+    <a><button style="font-size:large" mat-button color="primary" [routerLink]="'/home'" routerLinkActive="active">Home</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/Portfolio'">Portfolio</button></a>
+    <a><button style="font-size:large" mat-button color="primary" [routerLink]="'/BuySell'" routerLinkActive="active" *ngIf="auth.user$ | async as user">Buy/Sell</button></a>
     <a><button style="font-size:large" mat-button color="primary" (click)="'/News'">News</button></a>
-    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Posts'">Posts</button></a> -->
-    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'">Friends</button></a> -->
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/Profile'">Profile</button></a>
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignIn'">Sign In</button></a>
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/Register'">Register</button></a>
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">Sign Out</button></a>
+    <a><button style="font-size:large" mat-button color="primary" (click)="'/Posts'">Posts</button></a>
+    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'" *ngIf="auth.user$ | async as user">Friends</button></a> -->
+    <a style="font-size:large" routerLink="/user" routerLinkActive="active" *ngIf="auth.user$ | async as user">{{ user.name }}</a>
+    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/SignIn'">Sign In</button></a> -->
+    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">Sign Out</button></a> -->
+    <app-auth-button></app-auth-button>
+    
   </div>
 </nav>
-<app-home></app-home>
-<footer>
-  <div>
-    <p>Yoink!</p>
-    <p>123 Main st</p>
-    <p>New York, New York 10001</p>
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">About Us</button></a>
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">Social Media</button></a>
-  </div>
-</footer>
+
+
