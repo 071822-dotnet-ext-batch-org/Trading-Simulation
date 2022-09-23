@@ -24,6 +24,11 @@ import { DefaultComponent } from './components/default/default.component';
 import { RouterModule } from '@angular/router';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignOutComponent } from './components/sign-out/sign-out.component';
+import { RegisterComponent } from './components/register/register.component';
+import { AuthButtonComponent } from './components/auth-button/auth-button.component';
+import { UserComponent } from './components/user/user.component';
+
+
 
 
 
@@ -33,9 +38,11 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
     PortfolioComponent,
     NavBarComponent,
     BuySellComponent,
-
     SigninComponent,
     SignOutComponent,
+    RegisterComponent,
+    AuthButtonComponent,
+    UserComponent,
     HomeComponent,
     DefaultComponent
 
