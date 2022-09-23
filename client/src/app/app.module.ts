@@ -18,6 +18,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { FooterComponent } from './components/footer/footer.component';
+ 
+ 
+ 
 
 
 @NgModule({
@@ -25,7 +30,11 @@ import { RouterModule } from '@angular/router';
     AppComponent,
     PortfolioComponent,
     NavBarComponent,
-    BuySellComponent
+    BuySellComponent,
+    HomeComponent,
+    FooterComponent
+ 
+  
 
   ],
   imports: [
@@ -38,12 +47,13 @@ import { RouterModule } from '@angular/router';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
 
     MatCardModule,
 
     MatMenuModule,
-    RouterModule
+    RouterModule,
+    
 
   ],
   providers: [],

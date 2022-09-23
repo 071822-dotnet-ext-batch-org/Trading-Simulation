@@ -1,13 +1,15 @@
 .center{
-  background-color: wheat;
+  background-color: #93C6F7;
   position: top;
   padding-top: 20px;
   padding-bottom: 20px;
   text-align: center;
+  color: #ecf0f5;
+  
 }
 
 footer{
-  background: wheat;
+  background: #93F1C7;
   position: bottom;
   text-align: center;
 
