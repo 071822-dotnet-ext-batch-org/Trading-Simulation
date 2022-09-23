@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AuthModule } from '@auth0/auth0-angular'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +22,8 @@ import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { HomeComponent } from './components/home/home.component';
 import { DefaultComponent } from './components/default/default.component';
 import { RouterModule } from '@angular/router';
+import { SigninComponent } from './components/signin/signin.component';
+import { SignOutComponent } from './components/sign-out/sign-out.component';
 
 
 
@@ -30,14 +33,25 @@ import { RouterModule } from '@angular/router';
     PortfolioComponent,
     NavBarComponent,
     BuySellComponent,
+
+    SigninComponent,
+    SignOutComponent,
     HomeComponent,
     DefaultComponent
+
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+
+    AuthModule.forRoot({
+      domain: 'dev-pxtkabk5.us.auth0.com',
+      clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
+
+    }),
+
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,

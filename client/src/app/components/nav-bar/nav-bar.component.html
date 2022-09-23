@@ -13,9 +13,12 @@
     <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Posts'">Posts</button></a> -->
     <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'">Friends</button></a> -->
     <a><button style="font-size:large" mat-button color="primary" (click)="'/Profile'">Profile</button></a>
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignIn'">Sign In</button></a>
+    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/SignIn'">Sign In</button></a> -->
+    <a><app-signin></app-signin></a>
     <a><button style="font-size:large" mat-button color="primary" (click)="'/Register'">Register</button></a>
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">Sign Out</button></a>
+    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">Sign Out</button></a> -->
+    <a><app-sign-out></app-sign-out></a>
+    <a *ngIf="auth.user$ | async as user">{{ user.name }}</a>
   </div>
 </nav>
 <app-home></app-home>
