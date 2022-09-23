@@ -148,3 +148,20 @@ AS
    WHERE symbols = (SELECT symbols FROM inserted)
 GO
 
+CREATE TRIGGER AddLikesToPost
+ON [dbo].[LikesPosts]
+AFTER INSERT 
+AS 
+	UPDATE [dbo].[Posts]
+	SET likes = likes +1
+	WHERE postID=(SELECT postID FROM inserted);
+	GO
+
+
+CREATE TRIGGER AddLikesToComments
+ON [dbo].[LikesComments] 
+AFTER INSERT
+As 
+	UPDATE [dbo].[Comments]
+	SET likes = likes + 1
+	WHERE commentID = (SELECT commentID FROM inserted);
