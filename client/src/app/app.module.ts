@@ -17,8 +17,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
+
 import { HomeComponent } from './components/home/home.component';
 import { DefaultComponent } from './components/default/default.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -44,7 +46,7 @@ import { DefaultComponent } from './components/default/default.component';
     MatListModule,
     MatCardModule,
     MatMenuModule,
-    
+    RouterModule
 
   ],
   providers: [],

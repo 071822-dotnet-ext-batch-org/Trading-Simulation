@@ -4,7 +4,11 @@
   <div class="center"> <!-- font size needs to be changed here -->
     <a><button style="font-size: 20px" mat-button color="primary" (click)="'/'">Home</button></a>
     <a><button style="font-size:large" mat-button color="primary" [routerLink]="'/Portfolio'" routerLinkActive="active"(click)="'/Portfolio'">Portfolio</button></a>
-    <a><button style="font-size:large" mat-button color="primary" (click)="'/BuySell'">Buy/Sell</button></a>
+    
+
+   
+    <a><button style="font-size:large" mat-button color="primary" [routerLink]="'/BuySell'" routerLinkActive="active">Buy/Sell</button></a>
+
     <a><button style="font-size:large" mat-button color="primary" (click)="'/News'">News</button></a>
     <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Posts'">Posts</button></a> -->
     <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'">Friends</button></a> -->
