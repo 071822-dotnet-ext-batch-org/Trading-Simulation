@@ -55,25 +55,25 @@ namespace APILayer.Controllers
         }
 
 
-        [HttpPost("CreatePortfolioAsync")]
-        public async Task<ActionResult<Portfolio?>> CreatePortfolioAsync(Portfolio? p)
-        {
-            if (ModelState.IsValid)
-            {
-                string? auth0Id = User.Identity?.Name;
-                Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
-                return (newPortfolio);
-            }
-            else return BadRequest(p);
-        }
+        // [HttpPost("CreatePortfolioAsync")]
+        // public async Task<ActionResult<Portfolio?>> CreatePortfolioAsync(Portfolio? p)
+        // {
+        //     if (ModelState.IsValid)
+        //     {
+        //         string? auth0Id = User.Identity?.Name;
+        //         Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
+        //         return (newPortfolio);
+        //     }
+        //     else return BadRequest(p);
+        // }
 
-        [HttpGet("GetPortfolioeByUserIDAsync")]
-        public async Task<Portfolio?> GetPortfolioByUserIDAsync()
-        {
-            string? auth0Id = User.Identity?.Name;
-            Portfolio? retrievedPortfolio = await this._businessLayer.GetPortfolioByUserIDAsync(auth0Id);
-            return (retrievedPortfolio);
-        }
+        // [HttpGet("GetPortfolioeByUserIDAsync")]
+        // public async Task<Portfolio?> GetPortfolioByUserIDAsync()
+        // {
+        //     string? auth0Id = User.Identity?.Name;
+        //     Portfolio? retrievedPortfolio = await this._businessLayer.GetPortfolioByUserIDAsync(auth0Id);
+        //     return (retrievedPortfolio);
+        // }
 
        
 
