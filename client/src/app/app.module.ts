@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { PortfolioComponent } from './portfolio/portfolio.component';
+import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,12 +18,16 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
+
+import { HomeComponent } from './components/home/home.component';
+import { DefaultComponent } from './components/default/default.component';
 import { RouterModule } from '@angular/router';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
+
 
 
 
@@ -39,14 +43,16 @@ import { UserComponent } from './components/user/user.component';
     RegisterComponent,
     AuthButtonComponent,
     UserComponent,
+    HomeComponent,
+    DefaultComponent
 
- 
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
@@ -59,9 +65,7 @@ import { UserComponent } from './components/user/user.component';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-
     MatCardModule,
-
     MatMenuModule,
     RouterModule
 
@@ -70,3 +74,5 @@ import { UserComponent } from './components/user/user.component';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
