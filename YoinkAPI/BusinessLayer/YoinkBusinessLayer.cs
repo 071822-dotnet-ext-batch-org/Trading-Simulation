@@ -29,29 +29,36 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     }
 
 
-    //needs repo method
     public async Task<Portfolio?> CreatePortfolioAsync(string? auth0Id, Portfolio? p)
     {
-        Portfolio? newPortfolio = await this._repoLayer.CreatePortfolioAsync(auth0Id, p);
+        Portfolio? newPortfolio = await this._repoLayer.CreatePortfolioAsync(auth0Id, p.Name, p.PrivacyLevel, p.Type, p.OriginalLiquid);
         return newPortfolio;
     }
 
-
-    //needs repo method
-    public async Task<Portfolio?> GetPortfolioByUserIDAsync(string? auth0Id)
+    public async Task<Portfolio?> EditPortfolioAsync(string portfolioID, string name, int privacyLevel)
     {
-        //unimplemented in repo
-        Portfolio? newPortfolio = await this._repoLayer.GetPortfolioByUserIDAsync(auth0Id);
+        Portfolio? editedPortfolio = await this._repoLayer.EditPortfolioAsync(portfolioID, name, privacyLevel);
+        return editedPortfolio;
+    }
+
+
+    public async Task<List<Portfolio?>> GetPortfolioByUserIDAsync(string? auth0Id)
+    {
+        List<Portfolio?> newPortfolio = await this._repoLayer.GetPortfolioByUserIDAsync(auth0Id);
         return newPortfolio;
     }
 
-    public async Task<Buy?> AddNewBuyAsync(Buy? buy)
+    public async Task<Buy?> AddNewBuyAsync(Buy buy)
     {
-        Buy? newBuy = await this._repoLayer.AddNewBuyAsync(buy.Fk_PortfolioID, buy.Symbol, buy.CurrentPrice, buy.AmountBought, buy.PriceBought, buy.DateBought);
-        return (newBuy);
+        bool? check = await this._repoLayer.AddNewBuyAsync(buy.Fk_PortfolioID, buy.Symbol, buy.CurrentPrice, buy.AmountBought, buy.PriceBought, buy.DateBought);
+        if (true == check)
+        {
+            return (buy);
+        }
+        else return (null);
     }
 
-    public async Task<Sell?> AddNewSellAsync(Sell? sell)
+    public async Task<Sell?> AddNewSellAsync(Sell sell)
     {
         //fix null bool in repo
         bool? check = await this._repoLayer.AddNewSellAsync(sell.Fk_PortfolioID, sell.Symbol, sell.AmountSold, sell.PriceSold, sell.DateSold);
@@ -63,5 +70,19 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return (null);
 
     }
+
+    public async Task<List<Buy?>> GetAllBuyBySymbolAsync(string symbol, Guid portfolioID)
+    {
+        List<Buy?> buyList = await this._repoLayer.GetAllBuyBySymbolAsync(symbol, portfolioID);
+        return buyList;
+    }
+
+    public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
+    {
+        List<Sell?> sellList = await this._repoLayer.GetAllSellBySymbolAsync(symbol, portfolioID);
+        return sellList;
+    }
+
+    
 
 }
