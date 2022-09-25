@@ -8,6 +8,10 @@ namespace Models
 {
     public class ProfileDto
     {
+        public ProfileDto()
+        {
+        }
+
         public ProfileDto(string? name, string? email, int privacyLevel)
         {
             Name = name;

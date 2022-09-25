@@ -14,6 +14,7 @@ namespace Test.Yoink
 
 
             //Act
+            Investment newinvestment1 = new Investment(invt, invt, "AAPL", 1100, 50, 2, 100, 150, 40, 10, 20);
 
             Investment newinvestment = new Investment()
             {
@@ -33,7 +34,8 @@ namespace Test.Yoink
             //Assert
 
             Assert.Equal(newinvestment.InvestmentID, invt);
-          
+            Assert.Equal(newinvestment1.InvestmentID, invt);
+
         }
 
 

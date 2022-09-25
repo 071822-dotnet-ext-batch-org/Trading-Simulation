@@ -12,9 +12,18 @@ namespace Test.Yoink
 
 
         [Fact]
-        public void GetsAUserProfileByTheUserID()
+        public void TestingAllMethodsAssociatedWithUserProfile()
         {
             //Arrange
+
+            ProfileDto? profiledto = new ProfileDto()
+            {
+               
+                Name = "Tony",
+                Email = "Rodin@yahoo.com",
+                PrivacyLevel = 2,
+
+            };
 
             Profile? profile = new Profile()
             {
@@ -23,8 +32,7 @@ namespace Test.Yoink
                 Name = "Tony",
                 Email = "Rodin@yahoo.com",
                 PrivacyLevel = 2,
-               
-                
+                   
             };
 
             var dataSource = new Mock<IdbsRequests>();
@@ -39,12 +47,17 @@ namespace Test.Yoink
 
             var TheUserProfileWasGot = TheClassBeingTested.GetProfileByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");
 
+            var TheUserProfileWasCreated = TheClassBeingTested.CreateProfileAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", profiledto);
 
+            var TheUserProfileWasedited = TheClassBeingTested.EditProfileAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", profiledto);
+
+            
             //Assert
 
             Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
-
+            Assert.Equal(profiledto.Name, profile.Name);
         }
+
 
 
 
