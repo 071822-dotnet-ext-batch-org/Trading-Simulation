@@ -10,7 +10,7 @@ export class ProfileServiceService {
 
   constructor(private http: HttpClient) { }
 
-  private rootUrl = 'https://localhost:7280';
+  private rootUrl = 'https://localhost:7280/';
 
   public getProfiles(): Observable<Profile[]>{
     return this.http.get<Profile[]>(this.rootUrl + '/api/Yoink/GetProfileByUserIDAsync'); //not sure aabout the path:
