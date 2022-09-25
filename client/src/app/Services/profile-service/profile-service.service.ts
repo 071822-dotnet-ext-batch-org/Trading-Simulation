@@ -13,6 +13,6 @@ export class ProfileServiceService {
   private rootUrl = 'https://localhost:7280/';
 
   public getProfiles(): Observable<Profile[]>{
-    return this.http.get<Profile[]>(this.rootUrl + '/api/Yoink/GetProfileByUserIDAsync'); //not sure aabout the path:
+    return this.http.get<Profile[]>(this.rootUrl + '/api/Yoink/GetProfile'); //not sure aabout the path:
   }
 }
