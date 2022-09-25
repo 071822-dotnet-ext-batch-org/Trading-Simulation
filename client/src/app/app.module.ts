@@ -17,7 +17,6 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
-import { DefaultComponent } from './components/default/default.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -26,6 +25,9 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
+import { NewsComponent } from './components/news/news.component';
+import { HttpClientModule } from '@angular/common/http';
+import { NewsService } from './service/news.service';
 
 
 @NgModule({
@@ -41,7 +43,7 @@ import { UserComponent } from './components/user/user.component';
     RegisterComponent,
     AuthButtonComponent,
     UserComponent,
-    DefaultComponent
+    NewsComponent,
 
 
   ],
@@ -49,6 +51,7 @@ import { UserComponent } from './components/user/user.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
 
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
@@ -68,7 +71,7 @@ import { UserComponent } from './components/user/user.component';
     
 
   ],
-  providers: [],
+  providers: [NewsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
