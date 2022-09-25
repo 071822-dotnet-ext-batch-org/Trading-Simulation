@@ -1,0 +1,12 @@
+<div>
+    <h2>Here is your profile info:</h2>
+    <ul>
+        <li *ngFor="let profile of profiles">
+            <h3>{{ profile.name }}</h3>
+            <h4>{{ profile.id }}</h4>
+            <h4>{{ profile.email }}</h4>
+            <h4>{{ profile.privacyLevel }}</h4>
+            
+        </li>
+    </ul>
+</div>

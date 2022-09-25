@@ -1,12 +1,16 @@
 <div *ngIf="auth.user$ | async as user">
+    <h1>Yoink, {{user.name }}!</h1>
     <img 
         [src]="user.picture"
         alt="Profile Pic"
         >
     <h2>{{ user.name }}</h2>
     <h5>{{ user.email }}</h5>
-    <div *ngI="profileJson">
+    <div *ngIf="profileJson">
         <pre>{{ profileJson }}</pre>
+    </div>
+    <div>
+        <app-profile></app-profile>
     </div>
 
 
