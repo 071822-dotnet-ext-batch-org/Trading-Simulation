@@ -20,7 +20,7 @@ steps:
     SonarCloud: 'Yoink_SonarCloud_Connection'
     organization: 'yoinkp3'
     scannerMode: 'MSBuild'
-    projectKey: 'YoinkP3_Yoink-Pipline'
+    projectKey: 'YoinkP3_Yoink-Pipeline'
     projectName: 'Yoink Pipeline'
 
 - task: NuGetToolInstaller@1
