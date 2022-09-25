@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AuthModule } from '@auth0/auth0-angular'; 
+import { AuthModule } from '@auth0/auth0-angular';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; 
+import { AuthHttpInterceptor } from '@auth0/auth0-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -49,10 +51,13 @@ import { UserComponent } from './components/user/user.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-
+    HttpClientModule,
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
+      httpInterceptor: {
+        allowedList: [ 'https://localhost:7280/api/Profile' ],
+      }
 
     }),
 
@@ -68,7 +73,13 @@ import { UserComponent } from './components/user/user.component';
     
 
   ],
-  providers: [],
+  providers: [ 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
