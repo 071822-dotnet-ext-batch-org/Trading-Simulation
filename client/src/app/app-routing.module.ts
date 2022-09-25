@@ -14,7 +14,7 @@ const routes: Routes = [
 
   {path: '', redirectTo:'home',pathMatch:'full'},
   {path: "BuySell", component: BuySellComponent},
-  {path: 'portfolio', component: PortfolioComponent},
+  {path: 'Portfolio', component: PortfolioComponent},
   {path: 'home', component: HomeComponent },
   {path: 'user', component: UserComponent, canActivate: [AuthGuard]}
 
