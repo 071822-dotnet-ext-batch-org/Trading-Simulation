@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
 
   register(): void {
     this.auth.loginWithRedirect({
-      screen_hint: 'register'
+      screen_hint: 'signup'
     });
     
   }
