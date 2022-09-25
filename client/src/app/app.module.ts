@@ -28,6 +28,7 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { UserComponent } from './components/user/user.component';
     RegisterComponent,
     AuthButtonComponent,
     UserComponent,
-    DefaultComponent
+    DefaultComponent,
+    ProfileComponent
 
 
   ],
