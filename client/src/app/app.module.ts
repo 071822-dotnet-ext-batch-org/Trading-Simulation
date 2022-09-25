@@ -58,7 +58,7 @@ import { ProfileComponent } from './components/profile/profile.component';
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
       httpInterceptor: {
-        allowedList: [ 'https://localhost:7280/api/GetProfileByUserIDAsync' ], //for now
+        allowedList: [ 'https://localhost:7280/api/Yoink/GetProfileByUserIDAsync' ], //for now
       }
 
     }),
