@@ -3,21 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APILayer", "APILayer\APILayer.csproj", "{336CAB3F-DD38-499C-ACFD-7D1306DA1CF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APILayer", "APILayer\APILayer.csproj", "{336CAB3F-DD38-499C-ACFD-7D1306DA1CF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{A69D280C-F169-41D4-887C-1B016A63334E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{A69D280C-F169-41D4-887C-1B016A63334E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepoLayer", "RepoLayer\RepoLayer.csproj", "{839F5314-8724-41A8-864E-6440978FF602}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepoLayer", "RepoLayer\RepoLayer.csproj", "{839F5314-8724-41A8-864E-6440978FF602}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{7111EA3F-EE66-493E-9BF4-85081B5774CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{7111EA3F-EE66-493E-9BF4-85081B5774CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Yoink", "Test.Yoink\Test.Yoink.csproj", "{67A27C93-4B95-4744-99F8-3961B658D50F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{336CAB3F-DD38-499C-ACFD-7D1306DA1CF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,5 +35,15 @@ Global
 		{7111EA3F-EE66-493E-9BF4-85081B5774CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7111EA3F-EE66-493E-9BF4-85081B5774CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7111EA3F-EE66-493E-9BF4-85081B5774CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67A27C93-4B95-4744-99F8-3961B658D50F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67A27C93-4B95-4744-99F8-3961B658D50F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67A27C93-4B95-4744-99F8-3961B658D50F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67A27C93-4B95-4744-99F8-3961B658D50F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D08745C-D6F5-49AA-98D3-CB03B79B25E6}
 	EndGlobalSection
 EndGlobal

@@ -38,7 +38,7 @@ namespace RepoLayer
             }
         }
 
-        public async Task<Profile?> CreateProfileAsync(string userID, string Name, string Email, int Privacy)
+        public async Task<Profile?> CreateProfileAsync(string? userID, string? Name, string? Email, int? Privacy)
         {
             using (SqlCommand command = new SqlCommand($"INSERT INTO Profiles (fk_userID, name, email, privacyLevel) VALUES (@userid, @name, @email, @privacy)", _conn))
             {
@@ -59,7 +59,7 @@ namespace RepoLayer
             }
         }
 
-        public async Task<Profile?> EditProfileAsync(string userID, string Name, string Email, int Privacy)
+        public async Task<Profile?> EditProfileAsync(string? userID, string? Name, string? Email, int? Privacy)
         {
 
             using (SqlCommand command = new SqlCommand($"UPDATE Profiles SET (fk_userID = @userid, name =@name, email = @email, privacyLevel = @privacy)", _conn))
@@ -81,7 +81,7 @@ namespace RepoLayer
             }
             
         }
-        public async Task<List<Portfolio?>> GetPortfolioByUserIDAsync(string userID)
+        public async Task<List<Portfolio?>> GetPortfolioByUserIDAsync(string? userID)
         {
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ", _conn))
             {
@@ -101,7 +101,7 @@ namespace RepoLayer
                 return portList;
             }
         }
-        public async Task<Portfolio?> CreatePortfolioAsync(string UserID, string Name, int PrivacyLevel, int Type, decimal OriginalLiquid)
+        public async Task<Portfolio?> CreatePortfolioAsync(string? UserID, string? Name, int? PrivacyLevel, int? Type, decimal? OriginalLiquid)
         {
             using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, type, originalLiquid, liquid, currentTotal) VALUES (@userid, @name, @privacylevel, @type, @originalliquid, @liquid, @currenttotal)", _conn))
             {             
@@ -163,7 +163,7 @@ namespace RepoLayer
             }
         }        
         
-        public async Task<bool?> AddNewBuyAsync(Guid PortfolioId, string Symbol, decimal CurrentPrice, decimal AmountBought, decimal PriceBought, DateTime DateBought)
+        public async Task<bool?> AddNewBuyAsync(Guid? PortfolioId, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought, DateTime? DateBought)
         {
             using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_Portfolio, symbol, currentPrice, amountBought, priceBought, dateBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought, @datebought)", _conn))
             {
@@ -209,7 +209,7 @@ namespace RepoLayer
         }
 
 
-        public async Task<bool?> AddNewSellAsync(Guid PortfolioId, string Symbol, decimal amountSold, decimal priceSold, DateTime dateSold)
+        public async Task<bool?> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold)
         {
             using (SqlCommand command = new SqlCommand("INSERT INTO Sells (fk_Portfolio, symbol, amountSold, priceSold, dateSold) VALUES (@portfolioid, @symbol, @amountSold, @priceSold, @dateSold)", _conn))
             {

@@ -1,3 +1,75 @@
 table {
   width: 100%;
 }
+
+.title{
+  text-align: center;
+  text-decoration: underline;
+}
+
+.example-container .mat-form-field+.mat-form-field {
+  margin-left: 8px;
+}
+.panel-body{
+  text-align: center;
+  color: black;
+  text-decoration: underline;
+  padding-bottom: 10px;
+}
+.dropdown-fields{
+  text-align: left;
+  font-size: large;
+  margin-left: 20px;
+  text-decoration: underline;
+}
+
+.input-fields{
+  text-align: left;
+  font-size: large;
+  margin-left: 20px;
+  text-decoration: underline;
+
+}
+
+.total{
+  text-align: center;
+  font-size: x-large;
+  color: red;
+  padding-bottom: 20px;
+  position: absolute;
+  text-decoration: underline;
+  margin-left: 20px;
+  position: absolute;
+    bottom: 150px;
+}
+
+.back-btn{
+  background-color: red;
+  font-size: 15px;
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  border: black;
+  border-radius: 25px;
+  margin-right: 50px;
+  position: absolute;
+    bottom: 140px;
+    left: 500px;
+}
+
+.buy-btn{
+  background-color: rgb(8, 199, 8);
+  font-size: 15px;
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  border: black;
+  border-radius: 25px;
+  margin-right: 50px;
+  position: absolute;
+    bottom: 140px;
+    left: 800px;
+
+}
