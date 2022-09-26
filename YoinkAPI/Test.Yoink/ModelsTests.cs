@@ -37,6 +37,40 @@ namespace Test.Yoink
             Assert.Equal(newinvestment1.InvestmentID, invt);
 
         }
+        [Fact]
+        public void postWorksCorrectly()
+        {
+            //Arrange
+            Guid TestpostID = new Guid();
+            Guid TestFk_UserID = new Guid();
+            //Act
+            Post TestPost = new Post { PostID = TestpostID, Fk_UserID = TestFk_UserID };
+            //Assert
+            Assert.Equal(TestpostID, TestPost.PostID);
+            Assert.Equal(TestFk_UserID, TestPost.Fk_UserID);
+        }
+        [Fact]
+        public void sellWorksCorrectly()
+        {
+            //Arrange
+            Guid testSellID = new Guid();
+            string testSymbol = "GOOGL";
+            decimal testAmountSold = 250;
+            //Act
+            Sell Testsell = new Sell
+            {
+                SellID = testSellID,
+                Symbol = testSymbol,
+                AmountSold = testAmountSold
+            };
+
+            //Assert
+            Assert.Equal(testSellID, Testsell.SellID);
+            Assert.Equal(testSymbol, Testsell.Symbol);
+            Assert.Equal(testAmountSold, Testsell.AmountSold);
+
+
+        }
 
 
 

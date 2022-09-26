@@ -14,14 +14,17 @@ namespace Models
         public decimal? TotalAmountBought { get; set; }
         public decimal? TotalAmountSold { get; set; }
         public decimal? AveragedBuyPrice { get; set; }
-        public decimal? AveragedSellPrice { get; set; } 
+        // public decimal? AveragedSellPrice { get; set; } 
         public decimal? TotalPNL { get; set; }
+        public DateTime? DateCreated {get;set;}
+        public DateTime? DateModified {get;set;}
+
 
         public Investment()
         {
         }
 
-        public Investment(Guid? investmentID, Guid? fk_PortfolioID, string? symbol, decimal? amountInvested, decimal? currentAmount, decimal? currentPrice, decimal? totalAmountBought, decimal? totalAmountSold, decimal? averagedBuyPrice, decimal? averagedSellPrice, decimal? totalPNL)
+        public Investment(Guid? investmentID, Guid? fk_PortfolioID, string? symbol, decimal? amountInvested, decimal? currentAmount, decimal? currentPrice, decimal? totalAmountBought, decimal? totalAmountSold, decimal? averagedBuyPrice, decimal? totalPNL, DateTime? DateCreated, DateTime? DateModified)
         {
             this.InvestmentID = investmentID;
             this.Fk_PortfolioID = fk_PortfolioID;
@@ -32,8 +35,10 @@ namespace Models
             this.TotalAmountBought = totalAmountBought;
             this.TotalAmountSold = totalAmountSold;
             this.AveragedBuyPrice = averagedBuyPrice;
-            this.AveragedSellPrice = averagedSellPrice;
+            // this.AveragedSellPrice = averagedSellPrice;
             this.TotalPNL = totalPNL;
+            this.DateCreated = DateCreated;
+            this.DateModified = DateModified;
         }
     }
 

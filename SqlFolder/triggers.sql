@@ -1,20 +1,137 @@
+-- COMBINED TRIGGERS, RUN ONLY THESE ---------------------------------------------------------------
+-- TODO: portfolio pnl not changing
+
+DROP TRIGGER buyTrigger;
+DROP TRIGGER sellTrigger;
+
+CREATE TRIGGER buyTrigger
+ON Buys
+AFTER INSERT
+AS
+	IF EXISTS (SELECT * FROM Investments WHERE symbol = (SELECT symbol FROM inserted) AND fk_portfolioID = (SELECT fk_portfolioID FROM inserted))
+		BEGIN
+			UPDATE Investments
+			SET	moneyInvested = moneyInvested + (SELECT (amountBought * priceBought) FROM inserted),
+				currentAmount = currentAmount + (SELECT amountBought FROM inserted),
+				currentPrice = (SELECT priceBought FROM inserted),
+				totalAmountBought = totalAmountBought + (SELECT amountBought FROM inserted),
+				averageBuyPrice = ((SELECT (amountBought * priceBought) FROM inserted) + moneyInvested)/(currentAmount + (SELECT amountBought FROM inserted)),
+				pnl = ((currentAmount + (SELECT amountBought FROM inserted)) * (SELECT currentPrice FROM inserted)) - (moneyInvested + (SELECT (amountBought * priceBought) FROM inserted)),
+				dateModified = CURRENT_TIMESTAMP
+			WHERE symbol = (SELECT symbol FROM inserted) AND fk_portfolioID = (SELECT fk_portfolioID FROM inserted);
+
+
+			UPDATE Portfolios
+			SET currentInvestment = currentInvestment + (SELECT (amountBought * priceBought) FROM inserted),
+				liquid = liquid - (SELECT (amountBought * priceBought) FROM inserted),
+				currentTotal = (liquid - (SELECT (amountBought * priceBought) FROM inserted)) + (currentInvestment + (SELECT (amountBought * priceBought) FROM inserted)),
+				pnl = ((liquid - (SELECT (amountBought * priceBought) FROM inserted)) + (currentInvestment + (SELECT (amountBought * priceBought) FROM inserted))) - originalLiquid,
+				dateModified = CURRENT_TIMESTAMP
+			WHERE portfolioID = (SELECT fk_portfolioID FROM inserted);
+		END
+	ELSE
+		BEGIN
+			INSERT INTO Investments (
+				fk_portfolioID, 
+				symbol, 
+				moneyInvested, 
+				currentAmount, 
+				currentPrice, 
+				totalAmountBought, 
+				totalAmountSold, 
+				averageBuyPrice,
+				pnl
+			)
+			VALUES (
+				(SELECT fk_portfolioID FROM inserted),
+				(SELECT symbol FROM inserted),
+				(SELECT (amountBought * priceBought) FROM inserted),
+				(SELECT amountBought FROM inserted),
+				(SELECT currentPrice FROM inserted),
+				(SELECT amountBought FROM inserted),
+				0,
+				(SELECT currentPrice FROM inserted),
+				0
+			); 
+
+			UPDATE Portfolios
+			SET	currentInvestment = currentInvestment + (SELECT (amountBought * priceBought) FROM inserted),
+				liquid = liquid - (SELECT (amountBought * priceBought) FROM inserted),
+				currentTotal = (liquid - (SELECT (amountBought * priceBought) FROM inserted)) + (currentInvestment + (SELECT (amountBought * priceBought) FROM inserted)),
+				symbols = symbols + 1,
+				pnl = ((liquid - (SELECT (amountBought * priceBought) FROM inserted)) + (currentInvestment + (SELECT (amountBought * priceBought) FROM inserted))) - originalLiquid,
+				dateModified = CURRENT_TIMESTAMP
+			WHERE portfolioID = (SELECT fk_portfolioID FROM inserted);
+		END
+GO;
+
+-- TRIGGER TEST
+INSERT INTO Buys(fk_portfolioID, symbol, currentPrice, amountBought, priceBought) VALUES([get the portfolioID from table], 'AAPL', 15.00, 3, 15.00);
+INSERT INTO Buys(fk_portfolioID, symbol, currentPrice, amountBought, priceBought) VALUES([get the portfolioID from table], 'AAPL', 15.50, 4, 15.50);
+
+CREATE TRIGGER sellTrigger
+ON Sells
+AFTER INSERT
+AS
+	BEGIN
+
+		IF (SELECT amountSold FROM inserted) < (SELECT currentAmount FROM Investments WHERE symbol = (SELECT symbol FROM inserted) AND fk_portfolioID = (SELECT fk_portfolioID FROM inserted))
+			UPDATE Investments
+			SET averageBuyPrice = (moneyInvested - (SELECT (amountSold * priceSold) FROM inserted))/(currentAmount - (SELECT amountSold FROM inserted))
+			WHERE symbol = (SELECT symbol FROM inserted) AND fk_portfolioID = (SELECT fk_portfolioID FROM inserted);
+		ELSE 
+			UPDATE Investments
+			SET averageBuyPrice = 0
+			WHERE symbol = (SELECT symbol FROM inserted) AND fk_portfolioID = (SELECT fk_portfolioID FROM inserted);
+
+
+		UPDATE Investments
+		SET moneyInvested = moneyInvested - (SELECT (amountSold * priceSold) FROM inserted),
+			currentAmount = currentAmount - (SELECT amountSold FROM inserted),
+			currentPrice = (SELECT priceSold FROM inserted),
+			totalAmountSold = totalAmountSold + (SELECT amountSold FROM inserted),
+			pnl = ((currentAmount - (SELECT amountSold FROM inserted)) * (SELECT priceSold FROM inserted)) - (moneyInvested - (SELECT (amountSold * priceSold) FROM inserted)),
+			dateModified = CURRENT_TIMESTAMP
+		WHERE symbol = (SELECT symbol FROM inserted) AND fk_portfolioID = (SELECT fk_portfolioID FROM inserted);
+
+
+		IF (SELECT currentInvestment FROM Portfolios WHERE portfolioID = (SELECT fk_portfolioID FROM inserted)) >= (SELECT (amountSold * priceSold) FROM inserted)
+			UPDATE Portfolios
+			SET currentInvestment = currentInvestment - (SELECT (amountSold * priceSold) FROM inserted)
+			WHERE portfolioID = (SELECT fk_portfolioID FROM inserted);
+		ELSE 
+			UPDATE Portfolios
+			SET currentInvestment = 0
+			WHERE portfolioID = (SELECT fk_PortfolioID FROM inserted);
+
+
+		UPDATE Portfolios
+		SET liquid = liquid + (SELECT (amountSold * priceSold) FROM inserted),
+			currentTotal = currentInvestment + (liquid + (SELECT (amountSold * priceSold) FROM inserted)),
+			pnl = currentInvestment + (liquid + (SELECT (amountSold * priceSold) FROM inserted)) - originalLiquid,
+			dateModified = CURRENT_TIMESTAMP
+		WHERE portfolioID = (SELECT fk_PortfolioID FROM inserted);
+
+	END
+GO;
+
+-- TRIGGER TEST
+INSERT INTO Sells(fk_portfolioID, symbol, amountSold, priceSold) VALUES([get the portfolioID from table], 'AAPL', 3, 15.00);
+INSERT INTO Sells(fk_portfolioID, symbol, amountSold, priceSold) VALUES([get the portfolioID from table], 'AAPL', 4, 15.50);
+
+-- COMBINED TRIGGERS, RUN ONLY THESE ---------------------------------------------------------------
+
+
+
 --chris
-CREATE TRIGGER averagebuy
+CREATE TRIGGER averageBuy
 ON Buys
 AFTER INSERT
 As
     UPDATE Investments
-    SET averageBuyPrice = (currentPrice * (SELECT amountBought FROM inserted) + amountInvested)/totalAmountBought
+    SET averageBuyPrice = ((currentPrice * (SELECT amountBought FROM inserted)) + amountInvested)/totalAmountBought
     WHERE symbol =(SELECT symbol FROM inserted)
-GO
-
-CREATE TRIGGER averageSell
-ON Sells
-After INSERT
-As
-    UPDATE Investments
-    SET averageSellPrice = (currentPrice *totalAmountSold)/currentAmount
-    WHERE symbol =(SELECT symbol FROM inserted)
+GO;
 
 --Mikael
 
@@ -113,7 +230,7 @@ GO
 
 --Emmanuel
 CREATE TRIGGER onTotalAmtAfterbuy
-ON Dbo.Buys
+ON [dbo].[Buys]
 AFTER INSERT
 AS
    UPDATE DBO.Investments
@@ -122,7 +239,7 @@ AS
 GO
 
 CREATE TRIGGER onDateBought
-ON Dbo.Buys
+ON [dbo].[Buys]
 AFTER INSERT
 AS
    UPDATE DBO.Portfolios
@@ -131,7 +248,7 @@ AS
 GO
 
 CREATE TRIGGER onTotalAmtAftersell
-ON Dbo.Sells
+ON [dbo].[Sells]
 AFTER INSERT
 AS
    UPDATE DBO.Investments
@@ -140,7 +257,7 @@ AS
 GO
 
 CREATE TRIGGER onDateSold
-ON Dbo.Sells
+ON [dbo].[Sells]
 AFTER INSERT
 AS
    UPDATE DBO.Portfolios
@@ -165,3 +282,5 @@ As
 	UPDATE [dbo].[Comments]
 	SET likes = likes + 1
 	WHERE commentID = (SELECT commentID FROM inserted);
+
+
