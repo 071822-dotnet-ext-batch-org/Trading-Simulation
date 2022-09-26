@@ -40,11 +40,8 @@ import { baseURL } from './Services/base-url';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
-
 import { GoogleChartsModule } from 'angular-google-charts';
 import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
-
 
 @NgModule({
   declarations: [
@@ -60,10 +57,8 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
     AuthButtonComponent,
     UserComponent,
     NewsComponent,
-    DefaultComponent,
     ProfileComponent,
-    HomeLayoutComponent,
-    ProfileComponent
+    HomeLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -74,11 +69,12 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
+      audience: 'https://localhost:7280/api/Yoink',
       httpInterceptor: {
         allowedList: [
-          baseURL + '/CreateProfileAsync',
-          baseURL + '/GetProfileByUserIDAsync',
-          baseURL + '/EditProfileAsync'
+          baseURL + '/create-profile',
+          baseURL + '/my-profile',
+          baseURL + '/edit-profile'
          ], //for now
       }
 
@@ -102,9 +98,9 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
 
   ],
 
-providers: [NewsService],
-providers: [
 
+providers: [
+  NewsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
