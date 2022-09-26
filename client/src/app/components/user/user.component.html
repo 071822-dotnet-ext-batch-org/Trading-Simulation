@@ -6,8 +6,8 @@
         >
     <h2>{{ user.name }}</h2>
     <h5>{{ user.email }}</h5>
-    <div *ngIf="profileJson">
-        <pre>{{ profileJson }}</pre>
+    <div class="row" *ngIf="profileJson">
+        <pre class="col-12 text-light bg-dark p-4">{{ profileJson }}</pre>
     </div>
     <div>
         <app-profile></app-profile>

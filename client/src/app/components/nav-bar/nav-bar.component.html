@@ -10,9 +10,8 @@
     <a><button style="font-size:large" mat-button color="primary" (click)="'/News'">News</button></a>
     <a><button style="font-size:large" mat-button color="primary" (click)="'/Posts'">Posts</button></a>
     <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'" *ngIf="auth.user$ | async as user">Friends</button></a> -->
-    <a style="font-size:large" routerLink="/user" routerLinkActive="active" *ngIf="auth.user$ | async as user">{{ user.name }}</a>
-    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/SignIn'">Sign In</button></a> -->
-    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/SignOut'">Sign Out</button></a> -->
+    <a style="font-size:large" routerLink="/user" routerLinkActive="active" *ngIf="auth.user$ | async as user">{{ user.name }} <img [src]="user.picture"alt="Profile Pic" width="25" height="25">
+    </a>
     <app-auth-button></app-auth-button>
     
   </div>
