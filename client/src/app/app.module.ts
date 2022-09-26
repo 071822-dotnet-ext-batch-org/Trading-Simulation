@@ -19,7 +19,6 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
-import { DefaultComponent } from './components/default/default.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -28,6 +27,8 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
+import { NewsComponent } from './components/news/news.component';
+import { NewsService } from './service/news.service';
 import { ProfileComponent } from './components/profile/profile.component';
 
 import { baseURL } from './Services/base-url';
@@ -51,8 +52,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     RegisterComponent,
     AuthButtonComponent,
     UserComponent,
+    NewsComponent,
     DefaultComponent,
     ProfileComponent
+
 
 
   ],
@@ -91,13 +94,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 
   ],
-  providers: [
+
+providers: [NewsService],
+providers: [
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
       multi: true
-    }
+    }, 
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
