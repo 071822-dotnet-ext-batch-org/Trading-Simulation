@@ -6,16 +6,18 @@ import { callBuySellApi } from '../components/buy-sell/buy-sell-api-call';
 @Injectable({
   providedIn: 'root'
 })
+
 export class BuySellService {
 
   items: callBuySellApi[] = [];
 
   /////////// NEED TO ADD WEB TOKEN!!!!//////////////
-  private tickerApi = 'https://api.marketaux.com/v1/news/all?symbols=TSLA%2CAMZN%2CMSFT&filter_entities=true&language=en&api_token=!!!!!!TOKEN_GOES_HERE!!!!!!!!';
+  private lastQuote = 'https://api.polygon.io/v2/last/nbbo/AAPL?apiKey=    ';
 
   constructor(private http: HttpClient) { }
 
   getTickerPrice() {
-    return this.items
-  }
+    return this.http.get(this.lastQuote);
+  };
+
 }
