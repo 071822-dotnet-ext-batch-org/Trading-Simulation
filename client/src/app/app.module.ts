@@ -35,8 +35,7 @@ import { NewsComponent } from './components/news/news.component';
 import { NewsService } from './service/news.service';
 import { ProfileComponent } from './components/profile/profile.component';
 
-import { baseURL } from './Services/base-url';
-
+import { baseURL } from './services/base-url';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -105,7 +104,7 @@ providers: [
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
       multi: true
-    }, 
+    },
   ],
 
   bootstrap: [AppComponent]

@@ -17,6 +17,10 @@ export class BuySellOptions {
   ]
 };
 
+export interface Details{
+  value: string;
+}
+
 export class BuySellDetails {
   buy = "'Buy' means your are buying stock when there is enough sell volume to fill your request!";
   buyOpen = "'Buy at the open' means you will be buying at the beginning of the day when/if your order can be filled! Note that your order may not be filled if there is not enough volume!";
