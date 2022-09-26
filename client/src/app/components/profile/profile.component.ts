@@ -3,6 +3,8 @@ import { ProfileServiceService } from 'src/app/Services/profile-service/profile-
 import { Profile } from 'src/app/Models/Profile';
 import { ResultType } from '@remix-run/router/dist/utils';
 import { AuthService } from '@auth0/auth0-angular';
+import { CreateProfileService } from 'src/app/Services/CreateProfile/create-profile.service';
+import { UpdateProfileService } from 'src/app/Services/update-profile-service/update-profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,23 +13,28 @@ import { AuthService } from '@auth0/auth0-angular';
 })
 export class ProfileComponent implements OnInit {
 
-  @Input() profile?: Profile;
-
-  profiles?: Profile[];
-  profileToEdit?: Profile;
+  profile: any;
 
   constructor(private ProService: ProfileServiceService,
-              private AuthService: AuthService ) { }
+              private AuthService: AuthService, 
+              private CreatePro: CreateProfileService,
+              private UpdatePro: UpdateProfileService,
+              ) { }
 
   ngOnInit(): void { 
     // this.ProService
     // .getProfiles()
     // .subscribe((resul: Profile[]) => (this.profiles = result));
   }
-
-  updateProfile(profile:Profile){}
-  deleteProfile(profile:Profile){}
-  createProfile(profile:Profile){}
+  createProfile(){ 
+    this.AuthService.user$.subscribe(user => { 
+      this.CreatePro.createProfile(user?.name, user?.email, user?.picture, 0).subscribe(pro => { 
+        this.profile = pro
+        console.log(pro)
+       })
+    })
+   }
+   
 
   // initNewProfile() {
   //   this.profileToEdit = new Profile();
