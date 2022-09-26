@@ -88,6 +88,9 @@ namespace Test.Yoink
 
 
         }
+
+
+
         [Fact]
         public void buysWorksCorrectly()
         {
@@ -107,6 +110,9 @@ namespace Test.Yoink
             Assert.Equal(testFk_PortfolioID, testBuy.Fk_PortfolioID);
             Assert.Equal(symbol, testBuy.Symbol);
         }
+
+
+
         [Fact]
         public void commentsWorksCorrectly()
         {
@@ -127,6 +133,9 @@ namespace Test.Yoink
             Assert.Equal(testFk_UserID, testComment.Fk_UserID);
             Assert.Equal(testFk_PostID, testComment.Fk_PostID);
         }
+
+
+
         [Fact]
         public void FriendsWorksCorrectly()
         {
@@ -143,6 +152,9 @@ namespace Test.Yoink
             Assert.Equal(testFriendID, testFriend.FriendID);
             Assert.Equal(testDateFriended, testFriend.DateFriended);
         }
+
+
+
         [Fact]
         public void usersWorksCorrectly()
         {
@@ -162,6 +174,9 @@ namespace Test.Yoink
             Assert.Equal(testUserID, testUser.UserID);
             Assert.Equal(testRole, testUser.Role);
         }
+
+
+
         [Fact]
         public void likeCommentWorksCorrectly()
         {
@@ -180,6 +195,8 @@ namespace Test.Yoink
             Assert.Equal(testLikesCommentsID, testLikeComment.LikesCommentsID);
             Assert.Equal(testDateCreated, testLikeComment.DateCreated);
         }
+
+
         [Fact]
         public void likePostWorksCorrectly()
         {
@@ -200,6 +217,8 @@ namespace Test.Yoink
             Assert.Equal(testFk_PostID, testLikePost.Fk_PostID);
             Assert.Equal(testDateCreated, testLikePost.DateCreated);
         }
+
+
         //to make sure watchlist model is working
         [Fact]
         public void watchlistWorksCorrectly()
@@ -208,6 +227,8 @@ namespace Test.Yoink
             Guid testWatchListID = new Guid();
             string testsymbol = "Appl";
             DateTime testDateCreated = DateTime.Now;
+
+
             //Act
             Watchlist testWatchList = new Watchlist
             {
@@ -215,6 +236,8 @@ namespace Test.Yoink
                 Symbol = testsymbol,
                 DateCreated = testDateCreated
             };
+
+
             //Assert
             Assert.Equal(testWatchListID, testWatchList.WatchlistID);
             Assert.Equal(testsymbol, testWatchList.Symbol);
@@ -222,6 +245,33 @@ namespace Test.Yoink
         }
 
 
+        [Fact]
+        public void PortfolioWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            Portfolio portfolio = new Portfolio(guid, "d44d63fc-ffa8-4eb7-b81d-644547136d30", "Tony", 2, 2, 2000, 1000, 2500, 2300, 34,600, DT, DT);
+
+          
+            //Assert
+
+            Assert.Equal(portfolio.PortfolioID, guid);
+           
+
+        }
+
+
+
 
     }
+
+
+
 }
