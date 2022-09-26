@@ -59,9 +59,8 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
     AuthButtonComponent,
     UserComponent,
     DefaultComponent,
-    ProfileComponent
-
-
+    ProfileComponent,
+    HomeLayoutComponent
   ],
   imports: [
     BrowserModule,
