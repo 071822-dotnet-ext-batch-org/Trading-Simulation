@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { callBuySellApi } from '../components/buy-sell/buy-sell-api-call';
+import { callBuySellApi } from '../../Models/buy-sell/buy-sell-api-call';
 
 
 @Injectable({

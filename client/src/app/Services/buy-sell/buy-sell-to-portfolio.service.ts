@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TransactionInfo } from '../components/buy-sell/buy-sell-transactions';
+import { TransactionInfo } from '../../Models/buy-sell/buySellTransactions';
 
 
 @Injectable({

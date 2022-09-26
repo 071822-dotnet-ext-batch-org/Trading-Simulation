@@ -1,1 +1,1 @@
-export const baseURL:string  = 'https://localhost:7280/Yoink/';
+export const baseURL:string  = 'https://localhost:7280/api/Yoink';

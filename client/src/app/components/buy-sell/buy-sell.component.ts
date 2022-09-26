@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { BuySellDetails, Options } from './buySellOptions';
-import { BuySellService } from 'src/app/services/buy-sell.service';
-import { BuySellOptions } from './buySellOptions';
-
+import { BuySellDetails, Options } from '../../Models/buy-sell/buySellOptions';
+import { BuySellService } from 'src/app/services/buy-sell/buy-sell.service';
+import { BuySellOptions } from '../../Models/buy-sell/buySellOptions';
 
 @Component({
   selector: 'app-buy-sell',
@@ -16,13 +15,14 @@ import { BuySellOptions } from './buySellOptions';
 })
 export class BuySellComponent implements OnInit {
 
-  constructor(private http: HttpClient, private buySell: BuySellService, private buySellService: BuySellService) { }
+  constructor(private http: HttpClient, private buySell: BuySellService) { }
 
 
   qty: any;
   tickerPrice: any;
 
   details: BuySellDetails[] = [];
+
 
   options: Options[] = [
     { value: 'Buy', viewValue: 'Buy' },
@@ -49,17 +49,15 @@ export class BuySellComponent implements OnInit {
 
   ngOnInit(): void {
     this.calculateTotal();
+
+    CUSTOM_ELEMENTS_SCHEMA;
   };
 
   calculateTotal() {
     this.costTotal.map((cost) => {
       this.totalPrice = cost.quantity * cost.price;
     });
-
-    this.buySellService.getTickerPrice().subscribe(response => {this.tickerPrice = response;})
-
-  CUSTOM_ELEMENTS_SCHEMA;
-
   }
+  // this.buySellService.getTickerPrice().subscribe(response => {this.tickerPrice = response;}
 
 }
