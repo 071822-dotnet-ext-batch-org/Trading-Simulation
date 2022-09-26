@@ -21,7 +21,7 @@ namespace APILayer.Controllers
 
 
 
-        [HttpPost("CreateProfileAsync")]
+        [HttpPost("create-profile")]
         public async Task<ActionResult<Profile?>> CreateProfileAsync(ProfileDto? p)
         {
             if (ModelState.IsValid)
@@ -34,7 +34,7 @@ namespace APILayer.Controllers
         }
 
 
-        [HttpGet("GetProfileByUserIDAsync")]
+        [HttpGet("my-profile")]
         public async Task<Profile?> GetProfileByUserIDAsync()
         {
             string? auth0Id = User.Identity?.Name;
@@ -42,7 +42,7 @@ namespace APILayer.Controllers
             return (retrievedProfile);
         }
 
-        [HttpPut("EditProfileAsync")]
+        [HttpPut("edit-profile")]
         public async Task<ActionResult<Profile?>> EditProfileAsync(ProfileDto? p)
         {
             if (ModelState.IsValid)
@@ -55,27 +55,27 @@ namespace APILayer.Controllers
         }
 
 
-        [HttpPost("CreatePortfolioAsync")]
-        public async Task<ActionResult<Portfolio?>> CreatePortfolioAsync(Portfolio? p)
+        [HttpPost("create-portfolio")]
+        public async Task<ActionResult<List<Portfolio?>>> CreatePortfolioAsync(PortfolioDto? p)
         {
             if (ModelState.IsValid)
             {
                 string? auth0Id = User.Identity?.Name;
-                Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
-                return (newPortfolio);
+                List<Portfolio?> newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
+                return Ok(newPortfolio);
             }
             else return BadRequest(p);
         }
 
-        [HttpGet("GetPortfolioeByUserIDAsync")]
-        public async Task<List<Portfolio?>> GetPortfolioByUserIDAsync()
+        [HttpGet("my-portfolio")]
+        public async Task<ActionResult<List<Portfolio?>>> GetPortfolioByUserIDAsync()
         {
             string? auth0Id = User.Identity?.Name;
             List<Portfolio?> retrievedPortfolio = await this._businessLayer.GetPortfolioByUserIDAsync(auth0Id);
-            return (retrievedPortfolio);
+            return Ok(retrievedPortfolio);
         }
 
-        [HttpPut("EditPortfolioAsync")]
+        [HttpPut("edit-portfolio")]
         public async Task<Portfolio?> EditPortfolioAsync(string PortfolioID, string Name, int PrivacyLevel)
         {
             Portfolio? editedPortfolio = await this._businessLayer.EditPortfolioAsync(PortfolioID, Name, PrivacyLevel);
@@ -84,7 +84,7 @@ namespace APILayer.Controllers
 
 
 
-        [HttpPost("AddNewBuyAsync")]
+        [HttpPost("create-buy")]
         public async Task<ActionResult<Buy>> AddNewBuyAsync(Buy buy)
         {
             if (ModelState.IsValid)
@@ -96,7 +96,7 @@ namespace APILayer.Controllers
         }
 
 
-        [HttpPost("AddNewSellAsync")]
+        [HttpPost("create-sell")]
         public async Task<ActionResult<Sell>> AddNewSellAsync(Sell sell)
         {
             if (ModelState.IsValid)
@@ -108,14 +108,14 @@ namespace APILayer.Controllers
         }
 
 
-        [HttpGet("GetAllBuyBySymbolAsync")]
+        [HttpGet("my-buys")]
         public async Task<List<Buy?>> GetAllBuyBySymbolAsync(string symbol, Guid portfolioID)
         {
             List<Buy?> buyList = await this._businessLayer.GetAllBuyBySymbolAsync(symbol, portfolioID);
             return (buyList);
         }
 
-        [HttpGet("GetAllSellBySymbolAsync")]
+        [HttpGet("my-sell")]
         public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
         {
             List<Sell?> sellList = await this._businessLayer.GetAllSellBySymbolAsync(symbol, portfolioID);
