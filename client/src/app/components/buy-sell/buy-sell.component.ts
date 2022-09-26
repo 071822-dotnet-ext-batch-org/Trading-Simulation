@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { BuySellDetails, Options } from './buySellOptions';
 import { BuySellService } from 'src/app/services/buy-sell.service';
 import { BuySellOptions } from './buySellOptions';
-import { Observable, interval, Subscription } from 'rxjs';
 
 
 @Component({
@@ -19,7 +18,6 @@ export class BuySellComponent implements OnInit {
 
   constructor(private http: HttpClient, private buySell: BuySellService, private buySellService: BuySellService) { }
 
-  private updateSubscription: Subscription;
 
   qty: any;
   tickerPrice: any;
@@ -59,9 +57,6 @@ export class BuySellComponent implements OnInit {
     });
 
     this.buySellService.getTickerPrice().subscribe(response => {this.tickerPrice = response;})
-
-    this.updateSubscription = interval(3000).subscribe(
-      (val) => { this.calculateTotal() });
 
   CUSTOM_ELEMENTS_SCHEMA;
 
