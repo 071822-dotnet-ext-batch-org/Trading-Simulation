@@ -29,9 +29,13 @@ import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
 import { ProfileComponent } from './components/profile/profile.component';
+
+import { baseURL } from './Services/base-url';
+
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+
 
 
 @NgModule({
@@ -56,12 +60,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
     HttpClientModule,
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
       httpInterceptor: {
-        allowedList: [ 'https://localhost:7280/api/Yoink/GetProfileByUserIDAsync' ], //for now
+        allowedList: [
+          baseURL + '/CreateProfileAsync',
+          baseURL + '/GetProfileByUserIDAsync',
+          baseURL + '/EditProfileAsync'
+         ], //for now
       }
 
     }),
