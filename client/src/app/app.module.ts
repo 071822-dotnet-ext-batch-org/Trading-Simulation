@@ -16,9 +16,13 @@ import { MatListModule } from '@angular/material/list';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatGridListModule } from '@angular/material/grid-list'
+
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { DefaultComponent } from './components/default/default.component';
 import { RouterModule } from '@angular/router';
+
+
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SigninComponent } from './components/signin/signin.component';
@@ -26,6 +30,9 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
+
+import { GoogleChartsModule } from 'angular-google-charts';
+import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 
 
 @NgModule({
@@ -41,21 +48,17 @@ import { UserComponent } from './components/user/user.component';
     RegisterComponent,
     AuthButtonComponent,
     UserComponent,
-    DefaultComponent
-
-
+    DefaultComponent,
+    HomeLayoutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
-
     }),
-
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
@@ -65,9 +68,8 @@ import { UserComponent } from './components/user/user.component';
     GoogleChartsModule,
     MatCardModule,
     MatMenuModule,
+    MatGridListModule,
     RouterModule,
-    
-
   ],
   providers: [],
   bootstrap: [AppComponent]

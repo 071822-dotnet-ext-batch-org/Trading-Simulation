@@ -6,6 +6,7 @@ import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { HomeComponent } from './components/home/home.component';
 import { UserComponent } from './components/user/user.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 
 
 
@@ -15,7 +16,7 @@ const routes: Routes = [
   {path: '', redirectTo:'home',pathMatch:'full'},
   {path: "BuySell", component: BuySellComponent},
   {path: 'portfolio', component: PortfolioComponent},
-  {path: 'home', component: HomeComponent },
+  {path: 'home', component: HomeLayoutComponent },
   {path: 'user', component: UserComponent, canActivate: [AuthGuard]}
 
 ];

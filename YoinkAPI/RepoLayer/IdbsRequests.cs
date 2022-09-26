@@ -11,5 +11,7 @@ namespace RepoLayer
         Task<List<Buy?>> GetAllBuyBySymbolAsync(string value);
         Task<List<Sell?>> GetAllSellBySymbolAsync(string value);
         Task<Profile?> GetProfileByUserIDAsync(string userID);
+        Task<Portfolio?> GetPortfolioByUserIDAsync(string? auth0Id);
+        Task<Portfolio?> CreatePortfolioAsync(string? auth0Id, Portfolio? p);
     }
 }
