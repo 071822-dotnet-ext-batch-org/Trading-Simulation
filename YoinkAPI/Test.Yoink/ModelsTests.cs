@@ -12,9 +12,11 @@ namespace Test.Yoink
 
             Guid invt = Guid.NewGuid();
 
+            DateTime DT = new DateTime();
+
 
             //Act
-            Investment newinvestment1 = new Investment(invt, invt, "AAPL", 1100, 50, 2, 100, 150, 40, 10, 20);
+            Investment newinvestment1 = new Investment(invt, invt, "AAPL", 1200, 100, 50, 4, 2, 150, 50, DT, DT);
 
             Investment newinvestment = new Investment()
             {
@@ -23,10 +25,13 @@ namespace Test.Yoink
                 Symbol = "AAPL",
                 AmountInvested = 1200,
                 CurrentAmount = 100,
+                CurrentPrice= 50,
                 TotalAmountBought = 4,
+                TotalAmountSold = 2,
                 AveragedBuyPrice = 150,
-                AveragedSellPrice = 200,
                 TotalPNL = 50,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
 
             };
 
@@ -37,18 +42,26 @@ namespace Test.Yoink
             Assert.Equal(newinvestment1.InvestmentID, invt);
 
         }
+
+
+
         [Fact]
         public void postWorksCorrectly()
         {
             //Arrange
             Guid TestpostID = new Guid();
             Guid TestFk_UserID = new Guid();
+
             //Act
             Post TestPost = new Post { PostID = TestpostID, Fk_UserID = TestFk_UserID };
+
             //Assert
             Assert.Equal(TestpostID, TestPost.PostID);
             Assert.Equal(TestFk_UserID, TestPost.Fk_UserID);
         }
+
+
+
         [Fact]
         public void sellWorksCorrectly()
         {
@@ -56,6 +69,9 @@ namespace Test.Yoink
             Guid testSellID = new Guid();
             string testSymbol = "GOOGL";
             decimal testAmountSold = 250;
+
+
+
             //Act
             Sell Testsell = new Sell
             {
