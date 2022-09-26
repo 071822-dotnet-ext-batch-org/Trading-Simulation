@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AuthModule } from '@auth0/auth0-angular';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; 
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from '@auth0/auth0-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { MatSelectModule } from '@angular/material/select';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -29,6 +29,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -72,10 +75,14 @@ import { ProfileComponent } from './components/profile/profile.component';
     MatCardModule,
     MatMenuModule,
     RouterModule,
-    
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule
+
 
   ],
-  providers: [ 
+  providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
@@ -85,5 +92,3 @@ import { ProfileComponent } from './components/profile/profile.component';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-
