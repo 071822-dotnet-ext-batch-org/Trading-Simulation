@@ -12,7 +12,8 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
     public async Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p)
     {
-        Profile? newProfile = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.PrivacyLevel);
+        bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+        Profile? newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
         return newProfile;
     }
 
@@ -24,21 +25,24 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
     public async Task<Profile?> EditProfileAsync(string? auth0Id, ProfileDto? p)
     {
-        Profile? newProfile = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.PrivacyLevel);
-        return newProfile;
+        bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+        Profile? updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+        return updatedProfile;
     }
 
 
-    public async Task<Portfolio?> CreatePortfolioAsync(string? auth0Id, Portfolio? p)
+    public async Task<List<Portfolio?>> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
     {
-        Portfolio? newPortfolio = await this._repoLayer.CreatePortfolioAsync(auth0Id, p.Name, p.PrivacyLevel, p.Type, p.OriginalLiquid);
-        return newPortfolio;
+        bool newPortfolioSaved = await this._repoLayer.CreatePortfolioAsync(auth0Id, p);
+        List<Portfolio?> updatedListOfPortfolios = await this._repoLayer.GetPortfolioByUserIDAsync(auth0Id);
+        return updatedListOfPortfolios;
     }
 
     public async Task<Portfolio?> EditPortfolioAsync(string portfolioID, string name, int privacyLevel)
     {
-        Portfolio? editedPortfolio = await this._repoLayer.EditPortfolioAsync(portfolioID, name, privacyLevel);
-        return editedPortfolio;
+        bool editedPortfolio = await this._repoLayer.EditPortfolioAsync(portfolioID, name, privacyLevel);
+        Portfolio? updatedPorfolio = await this._repoLayer.GetPortfolioByPorfolioIDAsync(portfolioID);
+        return updatedPorfolio;
     }
 
 
