@@ -60,7 +60,6 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
     AuthButtonComponent,
     UserComponent,
     NewsComponent,
-    DefaultComponent,
     ProfileComponent,
     HomeLayoutComponent,
     ProfileComponent
@@ -101,8 +100,6 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
 
 
   ],
-
-providers: [NewsService],
 providers: [
 
     {
