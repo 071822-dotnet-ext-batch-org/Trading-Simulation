@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AuthModule } from '@auth0/auth0-angular'; 
+import { AuthModule } from '@auth0/auth0-angular';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; 
+import { AuthHttpInterceptor } from '@auth0/auth0-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,8 +28,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
 import { NewsComponent } from './components/news/news.component';
-import { HttpClientModule } from '@angular/common/http';
 import { NewsService } from './service/news.service';
+import { ProfileComponent } from './components/profile/profile.component';
+
 
 
 @NgModule({
@@ -44,6 +47,9 @@ import { NewsService } from './service/news.service';
     AuthButtonComponent,
     UserComponent,
     NewsComponent,
+    DefaultComponent,
+    ProfileComponent
+
 
 
   ],
@@ -52,10 +58,12 @@ import { NewsService } from './service/news.service';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
+      httpInterceptor: {
+        allowedList: [ 'https://localhost:7280/api/Yoink/GetProfileByUserIDAsync' ], //for now
+      }
 
     }),
 
@@ -71,7 +79,17 @@ import { NewsService } from './service/news.service';
     
 
   ],
+
   providers: [NewsService],
+
+  providers: [ 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true
+    }
+  ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
