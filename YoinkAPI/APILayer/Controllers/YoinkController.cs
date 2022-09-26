@@ -68,20 +68,26 @@ namespace APILayer.Controllers
         }
 
         [HttpGet("my-portfolio")]
-        public async Task<ActionResult<List<Portfolio?>>> GetPortfolioByUserIDAsync()
+        public async Task<ActionResult<Portfolio?>> GetPortfolioByPortfolioIDAsync(Guid? portfolioID)
         {
-            string? auth0Id = User.Identity?.Name;
-            List<Portfolio?> retrievedPortfolio = await this._businessLayer.GetPortfolioByUserIDAsync(auth0Id);
+            Portfolio? retrievedPortfolio = await this._businessLayer.GetPortfolioByPortfolioIDAsync(portfolioID);
             return Ok(retrievedPortfolio);
         }
 
-        [HttpPut("edit-portfolio")]
-        public async Task<Portfolio?> EditPortfolioAsync(string PortfolioID, string Name, int PrivacyLevel)
+        [HttpGet("my-portfolios")]
+        public async Task<ActionResult<List<Portfolio?>>> GetPortfoliosByUserIDAsync()
         {
-            Portfolio? editedPortfolio = await this._businessLayer.EditPortfolioAsync(PortfolioID, Name, PrivacyLevel);
-            return (editedPortfolio);
+            string? auth0UserId = User.Identity?.Name;
+            List<Portfolio?> retrievedPortfolios = await this._businessLayer.GetALLPortfoliosByUserIDAsync(auth0UserId);
+            return Ok(retrievedPortfolios);
         }
 
+        [HttpPut("edit-portfolio")]
+        public async Task<Portfolio?> EditPortfolioAsync(Models.PortfolioDto p)
+        {
+            Portfolio? editedPortfolio = await this._businessLayer.EditPortfolioAsync(p);
+            return (editedPortfolio);
+        }
 
 
         [HttpPost("create-buy")]
@@ -109,9 +115,9 @@ namespace APILayer.Controllers
 
 
         [HttpGet("my-buys")]
-        public async Task<List<Buy?>> GetAllBuyBySymbolAsync(string symbol, Guid portfolioID)
+        public async Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto buysDto)
         {
-            List<Buy?> buyList = await this._businessLayer.GetAllBuyBySymbolAsync(symbol, portfolioID);
+            List<Buy?> buyList = await this._businessLayer.GetAllBuyBySymbolAsync(buysDto);
             return (buyList);
         }
 
