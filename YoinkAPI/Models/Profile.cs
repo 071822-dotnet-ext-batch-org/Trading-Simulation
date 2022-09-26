@@ -16,12 +16,13 @@ namespace Models
         {
         }
 
-        public Profile(Guid? profileID, string? fk_UserID, string? name, string? email, int? privacyLevel)
+        public Profile(Guid? profileID, string? fk_UserID, string? name, string? email, string? picture, int? privacyLevel)
         {
             this.ProfileID = profileID;
             this.Fk_UserID = fk_UserID;
             this.Name = name;
             this.Email = email;
+            this.Picture = picture;
             this.PrivacyLevel = privacyLevel;
         }
     }

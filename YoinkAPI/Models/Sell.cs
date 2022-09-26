@@ -11,21 +11,22 @@ namespace Models
         public decimal? AmountSold { get; set; }
         public decimal? PriceSold { get; set; }
         public DateTime? DateSold { get; set; }
-        public decimal? PNL { get; set; }
+        // public decimal? PNL { get; set; }
 
         public Sell()
         {
         }
 
-        public Sell(Guid? sellID, Guid? fk_PortfolioID, string? symbol, decimal? amountSold, decimal? priceSold, decimal? pnl, DateTime? dateSold)
+        public Sell(Guid? sellID, Guid? fk_PortfolioID, string? symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold)
         {
             this.SellID = sellID;
             this.Fk_PortfolioID = fk_PortfolioID;
             this.Symbol = symbol;
             this.AmountSold = amountSold;
             this.PriceSold = priceSold;
-            this.PNL = pnl;
+        //     this.PNL = pnl;
             this.DateSold = dateSold;
+            // this.PNL = pNL;
         }
     }
 
