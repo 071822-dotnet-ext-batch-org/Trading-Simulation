@@ -24,6 +24,7 @@ namespace Models
             this.Symbol = symbol;
             this.AmountSold = amountSold;
             this.PriceSold = priceSold;
+        //     this.PNL = pnl;
             this.DateSold = dateSold;
             // this.PNL = pNL;
         }

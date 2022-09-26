@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { GoogleChartsModule } from 'angular-google-charts';
+import { Options } from './buySellOptions';
 
 
 @Component({
@@ -10,8 +10,23 @@ import { GoogleChartsModule } from 'angular-google-charts';
 })
 export class BuySellComponent implements OnInit {
 
+  title = '';
+  type = '';
+  
+
   constructor() { }
 
+  options: Options[] = [
+    { value: 'Buy', viewValue: 'Buy' },
+    { value: 'Buy at the open', viewValue: 'Buy at open' },
+    { value: 'Buy at the close', viewValue: 'Buy at close' },
+    { value: 'Set buy limit', viewValue: 'Set buy limit' },
+    { value: 'Sell', viewValue: 'Sell' },
+    { value: 'Sell at the open', viewValue: 'Sell at open' },
+    { value: 'Sell at the close', viewValue: 'Sell at close' },
+    { value: 'Set sell limit', viewValue: 'Set sell limit' }
+
+  ];
 
   ngOnInit(): void {
     CUSTOM_ELEMENTS_SCHEMA

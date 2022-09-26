@@ -68,12 +68,20 @@ namespace APILayer.Controllers
         }
 
         [HttpGet("GetPortfolioeByUserIDAsync")]
-        public async Task<Portfolio?> GetPortfolioByUserIDAsync()
+        public async Task<List<Portfolio?>> GetPortfolioByUserIDAsync()
         {
             string? auth0Id = User.Identity?.Name;
-            Portfolio? retrievedPortfolio = await this._businessLayer.GetPortfolioByUserIDAsync(auth0Id);
+            List<Portfolio?> retrievedPortfolio = await this._businessLayer.GetPortfolioByUserIDAsync(auth0Id);
             return (retrievedPortfolio);
         }
+
+        [HttpPut("EditPortfolioAsync")]
+        public async Task<Portfolio?> EditPortfolioAsync(string PortfolioID, string Name, int PrivacyLevel)
+        {
+            Portfolio? editedPortfolio = await this._businessLayer.EditPortfolioAsync(PortfolioID, Name, PrivacyLevel);
+            return (editedPortfolio);
+        }
+
 
 
         [HttpPost("AddNewBuyAsync")]
@@ -89,7 +97,7 @@ namespace APILayer.Controllers
 
 
         [HttpPost("AddNewSellAsync")]
-        public async Task<ActionResult<Sell>> AddNewSellAsync(Sell? sell)
+        public async Task<ActionResult<Sell>> AddNewSellAsync(Sell sell)
         {
             if (ModelState.IsValid)
             {
@@ -97,6 +105,21 @@ namespace APILayer.Controllers
                 return (newSell);
             }
             else return BadRequest(sell);
+        }
+
+
+        [HttpGet("GetAllBuyBySymbolAsync")]
+        public async Task<List<Buy?>> GetAllBuyBySymbolAsync(string symbol, Guid portfolioID)
+        {
+            List<Buy?> buyList = await this._businessLayer.GetAllBuyBySymbolAsync(symbol, portfolioID);
+            return (buyList);
+        }
+
+        [HttpGet("GetAllSellBySymbolAsync")]
+        public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
+        {
+            List<Sell?> sellList = await this._businessLayer.GetAllSellBySymbolAsync(symbol, portfolioID);
+            return (sellList);
         }
 
 
