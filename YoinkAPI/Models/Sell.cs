@@ -17,15 +17,15 @@ namespace Models
         {
         }
 
-        public Sell(Guid? sellID, Guid? fk_PortfolioID, string? symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold, decimal? pNL)
+        public Sell(Guid? sellID, Guid? fk_PortfolioID, string? symbol, decimal? amountSold, decimal? priceSold, decimal? pnl, DateTime? dateSold)
         {
             this.SellID = sellID;
             this.Fk_PortfolioID = fk_PortfolioID;
             this.Symbol = symbol;
             this.AmountSold = amountSold;
             this.PriceSold = priceSold;
+            this.PNL = pnl;
             this.DateSold = dateSold;
-            this.PNL = pNL;
         }
     }
 

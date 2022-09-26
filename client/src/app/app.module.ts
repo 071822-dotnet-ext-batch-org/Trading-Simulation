@@ -18,8 +18,12 @@ import { MatListModule } from '@angular/material/list';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatGridListModule } from '@angular/material/grid-list'
+
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
+
+
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SigninComponent } from './components/signin/signin.component';
@@ -38,6 +42,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 
+import { GoogleChartsModule } from 'angular-google-charts';
+import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
+
 
 @NgModule({
   declarations: [
@@ -54,10 +61,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     UserComponent,
     NewsComponent,
     DefaultComponent,
+    ProfileComponent,
+    HomeLayoutComponent,
     ProfileComponent
-
-
-
   ],
   imports: [
     BrowserModule,
@@ -77,15 +83,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
       }
 
     }),
-
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    GoogleChartsModule,
     MatCardModule,
     MatMenuModule,
+    MatGridListModule,
     RouterModule,
     FormsModule,
     MatInputModule,

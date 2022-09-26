@@ -10,6 +10,10 @@ import { Options } from './buySellOptions';
 })
 export class BuySellComponent implements OnInit {
 
+  title = '';
+  type = '';
+  
+
   constructor() { }
 
   options: Options[] = [
