@@ -37,7 +37,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +51,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     AuthButtonComponent,
     UserComponent,
     DefaultComponent,
-    ProfileComponent
+    ProfileComponent,
+    
 
 
   ],
@@ -65,11 +65,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
+      audience: 'https://localhost:7280/api/Yoink',
       httpInterceptor: {
         allowedList: [
-          baseURL + '/CreateProfileAsync',
-          baseURL + '/GetProfileByUserIDAsync',
-          baseURL + '/EditProfileAsync'
+          baseURL + '/create-profile',
+          baseURL + '/my-profile',
+          baseURL + '/edit-profile'
          ], //for now
       }
 

@@ -12,6 +12,6 @@ export class ProfileServiceService {
   constructor(private http: HttpClient) { }
 
   public getProfiles(): Observable<Profile[]>{
-    return this.http.get<Profile[]>(baseURL + '/GetProfileByUserIDAsync'); //not sure aabout the path:
+    return this.http.get<Profile[]>(baseURL + '/my-profile'); //not sure aabout the path:
   }
 }
