@@ -11,7 +11,7 @@ import { baseURL } from '../base-url';
 export class CreateProfileService {
   constructor(private http: HttpClient) { }
 
-  public createProfile( profilePicture: string, profileName: string, profileEmail: string,profilePrivacyLevel:number): Observable<User>{
-    return this.http.post<User>(baseURL + 'CreateProfileAsync/Profiles.json', { CreateProfileService })
+  public createProfile( profileName:any, profileEmail:any, profilePicture:any,profilePrivacyLevel:any): Observable<Profile>{
+    return this.http.post<Profile>(baseURL + '/create-profile', { name:profileName, email:profileEmail, picture:profilePicture, privacyLevel:profilePrivacyLevel})
   }
 }

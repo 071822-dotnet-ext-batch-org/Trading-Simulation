@@ -20,7 +20,7 @@ const routes: Routes = [
   {path: 'Portfolio', component: PortfolioComponent},
   {path: 'home', component: HomeComponent },
   {path: 'user', component: UserComponent, canActivate: [AuthGuard]},
-  {path: 'News', component: NewsComponent}
+  {path: 'News', component: NewsComponent},
   {path: 'Profile', component: ProfileComponent },
 
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { Profile } from 'src/app/Models/Profile';
 
 @Component({
   selector: 'app-user',
