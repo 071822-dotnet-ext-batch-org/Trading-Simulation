@@ -27,6 +27,7 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0Id = User.Identity?.Name;
+                Console.WriteLine(auth0Id);
                 Profile? newProfile = await this._businessLayer.CreateProfileAsync(auth0Id, p);
                 return (newProfile);
             }
