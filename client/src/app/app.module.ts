@@ -57,7 +57,6 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
     AuthButtonComponent,
     UserComponent,
     NewsComponent,
-    DefaultComponent,
     ProfileComponent,
     HomeLayoutComponent
   ],
@@ -99,9 +98,9 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
 
   ],
 
-providers: [NewsService],
-providers: [
 
+providers: [
+  NewsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
