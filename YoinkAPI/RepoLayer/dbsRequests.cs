@@ -129,7 +129,7 @@ namespace RepoLayer
 
         public async Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
         {
-            using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, type, originalLiquid, liquid, currentTotal) VALUES (@auth0Id, @name, @privacylevel, @type, @originalliquid, @liquid, @currenttotal)", _conn))
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, originalLiquid, liquid) VALUES (@auth0Id, @name, @privacylevel, @originalliquid, @liquid)", _conn))
             {             
                 command.Parameters.AddWithValue("@auth0Id", auth0Id);
                 command.Parameters.AddWithValue("@name", p.Name);

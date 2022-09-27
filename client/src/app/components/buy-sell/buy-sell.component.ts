@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { BuySellDetails, Options } from '../../Models/buy-sell/buySellOptions';
-import { BuySellService } from 'src/app/services/buy-sell/buy-sell.service';
+import { BuySellService } from 'src/app/Services/buy-sell/buy-sell.service';
 import { BuySellOptions } from '../../Models/buy-sell/buySellOptions';
 
 @Component({

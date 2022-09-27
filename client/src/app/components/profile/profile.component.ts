@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProfileServiceService } from 'src/app/services/profile-service/profile-service.service';
+import { ProfileServiceService } from 'src/app/Services/profile-service/profile-service.service';
 import { Profile } from 'src/app/Models/Profile';
 import { ResultType } from '@remix-run/router/dist/utils';
 import { AuthService } from '@auth0/auth0-angular';
-import { CreateProfileService } from 'src/app/services/CreateProfile/create-profile.service';
-import { UpdateProfileService } from 'src/app/services/update-profile-service/update-profile.service';
+import { CreateProfileService } from 'src/app/Services/CreateProfile/create-profile.service';
+import { UpdateProfileService } from 'src/app/Services/update-profile-service/update-profile.service';
 
 @Component({
   selector: 'app-profile',
