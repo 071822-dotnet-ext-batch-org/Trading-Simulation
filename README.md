@@ -9,6 +9,8 @@ Yoink! is a paper trading investment application that is used as an education to
 ![Build status](https://dev.azure.com/YoinkP3/Yoink%20Pipeline/_apis/build/status/Yoink%20Pipeline/_build/latest?definitionId=3)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/071822-dotnet-ext-batch-org/Trading-Simulation)
+![GitHub contributors](https://img.shields.io/github/contributors/071822-dotnet-ext-batch-org/Trading-Simulation)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub](https://img.shields.io/github/license/071822-dotnet-ext-batch-org/Trading-Simulation)
 
 ## Installation
@@ -20,7 +22,7 @@ install trading-simulation
 ## Usage
 
 ```C#
-import trading-simulation
+trading-simulation
 ```
 
 ## Contributing
