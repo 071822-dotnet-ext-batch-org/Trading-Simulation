@@ -25,6 +25,8 @@ namespace Test.Yoink
 
             };
 
+            Profile? profile2 = new Profile(Guid.NewGuid(), "d44d63fc-ffa8-4eb7-b81d-644547136d30", "Tony", "Rodin@yahoo.com", "Note", 2);
+
             Profile? profile = new Profile()
             {
                 ProfileID = Guid.NewGuid(),
