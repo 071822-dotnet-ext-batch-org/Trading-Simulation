@@ -83,9 +83,9 @@ namespace RepoLayer
             }
             
         }
-        public async Task<List<Portfolio?>> GetPortfolioByUserIDAsync(string? userID)
+        public async Task<List<Portfolio?>> GetALL_PortfoliosByUserIDAsync(string? userID)
         {
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ", _conn))
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ORDER BY dateModified DESC", _conn))
             {
                 List<Portfolio?> portList = new List<Portfolio?>();
                 command.Parameters.AddWithValue("@userid", userID);
@@ -99,14 +99,15 @@ namespace RepoLayer
                     portList.Add(p);
 
                 }
+                
                 _conn.Close();
                 return portList;
             }
         }//End OF Get PORTFOLIO BY userID
 
-        public async Task<Portfolio?> GetPortfolioByPorfolioIDAsync(string? porfolioID)
+        public async Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID)
         {
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE portfolioID=@portfolioID ", _conn))
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE portfolioID=@portfolioID", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioID", porfolioID);
                 _conn.Open();
@@ -128,7 +129,7 @@ namespace RepoLayer
 
         public async Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
         {
-            using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, type, originalLiquid, liquid, currentTotal) VALUES (@auth0Id, @name, @privacylevel, @type, @originalliquid, @liquid, @currenttotal)", _conn))
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, originalLiquid, liquid) VALUES (@auth0Id, @name, @privacylevel, @originalliquid, @liquid)", _conn))
             {             
                 command.Parameters.AddWithValue("@auth0Id", auth0Id);
                 command.Parameters.AddWithValue("@name", p.Name);
@@ -149,14 +150,14 @@ namespace RepoLayer
             }
         }
 
-        public async Task<bool> EditPortfolioAsync(string PortfolioID, string Name, int PrivacyLevel)
+        public async Task<bool> EditPortfolioAsync(Models.PortfolioDto p)
         {
 
             using (SqlCommand command = new SqlCommand($"UPDATE Portfolios SET (name = @name, privacyLevel = @privacylevel) WHERE portfolioID = @portfolioid", _conn))
             {            
-                command.Parameters.AddWithValue("@portfolioid", PortfolioID);
-                command.Parameters.AddWithValue("@name", Name);
-                command.Parameters.AddWithValue("@privacylevel", PrivacyLevel);
+                command.Parameters.AddWithValue("@portfolioid", p.PortfolioID);
+                command.Parameters.AddWithValue("@name", p.Name); 
+                command.Parameters.AddWithValue("@privacylevel", p.PrivacyLevel);
                 _conn.Open();
 
                 int ret = await command.ExecuteNonQueryAsync();
@@ -170,7 +171,7 @@ namespace RepoLayer
             }
         }
 
-        public async Task<Investment?> GetInvestmentByPortfolioIDAsync(string portfolioID, string symbol)
+        public async Task<Investment?> GetInvestmentByPortfolioIDAsync(Guid portfolioID, string symbol)
         {
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolfioid AND symbol=@symbol", _conn))
             {
@@ -182,6 +183,7 @@ namespace RepoLayer
                 if (ret.Read())
                 {
                     Investment i = new Investment(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetDecimal(9), ret.GetDateTime(10), ret.GetDateTime(11));
+                    _conn.Close();
                     return i;
                 }
                 _conn.Close();
@@ -211,13 +213,13 @@ namespace RepoLayer
             }
         }
         
-        public async Task<List<Buy?>> GetAllBuyBySymbolAsync(string symbol, Guid portfolioID)
+        public async Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys)
         {
             List<Buy?> buyList = new List<Buy?>();
-            using (SqlCommand command = new SqlCommand("Select * from Buys where symbol = @symbol and portfolioID = @portfolioid", _conn))
+            using (SqlCommand command = new SqlCommand("Select * from Buys where symbol = @symbol and portfolioID = @portfolioid ORDER BY dateBought DESC", _conn))
             {
-                command.Parameters.AddWithValue("@symbol", symbol);
-                command.Parameters.AddWithValue("@portfolioid", portfolioID);
+                command.Parameters.AddWithValue("@symbol", AllBuys.Symbol);
+                command.Parameters.AddWithValue("@portfolioid", AllBuys.Get_BuysID);
                 _conn.Open();
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
 
@@ -263,7 +265,7 @@ namespace RepoLayer
         public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
         {
             List<Sell?> SellList = new List<Sell?>();
-            using (SqlCommand command = new SqlCommand("Select * from Sells where symbol = @symbol and portfolioID = @portfolioid", _conn))
+            using (SqlCommand command = new SqlCommand("Select * from Sells where symbol = @symbol and portfolioID = @portfolioid ORDER BY dateSold DESC", _conn))
             {
                 command.Parameters.AddWithValue("@symbol", symbol);
                 command.Parameters.AddWithValue("@portfolioid", portfolioID);

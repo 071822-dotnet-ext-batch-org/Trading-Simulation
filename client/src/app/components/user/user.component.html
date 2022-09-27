@@ -8,10 +8,13 @@
     <h5>{{ user.email }}</h5>
     <div class="row" *ngIf="profileJson">
         <pre class="col-12 text-light bg-dark p-4">{{ profileJson }}</pre>
-    </div>
-    <div>
+        <!-- <button (click)="editProfile(profile)">Edit</button>
+    </div> -->
+    <!-- <div>
         <app-profile></app-profile>
-    </div>
-
+    </div> -->
+<!-- <button (click)="initNewProfile()">Create New Profile</button> -->
+<!-- <app-profile [profile]="profileToEdit"></app-profile> -->
+<app-profile></app-profile>
 
 </div>
