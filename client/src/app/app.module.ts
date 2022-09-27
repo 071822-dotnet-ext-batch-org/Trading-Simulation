@@ -26,6 +26,7 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { UserComponent } from './components/user/user.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
 
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
