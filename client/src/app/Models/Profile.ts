@@ -1,7 +1,7 @@
 export interface Profile {
-    picture: string;
-    id: string;
-    name: string;
-    email: string;
-    privacyLevel: number;
+    picture: string | undefined;
+    profileID: string | undefined;
+    name: string | undefined;
+    email: string | undefined;
+    privacyLevel: number | undefined;
 }

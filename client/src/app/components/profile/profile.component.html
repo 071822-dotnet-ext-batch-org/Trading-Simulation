@@ -1,14 +1,25 @@
-<div>
-    <h2>Here is your profile info:</h2>
-    <ul>
-        <li *ngFor="let profile of profiles">
-            <h3>{{ profile.name }}</h3>
-            <h4>{{ profile.id }}</h4>
-            <h4>{{ profile.email }}</h4>
-            <h4>{{ profile.privacyLevel }}</h4>
-            
-        </li>
-    </ul>
+<!-- <button (click)="initNewProfile()">Create New Profile</button> -->
+<div *ngIf="profile">
+    <h2>{{ profile.name }}</h2>
+    <div>   
+        Name:
+        <input [(ngModel)]="profile.name" placeholder="Name" />
+    </div>
+    <div>   
+        Email:
+        <input [(ngModel)]="profile.email" placeholder="Email" />
+    </div> 
+    <div>   
+        Privacy Level:
+        <input [(ngModel)]="profile.privacyLevel" placeholder="Privacy Level" />
+    </div>
+<!-- <div>
+    <button (click)="editProfile(profile)">Edit</button>
 </div>
-<a><button style="font-size:large" mat-button color="primary" >Update Profile</button></a>
+    -->
+
+</div>
+<button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true">Create Profile</button>
+<!-- <button style="font-size:large" mat-button color="primary" (click)="updateProfile()">Update Profile</button> -->
+
 
