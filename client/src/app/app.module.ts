@@ -34,7 +34,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
 import { NewsComponent } from './components/news/news.component';
-import { NewsService } from './service/news.service';
+import { NewsService } from './Services/news/news.service';
 import { ProfileComponent } from './components/profile/profile.component';
 
 import { baseURL } from './Services/base-url';
