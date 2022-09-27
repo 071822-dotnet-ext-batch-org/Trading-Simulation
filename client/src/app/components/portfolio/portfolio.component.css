@@ -8,6 +8,7 @@
 .portfolio-list-container {
   display: grid;
   place-items: center center;
+  margin-bottom: 200px;
 }
 
 .portfolio-row {
@@ -17,6 +18,11 @@
 
 .portfolio-col {
   width: 200px;
+}
+
+.progress-spinner-container {
+  display:grid;
+  place-items: center center;
 }
 
 #subheading {

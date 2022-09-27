@@ -2,7 +2,11 @@
   <button mat-button color="primary" id="create-portfolio-button" (click)="displayCreatePortfolioModal()"><mat-icon>add</mat-icon> Create Portfolio</button>
 </div>
 
-<div class="portfolio-list-container">
+<div *ngIf="loading" class="progress-spinner-container">
+  <mat-progress-spinner class="progress-spinner" mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<div class="portfolio-list-container" *ngIf="!loading">
   <mat-action-list>
     <div mat-subheader id="subheading">My Portfolios</div>
     <mat-divider></mat-divider>
