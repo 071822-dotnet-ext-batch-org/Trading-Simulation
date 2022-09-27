@@ -67,6 +67,12 @@ namespace Test.Yoink
         public void sellWorksCorrectly()
         {
             //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            Sell? sell = new Sell(guid, guid, "GOOGL", 2000, 1000, new DateTime());
+          
+
             Guid testSellID = new Guid();
             string testSymbol = "GOOGL";
             decimal testAmountSold = 250;

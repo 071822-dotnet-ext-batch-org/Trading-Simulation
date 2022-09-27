@@ -66,6 +66,7 @@ namespace Test.Yoink
         {
 
             //Arrange
+            Guid guid = Guid.NewGuid();
 
             PortfolioDto? portfoliodto = new PortfolioDto()
             {
@@ -77,7 +78,7 @@ namespace Test.Yoink
 
             Portfolio? portfolio = new Portfolio()
             {
-                PortfolioID = Guid.NewGuid(),
+                PortfolioID = guid,
                 Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
                 Name = "Tony",
                 PrivacyLevel = 2,
@@ -106,18 +107,22 @@ namespace Test.Yoink
 
             //Act
 
-            var TheUserPortfolioWasGot = TheClassBeingTested.GetALLPortfoliosByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");
+            var AllTheUserPortfolioWasGotByUserID = TheClassBeingTested.GetALLPortfoliosByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");
 
             var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfoliodto);
 
             var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);
 
+            var TheUserPortfolioWasGotByPortfolioID = TheClassBeingTested.GetPortfolioByPortfolioIDAsync(guid);
+
+            
 
             //Assert
 
             Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfolio.Fk_UserID);
             Assert.Equal(portfoliodto.Name, portfolio.Name);
             Assert.Equal(2, portfolio.PrivacyLevel);
+            Assert.Equal(portfolio.PortfolioID, guid);
         }
 
 
