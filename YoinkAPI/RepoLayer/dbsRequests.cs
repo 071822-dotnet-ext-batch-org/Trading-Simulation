@@ -85,7 +85,7 @@ namespace RepoLayer
         }
         public async Task<List<Portfolio?>> GetALL_PortfoliosByUserIDAsync(string? userID)
         {
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ", _conn))
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ORDER BY dateModified DESC", _conn))
             {
                 List<Portfolio?> portList = new List<Portfolio?>();
                 command.Parameters.AddWithValue("@userid", userID);
@@ -107,7 +107,7 @@ namespace RepoLayer
 
         public async Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID)
         {
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE portfolioID=@portfolioID ", _conn))
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE portfolioID=@portfolioID", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioID", porfolioID);
                 _conn.Open();
@@ -216,7 +216,7 @@ namespace RepoLayer
         public async Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys)
         {
             List<Buy?> buyList = new List<Buy?>();
-            using (SqlCommand command = new SqlCommand("Select * from Buys where symbol = @symbol and portfolioID = @portfolioid", _conn))
+            using (SqlCommand command = new SqlCommand("Select * from Buys where symbol = @symbol and portfolioID = @portfolioid ORDER BY dateBought DESC", _conn))
             {
                 command.Parameters.AddWithValue("@symbol", AllBuys.Symbol);
                 command.Parameters.AddWithValue("@portfolioid", AllBuys.Get_BuysID);
@@ -265,7 +265,7 @@ namespace RepoLayer
         public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
         {
             List<Sell?> SellList = new List<Sell?>();
-            using (SqlCommand command = new SqlCommand("Select * from Sells where symbol = @symbol and portfolioID = @portfolioid", _conn))
+            using (SqlCommand command = new SqlCommand("Select * from Sells where symbol = @symbol and portfolioID = @portfolioid ORDER BY dateSold DESC", _conn))
             {
                 command.Parameters.AddWithValue("@symbol", symbol);
                 command.Parameters.AddWithValue("@portfolioid", portfolioID);

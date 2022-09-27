@@ -16,6 +16,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 export class PortfolioComponent {
 
   portfolios:Portfolio[] = [];
+  loading:boolean = false;
 
 
   constructor(
@@ -30,8 +31,10 @@ export class PortfolioComponent {
   }
 
   getPortfolios(): void {
+    this.loading = true;
     this.GMP.getMyPortfolios().subscribe(ports => {
       this.portfolios = ports;
+      this.loading = false;
     })
   }
 
@@ -47,8 +50,8 @@ export class PortfolioComponent {
     })
   }
 
-  displayPortfolio(portfolioID: string): void {
-    
+  displayPortfolio(portfolioID:string): void {
+    console.log(portfolioID)
   }
 
 }
