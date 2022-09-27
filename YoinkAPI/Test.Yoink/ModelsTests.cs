@@ -100,10 +100,15 @@ namespace Test.Yoink
         public void buysWorksCorrectly()
         {
             //Arrange
+            Guid guid = Guid.NewGuid();
+
             Guid testbuyID = new Guid();
             Guid testFk_PortfolioID = new Guid();
             string symbol = "Duke";
+
+
             //Act
+            Buy? buy = new Buy(guid, guid, "GOOGL", 2000, 100, 50, new DateTime());
             Buy testBuy = new Buy
             {
                 BuyID = testbuyID,
@@ -122,17 +127,24 @@ namespace Test.Yoink
         public void commentsWorksCorrectly()
         {
             //Arrange
+            Guid guid = Guid.NewGuid();
             Guid testCommentID = new Guid();
             Guid testFk_UserID = new Guid();
             Guid testFk_PostID = new Guid();
+
+
             //Act
+            Comment? buy = new Comment(guid, guid, guid, "GOOGL", new DateTime(), new DateTime());
             Comment testComment = new Comment
             {
                 CommentID = testCommentID,
                 Fk_UserID = testFk_UserID,
-                Fk_PostID = testFk_PostID
-
+                Fk_PostID = testFk_PostID,
+                Content = "Hello World",
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
             };
+
             //Assert
             Assert.Equal(testCommentID, testComment.CommentID);
             Assert.Equal(testFk_UserID, testComment.Fk_UserID);
@@ -147,12 +159,19 @@ namespace Test.Yoink
             //Arrange
             Guid testFriendID = new Guid();
             DateTime testDateFriended = DateTime.Now;
+
+
             //Act
+            Friend? buy = new Friend(testFriendID, testFriendID, testFriendID, new DateTime());
+
             Friend testFriend = new Friend
             {
                 FriendID = testFriendID,
+                Fk_User1ID = testFriendID,
+                Fk_User2ID = testFriendID,
                 DateFriended = testDateFriended
             };
+
             //Assert
             Assert.Equal(testFriendID, testFriend.FriendID);
             Assert.Equal(testDateFriended, testFriend.DateFriended);
