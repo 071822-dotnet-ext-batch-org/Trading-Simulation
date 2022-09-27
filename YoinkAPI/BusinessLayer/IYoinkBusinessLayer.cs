@@ -13,7 +13,7 @@ namespace BusinessLayer
         Task<Buy?> AddNewBuyAsync(Buy buy);
         Task<Sell?> AddNewSellAsync(Sell sell);
         Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys);
-        Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID);
+        Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto);
 
 
         //Portfolio Section
@@ -21,11 +21,19 @@ namespace BusinessLayer
         Task<Portfolio?> EditPortfolioAsync(Models.PortfolioDto p);
         Task<Portfolio?> GetPortfolioByPortfolioIDAsync(Guid? portfolioID);
         Task<List<Portfolio?>> GetALLPortfoliosByUserIDAsync(string? auth0Id);
+        Task<Investment?> GetInvestmentByPortfolioIDAsync(GetInvestmentDto investmentDto);
+        Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime);
 
 
         //Profile Section
         Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p);
         Task<Profile?> EditProfileAsync(string? auth0Id, ProfileDto? p);
         Task<Profile> GetProfileByUserIDAsync(string? auth0Id);
+
+        //Homepage
+        Task<int> GetNumberOfUsersAsync();
+        Task<int> GetNumberOfPostsAsync();
+        Task<int> GetNumberOfBuysByDayAsync();
+        Task<int> GetNumberOfSellsByDayAsync();
     }
 }

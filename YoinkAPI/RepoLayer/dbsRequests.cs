@@ -22,7 +22,7 @@ namespace RepoLayer
 
         public async Task<Profile?> GetProfileByUserIDAsync(string userID)
         {
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Profiles WHERE fk_userID = @userid ", _conn))
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Profiles WHERE fk_userID=@userid ", _conn))
             {
                 command.Parameters.AddWithValue("@userid", userID);
                 _conn.Open();
@@ -171,12 +171,12 @@ namespace RepoLayer
             }
         }
 
-        public async Task<Investment?> GetInvestmentByPortfolioIDAsync(Guid portfolioID, string symbol)
+        public async Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
         {
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolfioid AND symbol=@symbol", _conn))
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolioid AND symbol=@symbol", _conn))
             {
-                command.Parameters.AddWithValue("@portfolioid", portfolioID);
-                command.Parameters.AddWithValue("@symbol", symbol);
+                command.Parameters.AddWithValue("@portfolioid", investmentDto.PortfolioId);
+                command.Parameters.AddWithValue("@symbol", investmentDto.Symbol);
                 _conn.Open();
 
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
@@ -262,13 +262,13 @@ namespace RepoLayer
 
 
         }
-        public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
+        public async Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto)
         {
             List<Sell?> SellList = new List<Sell?>();
             using (SqlCommand command = new SqlCommand("Select * from Sells where symbol = @symbol and portfolioID = @portfolioid ORDER BY dateSold DESC", _conn))
             {
-                command.Parameters.AddWithValue("@symbol", symbol);
-                command.Parameters.AddWithValue("@portfolioid", portfolioID);
+                command.Parameters.AddWithValue("@symbol", sellsDto.Symbol);
+                command.Parameters.AddWithValue("@portfolioid", sellsDto.PortfolioId);
                 _conn.Open();
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
 
@@ -284,5 +284,93 @@ namespace RepoLayer
                 return SellList;
             }
         }
+        public async Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime)
+        {
+            List<Investment?> investmentList = new List<Investment?>();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolioid AND symbol=@symbol AND dateCreated BETWEEN @startTime AND @endTime ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@startTime", investmentByTime.StartTime);
+                command.Parameters.AddWithValue("@endTime", investmentByTime.EndTime);
+                command.Parameters.AddWithValue("@symbol", investmentByTime.Symbol);
+                command.Parameters.AddWithValue("@portfolioid", investmentByTime.PortfolioId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Investment i = new Investment(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetDecimal(9), ret.GetDateTime(10), ret.GetDateTime(11));
+                    investmentList.Add(i);
+
+                }
+
+                _conn.Close();
+                return investmentList;
+            }
+        }
+
+        public async Task<int> GetNumberOfUsersAsync()
+        {
+            string stmt = "SELECT COUNT(userID) FROM Users";
+            int count = 0;
+           
+                using (SqlCommand cmdCount = new SqlCommand(stmt, _conn))
+                {
+                    _conn.Open();
+                    count = (int)cmdCount.ExecuteScalar();
+                    _conn.Close();
+                }
+            
+            return count;
+
+        }
+
+        public async Task<int> GetNumberOfPostsAsync()
+        {
+            string stmt = "SELECT COUNT(postID) FROM Posts";
+            int count = 0;
+
+            using (SqlCommand cmdCount = new SqlCommand(stmt, _conn))
+            {
+                _conn.Open();
+                count = (int)cmdCount.ExecuteScalar();
+                _conn.Close();
+            }
+
+            return count;
+
+        }
+
+        public async Task<int> GetNumberOfBuysByDayAsync()
+        {
+            string stmt = "SELECT COUNT(buyID) FROM Buys";
+            int count = 0;
+            using (SqlCommand cmdCount = new SqlCommand(stmt, _conn))
+            {
+                _conn.Open();
+                count = (int)cmdCount.ExecuteScalar();
+                _conn.Close();
+            }
+
+            return count;
+
+        }
+
+        public async Task<int> GetNumberOfSellsByDayAsync()
+        {
+            
+            string stmt = "SELECT COUNT(sellID) FROM Sells";
+            int count = 0;
+            using (SqlCommand cmdCount = new SqlCommand(stmt, _conn))
+            {
+                _conn.Open();
+                count = (int)cmdCount.ExecuteScalar();
+                _conn.Close();
+            }
+
+            return count;
+
+        }
+
+
     }
 }

@@ -36,7 +36,7 @@ namespace APILayer.Controllers
 
 
         [HttpGet("my-profile")]
-        public async Task<Profile?> GetProfileByUserIDAsync()
+        public async Task<ActionResult<Profile?>> GetProfileByUserIDAsync()
         {
             string? auth0Id = User.Identity?.Name;
             Profile? retrievedProfile = await this._businessLayer.GetProfileByUserIDAsync(auth0Id);
@@ -68,6 +68,7 @@ namespace APILayer.Controllers
             else return BadRequest(p);
         }
 
+        //[AllowAnonymous]
         [HttpGet("my-portfolio")]
         public async Task<ActionResult<Portfolio?>> GetPortfolioByPortfolioIDAsync(Guid? portfolioID)
         {
@@ -115,22 +116,70 @@ namespace APILayer.Controllers
         }
 
 
-        [HttpGet("my-buys")]
+        [HttpPost("my-buys")]
         public async Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto buysDto)
         {
             List<Buy?> buyList = await this._businessLayer.GetAllBuyBySymbolAsync(buysDto);
             return (buyList);
         }
 
-        [HttpGet("my-sell")]
-        public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
+        [HttpPost("my-sell")]
+        public async Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto)
         {
-            List<Sell?> sellList = await this._businessLayer.GetAllSellBySymbolAsync(symbol, portfolioID);
+            List<Sell?> sellList = await this._businessLayer.GetAllSellBySymbolAsync(sellsDto);
             return (sellList);
         }
 
+        //Need an adult for trying out get requests in swagger
+        //[AllowAnonymous]
+        [HttpPost("my-investments")]
+        public async Task<ActionResult<Investment?>> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
+        {
+            Investment? investment = await this._businessLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
+            return (investment);
+        }
+
+        //[AllowAnonymous]
+        //Swagger Tested
+        [HttpPost("my-investments-by-time")]
+        public async Task<ActionResult<List<Investment>?>> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime)
+        {
+            List<Investment>? returnedInvestment = await this._businessLayer.GetInvestmentByTimeAsync(investmentByTime);
+            return returnedInvestment;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("number-of-users")]
+        public async Task<ActionResult<int>> GetNumberOfUsersAsync()
+        {
+            int userCount = await this._businessLayer.GetNumberOfUsersAsync();
+            return userCount;   
+        }
+
+        [AllowAnonymous]
+        [HttpGet("number-of-posts")]
+        public async Task<ActionResult<int>> GetNumberOfPostsAsync()
+        {
+            int postCount = await this._businessLayer.GetNumberOfPostsAsync();
+            return postCount;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("number-of-buys-by-day")]
+        public async Task<ActionResult<int>> GetNumberOfBuysByDayAsync()
+        {
+            int buyCount = await this._businessLayer.GetNumberOfBuysByDayAsync();
+            return buyCount;
+        }
 
 
+        [AllowAnonymous]
+        [HttpGet("number-of-sells-by-day")]
+        public async Task<ActionResult<int>> GetNumberOfSellsByDayAsync()
+        {
+            int sellCount = await this._businessLayer.GetNumberOfSellsByDayAsync();
+            return sellCount;
+        }
     }
 
 }
