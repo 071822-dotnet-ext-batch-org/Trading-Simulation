@@ -5,6 +5,7 @@ import { ResultType } from '@remix-run/router/dist/utils';
 import { AuthService } from '@auth0/auth0-angular';
 import { CreateProfileService } from 'src/app/Services/CreateProfile/create-profile.service';
 import { UpdateProfileService } from 'src/app/Services/update-profile-service/update-profile.service';
+import { number } from 'echarts';
 
 @Component({
   selector: 'app-profile',
