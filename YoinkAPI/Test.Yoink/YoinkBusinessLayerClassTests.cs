@@ -4,6 +4,7 @@ using BusinessLayer;
 using Models;
 using Moq;
 using RepoLayer;
+using System;
 
 namespace Test.Yoink
 {
@@ -97,7 +98,7 @@ namespace Test.Yoink
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
-                .Setup(p => p.GetPortfolioByUserIDAsync(It.IsAny<string>()))
+                .Setup(p => p.GetALL_PortfoliosByUserIDAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(portmockList));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
@@ -105,11 +106,11 @@ namespace Test.Yoink
 
             //Act
 
-            var TheUserPortfolioWasGot = TheClassBeingTested.GetPortfolioByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");
+            var TheUserPortfolioWasGot = TheClassBeingTested.GetALLPortfoliosByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");
 
             var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfoliodto);
 
-            var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", "Tony", 2);
+            var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);
 
 
             //Assert
@@ -155,8 +156,6 @@ namespace Test.Yoink
             var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 
             
-
-
             //Assert
 
             Assert.Equal("GOOGL", sell.Symbol);
@@ -164,6 +163,57 @@ namespace Test.Yoink
             
         }
 
+
+
+        [Fact]
+        public void TestingAllMethodsAssociatedBuy()
+        {
+
+            //Arrange
+
+            Get_BuysDto AllBuys = new Get_BuysDto()
+            {
+                Symbol = "GOOGL",
+                       
+            };
+
+            Buy? buy = new Buy()
+            {
+                BuyID = new Guid(),
+                Fk_PortfolioID = new Guid(),
+                Symbol = "GOOGL",
+                CurrentPrice = 2000,
+                AmountBought = 100,
+                PriceBought = 50,
+                DateBought = new DateTime(),
+
+            };
+
+            List<Buy?> buymockList = new List<Buy?>();
+
+            buymockList.Add(buy);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(b => b.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
+                .Returns(Task.FromResult(buymockList));
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Act
+
+            var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
+
+            var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
+
+
+            //Assert
+
+            Assert.Equal("GOOGL", AllBuys.Symbol);
+            Assert.Equal(2000, buy.CurrentPrice);
+
+        }
 
 
 
