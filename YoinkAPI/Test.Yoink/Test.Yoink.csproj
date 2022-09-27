@@ -9,6 +9,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\APILayer\APILayer.csproj" />
 		<ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
 		<ProjectReference Include="..\RepoLayer\RepoLayer.csproj" />
 		<ProjectReference Include="..\Models\Models.csproj" />

@@ -4,7 +4,12 @@
     <div>   
         Name:
         <input [(ngModel)]="profile.name" placeholder="Name" />
-    </div><div>   
+    </div>
+    <div>   
+        Email:
+        <input [(ngModel)]="profile.email" placeholder="Email" />
+    </div> 
+    <div>   
         Privacy Level:
         <input [(ngModel)]="profile.privacyLevel" placeholder="Privacy Level" />
     </div>
@@ -14,5 +19,7 @@
     -->
 
 </div>
-<button style="font-size:large" mat-button color="primary" (click)="createProfile()">Create Profile</button>
+<button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true">Create Profile</button>
+<!-- <button style="font-size:large" mat-button color="primary" (click)="updateProfile()">Update Profile</button> -->
+
 
