@@ -311,7 +311,7 @@ namespace Test.Yoink
 
 
             //Act
-            Portfolio portfolio = new Portfolio(guid, "d44d63fc-ffa8-4eb7-b81d-644547136d30", "Tony", 2, 2, 2000, 1000, 2500, 2300, 34,600, DT, DT);
+            Portfolio portfolio = new Portfolio(guid, "d44d63fc-ffa8-4eb7-b81d-644547136d30", "John", 2, 2, 2000, 1000, 2500, 2300, 34,600, DT, DT);
 
           
             //Assert
@@ -333,7 +333,7 @@ namespace Test.Yoink
 
 
             //Act
-            PortfolioDto portfolio1 = new PortfolioDto(guid, "Tony", 2000, 2);
+            PortfolioDto portfolio1 = new PortfolioDto(guid, "John", 2000, 2);
 
             PortfolioDto portfolio = new PortfolioDto()
             {
