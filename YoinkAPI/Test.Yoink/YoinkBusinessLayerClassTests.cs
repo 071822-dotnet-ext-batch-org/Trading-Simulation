@@ -146,47 +146,47 @@ namespace Test.Yoink
 
 
 
-        [Fact]
-        public void TestingAllMethodsAssociatedWithSell()
-        {
+        // [Fact]
+        // public void TestingAllMethodsAssociatedWithSell()
+        // {
 
-            //Arrange
+        //     //Arrange
 
-            Sell? sell = new Sell()
-            {
-                SellID = new Guid(),
-                Fk_PortfolioID = new Guid(),
-                Symbol = "GOOGL",
-                AmountSold = 2000,
-                PriceSold = 1000,
-                DateSold = new DateTime(),
-            };
+        //     Sell? sell = new Sell()
+        //     {
+        //         SellID = new Guid(),
+        //         Fk_PortfolioID = new Guid(),
+        //         Symbol = "GOOGL",
+        //         AmountSold = 2000,
+        //         PriceSold = 1000,
+        //         DateSold = new DateTime(),
+        //     };
 
-            List<Sell?> SellmockList = new List<Sell?>();
+        //     List<Sell?> SellmockList = new List<Sell?>();
 
-            SellmockList.Add(sell);
+        //     SellmockList.Add(sell);
 
-            var dataSource = new Mock<IdbsRequests>();
-            dataSource
-                .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<string>(), It.IsAny<Guid>()))
-                .Returns(Task.FromResult(SellmockList));
+        //     var dataSource = new Mock<IdbsRequests>();
+        //     dataSource
+        //         .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<string>(), It.IsAny<Guid>()))
+        //         .Returns(Task.FromResult(SellmockList));
 
-            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+        //     var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
 
-            //Act
+        //     //Act
 
-            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
+        //     var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
 
-            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
+        //     var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 
             
-            //Assert
+        //     //Assert
 
-            Assert.Equal("GOOGL", sell.Symbol);
-            Assert.Equal(2000, sell.AmountSold);
+        //     Assert.Equal("GOOGL", sell.Symbol);
+        //     Assert.Equal(2000, sell.AmountSold);
             
-        }
+        // }
 
 
 
