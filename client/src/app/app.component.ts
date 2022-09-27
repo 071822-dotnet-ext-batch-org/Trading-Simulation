@@ -8,3 +8,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'YOINK';
 }
+
+export class ProfileComponent{
+  private createProfile = true;
+}
