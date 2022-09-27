@@ -8,6 +8,7 @@ import { baseURL } from 'src/app/Services/base-url';
 
 import { inject } from '@angular/core';
 import { BuySellComponent } from './buy-sell.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('BuySellComponent', () => {
   let component: BuySellComponent;
@@ -16,6 +17,7 @@ describe('BuySellComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
+        HttpClientModule,
         AuthModule.forRoot({
           domain: 'dev-pxtkabk5.us.auth0.com',
           clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
