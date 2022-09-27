@@ -16,30 +16,28 @@ export class ProfileComponent implements OnInit {
   profile: any;
 
   constructor(private ProService: ProfileServiceService,
-              private AuthService: AuthService, 
+              private AuthService: AuthService,
               private CreatePro: CreateProfileService,
               private UpdatePro: UpdateProfileService,
               ) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     // this.ProService
     // .getProfiles()
     // .subscribe((resul: Profile[]) => (this.profiles = result));
   }
-  createProfile(){ 
-    this.AuthService.user$.subscribe(user => { 
-      this.CreatePro.createProfile(user?.name, user?.email, user?.picture, 0).subscribe(pro => { 
+  createProfile(){
+    this.AuthService.user$.subscribe(user => {
+      this.CreatePro.createProfile(user?.name, user?.email, user?.picture, 0).subscribe(pro => {
         this.profile = pro
         console.log(pro)
        })
     })
    }
-   
+
 
   // initNewProfile() {
   //   this.profileToEdit = new Profile();
   // }
 
 }
-
-
