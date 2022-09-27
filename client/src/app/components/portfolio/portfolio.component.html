@@ -1,28 +1,38 @@
-<!-- <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Portfolio</mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item href="#">Profile</a>
-      <a mat-list-item href="#">more</a>
-      <a mat-list-item href="#">more</a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span>client</span>
-    </mat-toolbar>
-  </mat-sidenav-content>
-</mat-sidenav-container> -->
+<div class="create-button-container">
+  <button mat-button color="primary" id="create-portfolio-button" (click)="displayCreatePortfolioModal()"><mat-icon>add</mat-icon> Create Portfolio</button>
+</div>
 
-<button mat-raised-button color="primary">portfolio works</button>
+<div *ngIf="loading" class="progress-spinner-container">
+  <mat-progress-spinner class="progress-spinner" mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<div class="portfolio-list-container" *ngIf="!loading">
+  <mat-action-list>
+    <div mat-subheader id="subheading">My Portfolios</div>
+    <mat-divider></mat-divider>
+    <mat-list-item *ngFor="let portfolio of portfolios" (click)="displayPortfolio(portfolio.portfolioID)">
+      <mat-icon mat-list-icon class="portfolio-col">folder</mat-icon>
+      <div class="portfolio-col">
+        <div mat-line class="portfolio-row">{{portfolio.name}}</div>
+        <div mat-line class="portfolio-row">{{portfolio.dateModified | date}}</div>
+      </div>
+      <div class="portfolio-col">
+        <div mat-line class="portfolio-row">Total PNL</div>
+        <div mat-line class="portfolio-row">{{portfolio.totalPNL | currency}}</div>
+      </div>
+      <div class="portfolio-col">
+        <div mat-line class="portfolio-row">Original Investment</div>
+        <div mat-line class="portfolio-row">{{portfolio.originalLiquid | currency}}</div>
+      </div>
+      <div class="portfolio-col">
+        <div mat-line class="portfolio-row">Available cash</div>
+        <div mat-line class="portfolio-row">{{portfolio.liquid | currency}}</div>
+      </div>
+      <div class="portfolio-col">
+        <div mat-line class="portfolio-row">Current investments</div>
+        <div mat-line class="portfolio-row">{{portfolio.currentInvestment | currency}}</div>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-action-list>
+</div>

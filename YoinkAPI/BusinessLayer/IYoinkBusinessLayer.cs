@@ -12,14 +12,15 @@ namespace BusinessLayer
         //Buy and Sell Section
         Task<Buy?> AddNewBuyAsync(Buy buy);
         Task<Sell?> AddNewSellAsync(Sell sell);
-        Task<List<Buy?>> GetAllBuyBySymbolAsync(string symbol, Guid portfolioID);
+        Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys);
         Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID);
 
 
         //Portfolio Section
         Task<List<Portfolio?>> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
-        Task<Portfolio?> EditPortfolioAsync(string portfolioID, string name, int privacyLevel);
-        Task<List<Portfolio?>> GetPortfolioByUserIDAsync(string? auth0Id);
+        Task<Portfolio?> EditPortfolioAsync(Models.PortfolioDto p);
+        Task<Portfolio?> GetPortfolioByPortfolioIDAsync(Guid? portfolioID);
+        Task<List<Portfolio?>> GetALLPortfoliosByUserIDAsync(string? auth0Id);
 
 
         //Profile Section
