@@ -33,9 +33,13 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
+ 
+ 
+ 
 import { NewsComponent } from './components/news/news.component';
 import { NewsService } from './service/news.service';
 import { ProfileComponent } from './components/profile/profile.component';
+ 
 
 import { baseURL } from './Services/base-url';
 import { FormsModule } from '@angular/forms';
@@ -68,9 +72,14 @@ import { CreatePortfolioModalComponent } from './components/create-portfolio-mod
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+ 
+   
+
+ 
     FormsModule,
     HttpClientModule,
     MatDialogModule,
+ 
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
