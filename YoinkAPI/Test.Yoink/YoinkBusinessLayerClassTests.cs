@@ -4,6 +4,7 @@ using Models;
 using Moq;
 using RepoLayer;
 using System;
+using System.Xml.Linq;
 
 namespace Test.Yoink
 {
@@ -43,6 +44,16 @@ namespace Test.Yoink
                 .Returns(Task.FromResult(profile));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            var dataSource2 = new Mock<IdbsRequests>();
+            dataSource
+               .Setup(m => m.CreateProfileAsync(It.IsAny< string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+               .Returns(Task.FromResult(true));
+
+            var dataSource3 = new Mock<IdbsRequests>();
+            dataSource
+               .Setup(m => m.EditProfileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+               .Returns(Task.FromResult(true));
 
 
             //Act
@@ -105,6 +116,13 @@ namespace Test.Yoink
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
+
+            var dataSource2 = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.EditPortfolioAsync(It.IsAny<PortfolioDto>()))
+                .Returns(Task.FromResult(true));
+
+           
 
             //Act
 
