@@ -15,6 +15,7 @@ namespace Models
         public decimal? Liquid { get; set; }
         public decimal? CurrentTotal { get; set; }
         public int? Symbols { get; set; }
+        public decimal? TotalPNL { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
@@ -22,7 +23,7 @@ namespace Models
         {
         }
 
-        public Portfolio(Guid? portfolioID, string? fk_UserID, string? name, int? privacyLevel, int? type, decimal? originalLiquid, decimal? currentInvestment, decimal? liquid, decimal? currentTotal, int? symbols, DateTime? dateCreated, DateTime? dateModified)
+        public Portfolio(Guid? portfolioID, string? fk_UserID, string? name, int? privacyLevel, int? type, decimal? originalLiquid, decimal? currentInvestment, decimal? liquid, decimal? currentTotal, int? symbols,  decimal? TotalPNL, DateTime? dateCreated, DateTime? dateModified)
         {
             this.PortfolioID = portfolioID;
             this.Fk_UserID = fk_UserID;
@@ -34,6 +35,7 @@ namespace Models
             this.Liquid = liquid;
             this.CurrentTotal = currentTotal;
             this.Symbols = symbols;
+            this.TotalPNL = TotalPNL;
             this.DateCreated = dateCreated;
             this.DateModified = dateModified;
         }

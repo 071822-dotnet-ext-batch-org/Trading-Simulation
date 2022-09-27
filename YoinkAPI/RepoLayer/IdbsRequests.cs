@@ -4,12 +4,22 @@ namespace RepoLayer
 {
     public interface IdbsRequests
     {
-        Task<Profile?> CreateProfileAsync(string userID, string Name, string Email, int Privacy);
-        Task<Profile?> EditProfileAsync(string userID, string Name, string Email, int Privacy);
+        //Profiles Section
+        Task<bool> CreateProfileAsync(string? userID, string? Name, string? Email, string? Picture ,int? Privacy);
+        Task<bool> EditPortfolioAsync(Models.PortfolioDto p);
+        Task<bool> EditProfileAsync(string? userID, string? Name, string? Email, string? Picture, int? Privacy);
         Task<Profile?> GetProfileByUserIDAsync(string userID);
-        Task<List<Buy?>> GetAllBuyBySymbolAsync(string value);
-        Task<bool?> AddNewSellAsync(Guid PortfolioId, string Symbol, decimal amountSold, decimal priceSold, DateTime dateSold);
-        Task<Portfolio?> CreatePortfolioAsync(string? auth0Id, Portfolio? p);
-        Task<Portfolio?> GetPortfolioByUserIDAsync(string? auth0Id);
+
+        //Buy and Sell Section
+        Task<bool> AddNewBuyAsync(Guid? PortfolioId, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought, DateTime? DateBought);
+        Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold);
+        Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys);
+        Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID );
+
+        //Portfolio Section
+        Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID);
+        Task<List<Portfolio?>> GetALL_PortfoliosByUserIDAsync(string? userID);
+        Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
+        Task<Investment?> GetInvestmentByPortfolioIDAsync(Guid portfolioID, string symbol);
     }
 }

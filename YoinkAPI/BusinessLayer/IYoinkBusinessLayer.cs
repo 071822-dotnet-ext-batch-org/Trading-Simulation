@@ -9,10 +9,23 @@ namespace BusinessLayer
 {
     public interface IYoinkBusinessLayer
     {
-        Task<Portfolio?> CreatePortfolioAsync(string? auth0Id, Portfolio? p);
-        Task<Profile> CreateProfileAsync(string? auth0Id, ProfileDto? p);
-        Task<Profile> EditProfileAsync(string? auth0Id, ProfileDto? p);
-        Task<Portfolio?> GetPortfolioByUserIDAsync(string? auth0Id);
+        //Buy and Sell Section
+        Task<Buy?> AddNewBuyAsync(Buy buy);
+        Task<Sell?> AddNewSellAsync(Sell sell);
+        Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys);
+        Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID);
+
+
+        //Portfolio Section
+        Task<List<Portfolio?>> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
+        Task<Portfolio?> EditPortfolioAsync(Models.PortfolioDto p);
+        Task<Portfolio?> GetPortfolioByPortfolioIDAsync(Guid? portfolioID);
+        Task<List<Portfolio?>> GetALLPortfoliosByUserIDAsync(string? auth0Id);
+
+
+        //Profile Section
+        Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p);
+        Task<Profile?> EditProfileAsync(string? auth0Id, ProfileDto? p);
         Task<Profile> GetProfileByUserIDAsync(string? auth0Id);
     }
 }

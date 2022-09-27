@@ -30,7 +30,7 @@ namespace RepoLayer
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
                 if (ret.Read())
                 {
-                    Profile p = new Profile(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3), ret.GetInt32(4));
+                    Profile p = new Profile(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3),ret.GetString(4), ret.GetInt32(5));
                     return p;
                 }
                 _conn.Close();
@@ -38,52 +38,54 @@ namespace RepoLayer
             }
         }
 
-        public async Task<Profile?> CreateProfileAsync(string userID, string Name, string Email, int Privacy)
+        public async Task<bool> CreateProfileAsync(string? userID, string? Name, string? Email, string? Picture ,int? Privacy)
         {
-            using (SqlCommand command = new SqlCommand($"INSERT INTO Profiles (fk_userID, name, email, privacyLevel) VALUES (@userid, @name, @email, @privacy)", _conn))
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Profiles (fk_userID, name, email, picture, privacyLevel) VALUES (@userid, @name, @email , @picture , @privacy)", _conn))
             {
                 command.Parameters.AddWithValue("@userid", userID);
                 command.Parameters.AddWithValue("@name", Name);
                 command.Parameters.AddWithValue("@email", Email);
+                command.Parameters.AddWithValue("@picture", Picture);
                 command.Parameters.AddWithValue("@privacy", Privacy);
                 _conn.Open();
 
                 int ret = await command.ExecuteNonQueryAsync();
-                if (ret > 1)
+                if (ret > 0)
                 {
-                    Profile p = new Profile();
-                    return p;
+                    _conn.Close();
+                    return true;
                 }
                 _conn.Close();
-                return null;
+                return false;
             }
         }
 
-        public async Task<Profile?> EditProfileAsync(string userID, string Name, string Email, int Privacy)
+        public async Task<bool> EditProfileAsync(string? userID, string? Name, string? Email, string? Picture, int? Privacy)
         {
 
-            using (SqlCommand command = new SqlCommand($"UPDATE Profiles SET (fk_userID = @userid, name =@name, email = @email, privacyLevel = @privacy)", _conn))
+            using (SqlCommand command = new SqlCommand($"UPDATE Profiles SET (fk_userID=@userid, name=@name, email=@email, picture=@picture, privacyLevel=@privacy)", _conn))
             {
                 command.Parameters.AddWithValue("@userid", userID);
                 command.Parameters.AddWithValue("@name", Name);
                 command.Parameters.AddWithValue("@email", Email);
+                command.Parameters.AddWithValue("@picture", Picture);
                 command.Parameters.AddWithValue("@privacy", Privacy);
                 _conn.Open();
 
                 int ret = await command.ExecuteNonQueryAsync();
-                if (ret > 1)
+                if (ret > 0)
                 {
-                    Profile p = new Profile();
-                    return p;
+                    _conn.Close();
+                    return true;
                 }
                 _conn.Close();
-                return null;
+                return false;
             }
             
         }
-        public async Task<List<Portfolio?>> GetPortfolioByUserIDAsync(string userID)
+        public async Task<List<Portfolio?>> GetALL_PortfoliosByUserIDAsync(string? userID)
         {
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ", _conn))
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ORDER BY dateModified DESC", _conn))
             {
                 List<Portfolio?> portList = new List<Portfolio?>();
                 command.Parameters.AddWithValue("@userid", userID);
@@ -93,69 +95,95 @@ namespace RepoLayer
                 // add list stuff
                 while (ret.Read())
                 {
-                    Portfolio p = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDateTime(10), ret.GetDateTime(11));
+                    Portfolio p = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDecimal(10),ret.GetDateTime(11), ret.GetDateTime(12));
                     portList.Add(p);
 
                 }
+                
                 _conn.Close();
                 return portList;
             }
-        }
-        public async Task<Portfolio?> CreatePortfolioAsync(string UserID, string Name, int PrivacyLevel, int Type, decimal OriginalLiquid)
+        }//End OF Get PORTFOLIO BY userID
+
+        public async Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID)
         {
-            using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, type, originalLiquid, liquid, currentTotal) VALUES (@userid, @name, @privacylevel, @type, @originalliquid, @liquid, @currenttotal)", _conn))
-            {             
-                command.Parameters.AddWithValue("@userid", UserID);
-                command.Parameters.AddWithValue("@name", Name);
-                command.Parameters.AddWithValue("@privacylevel", PrivacyLevel);
-                command.Parameters.AddWithValue("@originalliquid", OriginalLiquid);
-                command.Parameters.AddWithValue("@liquid", OriginalLiquid);
-                command.Parameters.AddWithValue("@currenttotal", OriginalLiquid);
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE portfolioID=@portfolioID", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioID", porfolioID);
                 _conn.Open();
 
-                int ret = await command.ExecuteNonQueryAsync();
-                if (ret > 1)
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                // add list stuff
+
+                if(ret.Read())
                 {
-                    Portfolio p = new Portfolio();
+                    Portfolio p = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDecimal(10),ret.GetDateTime(11), ret.GetDateTime(12));
+                    _conn.Close();
                     return p;
+
                 }
                 _conn.Close();
                 return null;
             }
         }
 
-        public async Task<Portfolio?> EditPortfolioAsync(string PortfolioID, string Name, int PrivacyLevel)
+        public async Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
         {
-
-            using (SqlCommand command = new SqlCommand($"UPDATE Portfolios SET (name = @name, privacyLevel = @privacylevel) WHERE portfolioID = @portfolioid", _conn))
-            {            
-                command.Parameters.AddWithValue("@portfolioid", PortfolioID);
-                command.Parameters.AddWithValue("@name", Name);
-                command.Parameters.AddWithValue("@privacylevel", PrivacyLevel);
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, originalLiquid, liquid) VALUES (@auth0Id, @name, @privacylevel, @originalliquid, @liquid)", _conn))
+            {             
+                command.Parameters.AddWithValue("@auth0Id", auth0Id);
+                command.Parameters.AddWithValue("@name", p.Name);
+                command.Parameters.AddWithValue("@privacylevel", p.PrivacyLevel);
+                command.Parameters.AddWithValue("@originalliquid", p.OriginalLiquid);
+                command.Parameters.AddWithValue("@liquid", p.OriginalLiquid);
+                // command.Parameters.AddWithValue("@currenttotal", p.CurrentInvestment);
                 _conn.Open();
 
                 int ret = await command.ExecuteNonQueryAsync();
                 if (ret > 0)
                 {
-                    Portfolio p = new Portfolio();
-                    return p;
+                    _conn.Close();
+                    return true;
                 }
                 _conn.Close();
-                return null;
+                return false;
             }
         }
 
-        public async Task<Investment?> GetInvestmentByPortfolioIDAsync(string portfolioID)
+        public async Task<bool> EditPortfolioAsync(Models.PortfolioDto p)
         {
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolfioid ", _conn))
+
+            using (SqlCommand command = new SqlCommand($"UPDATE Portfolios SET (name = @name, privacyLevel = @privacylevel) WHERE portfolioID = @portfolioid", _conn))
+            {            
+                command.Parameters.AddWithValue("@portfolioid", p.PortfolioID);
+                command.Parameters.AddWithValue("@name", p.Name); 
+                command.Parameters.AddWithValue("@privacylevel", p.PrivacyLevel);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        public async Task<Investment?> GetInvestmentByPortfolioIDAsync(Guid portfolioID, string symbol)
+        {
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolfioid AND symbol=@symbol", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioid", portfolioID);
+                command.Parameters.AddWithValue("@symbol", symbol);
                 _conn.Open();
 
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
                 if (ret.Read())
                 {
-                    Investment i = new Investment(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetDecimal(9), ret.GetDecimal(10));
+                    Investment i = new Investment(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetDecimal(9), ret.GetDateTime(10), ret.GetDateTime(11));
+                    _conn.Close();
                     return i;
                 }
                 _conn.Close();
@@ -163,7 +191,7 @@ namespace RepoLayer
             }
         }        
         
-        public async Task<bool?> AddNewBuyAsync(Guid PortfolioId, string Symbol, decimal CurrentPrice, decimal AmountBought, decimal PriceBought, DateTime DateBought)
+        public async Task<bool> AddNewBuyAsync(Guid? PortfolioId, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought, DateTime? DateBought)
         {
             using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_Portfolio, symbol, currentPrice, amountBought, priceBought, dateBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought, @datebought)", _conn))
             {
@@ -185,13 +213,13 @@ namespace RepoLayer
             }
         }
         
-        public async Task<List<Buy?>> GetAllBuyBySymbolAsync(string symbol, Guid portfolioID)
+        public async Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys)
         {
             List<Buy?> buyList = new List<Buy?>();
-            using (SqlCommand command = new SqlCommand("Select * from Buys where symbol = @symbol and portfolioID = @portfolioid", _conn))
+            using (SqlCommand command = new SqlCommand("Select * from Buys where symbol = @symbol and portfolioID = @portfolioid ORDER BY dateBought DESC", _conn))
             {
-                command.Parameters.AddWithValue("@symbol", symbol);
-                command.Parameters.AddWithValue("@portfolioid", portfolioID);
+                command.Parameters.AddWithValue("@symbol", AllBuys.Symbol);
+                command.Parameters.AddWithValue("@portfolioid", AllBuys.Get_BuysID);
                 _conn.Open();
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
 
@@ -209,7 +237,7 @@ namespace RepoLayer
         }
 
 
-        public async Task<bool?> AddNewSellAsync(Guid PortfolioId, string Symbol, decimal amountSold, decimal priceSold, DateTime dateSold)
+        public async Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold)
         {
             using (SqlCommand command = new SqlCommand("INSERT INTO Sells (fk_Portfolio, symbol, amountSold, priceSold, dateSold) VALUES (@portfolioid, @symbol, @amountSold, @priceSold, @dateSold)", _conn))
             {
@@ -237,7 +265,7 @@ namespace RepoLayer
         public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
         {
             List<Sell?> SellList = new List<Sell?>();
-            using (SqlCommand command = new SqlCommand("Select * from Sells where symbol = @symbol and portfolioID = @portfolioid", _conn))
+            using (SqlCommand command = new SqlCommand("Select * from Sells where symbol = @symbol and portfolioID = @portfolioid ORDER BY dateSold DESC", _conn))
             {
                 command.Parameters.AddWithValue("@symbol", symbol);
                 command.Parameters.AddWithValue("@portfolioid", portfolioID);
@@ -246,7 +274,7 @@ namespace RepoLayer
 
                 while (ret.Read())
                 {
-                    Sell b = new Sell(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDateTime(5), ret.GetDecimal(6));
+                    Sell b = new Sell(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDateTime(5));
 
                     SellList.Add(b);
 

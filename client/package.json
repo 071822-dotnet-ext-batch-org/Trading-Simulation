@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
@@ -24,23 +25,20 @@
     "@auth0/auth0-angular": "^1.10.1",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
-
-    "highcharts": "^10.2.1",
-    "highcharts-angular": "^3.0.0",
-
     "angular-google-charts": "^2.2.3",
     "auth0-angular": "github:auth0/auth0-angular",
     "echarts": "^5.3.3",
     "echarts-gl": "^2.0.9",
+    "highcharts": "^10.2.1",
+    "highcharts-angular": "^3.0.0",
     "ngx-echarts": "^14.0.0",
-
     "react-router-dom": "^6.4.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.2.2",
+    "@angular-devkit/build-angular": "^14.2.3",
     "@angular/cli": "~14.2.2",
     "@angular/compiler-cli": "^14.2.0",
     "@types/echarts": "^4.9.16",
