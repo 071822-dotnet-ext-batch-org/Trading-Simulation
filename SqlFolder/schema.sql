@@ -22,7 +22,7 @@ CREATE TABLE Users
 CREATE TABLE Profiles
 (
 	profileID UNIQUEIDENTIFIER PRIMARY KEY NOT NULL DEFAULT newid(), --make sure all the guids have a newid generator
-	fk_userID NVARCHAR(100) NOT NULL FOREIGN KEY REFERENCES Users(userID),
+	fk_userID NVARCHAR(100) NOT NULL UNIQUE FOREIGN KEY REFERENCES Users(userID),
 	name NVARCHAR (100),
 	email NVARCHAR (64),
 	picture NVARCHAR (200),

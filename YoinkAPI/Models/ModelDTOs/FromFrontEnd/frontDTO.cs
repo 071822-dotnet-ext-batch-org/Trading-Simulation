@@ -10,15 +10,16 @@ namespace Models
     /// </summary>
     public class PortfolioDto
     {
-        // public Guid? porfolioID {get;set;}
+        public Guid? PortfolioID {get;set;}
         // public string? UserID {get;set;}
         public string? Name { get; set; } 
         // public decimal? CurrentInvestment { get; set; } //These three values will be used case by case - Just depending on which amount needs to be udated
         public decimal? OriginalLiquid { get; set; }// Each one is optional so we wont get a callback if its empty - original liquid value given
         public int? PrivacyLevel { get; set; } 
         public PortfolioDto(){}
-        public PortfolioDto(string? name, decimal? originalLiquid, int? privacyLevel)
+        public PortfolioDto(Guid? portfolioID, string? name, decimal? originalLiquid, int? privacyLevel)
         {
+            this.PortfolioID = portfolioID;
             this.Name = name;
             this.OriginalLiquid = originalLiquid;
             this.PrivacyLevel = privacyLevel;
@@ -27,13 +28,15 @@ namespace Models
     }//End of Portfolio from front end to update portfolio in DB
 
     public class ProfileDto{
+        public Guid? PortfolioID { get; set; }
         public string? Name { get; set; }
         public string? Email { get; set; }
         public string? Picture { get; set; }
         public int? PrivacyLevel { get; set; }
         public ProfileDto(){}
-        public ProfileDto(string? name, string? email, string? picture,int? privacyLevel)
+        public ProfileDto(Guid? PortfolioID, string? name, string? email, string? picture,int? privacyLevel)
         {
+            this.PortfolioID = PortfolioID;
             this.Name = name;
             this.Email = email;
             this.Picture = picture;
@@ -47,7 +50,7 @@ namespace Models
     /// </summary>
     public class BuyDto
     {
-        public Guid? Fk_PortfolioID { get; set; }
+        public Guid? BuyID { get; set; }
         public string? Symbol { get; set; }
         public decimal? CurrentPrice { get; set; }
         public decimal? AmountBought { get; set; }
@@ -55,13 +58,25 @@ namespace Models
         public BuyDto(){}
         public BuyDto(Guid? Fk_PortfolioID, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought)
         {
-            this.Fk_PortfolioID = Fk_PortfolioID;
+            this.BuyID = Fk_PortfolioID;
             this.Symbol = Symbol;
             this.CurrentPrice = CurrentPrice;
             this.AmountBought  = AmountBought;
             this.PriceBought = PriceBought;
         }
     }//End of BUY
+
+    public class Get_BuysDto
+    {
+        public Guid? Get_BuysID { get; set; }
+        public string? Symbol { get; set; }
+        public Get_BuysDto(){}
+        public Get_BuysDto(Guid? Get_BuysID, string? Symbol)
+        {
+            this.Get_BuysID = Get_BuysID;
+            this.Symbol = Symbol;
+        }
+    }//End of GET Get_BuysDto
 
 
     /// <summary>
