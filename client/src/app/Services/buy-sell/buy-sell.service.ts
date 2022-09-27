@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { callBuySellApi } from '../../Models/buy-sell/buy-sell-api-call';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -16,8 +17,8 @@ export class BuySellService {
 
   constructor(private http: HttpClient) { }
 
-  getTickerPrice() {
-    return this.http.get(this.lastQuote);
+  getTickerPrice(): Observable<any> {
+    return this.http.get<any>(this.lastQuote);
   };
 
 }
