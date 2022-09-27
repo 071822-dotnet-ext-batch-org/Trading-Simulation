@@ -14,7 +14,7 @@ export class BuySellService {
 
   /////////// NEED TO ADD WEB TOKEN!!!!//////////////
   private lastQuote = 'https://api.polygon.io/v2/aggs/ticker/';
-  private lastQuoteKey = '/prev?adjusted=true&apiKey=Z1iQvUg4p15SM0xMbsMxVAJ_d1dZlgd4';
+  private lastQuoteKey = '/prev?adjusted=true&apiKey=';
 
   constructor(private http: HttpClient) { }
 
