@@ -1,4 +1,5 @@
-using System.Security.Cryptography.X509Certificates;
+
+
 using Models;
 
 namespace Test.Yoink
@@ -7,6 +8,75 @@ namespace Test.Yoink
     {
         [Fact]
         public void InvestmentWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid invt = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            Investment newinvestment1 = new Investment(invt, invt, "AAPL", 1200, 100, 50, 4, 2, 150, 50, DT, DT);
+
+            Investment newinvestment = new Investment()
+            {
+                InvestmentID = invt,
+                Fk_PortfolioID = invt,
+                Symbol = "AAPL",
+                AmountInvested = 1200,
+                CurrentAmount = 100,
+                CurrentPrice= 50,
+                TotalAmountBought = 4,
+                TotalAmountSold = 2,
+                AveragedBuyPrice = 150,
+                TotalPNL = 50,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(newinvestment.InvestmentID, invt);
+            Assert.Equal(newinvestment1.InvestmentID, invt);
+
+        }
+
+
+
+        [Fact]
+        public void postWorksCorrectly()
+        {
+            //Arrange
+            Guid TestpostID = new Guid();
+            Guid TestFk_UserID = new Guid();
+
+            //Act
+            Post TestPost1 = new Post(TestpostID, TestFk_UserID, "Sold big", "1", new DateTime(), 2, new DateTime());
+            Post TestPost = new Post 
+            { PostID = TestpostID, 
+              Fk_UserID = TestFk_UserID,
+              Content = "Sold big",
+              Likes = "1",
+              DateCreated = new DateTime(),
+              PrivacyLevel = 2,
+              DateModified = new DateTime(),
+
+        };
+
+            //Assert
+            Assert.Equal(TestpostID, TestPost.PostID);
+            Assert.Equal(TestFk_UserID, TestPost.Fk_UserID);
+        }
+
+
+
+        [Fact]
+        public void sellWorksCorrectly()
+
         {
 
             //Arrange
@@ -71,6 +141,7 @@ namespace Test.Yoink
             Guid guid = Guid.NewGuid();
 
             Sell? sell = new Sell(guid, guid, "GOOGL", 2000, 1000, new DateTime());
+
           
 
             Guid testSellID = new Guid();
@@ -569,10 +640,12 @@ namespace Test.Yoink
                 Fk_UserID = testUserID,
                 DateCreated = testDateCreated,
                 DateModified = testDateModi
+
             };
 
 
             //Assert
+
 
             Assert.Equal(dummyLikepost.LikesPostsID, testLikePostID);
             Assert.Equal(dummylikepost2.LikesPostsID, testLikePostID);
@@ -603,4 +676,3 @@ namespace Test.Yoink
 
 
 
-}

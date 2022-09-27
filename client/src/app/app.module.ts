@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AuthModule } from '@auth0/auth0-angular';
+import { Auth0ClientService, AuthModule } from '@auth0/auth0-angular';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from '@auth0/auth0-angular';
 
@@ -105,8 +105,6 @@ import { CreatePortfolioModalComponent } from './components/create-portfolio-mod
     MatProgressSpinnerModule
 
   ],
-
-
 providers: [
     NewsService,
     {
