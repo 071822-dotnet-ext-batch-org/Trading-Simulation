@@ -3,7 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { BuySellDetails, Options } from '../../Models/buy-sell/buySellOptions';
 import { BuySellService } from 'src/app/Services/buy-sell/buy-sell.service';
-import { BuySellOptions } from '../../Models/buy-sell/buySellOptions';
+import { Results } from 'src/app/Models/buy-sell/polygonResults';
 
 @Component({
   selector: 'app-buy-sell',
@@ -20,8 +20,10 @@ export class BuySellComponent implements OnInit {
 
   qty: any;
   tickerPrice: any;
-
+  tickerData: any;
+  tickerSymbol: any;
   details: BuySellDetails[] = [];
+  results: Results[] = [];
 
 
   options: Options[] = [
@@ -36,6 +38,7 @@ export class BuySellComponent implements OnInit {
 
   ];
 
+
   getQty() {
     this.qty;
   }
@@ -49,7 +52,6 @@ export class BuySellComponent implements OnInit {
 
   ngOnInit(): void {
     this.calculateTotal();
-
     CUSTOM_ELEMENTS_SCHEMA;
   };
 
@@ -58,6 +60,8 @@ export class BuySellComponent implements OnInit {
       this.totalPrice = cost.quantity * cost.price;
     });
   }
-  // this.buySellService.getTickerPrice().subscribe(response => {this.tickerPrice = response;}
 
+  getTickerData(tickerSymbol: string) {
+    this.buySell.getTickerData(tickerSymbol).subscribe(tickerData => this.tickerData = (tickerData.results))
+  }
 }

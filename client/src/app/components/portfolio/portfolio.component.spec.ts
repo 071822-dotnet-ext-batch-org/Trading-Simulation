@@ -7,6 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PortfolioComponent } from './portfolio.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -18,6 +19,7 @@ describe('PortfolioComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PortfolioComponent],
       imports: [
+        HttpClientModule,
         NoopAnimationsModule,
         LayoutModule,
         MatButtonModule,

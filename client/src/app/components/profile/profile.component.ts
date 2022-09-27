@@ -12,7 +12,7 @@ import { UpdateProfileService } from 'src/app/Services/update-profile-service/up
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
+  private isButtonVisible = true;
   profile: any;
 
   constructor(private ProService: ProfileServiceService,
@@ -25,8 +25,12 @@ export class ProfileComponent implements OnInit {
     // this.ProService
     // .getProfiles()
     // .subscribe((resul: Profile[]) => (this.profiles = result));
+    
   }
-  createProfile(){
+
+  isClicked: boolean = false;
+
+  createProfile (){
     this.AuthService.user$.subscribe(user => {
       this.CreatePro.createProfile(user?.name, user?.email, user?.picture, 0).subscribe(pro => {
         this.profile = pro
@@ -34,6 +38,15 @@ export class ProfileComponent implements OnInit {
        })
     })
    }
+
+  //  updateProfile(){
+  //   this.AuthService.user$.subscribe(user => {
+  //     this.UpdatePro.updateProfile(user?.name, user?.email, user?.picture, 0).subscribe(update => {
+  //       console.log(update)
+  //     })
+  //   })
+    
+  //  }
 
 
   // initNewProfile() {
