@@ -1,4 +1,67 @@
 <!-- <button (click)="initNewProfile()">Create New Profile</button> -->
+<div class="container">
+    <mat-card class="card">
+        <mat-card-header>
+            <img mat-card-avatar src={{this.profile.picture}}>
+            <mat-card-title>{{this.profile.name}}</mat-card-title>
+            <mat-card-subtitle>{{this.profile.email}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="content">
+        </mat-card-content>
+        </mat-card>
+        </div>
+<!--             
+            <div class="address-container">
+                <p>Address</p>
+
+                <div *ngIf="showProfileName">
+                    <p class="editable">
+                        <span class="not-on-file" *ngIf="this.profile.name===''">
+                            No address given 
+                        </span>
+                        
+                        {{this.profile.profileName}}
+                        
+                        <button mat-button (click)="editName()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </p>
+                </div>
+
+                <div *ngIf="!showProfileName">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Profile Name</mat-label>
+                        <input matInput id="name" type="text" (focusout)="updateProfileName()" (keydown.enter)="updateEmailName()" [formControl]="profile">
+                    </mat-form-field>
+                </div>
+            </div> -->
+                
+            <!-- <div class="phone-container">
+                <p>Phone</p>
+
+                <div *ngIf="showPhone">
+                    <p class="editable">
+                        <span class="not-on-file" *ngIf="this.userInfo.profilePhone===''">
+                            No phone number given 
+                        </span>
+                        
+                        {{this.userInfo.profilePhone}}
+                        
+                        <button mat-button (click)="editPhone()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </p>
+                </div>
+
+                <div *ngIf="!showPhone">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Phone</mat-label>
+                        <input matInput id="phone" type="text" (focusout)="updatePhoneInfo()" (keydown.enter)="updatePhoneInfo()" [formControl]="phone">
+                    </mat-form-field>
+                </div>
+            </div> -->
+
+
 <div *ngIf="profile">
     <h2>{{ profile.name }}</h2>
     <div>   
@@ -11,14 +74,14 @@
     </div> 
     <div>   
         Privacy Level:
-        <input [(ngModel)]="profile.privacyLevel" placeholder="Privacy Level" />
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+        </label>
+        <!-- <button (click)="updateProfile(profile)">Save</button> -->
     </div>
-<!-- <div>
-    <button (click)="editProfile(profile)">Edit</button>
-</div>
-    -->
 
-</div>
+    
 <button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true">Create Profile</button>
 <!-- <button style="font-size:large" mat-button color="primary" (click)="updateProfile()">Update Profile</button> -->
 

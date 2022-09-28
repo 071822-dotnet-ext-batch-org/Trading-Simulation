@@ -184,6 +184,15 @@ namespace Test.Yoink
 
             //Arrange
 
+            GetSellsDto selldto1 = new GetSellsDto(new Guid(), "GOOGL");
+
+            GetSellsDto selldto = new GetSellsDto()
+            {
+                PortfolioId = new Guid(),
+                Symbol = "GOOGL",
+
+            };
+
             Sell? sell = new Sell()
             {
                 SellID = new Guid(),
@@ -200,7 +209,7 @@ namespace Test.Yoink
 
             var dataSource = new Mock<IYoinkBusinessLayer>();
             dataSource
-                .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<string>(), It.IsAny<Guid>()))
+                .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<GetSellsDto>()))
                 .Returns(Task.FromResult(SellmockList));
 
             var TheClassBeingTested = new YoinkController(dataSource.Object);
@@ -208,7 +217,7 @@ namespace Test.Yoink
 
             //Act
 
-            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
+            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(selldto);
 
             var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 
@@ -217,7 +226,7 @@ namespace Test.Yoink
 
             Assert.Equal("GOOGL", sell.Symbol);
             Assert.Equal(2000, sell.AmountSold);
-
+            Assert.Equal("GOOGL", selldto.Symbol);
         }
 
 
