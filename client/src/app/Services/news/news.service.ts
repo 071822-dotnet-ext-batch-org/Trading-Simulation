@@ -15,6 +15,5 @@ export class NewsService {
   public getNews():Observable<any>{
     return this.http.get<any>(this.Nurl)
   }
-  
   }
 

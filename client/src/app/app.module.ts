@@ -102,7 +102,7 @@ import { CreatePortfolioModalComponent } from './components/create-portfolio-mod
     MatFormFieldModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
 
   ],
 providers: [
