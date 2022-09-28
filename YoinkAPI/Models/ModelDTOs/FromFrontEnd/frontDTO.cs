@@ -28,15 +28,13 @@ namespace Models
     }//End of Portfolio from front end to update portfolio in DB
 
     public class ProfileDto{
-        public Guid? PortfolioID { get; set; }
         public string? Name { get; set; }
         public string? Email { get; set; }
         public string? Picture { get; set; }
         public int? PrivacyLevel { get; set; }
         public ProfileDto(){}
-        public ProfileDto(Guid? PortfolioID, string? name, string? email, string? picture,int? privacyLevel)
+        public ProfileDto(string? name, string? email, string? picture,int? privacyLevel)
         {
-            this.PortfolioID = PortfolioID;
             this.Name = name;
             this.Email = email;
             this.Picture = picture;
@@ -77,6 +75,46 @@ namespace Models
             this.Symbol = Symbol;
         }
     }//End of GET Get_BuysDto
+
+    public class GetSellsDto
+    {
+        public Guid? PortfolioId { get; set; }
+        public string? Symbol { get; set; }
+        public GetSellsDto() { }
+        public GetSellsDto(Guid? PortfolioId, string? Symbol)
+        {
+            this.PortfolioId = PortfolioId;
+            this.Symbol = Symbol;
+        }
+    }//End of GET SellsDto
+
+    public class GetInvestmentDto
+    {
+        public Guid? PortfolioId { get; set; }
+        public string? Symbol { get; set; }
+        public GetInvestmentDto() { }
+        public GetInvestmentDto(Guid? PortfolioId, string? Symbol)
+        {
+            this.PortfolioId = PortfolioId;
+            this.Symbol = Symbol;
+        }
+    }//End of GET InvestmentDto
+
+    public class GetInvestmentByTimeDto
+    {
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }   
+        public Guid? PortfolioId { get; set; }
+        public string? Symbol { get; set; }
+        public GetInvestmentByTimeDto() { }
+        public GetInvestmentByTimeDto(DateTime StartTime, DateTime EndTime, Guid? PortfolioId, string? Symbol)
+        {
+            this.StartTime = StartTime; 
+            this.EndTime = EndTime; 
+            this.PortfolioId = PortfolioId;
+            this.Symbol = Symbol;
+        }
+    }//End of GET InvestmentByTimeDto
 
 
     /// <summary>

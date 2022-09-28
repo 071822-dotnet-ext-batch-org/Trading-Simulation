@@ -73,7 +73,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         bool? check = await this._repoLayer.AddNewSellAsync(sell.Fk_PortfolioID, sell.Symbol, sell.AmountSold, sell.PriceSold, sell.DateSold);
 
         if (true == check)
-        { 
+        {
             return (sell);
         }
         else return (null);
@@ -86,12 +86,46 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return buyList;
     }
 
-    public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
+    public async Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto)
     {
-        List<Sell?> sellList = await this._repoLayer.GetAllSellBySymbolAsync(symbol, portfolioID);
+        List<Sell?> sellList = await this._repoLayer.GetAllSellBySymbolAsync(sellsDto);
         return sellList;
     }
 
-    
+    public async Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
+    {
+        Investment? investment = await this._repoLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
+        return investment;
+    }
+
+    public async Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime)
+    {
+        List<Investment>? returnedInvestment = await this._repoLayer.GetInvestmentByTimeAsync(investmentByTime);
+        return returnedInvestment;
+    }
+
+    public async Task<int> GetNumberOfUsersAsync()
+    {
+        int userCount = await this._repoLayer.GetNumberOfUsersAsync();
+        return userCount;
+    }
+
+    public async Task<int> GetNumberOfPostsAsync()
+    {
+        int userCount = await this._repoLayer.GetNumberOfPostsAsync();
+        return userCount;
+    }
+
+    public async Task<int> GetNumberOfBuysByDayAsync()
+    {
+        int buysCount = await this._repoLayer.GetNumberOfBuysByDayAsync();
+        return buysCount;
+    }
+
+    public async Task<int> GetNumberOfSellsByDayAsync()
+    {
+        int sellsCount = await this._repoLayer.GetNumberOfSellsByDayAsync();
+        return sellsCount;
+    }
 
 }
