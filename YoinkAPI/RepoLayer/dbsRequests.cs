@@ -371,6 +371,86 @@ namespace RepoLayer
 
         }
 
+        public async Task<bool> CreatePostAsync(string auth0Id, CreatePostDto post)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Posts (fk_userID, content, privacyLevel) VALUES (@auth0Id, @content, @privacylevel)", _conn))
+            {
+                command.Parameters.AddWithValue("@auth0Id", auth0Id);
+                command.Parameters.AddWithValue("@content", post.Content);
+                command.Parameters.AddWithValue("@privacylevel", post.PrivacyLevel);
+                
+                // command.Parameters.AddWithValue("@currenttotal", p.CurrentInvestment);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        public async Task<Post?> GetRecentPostByUserId(string auth0Id)
+        {
+            using (SqlCommand command = new SqlCommand($"Select TOP (1) * FROM Posts WHERE fk_userID = @userId ORDER BY dateCreated DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@userId", auth0Id);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                Post? post = null;
+                if (ret.Read())
+                {
+                    post = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+
+                }
+
+                _conn.Close();
+                return post;
+            }
+        }
+        public async Task<Portfolio?> GetRecentPortfoliosByUserIDAsync(string auth0Id)
+        {
+            using (SqlCommand command = new SqlCommand($"Select TOP (1) * FROM Portfolios WHERE fk_userID = @userId ORDER BY dateCreated DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@userId", auth0Id);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                Portfolio? portfolio = null;
+                if (ret.Read())
+                {
+                    portfolio = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDecimal(10), ret.GetDateTime(11), ret.GetDateTime(12));
+
+                }
+
+                _conn.Close();
+                return portfolio;
+            }
+        }
+
+        public async Task<List<Post>> GetAllPostAsync()
+        {
+            List<Post> postList = new List<Post>();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts ORDER BY dateModified DESC", _conn))
+            {
+                
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Post p = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+                    postList.Add(p);
+
+                }
+
+                _conn.Close();
+                return postList;
+            }
+        }
+
 
     }
 }

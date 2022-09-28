@@ -17,7 +17,7 @@ namespace BusinessLayer
 
 
         //Portfolio Section
-        Task<List<Portfolio?>> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
+        Task<Portfolio?> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
         Task<Portfolio?> EditPortfolioAsync(Models.PortfolioDto p);
         Task<Portfolio?> GetPortfolioByPortfolioIDAsync(Guid? portfolioID);
         Task<List<Portfolio?>> GetALLPortfoliosByUserIDAsync(string? auth0Id);
@@ -35,5 +35,9 @@ namespace BusinessLayer
         Task<int> GetNumberOfPostsAsync();
         Task<int> GetNumberOfBuysAsync();
         Task<int> GetNumberOfSellsAsync();
+
+        //Posts
+        Task<Post?> CreatePostAsync(string auth0Id, CreatePostDto post);
+        Task<List<Post>> GetAllPostAsync();
     }
 }
