@@ -340,7 +340,7 @@ namespace RepoLayer
 
         }
 
-        public async Task<int> GetNumberOfBuysByDayAsync()
+        public async Task<int> GetNumberOfBuysAsync()
         {
             string stmt = "SELECT COUNT(buyID) FROM Buys";
             int count = 0;
@@ -355,7 +355,7 @@ namespace RepoLayer
 
         }
 
-        public async Task<int> GetNumberOfSellsByDayAsync()
+        public async Task<int> GetNumberOfSellsAsync()
         {
             
             string stmt = "SELECT COUNT(sellID) FROM Sells";

@@ -116,15 +116,15 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return userCount;
     }
 
-    public async Task<int> GetNumberOfBuysByDayAsync()
+    public async Task<int> GetNumberOfBuysAsync()
     {
-        int buysCount = await this._repoLayer.GetNumberOfBuysByDayAsync();
+        int buysCount = await this._repoLayer.GetNumberOfBuysAsync();
         return buysCount;
     }
 
-    public async Task<int> GetNumberOfSellsByDayAsync()
+    public async Task<int> GetNumberOfSellsAsync()
     {
-        int sellsCount = await this._repoLayer.GetNumberOfSellsByDayAsync();
+        int sellsCount = await this._repoLayer.GetNumberOfSellsAsync();
         return sellsCount;
     }
 
