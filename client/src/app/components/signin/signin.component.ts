@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular'
+import { AuthService } from '@auth0/auth0-angular';
+import { Profile } from 'src/app/Models/Profile';
+
 
 @Component({
   selector: 'app-signin',
@@ -14,7 +16,8 @@ export class SigninComponent implements OnInit {
   }
 
   signin(): void {
-    this.auth.loginWithRedirect();
+    this.auth.signin$.subscribe(Profile =>(this.profileJson = JSON.stringify(profile, null,2))
+    );
   }
 
 }

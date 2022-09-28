@@ -38,7 +38,13 @@ describe('SigninComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create headr1', () => {
+    const fixture = TestBed.createComponent(SigninComponent);
+    fixture.detectChanges();
+    const complied = fixture.debugElement.nativeElement;
+    expect(complied.querySelector('h1').textContent).toContain('Yoink,');
   });
+  it('test header2',()=>{
+    const data = fixture.nativeElement.querySelector('h2');
+    expect(data).toBeFalsy();
 });
