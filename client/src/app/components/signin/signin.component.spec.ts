@@ -1,8 +1,5 @@
-import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { Location, CommonModule} from '@angular/common';
-import { Router } from '@angular/router';
+
+import {ComponentFixture,TestBed } from '@angular/core/testing';
 import { AuthModule } from '@auth0/auth0-angular';
 import { baseURL } from 'src/app/Services/base-url';
 
@@ -24,21 +21,29 @@ describe('SigninComponent', () => {
               baseURL + '/CreateProfileAsync',
               baseURL + '/GetProfileByUserIDAsync',
               baseURL + '/EditProfileAsync'
-             ], //for now
+            ], //for now
           }
-    
+
         })
       ],
-      declarations: [ SigninComponent ]
+      declarations: [SigninComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SigninComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create headr1', () => {
+    const fixture = TestBed.createComponent(SigninComponent);
+    fixture.detectChanges();
+    const complied = fixture.debugElement.nativeElement;
+    expect(complied.querySelector('h1').textContent).toContain('Yoink,');
+  });
+  it('test header2', () => {
+    const data = fixture.nativeElement.querySelector('h2');
+    expect(data).toBeFalsy();
   });
 });
+
