@@ -14,7 +14,7 @@
 
 ## Introduction
 
-Getting started with investing and personal finance can be intimidating. And, there are an overwhelming list of options to choose from. But, investing should be a skill everyone should acquire. Yoink! is here to make learning about investing interesting and fun to do.
+Getting started with investing and personal finance can be intimidating. And, there is an overwhelming list of options to choose from. But, investing should be a skill everyone should acquire. Yoink! is here to make learning about investing interesting and fun to do.
 
 Yoink! is a paper trading application that is used as an educational tool to get started in the world of investment and personal finance. With Yoink!, you can dive into stocks and portfolios whether you are 16 or 60.
 
@@ -30,7 +30,7 @@ Install trading-simulation using these commands
 ## Usage
 
 ```C#
-Use trading-simulation usiing these statements
+Use trading-simulation using these statements
 ```
 
 ## Technologies
