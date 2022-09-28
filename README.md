@@ -1,29 +1,71 @@
 # Yoink! Trading Simulation
 
-Yoink! is a paper trading investment application that is used as an education tool.
-
 ![GitHub language count](https://img.shields.io/github/languages/count/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub top language](https://img.shields.io/github/languages/top/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub repo size](https://img.shields.io/github/repo-size/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![Lines of code](https://img.shields.io/tokei/lines/github/071822-dotnet-ext-batch-org/Trading-Simulation)
-![Build status](https://dev.azure.com/YoinkP3/Yoink%20Pipeline/_apis/build/status/Yoink%20Pipeline/_build/latest?definitionId=3)
+![Build Status](https://dev.azure.com/YoinkP3/Yoink%20Pipeline/_apis/build/status/Yoink%20Pipeline?branchName=development)
+![GitHub issues](https://img.shields.io/github/issues/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub contributors](https://img.shields.io/github/contributors/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub](https://img.shields.io/github/license/071822-dotnet-ext-batch-org/Trading-Simulation)
 
+## Introduction
+
+Getting started with investing and personal finance can be intimidating. And, there are an overwhelming list of options to choose from. But, investing should be a skill everyone should acquire. Yoink! is here to make learning about investing interesting and fun to do.
+
+Yoink! is a paper trading application that is used as an educational tool to get started in the world of investment and personal finance. With Yoink!, you can dive into stocks and portfolios whether you are 16 or 60.
+
+## Deployment Link
+```https://
+Link to deployed site for trading-simulation here
+```
 ## Installation
 
 ```bash
-install trading-simulation
+Install trading-simulation using these commands
 ```
 
 ## Usage
 
 ```C#
-trading-simulation
+Use trading-simulation usiing these statements
 ```
+
+## Technologies
+
+* GitHub ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+* Microsoft SQL Server ![MicrosoftSQLServer](https://img.shields.io/badge/Microsoft%20SQL%20Sever-CC2927?style=for-the-badge&logo=microsoft%20sql%20server&logoColor=white)
+* .Net Core 6.0.9 ![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
+* Postman ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+* Swagger ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+* AngularJS 1.6 / Angular 2+/4/5/6 ![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
+* Jasmine ![Jasmine](https://img.shields.io/badge/-Jasmine-%238A4182?style=for-the-badge&logo=Jasmine&logoColor=white)
+* NPM ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
+* Node.js ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+* Trello ![Trello](https://img.shields.io/badge/Trello-%23026AA7.svg?style=for-the-badge&logo=Trello&logoColor=white)
+* Linux ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+* macOS ![macOS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0)
+* Windows ![Windows XP](https://img.shields.io/badge/Windows%20xp-003399?style=for-the-badge&logo=windowsxp&logoColor=white)
+
+## Languages
+
+* C# 10.0 ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white)
+* CSS3 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+* HTML5 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+* Javascript ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+* Markdown ![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white)
+* Typescript ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
+## Credits
+The following people contributed to the development and deployment of Yoink!:
+<a href="https://github.com/071822-dotnet-ext-batch-org/Trading-Simulation/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=071822-dotnet-ext-batch-org/Trading-Simulation" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Contributing
 
