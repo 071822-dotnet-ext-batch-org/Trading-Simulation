@@ -16,8 +16,7 @@ export class SigninComponent implements OnInit {
   }
 
   signin(): void {
-    this.auth.signin$.subscribe(Profile =>(this.profileJson = JSON.stringify(profile, null,2))
-    );
+    this.auth.loginWithRedirect();
   }
 
 }
