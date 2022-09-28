@@ -13,48 +13,45 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
-
-
-profile: any;
-showProfileName: boolean = true;
-showProfileEmail: boolean = true;
-// showProfilePL: boolean = true;
-profileName = new FormControl('');
-profileEmail = new FormControl('');
-
+ 
   constructor(private ProService: ProfileServiceService,
-              private AuthService: AuthService,
-              private CreatePro: CreateProfileService,
-              private UpdatePro: UpdateProfileService,
-              ) { }
+    private AuthService: AuthService,
+    private CreatePro: CreateProfileService,
+    private UpdatePro: UpdateProfileService,
+    ) { }
+    
+    profile: any;
+    showProfileName: boolean = true;
+    showProfileEmail: boolean = true;
+    showProfilePL: boolean = true;
+    name = new FormControl('');
+    email = new FormControl('');
+    pl = new FormControl('');
 
   ngOnInit(): void {
    this.ProService.getProfiles().subscribe(data => {
     this.profile = data;
     this.profile.setValue(data.name);
     this.profile.setValue(data.email);
-   });
-    
+    this.profile.setValue(data.privacyLevel)
+   });   
   }
 
-  // editName(): void {
-  //   this.showProfileName = false;
-  // }
+  editName(): void {
+    this.showProfileName = false;
+  }
 
-  // editEmail(): void {
-  //   this.showProfileEmail = false;
-  // }
+  editEmail(): void {
+    this.showProfileEmail = false;
+  }
 
-  // updateProfileName(): void {
-  //   this.showProfileName = true;
-  //   this.UpdatePro.updateProfile(null, this.profileName.value).subscribe(data => {
-  //     this.profileName.setValue(data.name)
-  //     this.profile = data;
-  //   })
-  // }
-
-
+  updateProfileName(): void {
+    this.showProfileName = true;
+    this.UpdatePro.updateProfile(this.name.value, null, null,).subscribe(update => {
+      this.name.setValue(update.name)
+      this.profile = update;
+    })
+  }
 
   isClicked: boolean = false;
 
@@ -67,7 +64,7 @@ profileEmail = new FormControl('');
     })
    }
 
-  
+   
 
 
   //  updateProfile(){
