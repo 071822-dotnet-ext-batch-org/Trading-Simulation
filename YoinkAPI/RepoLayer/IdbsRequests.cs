@@ -26,7 +26,7 @@ namespace RepoLayer
         //Homepage
         Task<int> GetNumberOfUsersAsync();
         Task<int> GetNumberOfPostsAsync();
-        Task<int> GetNumberOfBuysByDayAsync();
-        Task<int> GetNumberOfSellsByDayAsync();
+        Task<int> GetNumberOfBuysAsync();
+        Task<int> GetNumberOfSellsAsync();
     }
 }

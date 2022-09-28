@@ -408,7 +408,7 @@ namespace Test.Yoink
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
-                .Setup(G => G.GetNumberOfBuysByDayAsync())
+                .Setup(G => G.GetNumberOfBuysAsync())
                 .Returns(Task.FromResult(sellsCount));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
@@ -416,7 +416,7 @@ namespace Test.Yoink
 
             //Act
 
-            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfBuysByDayAsync();
+            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfBuysAsync();
 
 
             //Assert
@@ -437,7 +437,7 @@ namespace Test.Yoink
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
-                .Setup(G => G.GetNumberOfBuysByDayAsync())
+                .Setup(G => G.GetNumberOfBuysAsync())
                 .Returns(Task.FromResult(buysCount));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
@@ -445,7 +445,7 @@ namespace Test.Yoink
 
             //Act
 
-            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfBuysByDayAsync();
+            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfBuysAsync();
 
 
             //Assert
@@ -468,7 +468,7 @@ namespace Test.Yoink
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
-                .Setup(G => G.GetNumberOfSellsByDayAsync())
+                .Setup(G => G.GetNumberOfSellsAsync())
                 .Returns(Task.FromResult(sellsCount));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
@@ -476,7 +476,7 @@ namespace Test.Yoink
 
             //Act
 
-            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfSellsByDayAsync();
+            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfSellsAsync();
 
 
             //Assert

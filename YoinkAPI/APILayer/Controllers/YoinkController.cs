@@ -165,21 +165,28 @@ namespace APILayer.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("number-of-buys-by-day")]
-        public async Task<ActionResult<int>> GetNumberOfBuysByDayAsync()
+        [HttpGet("number-of-buys")]
+        public async Task<ActionResult<int>> GetNumberOfBuysAsync()
         {
-            int buyCount = await this._businessLayer.GetNumberOfBuysByDayAsync();
+            int buyCount = await this._businessLayer.GetNumberOfBuysAsync();
             return buyCount;
         }
 
 
         [AllowAnonymous]
-        [HttpGet("number-of-sells-by-day")]
-        public async Task<ActionResult<int>> GetNumberOfSellsByDayAsync()
+        [HttpGet("number-of-sells")]
+        public async Task<ActionResult<int>> GetNumberOfSellsAsync()
         {
-            int sellCount = await this._businessLayer.GetNumberOfSellsByDayAsync();
+            int sellCount = await this._businessLayer.GetNumberOfSellsAsync();
             return sellCount;
         }
+    
+    
+    
+    
+    
+    
+    
     }
 
 }
