@@ -19,9 +19,8 @@ Getting started with investing and personal finance can be intimidating. And, th
 Yoink! is a paper trading application that is used as an educational tool to get started in the world of investment and personal finance. With Yoink!, you can dive into stocks and portfolios whether you are 16 or 60.
 
 ## Deployment Link
-```https://
-Link to deployed site for trading-simulation here
-```
+[Yoink! Deployment Site](https://yoinktestclient.azurewebsites.net/home)
+
 ## Installation
 
 ```bash
