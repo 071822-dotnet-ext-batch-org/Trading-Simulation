@@ -121,7 +121,7 @@ namespace APILayer.Controllers
             return (buyList);
         }
 
-        [HttpGet("my-sell")]
+        [HttpGet("my-sells")]
         public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
         {
             List<Sell?> sellList = await this._businessLayer.GetAllSellBySymbolAsync(symbol, portfolioID);

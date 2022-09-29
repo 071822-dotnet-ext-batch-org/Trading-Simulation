@@ -7,7 +7,7 @@ namespace Models
         public Guid? Fk_UserID { get; set; }
         // public string? Title { get; set; }
         public string? Content { get; set; }
-        public string? Likes { get; set; }
+        public int? Likes { get; set; }//Changed from string to int
         public DateTime? DateCreated { get; set; }
         public int? PrivacyLevel { get; set; }
         public DateTime? DateModified { get; set; }
@@ -16,7 +16,7 @@ namespace Models
 
         }
 
-        public Post(Guid? postID, Guid? fk_UserID,  string? content, string? likes, DateTime? dateCreated, int? privacyLevel, DateTime? dateModified)
+        public Post(Guid? postID, Guid? fk_UserID,  string? content, int? likes, DateTime? dateCreated, int? privacyLevel, DateTime? dateModified)
         {
             this.PostID = postID;
             this.Fk_UserID = fk_UserID;

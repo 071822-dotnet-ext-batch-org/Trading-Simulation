@@ -20,6 +20,8 @@ namespace RepoLayer
         Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID);
         Task<List<Portfolio?>> GetALL_PortfoliosByUserIDAsync(string? userID);
         Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
+
+        //Investment Section
         Task<Investment?> GetInvestmentByPortfolioIDAsync(Guid portfolioID, string symbol);
     }
 }

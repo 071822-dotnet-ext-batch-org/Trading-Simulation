@@ -56,7 +56,7 @@ namespace Test.Yoink
 
             Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
             Assert.Equal(profiledto.Name, profile.Name);
-        }
+        }//END OF TestingAllMethodsAssociatedWithUserProfile
 
 
 
@@ -68,9 +68,12 @@ namespace Test.Yoink
 
             PortfolioDto? portfoliodto = new PortfolioDto()
             {
-
+                PortfolioID = Guid.NewGuid(),
                 Name = "Tony",
+                OriginalLiquid = 2000,
                 PrivacyLevel = 2,
+                
+
 
             };
 
@@ -97,19 +100,19 @@ namespace Test.Yoink
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
-                .Setup(p => p.GetPortfolioByUserIDAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(portmockList));
+                .Setup(p => p.GetPortfolioByPorfolioIDAsync(It.IsAny<Guid?>()))
+                .Returns(Task.FromResult(portfolio));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
 
-            //Act
+            //Act Task<Portfolio?> GetPortfolioByPortfolioIDAsync(Guid? portfolioID);
 
-            var TheUserPortfolioWasGot = TheClassBeingTested.GetPortfolioByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");
+            var TheUserPortfolioWasGot = TheClassBeingTested.GetPortfolioByPortfolioIDAsync(Guid.NewGuid());
 
             var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfoliodto);
 
-            var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", "Tony", 2);
+            var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);
 
 
             //Assert
@@ -117,7 +120,7 @@ namespace Test.Yoink
             Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfolio.Fk_UserID);
             Assert.Equal(portfoliodto.Name, portfolio.Name);
             Assert.Equal(2, portfolio.PrivacyLevel);
-        }
+        }//END OF TestingAllMethodsAssociatedWithUserPortfolio
 
 
         [Fact]
@@ -162,7 +165,60 @@ namespace Test.Yoink
             Assert.Equal("GOOGL", sell.Symbol);
             Assert.Equal(2000, sell.AmountSold);
             
-        }
+        }//END OF TestingAllMethodsAssociatedSell
+
+
+        [Fact]
+        public void TestingAllMethodsPosts()
+        {
+
+            //Arrange
+
+            Post? post = new Post()
+            {
+                PostID = new Guid(),
+                Fk_UserID = new Guid(),
+                Content = "New Content",
+                Likes = 0,
+                PrivacyLevel = 1000,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
+
+            CreatePostDto postDto = new CreatePostDto()
+            {
+
+            };
+
+            List<Post?> PostsmockList = new List<Post?>();
+
+            PostsmockList.Add(post);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .Returns(Task.FromResult(PostsmockList));
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Act
+
+            var AllPostWasGotByUserID = TheClassBeingTested.CreatePostAsync("UserID");
+
+            var NewPostWasAdded = TheClassBeingTested.AddNewSellAsync("UserID", CreatePostDto );
+
+            
+
+
+            //Assert
+
+            Assert.Equal("GOOGL", sell.Symbol);
+            Assert.Equal(2000, sell.AmountSold);
+            
+        }//END OF TestingAllMethodsPosts
+
+
 
 
 
