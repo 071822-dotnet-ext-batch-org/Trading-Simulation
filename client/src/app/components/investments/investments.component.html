@@ -1,6 +1,45 @@
-<p>investments works!</p>
-<div *ngFor="let inv of investments">
-    <p>{{inv.symbol}}</p>
-    <p>{{inv.amountInvested}}</p>
-    <p>{{inv.currentAmount}}</p>
-</div>
+<table mat-table [dataSource]="investments" class="mat-elevation-z8">
+    <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef class="table-row"> Symbol </th>
+        <td mat-cell *matCellDef="let inv" class="table-row"> {{inv.symbol}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amountInvested">
+        <th mat-header-cell *matHeaderCellDef class="table-row"> Invested </th>
+        <td mat-cell *matCellDef="let inv" class="table-row"> {{inv.amountInvested | currency}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="currentAmount">
+        <th mat-header-cell *matHeaderCellDef class="table-row"> Stock owned </th>
+        <td mat-cell *matCellDef="let inv" class="table-row"> {{inv.currentAmount}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="currentPrice">
+        <th mat-header-cell *matHeaderCellDef class="table-row"> Current Price </th>
+        <td mat-cell *matCellDef="let inv" class="table-row"> {{inv.currentPrice}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalAmountBought">
+        <th mat-header-cell *matHeaderCellDef class="table-row"> Total bought </th>
+        <td mat-cell *matCellDef="let inv" class="table-row"> {{inv.totalAmountBought}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalAmountSold">
+        <th mat-header-cell *matHeaderCellDef class="table-row"> Total sold </th>
+        <td mat-cell *matCellDef="let inv" class="table-row"> {{inv.totalAmountSold}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalPNL">
+        <th mat-header-cell *matHeaderCellDef class="table-row"> PNL </th>
+        <td mat-cell *matCellDef="let inv" class="table-row"> {{inv.totalPNL}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dateModified">
+        <th mat-header-cell *matHeaderCellDef class="table-row"> Last modified </th>
+        <td mat-cell *matCellDef="let inv" class="table-row"> {{inv.dateModified | date:'short'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+    
