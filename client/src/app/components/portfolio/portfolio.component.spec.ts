@@ -8,6 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PortfolioComponent } from './portfolio.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
 
 
 
@@ -27,6 +28,7 @@ describe('PortfolioComponent', () => {
         MatListModule,
         MatSidenavModule,
         MatToolbarModule,
+        MatDialog
       ]
     }).compileComponents();
   }));

@@ -4,7 +4,7 @@ using Models;
 using Moq;
 using RepoLayer;
 using System;
-using System.Xml.Linq;
+
 
 namespace Test.Yoink
 {
@@ -16,12 +16,14 @@ namespace Test.Yoink
         public void TestingAllMethodsAssociatedWithUserProfile()
         {
             //Arrange
+            ProfileDto? profiledto2 = new ProfileDto("Tony", "Rodin@yahoo.com", "ghhhtbnn", 2);
 
             ProfileDto? profiledto = new ProfileDto()
             {
-               
+
                 Name = "Tony",
                 Email = "Rodin@yahoo.com",
+                Picture = "ghhhtbnn",
                 PrivacyLevel = 2,
 
             };
@@ -146,47 +148,63 @@ namespace Test.Yoink
 
 
 
-        // [Fact]
-        // public void TestingAllMethodsAssociatedWithSell()
-        // {
+        [Fact]
+        public void TestingAllMethodsAssociatedWithSell()
+        {
 
-        //     //Arrange
+            //Arrange
 
-        //     Sell? sell = new Sell()
-        //     {
-        //         SellID = new Guid(),
-        //         Fk_PortfolioID = new Guid(),
-        //         Symbol = "GOOGL",
-        //         AmountSold = 2000,
-        //         PriceSold = 1000,
-        //         DateSold = new DateTime(),
-        //     };
+            GetSellsDto selldto = new GetSellsDto()
+            {
+                PortfolioId = new Guid(),
+                Symbol = "GOOGL",
 
-        //     List<Sell?> SellmockList = new List<Sell?>();
+            };
 
-        //     SellmockList.Add(sell);
+            Sell? sell = new Sell()
+            {
+                SellID = new Guid(),
+                Fk_PortfolioID = new Guid(),
+                Symbol = "GOOGL",
+                AmountSold = 2000,
+                PriceSold = 1000,
+                DateSold = new DateTime(),
+            };
 
-        //     var dataSource = new Mock<IdbsRequests>();
-        //     dataSource
-        //         .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<string>(), It.IsAny<Guid>()))
-        //         .Returns(Task.FromResult(SellmockList));
+            List<Sell?> SellmockList = new List<Sell?>();
 
-        //     var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+            SellmockList.Add(sell);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<GetSellsDto>()))
+                .Returns(Task.FromResult(SellmockList));
 
 
-        //     //Act
+            var dataSource2 = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<DateTime>()))
+                .Returns(Task.FromResult(true));
 
-        //     var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+            var TheClassBeingTested2 = new YoinkBusinessLayer(dataSource2.Object);
 
-        //     var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
+            //Act
 
-            
-        //     //Assert
+            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(selldto);
 
-        //     Assert.Equal("GOOGL", sell.Symbol);
-        //     Assert.Equal(2000, sell.AmountSold);
-            
-        // }
+            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
+
+            var NewSellWasAddedBool = TheClassBeingTested2.AddNewSellAsync(sell);
+
+
+            //Assert
+
+            Assert.Equal("GOOGL", sell.Symbol);
+            Assert.Equal(2000, sell.AmountSold);
+            Assert.Equal("GOOGL", selldto.Symbol);
+            Assert.True(true);
+        }
 
 
 
@@ -223,8 +241,13 @@ namespace Test.Yoink
                 .Setup(b => b.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
                 .Returns(Task.FromResult(buymockList));
 
-            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+            var dataSource2 = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(b => b.AddNewBuyAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<DateTime>()))
+                .Returns(Task.FromResult(true));
 
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+            var TheClassBeingTested2 = new YoinkBusinessLayer(dataSource2.Object);
 
             //Act
 
@@ -232,11 +255,234 @@ namespace Test.Yoink
 
             var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
 
+            var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(buy);
 
             //Assert
 
             Assert.Equal("GOOGL", AllBuys.Symbol);
             Assert.Equal(2000, buy.CurrentPrice);
+            Assert.True(true);
+
+        }
+
+
+
+        [Fact]
+        public void TestingAllMethodsAssociatedWithInvestment()
+        {
+
+            //Arrange
+
+            Guid invt = new Guid();
+
+            DateTime DT = new DateTime();
+
+            GetInvestmentDto getInvest2 = new GetInvestmentDto()
+            {
+                PortfolioId = invt,
+                Symbol = "GOOGL",
+
+            };
+
+            GetInvestmentByTimeDto getInvesttime2 = new GetInvestmentByTimeDto()
+            {
+                StartTime = DT,
+                EndTime = DT,
+                PortfolioId = invt,
+                Symbol = "GOOGL",
+
+            };
+
+
+            Investment newinvestment = new Investment()
+            {
+                InvestmentID = invt,
+                Fk_PortfolioID = invt,
+                Symbol = "AAPL",
+                AmountInvested = 1200,
+                CurrentAmount = 100,
+                CurrentPrice = 50,
+                TotalAmountBought = 4,
+                TotalAmountSold = 2,
+                AveragedBuyPrice = 150,
+                TotalPNL = 50,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+
+            };
+
+            List<Investment?> investmentmockList = new List<Investment?>();
+
+            investmentmockList.Add(newinvestment);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(I => I.GetInvestmentByTimeAsync(It.IsAny<GetInvestmentByTimeDto>()))
+                .Returns(Task.FromResult(investmentmockList));
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Act
+
+            var InvestmentGotByTime = TheClassBeingTested.GetInvestmentByTimeAsync(getInvesttime2);
+
+            var InvestmentGotByPortfolioID = TheClassBeingTested.GetInvestmentByPortfolioIDAsync(getInvest2);
+
+
+            //Assert
+
+            Assert.Equal(getInvesttime2.PortfolioId, invt);
+            Assert.Equal(getInvest2.PortfolioId, invt);
+
+        }
+
+
+
+
+        [Fact]
+        public void TestingGetNumberOfUsers()
+        {
+
+            //Arrange
+
+            int userCount = 500;
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(G => G.GetNumberOfUsersAsync())
+                .Returns(Task.FromResult(userCount));
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Act
+
+            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfUsersAsync();
+
+            
+            //Assert
+
+            Assert.Equal(500, userCount);
+            
+
+        }
+
+
+        [Fact]
+        public void TestingGetNumberOfPosts()
+        {
+
+            //Arrange
+
+            int userCount = 500;
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(G => G.GetNumberOfPostsAsync())
+                .Returns(Task.FromResult(userCount));
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Act
+
+            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfPostsAsync();
+
+
+            //Assert
+
+            Assert.Equal(500, userCount);
+
+
+        }
+
+
+        [Fact]
+        public void TestingGetNumberOfSellsByDay()
+        {
+
+            //Arrange
+
+            int sellsCount = 700;
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(G => G.GetNumberOfBuysAsync())
+                .Returns(Task.FromResult(sellsCount));
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Act
+
+            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfBuysAsync();
+
+
+            //Assert
+
+            Assert.Equal(700, sellsCount);
+
+
+        }
+
+
+        [Fact]
+        public void TestingGetNumberOfBuysByDay()
+        {
+
+            //Arrange
+
+            int buysCount = 300;
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(G => G.GetNumberOfBuysAsync())
+                .Returns(Task.FromResult(buysCount));
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Act
+
+            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfBuysAsync();
+
+
+            //Assert
+
+            Assert.Equal(300, buysCount);
+
+
+        }
+
+
+
+
+        [Fact]
+        public void GetNumberOfSellsByDayAsync()
+        {
+
+            //Arrange
+
+            int sellsCount = 350;
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(G => G.GetNumberOfSellsAsync())
+                .Returns(Task.FromResult(sellsCount));
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Act
+
+            var GetsNumberOfUsers = TheClassBeingTested.GetNumberOfSellsAsync();
+
+
+            //Assert
+
+            Assert.Equal(350, sellsCount);
+
 
         }
 

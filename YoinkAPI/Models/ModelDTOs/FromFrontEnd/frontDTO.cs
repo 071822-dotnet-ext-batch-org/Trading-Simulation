@@ -137,4 +137,21 @@ namespace Models
             this.PNL = PNL;
         }
     }//End of SELL
+
+    public class CreatePostDto
+    {
+        public string? Content { get; set; }
+        public int? PrivacyLevel { get; set; }
+        public CreatePostDto() { }
+        public CreatePostDto(string? Content, int? PrivacyLevel)
+        {
+            this.Content = Content;
+            this.PrivacyLevel = PrivacyLevel;
+        }
+    }
+
+
+
+
+
 }

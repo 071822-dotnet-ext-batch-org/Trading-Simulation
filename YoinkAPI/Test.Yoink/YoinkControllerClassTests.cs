@@ -11,172 +11,228 @@ namespace Test.Yoink
     {
 
 
-        // [Fact]
-        // public void TestingAllMethodsAssociatedWithUserProfile()
-        // {
-        //     //Arrange
+        [Fact]
+        public void TestingAllMethodsAssociatedWithUserProfile()
+        {
+            //Arrange
 
-        //     ProfileDto? profiledto = new ProfileDto()
-        //     {
+            ProfileDto? profiledto = new ProfileDto()
+            {
 
-        //         Name = "Tony",
-        //         Email = "Rodin@yahoo.com",
-        //         PrivacyLevel = 2,
+                Name = "Tony",
+                Email = "Rodin@yahoo.com",
+                PrivacyLevel = 2,
 
-        //     };
+            };
 
-        //     Profile? profile = new Profile()
-        //     {
-        //         ProfileID = Guid.NewGuid(),
-        //         Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
-        //         Name = "Tony",
-        //         Email = "Rodin@yahoo.com",
-        //         PrivacyLevel = 2,
+            Profile? profile = new Profile()
+            {
+                ProfileID = Guid.NewGuid(),
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Name = "Tony",
+                Email = "Rodin@yahoo.com",
+                PrivacyLevel = 2,
 
-        //     };
+            };
 
-        //     var dataSource = new Mock<IYoinkBusinessLayer>();
-        //     dataSource
-        //         .Setup(m => m.GetProfileByUserIDAsync(It.IsAny<string>()))
-        //         .Returns(Task.FromResult(profile));
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(m => m.GetProfileByUserIDAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(profile));
 
-        //     var TheClassBeingTested = new YoinkController(dataSource.Object);
-
-
-        //     //Act
-
-        //     var TheUserProfileWasGot = TheClassBeingTested.GetProfileByUserIDAsync();
-
-        //     var TheUserProfileWasCreated = TheClassBeingTested.CreateProfileAsync(profiledto);
-
-        //     var TheUserProfileWasedited = TheClassBeingTested.EditProfileAsync(profiledto);
-
-
-        //     //Assert
-
-        //     Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
-        //     Assert.Equal(profiledto.Name, profile.Name);
-        // }
-
-
-
+            var TheClassBeingTested = new YoinkController(dataSource.Object);
 
 
             //Act
 
-            // var AllTheUserPortfolioWasGotByUserID = TheClassBeingTested.GetPortfoliosByUserIDAsync();
+            var TheUserProfileWasGot = TheClassBeingTested.GetProfileByUserIDAsync();
 
-            // var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync(portfoliodto);
+            var TheUserProfileWasCreated = TheClassBeingTested.CreateProfileAsync(profiledto);
 
-            // var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);
+            var TheUserProfileWasedited = TheClassBeingTested.EditProfileAsync(profiledto);
 
-            // var TheUserPortfolioWasGotByPortfolioID = TheClassBeingTested.GetPortfolioByPortfolioIDAsync(guid);
+
+            //Assert
+
+            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
+            Assert.Equal(profiledto.Name, profile.Name);
+        }
+
+
+
+        [Fact]
+        public void TestingAllMethodsAssociatedWithUserPortfolio()
+        {
+
+            //Arrange
+            Guid guid = Guid.NewGuid();
+
+            PortfolioDto? portfoliodto = new PortfolioDto()
+            {
+
+                Name = "Tony",
+                PrivacyLevel = 2,
+
+            };
+
+            Portfolio? portfolio = new Portfolio()
+            {
+                PortfolioID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Name = "Tony",
+                PrivacyLevel = 2,
+                Type = 2,
+                OriginalLiquid = 2000,
+                CurrentInvestment = 1000,
+                Liquid = 2500,
+                CurrentTotal = 2300,
+                Symbols = 34,
+                TotalPNL = 600,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+            List<Portfolio?> portmockList = new List<Portfolio?>();
+
+            portmockList.Add(portfolio);
+
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(p => p.GetALLPortfoliosByUserIDAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(portmockList));
+
+            var TheClassBeingTested = new YoinkController(dataSource.Object);
+
+
+            //Act
+
+            var AllTheUserPortfolioWasGotByUserID = TheClassBeingTested.GetPortfoliosByUserIDAsync();
+
+            var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync(portfoliodto);
+
+            var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);
+
+            var TheUserPortfolioWasGotByPortfolioID = TheClassBeingTested.GetPortfolioByPortfolioIDAsync(guid);
 
 
 
             //Assert
 
-        //     Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfolio.Fk_UserID);
-        //     Assert.Equal(portfoliodto.Name, portfolio.Name);
-        //     Assert.Equal(2, portfolio.PrivacyLevel);
-        //     Assert.Equal(portfolio.PortfolioID, guid);
-        // }
+            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfolio.Fk_UserID);
+            Assert.Equal(portfoliodto.Name, portfolio.Name);
+            Assert.Equal(2, portfolio.PrivacyLevel);
+            Assert.Equal(portfolio.PortfolioID, guid);
+        }
 
 
-        // [Fact]
-        // public void TestingAllMethodsAssociatedWithBuy()
-        // {
+        [Fact]
+        public void TestingAllMethodsAssociatedWithBuy()
+        {
 
-        //     //Arrange
+            //Arrange
 
-        //     Get_BuysDto AllBuys = new Get_BuysDto()
-        //     {
-        //         Symbol = "GOOGL",
+            Get_BuysDto AllBuys = new Get_BuysDto()
+            {
+                Symbol = "GOOGL",
 
-        //     };
+            };
 
-        //     Buy? buy = new Buy()
-        //     {
-        //         BuyID = new Guid(),
-        //         Fk_PortfolioID = new Guid(),
-        //         Symbol = "GOOGL",
-        //         CurrentPrice = 2000,
-        //         AmountBought = 100,
-        //         PriceBought = 50,
-        //         DateBought = new DateTime(),
+            Buy? buy = new Buy()
+            {
+                BuyID = new Guid(),
+                Fk_PortfolioID = new Guid(),
+                Symbol = "GOOGL",
+                CurrentPrice = 2000,
+                AmountBought = 100,
+                PriceBought = 50,
+                DateBought = new DateTime(),
 
-        //     };
+            };
 
-        //     List<Buy?> buymockList = new List<Buy?>();
+            List<Buy?> buymockList = new List<Buy?>();
 
-        //     buymockList.Add(buy);
+            buymockList.Add(buy);
 
-        //     var dataSource = new Mock<IYoinkBusinessLayer>();
-        //     dataSource
-        //         .Setup(b => b.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
-        //         .Returns(Task.FromResult(buymockList));
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(b => b.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
+                .Returns(Task.FromResult(buymockList));
+
+            var TheClassBeingTested = new YoinkController(dataSource.Object);
 
         //     var TheClassBeingTested = new YoinkController(dataSource.Object);
 
+            //Act
 
-            // Act
+            var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
 
-            // var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
+            var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
 
             // var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
 
+            //Assert
 
-            // Assert
+            Assert.Equal("GOOGL", AllBuys.Symbol);
+            Assert.Equal(2000, buy.CurrentPrice);
 
-            // Assert.Equal("GOOGL", AllBuys.Symbol);
-            // Assert.Equal(2000, buy.CurrentPrice);
+        }
 
         // }
 
 
 
+        [Fact]
+        public void TestingAllMethodsAssociatedWithSell()
+        {
 
-        // [Fact]
-        // public void TestingAllMethodsAssociatedWithSell()
-        // {
+            //Arrange
 
-        //     //Arrange
+            GetSellsDto selldto1 = new GetSellsDto(new Guid(), "GOOGL");
 
-        //     Sell? sell = new Sell()
-        //     {
-        //         SellID = new Guid(),
-        //         Fk_PortfolioID = new Guid(),
-        //         Symbol = "GOOGL",
-        //         AmountSold = 2000,
-        //         PriceSold = 1000,
-        //         DateSold = new DateTime(),
-        //     };
+            GetSellsDto selldto = new GetSellsDto()
+            {
+                PortfolioId = new Guid(),
+                Symbol = "GOOGL",
 
-        //     List<Sell?> SellmockList = new List<Sell?>();
+            };
 
-        //     SellmockList.Add(sell);
+            Sell? sell = new Sell()
+            {
+                SellID = new Guid(),
+                Fk_PortfolioID = new Guid(),
+                Symbol = "GOOGL",
+                AmountSold = 2000,
+                PriceSold = 1000,
+                DateSold = new DateTime(),
+            };
 
-        //     var dataSource = new Mock<IYoinkBusinessLayer>();
-        //     dataSource
-        //         .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<string>(), It.IsAny<Guid>()))
-        //         .Returns(Task.FromResult(SellmockList));
+            List<Sell?> SellmockList = new List<Sell?>();
+
+            SellmockList.Add(sell);
+
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<GetSellsDto>()))
+                .Returns(Task.FromResult(SellmockList));
+
+            var TheClassBeingTested = new YoinkController(dataSource.Object);
 
         //     var TheClassBeingTested = new YoinkController(dataSource.Object);
 
+            //Act
 
-        //     //Act
+            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
 
-        //     var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
+            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 
         //     var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 
+            //Assert
 
-        //     //Assert
-
-        //     Assert.Equal("GOOGL", sell.Symbol);
-        //     Assert.Equal(2000, sell.AmountSold);
-
-        // }
+            Assert.Equal("GOOGL", sell.Symbol);
+            Assert.Equal(2000, sell.AmountSold);
+            Assert.Equal("GOOGL", selldto.Symbol);
+        }
 
 
 
