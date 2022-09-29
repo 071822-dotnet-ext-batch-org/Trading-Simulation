@@ -4,10 +4,20 @@ export interface callBuySellApi {
 }
 
 export interface Buy {
-  symbol: string,
-  currentPrice: number,
-  amountBought: number,
-  price: number
+  buyID: string;
+  fk_portfolioID: string;
+  symbol: string;
+  currentPrice: number;
+  amountBought: number;
+  priceBought: number;
+  dateBought: Date;
+}
+
+export interface BuyDto {
+  fk_portfolioID: string;
+  symbol: string;
+  amountBought: number;
+  priceBought: number;
 }
 
 export interface Sell {
