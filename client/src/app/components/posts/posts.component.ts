@@ -23,9 +23,15 @@ export class PostsComponent implements OnInit {
 
   getPosts(): void {
     this.loadingPosts = true;
-    this.GPS.getAllPosts().subscribe(allPosts => {
-      this.posts = allPosts;
-      this.loadingPosts = false;
-    })
+
+    this.posts = JSON.parse(sessionStorage.getItem('posts') || '[]');
+
+    if(this.posts.length === 0) {
+      this.GPS.getAllPosts().subscribe(allPosts => {
+        this.posts = allPosts;
+        this.loadingPosts = false;
+        sessionStorage.setItem('posts', JSON.stringify(allPosts));
+      });
+    }
   }
 }
