@@ -126,15 +126,13 @@ namespace Models
         public string? Symbol { get; set; }
         public decimal? AmountSold { get; set; }
         public decimal? PriceSold { get; set; }
-        public decimal? PNL { get; set; }
         public SellDto(){}
-        public SellDto(Guid? Fk_PortfolioID, string? Symbol, decimal? AmountSold, decimal? PriceSold, decimal? PNL)
+        public SellDto(Guid? Fk_PortfolioID, string? Symbol, decimal? AmountSold, decimal? PriceSold)
         {
             this.Fk_PortfolioID = Fk_PortfolioID;
             this.Symbol = Symbol;
             this.AmountSold = AmountSold;
             this.PriceSold  = PriceSold;
-            this.PNL = PNL;
         }
     }//End of SELL
 
