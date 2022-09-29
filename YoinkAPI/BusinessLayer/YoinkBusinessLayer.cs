@@ -222,5 +222,77 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return null;
     }
 
+    public async Task<List<PostWithCommentCountDto>> GetAllPostByUserIdAsync(string userId)
+    {
+        List<PostWithCommentCountDto> listWithCommentCount = new List<PostWithCommentCountDto>();
+        List<Post> returnedPosts = await this._repoLayer.GetAllPostByUserIdAsync(userId);
+        foreach (Post post in returnedPosts)
+        {
+            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
+            PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
+            postWithCommentCountDto.PostID = post.PostID;
+            postWithCommentCountDto.Fk_UserID = post.Fk_UserID;
+            postWithCommentCountDto.Content = post.Content;
+            postWithCommentCountDto.Likes = post.Likes;
+            postWithCommentCountDto.Comments = count;
+            postWithCommentCountDto.PrivacyLevel = post.PrivacyLevel;
+            postWithCommentCountDto.DateCreated = post.DateCreated;
+            postWithCommentCountDto.DateModified = post.DateModified;
+            listWithCommentCount.Add(postWithCommentCountDto);
+        }
+        return listWithCommentCount;
+    }
+
+    public async Task<PostWithCommentCountDto?> GetPostByPostIdAsync(Guid? postId)
+    {
+            //fills post object with retrieved post
+            Post? returnedPost = await this._repoLayer.GetPostByPostIdAsync(postId);
+
+
+            //creates post object with the comment count added
+            PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
+
+        if (returnedPost != null)
+        {
+            //count int stores comment counts for that post
+            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(postId);
+
+            //fills the postdto with values retrieved
+            postWithCommentCountDto.PostID = returnedPost.PostID;
+            postWithCommentCountDto.Fk_UserID = returnedPost.Fk_UserID;
+            postWithCommentCountDto.Content = returnedPost.Content;
+            postWithCommentCountDto.Likes = returnedPost.Likes;
+            postWithCommentCountDto.Comments = count;
+            postWithCommentCountDto.PrivacyLevel = returnedPost.PrivacyLevel;
+            postWithCommentCountDto.DateCreated = returnedPost.DateCreated;
+            postWithCommentCountDto.DateModified = returnedPost.DateModified;
+            return postWithCommentCountDto;
+        }
+
+        else return null;
+    }
+
+    public async Task<int?> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
+    {
+        bool createdLike = await this._repoLayer.CreateLikeOnPostAsync(like, auth0UserId);
+        if (createdLike)
+        {
+            Post? post = await this._repoLayer.GetPostByPostId(like.PostId);
+            return post.Likes;
+        }
+        return null;
+    }
+
+    public async Task<int?> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
+    {
+        bool removedLike = await this._repoLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
+        if (removedLike)
+        {
+            Post? post = await this._repoLayer.GetPostByPostId(unlike.PostId);
+            return post.Likes;
+        }
+        return null;
+    }
+
 
 }
