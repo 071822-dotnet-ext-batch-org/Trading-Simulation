@@ -21,6 +21,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
@@ -45,7 +46,8 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
 import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
-import { PostCardComponent } from './components/post-card/post-card.component'
+import { PostCardComponent } from './components/post-card/post-card.component';
+import { InvestmentsComponent } from './components/investments/investments.component'
 
 @NgModule({
   declarations: [
@@ -66,19 +68,16 @@ import { PostCardComponent } from './components/post-card/post-card.component'
     CreatePortfolioModalComponent,
     PostsComponent,
     PostCardComponent,
+    InvestmentsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
- 
-   
-
- 
+    CdkAccordionModule,
     FormsModule,
     HttpClientModule,
     MatDialogModule,
- 
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
@@ -90,6 +89,7 @@ import { PostCardComponent } from './components/post-card/post-card.component'
           env.baseURL + '/edit-profile',
           env.baseURL + '/my-portfolios',
           env.baseURL + '/create-portfolio',
+          env.baseURL + '/all-investments'
          ], //for now
       }
 
@@ -111,7 +111,6 @@ import { PostCardComponent } from './components/post-card/post-card.component'
     MatSelectModule,
     MatCheckboxModule,
     MatProgressSpinnerModule
-
   ],
 providers: [
     NewsService,

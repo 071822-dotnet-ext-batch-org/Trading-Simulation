@@ -164,13 +164,24 @@ namespace APILayer.Controllers
 
         //Need an adult for trying out get requests in swagger
         //[AllowAnonymous]
-        [HttpPost("my-investments")]
-        public async Task<ActionResult<Investment?>> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
+        [HttpPost("single-investment")]
+        public async Task<ActionResult<Investment?>> GetSingleInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
         {
             if(ModelState.IsValid)
             {
-                 Investment? investment = await this._businessLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
-                 return Ok(investment);
+                Investment? investment = await this._businessLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
+                return Ok(investment);
+            }
+            return BadRequest(investmentDto);
+        }
+
+        [HttpPost("all-investments")]
+        public async Task<ActionResult<List<Investment?>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
+        {
+            if(ModelState.IsValid)
+            {
+                List<Investment?> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
+                return Ok(investment);
             }
             return BadRequest(investmentDto);
         }

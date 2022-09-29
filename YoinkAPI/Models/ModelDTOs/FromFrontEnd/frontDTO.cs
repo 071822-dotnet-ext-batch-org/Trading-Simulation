@@ -164,4 +164,18 @@ namespace Models
         public string? UserID { get; set; }
     }
 
+    public class GetAllInvestmentsDto 
+    {
+        public GetAllInvestmentsDto()
+        {
+        }
+
+        public GetAllInvestmentsDto(Guid? portfolioID)
+        {
+            PortfolioID = portfolioID;
+        }
+
+        public Guid? PortfolioID { get; set; }
+    }
+
 }

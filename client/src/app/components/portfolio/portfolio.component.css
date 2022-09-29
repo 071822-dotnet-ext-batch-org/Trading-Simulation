@@ -5,7 +5,7 @@
   place-items: center center;
 }
 
-.portfolio-list-container {
+.list-container {
   display: grid;
   place-items: center center;
   margin-bottom: 200px;
