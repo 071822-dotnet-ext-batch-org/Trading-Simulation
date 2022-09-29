@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AuthModule } from '@auth0/auth0-angular';
+import { Auth0ClientService, AuthModule } from '@auth0/auth0-angular';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from '@auth0/auth0-angular';
 
@@ -18,7 +18,10 @@ import { MatListModule } from '@angular/material/list';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatGridListModule } from '@angular/material/grid-list'
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
@@ -32,16 +35,19 @@ import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
 import { NewsComponent } from './components/news/news.component';
-import { NewsService } from './service/news.service';
+import { NewsService } from './Services/news/news.service';
 import { ProfileComponent } from './components/profile/profile.component';
-
-import { baseURL } from './Services/base-url';
-
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
+import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
+import { environment as env } from 'src/environments/environment';
+import { PostsComponent } from './components/posts/posts.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
+import { InvestmentsComponent } from './components/investments/investments.component'
 
 @NgModule({
   declarations: [
@@ -58,23 +64,32 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
     UserComponent,
     NewsComponent,
     ProfileComponent,
-    HomeLayoutComponent
+    HomeLayoutComponent,
+    CreatePortfolioModalComponent,
+    PostsComponent,
+    PostCardComponent,
+    InvestmentsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    CdkAccordionModule,
     FormsModule,
     HttpClientModule,
+    MatDialogModule,
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
       audience: 'https://localhost:7280/api/Yoink',
       httpInterceptor: {
         allowedList: [
-          baseURL + '/create-profile',
-          baseURL + '/my-profile',
-          baseURL + '/edit-profile'
+          env.baseURL + '/create-profile',
+          env.baseURL + '/my-profile',
+          env.baseURL + '/edit-profile',
+          env.baseURL + '/my-portfolios',
+          env.baseURL + '/create-portfolio',
+          env.baseURL + '/all-investments'
          ], //for now
       }
 
@@ -93,20 +108,23 @@ import { HomeLayoutComponent } from './components/home-layout/home-layout.compon
     FormsModule,
     MatInputModule,
     MatFormFieldModule,
-    MatSelectModule
-
-
+    MatSelectModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule
   ],
-
-
 providers: [
-  NewsService,
+    NewsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
       multi: true
-    }, 
+    },
+    {
+      provide: MatDialogRef,
+      useValue: {}
+    },
   ],
+
 
   bootstrap: [AppComponent]
 })

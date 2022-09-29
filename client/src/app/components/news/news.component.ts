@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
-import { NewsService } from 'src/app/service/news.service';
-import { News } from 'src/Models/News';
+import { NewsService } from 'src/app/Services/news/news.service';
+import { News } from 'src/app/Models/News';
 
 @Component({
   selector: 'app-news',
@@ -12,16 +12,22 @@ export class NewsComponent implements OnInit {
   title = 'Stock News';
   newsData: any;
 
-  constructor(private nservice: NewsService) { }
+
+  constructor(private GetNewsService: NewsService) { }
 
    
     ngOnInit(): void {
-      this.getNewsData()
-    }
-    
-    getNewsData(): void{
-      this.nservice.getNewsData()
-      .subscribe(newsData => this.newsData = (newsData.data))
-    }
-  }
-    
+      const news = localStorage.getItem('newsData')
+      if (!news) {
+        this.GetNewsService.getNews().subscribe(nd => 
+          {
+            this.newsData = nd.results
+            localStorage.setItem('newsData', JSON.stringify(nd))
+          })
+        }
+      else {
+        const parseNews = JSON.parse(news || "")
+        this.newsData = parseNews.results
+      }
+      
+    }}

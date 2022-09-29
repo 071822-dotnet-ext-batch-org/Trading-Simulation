@@ -1,3 +1,25 @@
 .example-card {
     max-width: 400px;
   }
+  .main-container{
+    background-color: rgb(red, green, blue);
+    width: 350px;
+    border-radius:10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .selection-cont{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    align-items: center;
+  }
+  .resultcontainer{
+    text-align: center;
+  }
+ 
+  
+ 

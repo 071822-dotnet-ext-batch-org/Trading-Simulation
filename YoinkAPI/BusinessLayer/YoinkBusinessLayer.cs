@@ -12,9 +12,14 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
     public async Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p)
     {
+        Profile? newProfile = null;
         bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        Profile? newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-        return newProfile;
+        if (newProfileSaved)
+        {
+            newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            return newProfile;
+        }
+        else return newProfile;
     }
 
     public async Task<Profile?> GetProfileByUserIDAsync(string? auth0Id)
@@ -25,24 +30,39 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
     public async Task<Profile?> EditProfileAsync(string? auth0Id, ProfileDto? p)
     {
+        Profile? updatedProfile = null;
         bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        Profile? updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-        return updatedProfile;
+        if (newProfileSaved)
+        {
+            updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            return updatedProfile;
+        }
+        else return updatedProfile;
     }
 
 
-    public async Task<List<Portfolio?>> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
+    public async Task<Portfolio?> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
     {
+        Portfolio? updatedListOfPortfolios = null;
         bool newPortfolioSaved = await this._repoLayer.CreatePortfolioAsync(auth0Id, p);
-        List<Portfolio?> updatedListOfPortfolios = await this._repoLayer.GetALL_PortfoliosByUserIDAsync(auth0Id);
-        return updatedListOfPortfolios;
+        if (newPortfolioSaved)
+        {
+            updatedListOfPortfolios = await this._repoLayer.GetRecentPortfoliosByUserIDAsync(auth0Id);
+            return updatedListOfPortfolios;
+        }
+        else return updatedListOfPortfolios;
     }
 
     public async Task<Portfolio?> EditPortfolioAsync(Models.PortfolioDto p)
     {
+        Portfolio? updatedPortfolio = null;
         bool editedPortfolio = await this._repoLayer.EditPortfolioAsync(p);
-        Portfolio? updatedPortfolio = await this._repoLayer.GetPortfolioByPorfolioIDAsync(p.PortfolioID);
-        return updatedPortfolio;
+        if (editedPortfolio)
+        {
+            updatedPortfolio = await this._repoLayer.GetPortfolioByPorfolioIDAsync(p.PortfolioID);
+            return updatedPortfolio;
+        }
+        else return updatedPortfolio;
     }
     public async Task<Portfolio?> GetPortfolioByPortfolioIDAsync(Guid? portfolioID)
     {
@@ -73,7 +93,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         bool? check = await this._repoLayer.AddNewSellAsync(sell.Fk_PortfolioID, sell.Symbol, sell.AmountSold, sell.PriceSold, sell.DateSold);
 
         if (true == check)
-        { 
+        {
             return (sell);
         }
         else return (null);
@@ -86,12 +106,70 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return buyList;
     }
 
-    public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
+    public async Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto)
     {
-        List<Sell?> sellList = await this._repoLayer.GetAllSellBySymbolAsync(symbol, portfolioID);
+        List<Sell?> sellList = await this._repoLayer.GetAllSellBySymbolAsync(sellsDto);
         return sellList;
     }
 
-    
+    public async Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
+    {
+        Investment? investment = await this._repoLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
+        return investment;
+    }
+
+    public async Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime)
+    {
+        List<Investment>? returnedInvestment = await this._repoLayer.GetInvestmentByTimeAsync(investmentByTime);
+        return returnedInvestment;
+    }
+
+    public async Task<int> GetNumberOfUsersAsync()
+    {
+        int userCount = await this._repoLayer.GetNumberOfUsersAsync();
+        return userCount;
+    }
+
+    public async Task<int> GetNumberOfPostsAsync()
+    {
+        int userCount = await this._repoLayer.GetNumberOfPostsAsync();
+        return userCount;
+    }
+
+    public async Task<int> GetNumberOfBuysAsync()
+    {
+        int buysCount = await this._repoLayer.GetNumberOfBuysAsync();
+        return buysCount;
+    }
+
+    public async Task<int> GetNumberOfSellsAsync()
+    {
+        int sellsCount = await this._repoLayer.GetNumberOfSellsAsync();
+        return sellsCount;
+    }
+
+    public async Task<Post?> CreatePostAsync(string auth0Id, CreatePostDto post)
+    {
+        //List<Post?> userList = null;    
+        bool createdPost = await this._repoLayer.CreatePostAsync(auth0Id, post);
+        if(createdPost)
+        {
+            Post? newPost = await this._repoLayer.GetRecentPostByUserId(auth0Id);
+            return newPost;
+        }
+        return null;
+    }
+
+    public async Task<List<Post>> GetAllPostAsync()
+    {
+        List<Post> returnedPosts = await this._repoLayer.GetAllPostAsync();
+        return returnedPosts;   
+    }
+
+    public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+    {
+        List<Investment?> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
+        return investments;
+    }
 
 }

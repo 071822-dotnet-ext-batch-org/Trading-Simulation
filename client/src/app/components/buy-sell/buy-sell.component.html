@@ -16,22 +16,32 @@
       <mat-form-field appearance="fill">
         <mat-label>Enter Ticker Symbol</mat-label>
         <input matInput #input maxlength="5" placeholder="Ticker Symbol" [required]="true">
+        <!-- <div *ngFor="let result of results"></div> !!!!GOES IN THE ABOVE LINE!!! name="input" value="" [ngModel]="getTickerData(input.value)" -->
       </mat-form-field>
     </div>
     <div class="Row-3">
       <mat-form-field appearance="fill">
         <mat-label>Enter Quantity</mat-label>
-        <input matInput #input maxlength="7" placeholder="Quantity" [required]="true">
+        <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty" [ngModelOptions]="{standalone: true}" [required]="true">
       </mat-form-field>
     </div>
     <p></p>
   </div>
   <div class="total">
-    Total: $ cost.interprelation goes here
+    <div *ngFor="let cost of costTotal">
+      <p ng-change=""> Total Price: $ {{ totalPrice }} </p>
+    </div>
   </div>
   <div>
     <button class="back-btn" [routerLink]="'/Portfolio'">Back</button>
-    <button class="buy-btn" (click)="'ADD_A_METHOD_TO_GO_TO_PORTFOLIO_AFTER_BUYING_HERE!!!!!!!!!!'"
+    <button class="buy-btn" (click)="onPayment()"
       [routerLink]="'/Portfolio'">Buy</button>
   </div>
+  <!-- <div>
+    <ul class="ticker-group">
+      <li *ngFor="let ticker of tickerPrice" class="list-group-item">
+        {{ ticker.tickerSymbol }}
+      </li>
+    </ul>
+  </div> -->
 </form>

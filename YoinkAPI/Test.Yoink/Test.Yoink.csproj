@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+<<<<<<< HEAD
   <ItemGroup>
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj"/>
     <ProjectReference Include="..\RepoLayer\RepoLayer.csproj"/>
@@ -14,6 +15,21 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
     <PackageReference Include="Moq" Version="4.18.2"/>
     <PackageReference Include="xunit" Version="2.4.1"/>
+=======
+
+	<ItemGroup>
+		<ProjectReference Include="..\APILayer\APILayer.csproj" />
+		<ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
+		<ProjectReference Include="..\RepoLayer\RepoLayer.csproj" />
+		<ProjectReference Include="..\Models\Models.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="Moq" Version="4.18.2" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+>>>>>>> 9950bda0dca79039b0e22d2ccd803c062b286363
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

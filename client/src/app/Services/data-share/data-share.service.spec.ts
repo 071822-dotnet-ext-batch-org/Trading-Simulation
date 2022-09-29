@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BuySellService } from './buy-sell.service';
+import { DataShareService } from './data-share.service';
 
-describe('BuySellService', () => {
-  let service: BuySellService;
+describe('DataShareService', () => {
+  let service: DataShareService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BuySellService);
+    service = TestBed.inject(DataShareService);
   });
 
   it('should be created', () => {

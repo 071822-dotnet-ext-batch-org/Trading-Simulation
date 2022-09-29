@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { News } from 'src/Models/News';
+import { News } from 'src/app/Models/News';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,10 @@ import { News } from 'src/Models/News';
 export class NewsService { 
   
   constructor(private http:HttpClient) {}
-    private Nurl = "https://api.marketaux.com/v1/news/all?symbols=TSLA%2CAMZN%2CMSFT&filter_entities=true&language=en&api_token=6CJ3TxOf4jYZhIgzjOaZxAK4GLC8Hlpxjckp5kbr";
+    private Nurl = "https://api.polygon.io/v2/reference/news?apiKey=" + environment.polygonApiKey;
 
 
-  public getNewsData():Observable<any>{
+  public getNews():Observable<any>{
     return this.http.get<any>(this.Nurl)
   }
   
