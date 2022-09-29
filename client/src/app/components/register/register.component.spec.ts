@@ -41,4 +41,12 @@ describe('RegisterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('test buttion', ()=>{
+    let data = fixture.nativeElement.querySelector('a')
+    expect(data.textContent).toBeTruthy();
+  })
+  it('test buttion', ()=>{
+    let data = fixture.nativeElement.querySelector('a')
+    expect(component.register).toBeTruthy();
+  })
 });
