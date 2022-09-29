@@ -54,21 +54,25 @@ namespace Test.Yoink
             Guid TestFk_UserID = new Guid();
 
             //Act
-            Post TestPost1 = new Post(TestpostID, TestFk_UserID, "Sold big", "1", new DateTime(), 2, new DateTime());
+            Post TestPost1 = new Post(TestpostID, "TestFk_UserID", "Sold big", 1, 2, new DateTime(), new DateTime());
+            
             Post TestPost = new Post 
-            { PostID = TestpostID, 
-              Fk_UserID = TestFk_UserID,
+            { 
+
+              PostID = TestpostID, 
+              Fk_UserID = "TestFk_UserID",
               Content = "Sold big",
-              Likes = "1",
-              DateCreated = new DateTime(),
+              Likes = 1,
               PrivacyLevel = 2,
+              DateCreated = new DateTime(),
               DateModified = new DateTime(),
 
-        };
+
+            };
 
             //Assert
             Assert.Equal(TestpostID, TestPost.PostID);
-            Assert.Equal(TestFk_UserID, TestPost.Fk_UserID);
+            Assert.Equal("TestFk_UserID", TestPost.Fk_UserID);
         }
 
 
@@ -369,7 +373,7 @@ namespace Test.Yoink
 
             BuyDto buydto = new BuyDto()
             {
-                BuyID = guid,
+                portfolioId = guid,
                 Symbol = "GOOGL",
                 CurrentPrice = 500,
                 AmountBought = 1500,
@@ -379,7 +383,7 @@ namespace Test.Yoink
 
             //Assert
 
-            Assert.Equal(buydto.BuyID, guid);
+            Assert.Equal(buydto.portfolioId, guid);
 
 
         }
@@ -539,6 +543,122 @@ namespace Test.Yoink
         }
 
 
+        [Fact]
+        public void CreatPostDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            CreatePostDto createpostdto = new CreatePostDto("Hello World", 2);
+
+            CreatePostDto createpostdto2 = new CreatePostDto()
+            {
+                Content = "Hello World",
+                PrivacyLevel= 2,
+             
+            };
+
+
+            //Assert
+
+            Assert.Equal(2, createpostdto.PrivacyLevel);
+            Assert.Equal(2, createpostdto2.PrivacyLevel);
+
+        }
+
+
+
+        [Fact]
+        public void EditPostDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            EditPostDto editpostdto = new EditPostDto(guid, "Hello World", 2);
+
+            EditPostDto editpostdto2 = new EditPostDto()
+            { 
+                PostId = guid,
+                Content = "Hello World",
+                PrivacyLevel = 2,
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(2, editpostdto.PrivacyLevel);
+            Assert.Equal(2, editpostdto.PrivacyLevel);
+
+        }
+
+
+        [Fact]
+        public void GetAllInvestmentsDtoWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            GetAllInvestmentsDto getallInvestmentdto = new GetAllInvestmentsDto(guid);
+
+            GetAllInvestmentsDto getallInvestmentdto2 = new GetAllInvestmentsDto()
+            {
+                PortfolioID = guid,
+               
+            };
+
+
+            //Assert
+
+            Assert.Equal(getallInvestmentdto.PortfolioID, guid);
+            Assert.Equal(getallInvestmentdto.PortfolioID, guid);
+
+        }
+
+
+        [Fact]
+        public void GetProfileDtoDtoWorksCorrectly()
+        {
+
+            //Arrange
+
+            String UserID = "45678788";
+
+
+            //Act
+            GetProfileDto getProfileDto = new GetProfileDto(UserID);
+
+            GetProfileDto getProfileDto2 = new GetProfileDto()
+            {
+                UserID = UserID,
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(UserID, getProfileDto.UserID);
+            Assert.Equal(UserID, getProfileDto2.UserID);
+
+        }
 
 
     }
