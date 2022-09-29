@@ -153,7 +153,7 @@ namespace RepoLayer
         public async Task<bool> EditPortfolioAsync(Models.PortfolioDto p)
         {
 
-            using (SqlCommand command = new SqlCommand($"UPDATE Portfolios SET (name = @name, privacyLevel = @privacylevel) WHERE portfolioID = @portfolioid", _conn))
+            using (SqlCommand command = new SqlCommand($"UPDATE Portfolios SET name = @name, privacyLevel = @privacylevel WHERE portfolioID = @portfolioid", _conn))
             {            
                 command.Parameters.AddWithValue("@portfolioid", p.PortfolioID);
                 command.Parameters.AddWithValue("@name", p.Name); 
@@ -191,16 +191,15 @@ namespace RepoLayer
             }
         }        
         
-        public async Task<bool> AddNewBuyAsync(Guid? PortfolioId, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought, DateTime? DateBought)
+        public async Task<bool> AddNewBuyAsync(Guid? PortfolioId, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought)
         {
-            using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_Portfolio, symbol, currentPrice, amountBought, priceBought, dateBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought, @datebought)", _conn))
+            using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_portfolioID, symbol, currentPrice, amountBought, priceBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought)", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioid", PortfolioId);
                 command.Parameters.AddWithValue("@symbol", Symbol);
                 command.Parameters.AddWithValue("@currentprice", CurrentPrice);
                 command.Parameters.AddWithValue("@amountbought", AmountBought);
                 command.Parameters.AddWithValue("@pricebought", PriceBought);
-                command.Parameters.AddWithValue("@dateBought", DateBought);
                 _conn.Open();
                 int ret = await command.ExecuteNonQueryAsync();
                 if (ret > 0)
@@ -484,6 +483,103 @@ namespace RepoLayer
                 return invList;
             }
         }
+
+        public async Task<int> GetNumberOfCommentsByPostIdAsync(Guid? PostId)
+        {
+            //string stmt = "SELECT COUNT(fk_postID) FROM Comments";
+            int count = 0;
+            using (SqlCommand cmdCount = new SqlCommand("SELECT COUNT(commentID) FROM Comments WHERE fk_postID=@postId", _conn))
+            {
+                cmdCount.Parameters.AddWithValue("@postId", PostId);
+                _conn.Open();
+                count = (int)cmdCount.ExecuteScalar();
+                _conn.Close();
+            }
+
+            return count;
+
+        }
+
+        public async Task<string?> GetUserWithPostIdAsync(Guid? postId)
+        {
+            string? postUser = "";
+            using (SqlCommand command = new SqlCommand($"SELECT fk_userID FROM Posts WHERE postID=@postId", _conn))
+            {
+                command.Parameters.AddWithValue("@postId", postId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+                    postUser = ret.GetString(0);
+
+                }
+
+                _conn.Close();
+                return postUser;
+            }
+        }
+
+        public async Task<bool> UpdatePostAsync(EditPostDto editPostDto)
+        {
+            using (SqlCommand command = new SqlCommand($"UPDATE Posts SET content=@Content, privacyLevel=@privacylevel WHERE postID=@PostId", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", editPostDto.PostId);
+                command.Parameters.AddWithValue("@Content", editPostDto.Content);
+                command.Parameters.AddWithValue("@privacylevel", editPostDto.PrivacyLevel);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        public async Task<Post?> GetPostByPostId(Guid? PostId)
+        {
+            Post? p = null;  
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts WHERE postID=@PostId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", PostId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    p = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+
+                }
+
+                _conn.Close();
+                return p;
+            }
+        }
+
+        public async Task<Buy?> GetRecentBuyByPortfolioId(Guid? portfolioId)
+        {
+            using (SqlCommand command = new SqlCommand($"Select TOP (1) * FROM Buys WHERE fk_portfolioID = @portfolioId ORDER BY dateBought DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioId", portfolioId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                Buy? recentBuy = null;
+                if (ret.Read())
+                {
+                    recentBuy = new Buy(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDateTime(6));
+
+                }
+
+                _conn.Close();
+                return recentBuy;
+            }
+        }
+
+
 
 
     }

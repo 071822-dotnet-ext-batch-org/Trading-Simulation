@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Models;
 using BusinessLayer;
+using Models.ModelDTOs.BackToFrontEnd;
 
 namespace APILayer.Controllers
 {
@@ -117,7 +118,7 @@ namespace APILayer.Controllers
 
 
         [HttpPost("create-buy")]
-        public async Task<ActionResult<Buy>> AddNewBuyAsync(Buy buy)
+        public async Task<ActionResult<Buy>> AddNewBuyAsync(BuyDto buy)
         {
             if (ModelState.IsValid)
             {
@@ -247,10 +248,18 @@ namespace APILayer.Controllers
 
         [AllowAnonymous]
         [HttpGet("get-all-post")]
-        public async Task<ActionResult<List<Post>>> GetAllPostsAsync()
+        public async Task<ActionResult<List<PostWithCommentCountDto>>> GetAllPostsAsync()
         {
-            List<Post> returnedPosts = await this._businessLayer.GetAllPostAsync();
+            List<PostWithCommentCountDto> returnedPosts = await this._businessLayer.GetAllPostAsync();
             return Ok(returnedPosts);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Post?>> UpdatePostAsync(EditPostDto editPostDto)
+        {
+            string? auth0UserId = User.Identity?.Name;
+            Post? editedPost = await this._businessLayer.UpdatePostAsync(auth0UserId, editPostDto);
+            return Ok(editedPost);
         }
 
 

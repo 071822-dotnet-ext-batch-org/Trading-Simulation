@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
+using Models.ModelDTOs.BackToFrontEnd;
 
 namespace BusinessLayer
 {
     public interface IYoinkBusinessLayer
     {
         //Buy and Sell Section
-        Task<Buy?> AddNewBuyAsync(Buy buy);
+        Task<Buy?> AddNewBuyAsync(BuyDto buy);
         Task<Sell?> AddNewSellAsync(Sell sell);
         Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys);
         Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto);
@@ -39,7 +40,7 @@ namespace BusinessLayer
 
         //Posts
         Task<Post?> CreatePostAsync(string auth0Id, CreatePostDto post);
-        Task<List<Post>> GetAllPostAsync();
-        
+        Task<List<PostWithCommentCountDto>> GetAllPostAsync();
+        Task<Post?> UpdatePostAsync(string? auth0UserId, EditPostDto editPostDto);
     }
 }
