@@ -3,6 +3,7 @@ using BusinessLayer;
 using Models;
 using Moq;
 using RepoLayer;
+using System;
 
 
 namespace Test.Yoink
@@ -130,8 +131,15 @@ namespace Test.Yoink
         {
 
             //Arrange
+            Guid guid = Guid.NewGuid();
 
             Get_BuysDto AllBuys = new Get_BuysDto()
+            {
+                Symbol = "GOOGL",
+
+            };
+
+            BuyDto buydto = new BuyDto()
             {
                 Symbol = "GOOGL",
 
@@ -158,14 +166,20 @@ namespace Test.Yoink
                 .Setup(b => b.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
                 .Returns(Task.FromResult(buymockList));
 
+            var dataSource2 = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(b => b.AddNewBuyAsync(It.IsAny<BuyDto>()))
+                .Returns(Task.FromResult(buy));
+
             var TheClassBeingTested = new YoinkController(dataSource.Object);
 
+            var TheClassBeingTested2 = new YoinkController(dataSource2.Object);
 
             //Act
 
             var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
 
-            var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
+            var NewBuyWasAdded = TheClassBeingTested2.AddNewBuyAsync(buydto);
 
 
             //Assert
