@@ -93,8 +93,10 @@ import { InvestmentsComponent } from './components/investments/investments.compo
           env.baseURL + '/edit-profile',
           env.baseURL + '/my-portfolios',
           env.baseURL + '/create-portfolio',
-          env.baseURL + '/all-investments'
-         ], //for now
+          env.baseURL + '/all-investments',
+          env.baseURL + '/create-buy',
+          env.baseURL + '/create-sell'
+        ], //for now
       }
 
     }),
