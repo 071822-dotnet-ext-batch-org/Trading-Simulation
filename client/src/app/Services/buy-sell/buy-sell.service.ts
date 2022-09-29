@@ -21,4 +21,8 @@ export class BuySellService {
   public getTickerData(tickerSymbol: string): Observable<any> {
     return this.http.get<any>(this.lastQuote + tickerSymbol + this.lastQuoteKey);
   }
+
+  getTickerPrice(): Observable<any> {
+    return this.http.get<any>(this.lastQuote);
+  };
 }
