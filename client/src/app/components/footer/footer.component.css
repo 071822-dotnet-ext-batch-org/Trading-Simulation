@@ -4,6 +4,8 @@
     bottom: 0;
     width: 100%;
     height: auto;
-    background-color: #93C6F7;
-     text-align: center;          
+    background-color: #c4e3ff;
+    text-align: center;  
+    color:  rgb(32, 32, 76);  
+    font-size: 15px;     
   }
