@@ -6,7 +6,7 @@ import { AuthModule, AuthService } from '@auth0/auth0-angular';
 import { AuthConfig, AuthConfigService, AuthClientConfig } from '@auth0/auth0-angular';
 import { Auth0ClientService, Auth0ClientFactory } from '@auth0/auth0-angular';
 import { AuthGuard } from '@auth0/auth0-angular';
-import { baseURL } from '../../Services/base-url';
+import { environment as env } from 'src/environments/environment';
 
 
 describe('ProfileComponent', () => {
@@ -24,11 +24,11 @@ describe('ProfileComponent', () => {
           audience: 'https://localhost:7280/api/Yoink',
           httpInterceptor: {
             allowedList: [
-              baseURL + '/create-profile',
-              baseURL + '/my-profile',
-              baseURL + '/edit-profile',
-              baseURL + '/my-portfolios',
-              baseURL + '/create-portfolio'
+              env.baseURL + '/create-profile',
+              env.baseURL + '/edit-profile',
+              env.baseURL + '/my-portfolios',
+              env.baseURL + '/my-profile',
+              env.baseURL + '/create-portfolio'
              ], 
           }
     
@@ -48,10 +48,10 @@ describe('ProfileComponent', () => {
   });
   it('Testing Button', ()=>{
     const data = fixture.nativeElement;
-    expect(data.querySelector("button").textContent).toContain(" ")
+    expect(data.querySelector("button").textContent).toContain("edit")
   });
   it('Testing header2', ()=>{
     const data = fixture.nativeElement;
-    expect(data.querySelector("h2").textContent).toContain(" ")
+    expect(data.querySelector("p").textContent).toContain(" ")
   });
 });

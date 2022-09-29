@@ -23,6 +23,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { MatTableModule } from '@angular/material/table';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
@@ -82,6 +83,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     HttpClientModule,
     MatDialogModule,
     MatTableModule,
+    ReactiveFormsModule,
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
@@ -93,8 +95,10 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
           env.baseURL + '/edit-profile',
           env.baseURL + '/my-portfolios',
           env.baseURL + '/create-portfolio',
-          env.baseURL + '/all-investments'
-         ], //for now
+          env.baseURL + '/all-investments',
+          env.baseURL + '/create-buy',
+          env.baseURL + '/create-sell'
+        ], //for now
       }
 
     }),
