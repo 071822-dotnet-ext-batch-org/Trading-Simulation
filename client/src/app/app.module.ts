@@ -48,7 +48,8 @@ import { CreatePortfolioModalComponent } from './components/create-portfolio-mod
 import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
-import { InvestmentsComponent } from './components/investments/investments.component'
+import { InvestmentsComponent } from './components/investments/investments.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { InvestmentsComponent } from './components/investments/investments.compo
     PostsComponent,
     PostCardComponent,
     InvestmentsComponent,
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,
