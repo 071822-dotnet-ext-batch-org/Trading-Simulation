@@ -160,7 +160,6 @@ namespace Test.Yoink
 
             var TheClassBeingTested = new YoinkController(dataSource.Object);
 
-        //     var TheClassBeingTested = new YoinkController(dataSource.Object);
 
             //Act
 
@@ -168,7 +167,6 @@ namespace Test.Yoink
 
             var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
 
-            // var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
 
             //Assert
 
@@ -221,7 +219,9 @@ namespace Test.Yoink
 
             //Act
 
-            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
+            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(selldto);
+
+            // var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
 
             var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 

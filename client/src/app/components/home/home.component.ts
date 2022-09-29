@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { CuriencyapiService } from 'src/app/service/curiencyapi.service';
+import { CuriencyapiService } from 'src/app/Services/currency-api/curiencyapi.service';
 
 @Component({
   selector: 'app-home',

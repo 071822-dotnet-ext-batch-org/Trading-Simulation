@@ -33,15 +33,9 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
- 
- 
- 
 import { NewsComponent } from './components/news/news.component';
-import { NewsService } from './service/news.service';
+import { NewsService } from './Services/news/news.service';
 import { ProfileComponent } from './components/profile/profile.component';
- 
-
-import { baseURL } from './Services/base-url';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -49,6 +43,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
+import { environment as env } from 'src/environments/environment'
 
 @NgModule({
   declarations: [
@@ -86,11 +81,11 @@ import { CreatePortfolioModalComponent } from './components/create-portfolio-mod
       audience: 'https://localhost:7280/api/Yoink',
       httpInterceptor: {
         allowedList: [
-          baseURL + '/create-profile',
-          baseURL + '/my-profile',
-          baseURL + '/edit-profile',
-          baseURL + '/my-portfolios',
-          baseURL + '/create-portfolio'
+          env.baseURL + '/create-profile',
+          env.baseURL + '/my-profile',
+          env.baseURL + '/edit-profile',
+          env.baseURL + '/my-portfolios',
+          env.baseURL + '/create-portfolio'
          ], //for now
       }
 
