@@ -1,5 +1,5 @@
 <div *ngIf="auth.user$ | async as user">
-    <h1>Yoink, {{user.name }}!</h1>
+    <h1>Yoink, {{ user.name }}!</h1>
     <app-profile></app-profile>
     <div class="row" *ngIf="profileJson">
         <pre class="col-12 text-light bg-dark p-4">{{ profileJson }}</pre>

@@ -37,14 +37,12 @@ describe('SignOutComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create test1', () => {
-    const fixture = TestBed.createComponent(SignOutComponent);
-    fixture.detectChanges();
-    const complied = fixture.debugElement.nativeElement;
-    expect(complied.querySelector('h1').textContent).toContain('Yoink,');
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
-  it('test header2', () => {
-    const data = fixture.nativeElement.querySelector('h2');
-    expect(data).toBeFalsy();
+
+  it('test button', () => {
+    const data = fixture.nativeElement.querySelector('button');
+    expect(data).toBeTruthy();
   });
 });

@@ -1,13 +1,9 @@
-import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { Location, CommonModule} from '@angular/common';
-import { Router } from '@angular/router';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'src/environments/environment';
 
-import { inject } from '@angular/core';
 import { UserComponent } from './user.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('UserComponent', () => {
   let component: UserComponent;
@@ -16,6 +12,8 @@ describe('UserComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
+        FormsModule,
+        ReactiveFormsModule,
         AuthModule.forRoot({
           domain: 'dev-pxtkabk5.us.auth0.com',
           clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
@@ -50,14 +48,6 @@ describe('UserComponent', () => {
     const data = fixture.nativeElement.querySelector('.row');
     expect(data).toBeFalsy();
    });
-   it('test header2',()=>{
-    const data = fixture.nativeElement.querySelector('h2');
-    expect(data).toBeFalsy();
-   });
-   it('test header5',()=>{
-    const data = fixture.nativeElement.querySelector('h5');
-    expect(data).toBeFalsy();
-   });
    it('should create userpage', () =>{
     const fixture =TestBed.createComponent(UserComponent)
     const user = fixture.debugElement.componentInstance;
@@ -66,9 +56,9 @@ describe('UserComponent', () => {
    it('should create header1',()=>{
     const fixture = TestBed.createComponent(UserComponent);
     fixture.detectChanges();
-    const complied = fixture.debugElement.nativeElement;
-    expect(complied.querySelector('h1').textContent).toContain('Yoink,');
-   });
+    const complied = fixture.debugElement.nativeElement.querySelector('#titleInterpolation');
+    expect(complied).toBeTruthy;
+  });
    it('testing profileJSON',()=>{
     expect(component.profileJson).toBe("")
    });
