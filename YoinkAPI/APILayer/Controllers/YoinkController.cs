@@ -130,7 +130,7 @@ namespace APILayer.Controllers
 
 
         [HttpPost("create-sell")]
-        public async Task<ActionResult<Sell>> AddNewSellAsync(Sell sell)
+        public async Task<ActionResult<Sell>> AddNewSellAsync(SellDto sell)
         {
             if (ModelState.IsValid)
             {
@@ -254,12 +254,20 @@ namespace APILayer.Controllers
             return Ok(returnedPosts);
         }
 
-        [HttpPut]
+        [HttpPut("edit-post")]
         public async Task<ActionResult<Post?>> UpdatePostAsync(EditPostDto editPostDto)
         {
             string? auth0UserId = User.Identity?.Name;
             Post? editedPost = await this._businessLayer.UpdatePostAsync(auth0UserId, editPostDto);
             return Ok(editedPost);
+        }
+
+        [HttpDelete("delete-post")]
+        public async Task<ActionResult<Post?>> DeletePostAsync(Guid? postId)
+        {
+            string? auth0UserId = User.Identity?.Name;
+            Guid? deletedPostId = await this._businessLayer.DeletePostAsync(auth0UserId, postId);
+            return Ok(deletedPostId);
         }
 
 
