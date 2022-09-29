@@ -1,0 +1,28 @@
+<mat-card *ngIf="profile" class="post-card">
+    <mat-card-title-group>
+        <mat-card-header>
+            <img mat-card-avatar src="{{profile.picture}}">
+            <mat-card-title>
+                {{profile.name}}
+            </mat-card-title>
+            <mat-card-subtitle>
+                {{post.dateModified | date}}
+            </mat-card-subtitle>
+        </mat-card-header>
+    </mat-card-title-group>
+
+    <mat-card-content>
+        <p>{{post.content}}</p>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+        <button mat-icon-button>
+            <mat-icon>thumb_up</mat-icon>
+            {{post.likes}}
+        </button>
+
+        <button mat-icon-button>
+            <mat-icon>chat_bubble</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>

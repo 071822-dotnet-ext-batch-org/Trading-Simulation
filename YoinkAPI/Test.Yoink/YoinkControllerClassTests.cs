@@ -45,7 +45,7 @@ namespace Test.Yoink
 
             //Act
 
-            var TheUserProfileWasGot = TheClassBeingTested.GetProfileByUserIDAsync();
+            var TheUserProfileWasGot = TheClassBeingTested.GetMyProfileAsync();
 
             var TheUserProfileWasCreated = TheClassBeingTested.CreateProfileAsync(profiledto);
 

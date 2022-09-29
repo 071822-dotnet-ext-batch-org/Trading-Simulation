@@ -150,8 +150,18 @@ namespace Models
         }
     }
 
+    public class GetProfileDto
+    {
+        public GetProfileDto()
+        {
+        }
 
+        public GetProfileDto(string? userID)
+        {
+            UserID = userID;
+        }
 
-
+        public string? UserID { get; set; }
+    }
 
 }
