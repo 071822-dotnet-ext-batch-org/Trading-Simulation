@@ -1,6 +1,10 @@
 <div *ngIf="profile">
 <h2>{{ this.profile.name }}</h2>
 <div>
+    Picture:
+    <input [(ngModel)]="this.profile.picture" placeholder="Picture"/> 
+</div>
+<div>
     Name:
     <input [(ngModel)]="this.profile.name" placeholder="Name"/> 
 </div>
@@ -12,5 +16,5 @@
     Privacy Level:
     <input [(ngModel)]="this.profile.privacyLevel" placeholder="PrivacyLevel"/>  
 </div>
-<button (click)="updateProfile(profile)">Save</button>
+<button mat-raised-button (click)="updateProfile(profile)">Save</button>
 </div>
