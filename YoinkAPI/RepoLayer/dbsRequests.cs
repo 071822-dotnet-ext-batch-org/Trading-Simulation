@@ -63,7 +63,7 @@ namespace RepoLayer
         public async Task<bool> EditProfileAsync(string? userID, string? Name, string? Email, string? Picture, int? Privacy)
         {
 
-            using (SqlCommand command = new SqlCommand($"UPDATE Profiles SET (name=@name, email=@email, picture=@picture, privacyLevel=@privacy) WHERE fk_userID=@userid", _conn))
+            using (SqlCommand command = new SqlCommand($"UPDATE Profiles SET name=@name, email=@email, picture=@picture, privacyLevel=@privacy WHERE fk_userID=@userid", _conn))
             {
                 command.Parameters.AddWithValue("@userid", userID);
                 command.Parameters.AddWithValue("@name", Name);

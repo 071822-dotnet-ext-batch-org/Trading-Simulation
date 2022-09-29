@@ -19,7 +19,7 @@ export class EditProfileComponent implements OnInit {
 
   updateProfile(profile:Profile) {
     this.UpdatePro
-    .updateProfile(profile.name, profile.email, profile.privacyLevel)
+    .updateProfile(profile.name, profile.email, profile.picture, profile.privacyLevel)
     .subscribe((update: Profile) => this.profileUpdated.emit(update));
   }
 

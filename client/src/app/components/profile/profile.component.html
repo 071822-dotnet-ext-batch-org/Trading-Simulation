@@ -12,59 +12,8 @@
         <div><button style="font-size:large" mat-button color="primary" (click)="editProfile(profile)">Edit Profile</button></div>
 <app-edit-profile [profile]="profileToEdit" (profileUpdated)="updateProfileList($event)">Save</app-edit-profile>
        
-
-        <mat-card-header>
-            <img mat-card-avatar src={{this.profile?.picture}}>
-            <mat-card-title>Name: {{this.profile?.name}}</mat-card-title>
-            <mat-card-subtitle>E-mail: {{this.profile?.email}}</mat-card-subtitle>
-            <mat-card-subtitle>Privacy level: {{this.profile?.privacyLevel}}</mat-card-subtitle>
-        </mat-card-header>
-        </mat-card>
-        </div>
-<div class="profile-edit-container">
-    <p>Name: <p>
-<div *ngIf="showProfileName">
-    <p class="editable">
-        <span  class="not-on-file" *ngIf="this.profile?.name===''">
-            No name given
-        </span>
-
-        {{this.profile?.name}}
-
-        <button mat-button (click)="editName()">
-            <mat-icon>edit</mat-icon>
-        </button>
-    </p>
-</div>
-
-<div *ngIf="!showProfileName">
-    <mat-form-field appearance="fill">
-        <mat-label>Profile Name</mat-label>
-        <input matInput id="name" type="text" (focusout)="updateProfileName()" (keydown.enter)="updateProfileName()" []>
-    </mat-form-field>
-</div>
-
-
-   <!-- <h2>{{ profile.name }}</h2>
-    <div>   
-        Name:
-        <input [(ngModel)]="profile.name" placeholder="Name" />
-    </div>
-    <div>   
-        Email:
-        <input [(ngModel)]="profile.email" placeholder="Email" />
-    </div> 
-    <div>   
-        Private:
-        <label class="switch">
-            <input type="checkbox">
-            <span class="slider round"></span>
-        </label>
-        <button (click)="updateProfile(profile)">Save</button>
-    </div> -->
-
     
-<button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true">Create Profile</button>
+
 <!-- <button style="font-size:large" mat-button color="primary" (click)="updateProfile()">Update Profile</button> -->
 
 
