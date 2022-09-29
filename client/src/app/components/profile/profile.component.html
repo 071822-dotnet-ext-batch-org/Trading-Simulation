@@ -1,25 +1,20 @@
-<!-- <button (click)="initNewProfile()">Create New Profile</button> -->
-<div *ngIf="profile">
-    <h2>{{ profile.name }}</h2>
-    <div>   
-        Name:
-        <input [(ngModel)]="profile.name" placeholder="Name" />
-    </div>
-    <div>   
-        Email:
-        <input [(ngModel)]="profile.email" placeholder="Email" />
-    </div> 
-    <div>   
-        Privacy Level:
-        <input [(ngModel)]="profile.privacyLevel" placeholder="Privacy Level" />
-    </div>
-<!-- <div>
-    <button (click)="editProfile(profile)">Edit</button>
-</div>
-    -->
+<div class="container">
+    <mat-card class="card">
 
-</div>
-<button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true">Create Profile</button>
+        <mat-card-header *ngIf="profile">
+            <img mat-card-avatar src={{this.profile.picture}}>
+            <mat-card-title>Name: {{this.profile.name}}</mat-card-title>
+            <mat-card-subtitle>E-mail: {{this.profile.email}}</mat-card-subtitle>
+            <mat-card-subtitle>Privacy level: {{this.profile.privacyLevel}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="content"></mat-card-content>
+        <div><button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true">Create Profile</button></div>
+        <div><button style="font-size:large" mat-button color="primary" (click)="editProfile(profile)">Edit Profile</button></div>
+<app-edit-profile [profile]="profileToEdit" (profileUpdated)="updateProfileList($event)">Save</app-edit-profile>
+       
+    
+
 <!-- <button style="font-size:large" mat-button color="primary" (click)="updateProfile()">Update Profile</button> -->
+
 
 

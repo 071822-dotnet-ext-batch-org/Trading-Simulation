@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
 
 import { CreatePortfolioModalComponent } from './create-portfolio-modal.component';
 
@@ -8,6 +9,7 @@ describe('CreatePortfolioModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [MatDialogRef],
       declarations: [ CreatePortfolioModalComponent ]
     })
     .compileComponents();

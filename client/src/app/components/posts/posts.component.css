@@ -1,0 +1,12 @@
+.post-list-container {
+    display: grid;
+    place-items: center center;
+}
+
+.spinner {
+    margin-top: 25vh;
+}
+
+.post-card {
+    margin: 200px;
+}

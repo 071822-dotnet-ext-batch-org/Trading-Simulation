@@ -1,10 +1,7 @@
-import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { Location, CommonModule} from '@angular/common';
-import { Router } from '@angular/router';
+
+import {ComponentFixture,TestBed } from '@angular/core/testing';
 import { AuthModule } from '@auth0/auth0-angular';
-import { baseURL } from 'src/app/Services/base-url';
+import { environment as env } from 'src/environments/environment';
 
 import { inject } from '@angular/core';
 import { SigninComponent } from './signin.component';
@@ -19,19 +16,22 @@ describe('SigninComponent', () => {
         AuthModule.forRoot({
           domain: 'dev-pxtkabk5.us.auth0.com',
           clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
+          audience: 'https://localhost:7280/api/Yoink',
           httpInterceptor: {
             allowedList: [
-              baseURL + '/CreateProfileAsync',
-              baseURL + '/GetProfileByUserIDAsync',
-              baseURL + '/EditProfileAsync'
-             ], //for now
+              env.baseURL + '/create-profile',
+              env.baseURL + '/edit-profile',
+              env.baseURL + '/my-portfolios',
+              env.baseURL + '/my-profile',
+              env.baseURL + '/create-portfolio'
+             ], 
           }
     
         })
       ],
-      declarations: [ SigninComponent ]
+      declarations: [SigninComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SigninComponent);
     component = fixture.componentInstance;
@@ -41,4 +41,10 @@ describe('SigninComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('test button', () => {
+    const data = fixture.nativeElement.querySelector('button');
+    expect(data).toBeTruthy();
+  });
 });
+

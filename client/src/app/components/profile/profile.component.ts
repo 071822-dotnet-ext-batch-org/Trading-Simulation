@@ -4,7 +4,6 @@ import { Profile } from 'src/app/Models/Profile';
 import { ResultType } from '@remix-run/router/dist/utils';
 import { AuthService } from '@auth0/auth0-angular';
 import { CreateProfileService } from 'src/app/Services/CreateProfile/create-profile.service';
-import { UpdateProfileService } from 'src/app/Services/update-profile-service/update-profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,21 +11,31 @@ import { UpdateProfileService } from 'src/app/Services/update-profile-service/up
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  private isButtonVisible = true;
-  profile: any;
 
-  constructor(private ProService: ProfileServiceService,
-              private AuthService: AuthService,
-              private CreatePro: CreateProfileService,
-              private UpdatePro: UpdateProfileService,
-              ) { }
+  profileToEdit?: Profile;
+  
+  constructor(
+    private ProService: ProfileServiceService,
+    private AuthService: AuthService,
+    private CreatePro: CreateProfileService,
+    ) { }
+    
+    profile: any;
 
   ngOnInit(): void {
-    // this.ProService
-    // .getProfiles()
-    // .subscribe((resul: Profile[]) => (this.profiles = result));
-    
+   this.ProService.getProfiles().subscribe(data => {
+    this.profile = data;
+   });   
   }
+
+  editProfile(profile: Profile) {
+    this.profileToEdit = profile;
+  }
+
+  updateProfileList(update: Profile) {
+    this.profile = update;  //check back on this
+  }
+
 
   isClicked: boolean = false;
 
@@ -38,19 +47,5 @@ export class ProfileComponent implements OnInit {
        })
     })
    }
-
-  //  updateProfile(){
-  //   this.AuthService.user$.subscribe(user => {
-  //     this.UpdatePro.updateProfile(user?.name, user?.email, user?.picture, 0).subscribe(update => {
-  //       console.log(update)
-  //     })
-  //   })
-    
-  //  }
-
-
-  // initNewProfile() {
-  //   this.profileToEdit = new Profile();
-  // }
 
 }

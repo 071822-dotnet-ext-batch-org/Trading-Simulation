@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.ModelDTOs.BackToFrontEnd;
 using RepoLayer;
 
 namespace BusinessLayer;
@@ -12,9 +13,14 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
     public async Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p)
     {
+        Profile? newProfile = null;
         bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        Profile? newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-        return newProfile;
+        if (newProfileSaved)
+        {
+            newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            return newProfile;
+        }
+        else return newProfile;
     }
 
     public async Task<Profile?> GetProfileByUserIDAsync(string? auth0Id)
@@ -25,24 +31,39 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
     public async Task<Profile?> EditProfileAsync(string? auth0Id, ProfileDto? p)
     {
+        Profile? updatedProfile = null;
         bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        Profile? updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-        return updatedProfile;
+        if (newProfileSaved)
+        {
+            updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            return updatedProfile;
+        }
+        else return updatedProfile;
     }
 
 
-    public async Task<List<Portfolio?>> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
+    public async Task<Portfolio?> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
     {
+        Portfolio? updatedListOfPortfolios = null;
         bool newPortfolioSaved = await this._repoLayer.CreatePortfolioAsync(auth0Id, p);
-        List<Portfolio?> updatedListOfPortfolios = await this._repoLayer.GetALL_PortfoliosByUserIDAsync(auth0Id);
-        return updatedListOfPortfolios;
+        if (newPortfolioSaved)
+        {
+            updatedListOfPortfolios = await this._repoLayer.GetRecentPortfoliosByUserIDAsync(auth0Id);
+            return updatedListOfPortfolios;
+        }
+        else return updatedListOfPortfolios;
     }
 
     public async Task<Portfolio?> EditPortfolioAsync(Models.PortfolioDto p)
     {
+        Portfolio? updatedPortfolio = null;
         bool editedPortfolio = await this._repoLayer.EditPortfolioAsync(p);
-        Portfolio? updatedPortfolio = await this._repoLayer.GetPortfolioByPorfolioIDAsync(p.PortfolioID);
-        return updatedPortfolio;
+        if (editedPortfolio)
+        {
+            updatedPortfolio = await this._repoLayer.GetPortfolioByPorfolioIDAsync(p.PortfolioID);
+            return updatedPortfolio;
+        }
+        else return updatedPortfolio;
     }
     public async Task<Portfolio?> GetPortfolioByPortfolioIDAsync(Guid? portfolioID)
     {
@@ -57,12 +78,14 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return getALL_portfolios;
     }
 
-    public async Task<Buy?> AddNewBuyAsync(Buy buy)
+    public async Task<Buy?> AddNewBuyAsync(BuyDto buy)
     {
-        bool? check = await this._repoLayer.AddNewBuyAsync(buy.Fk_PortfolioID, buy.Symbol, buy.CurrentPrice, buy.AmountBought, buy.PriceBought, buy.DateBought);
+        buy.CurrentPrice = buy.PriceBought;
+        bool? check = await this._repoLayer.AddNewBuyAsync(buy.portfolioId, buy.Symbol, buy.CurrentPrice, buy.AmountBought, buy.PriceBought);
         if (true == check)
         {
-            return (buy);
+            Buy? createdBuy = await this._repoLayer.GetRecentBuyByPortfolioId(buy.portfolioId);
+            return (createdBuy);
         }
         else return (null);
     }
@@ -116,16 +139,71 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return userCount;
     }
 
-    public async Task<int> GetNumberOfBuysByDayAsync()
+    public async Task<int> GetNumberOfBuysAsync()
     {
-        int buysCount = await this._repoLayer.GetNumberOfBuysByDayAsync();
+        int buysCount = await this._repoLayer.GetNumberOfBuysAsync();
         return buysCount;
     }
 
-    public async Task<int> GetNumberOfSellsByDayAsync()
+    public async Task<int> GetNumberOfSellsAsync()
     {
-        int sellsCount = await this._repoLayer.GetNumberOfSellsByDayAsync();
+        int sellsCount = await this._repoLayer.GetNumberOfSellsAsync();
         return sellsCount;
+    }
+
+    public async Task<Post?> CreatePostAsync(string auth0Id, CreatePostDto post)
+    {
+        //List<Post?> userList = null;    
+        bool createdPost = await this._repoLayer.CreatePostAsync(auth0Id, post);
+        if(createdPost)
+        {
+            Post? newPost = await this._repoLayer.GetRecentPostByUserId(auth0Id);
+            return newPost;
+        }
+        return null;
+    }
+
+    public async Task<List<PostWithCommentCountDto>> GetAllPostAsync()
+    {
+        List<PostWithCommentCountDto> listWithCommentCount = new List<PostWithCommentCountDto>();
+        List<Post> returnedPosts = await this._repoLayer.GetAllPostAsync();
+        foreach(Post post in returnedPosts)
+        { 
+            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
+            PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
+            postWithCommentCountDto.PostID = post.PostID;
+            postWithCommentCountDto.Fk_UserID = post.Fk_UserID;
+            postWithCommentCountDto.Content = post.Content;
+            postWithCommentCountDto.Likes = post.Likes;
+            postWithCommentCountDto.Comments = count;
+            postWithCommentCountDto.PrivacyLevel = post.PrivacyLevel;
+            postWithCommentCountDto.DateCreated = post.DateCreated;
+            postWithCommentCountDto.DateModified = post.DateModified;
+            listWithCommentCount.Add(postWithCommentCountDto);
+        }
+        return listWithCommentCount;   
+    }
+
+    public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+    {
+        List<Investment?> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
+        return investments;
+    }
+
+    public async Task<Post?> UpdatePostAsync(string? auth0UserId, EditPostDto editPostDto)
+    {
+        string? user = await this._repoLayer.GetUserWithPostIdAsync(editPostDto.PostId);
+        if (auth0UserId == user)
+        {
+            bool checkUpdate = await this._repoLayer.UpdatePostAsync(editPostDto);
+            if (checkUpdate)
+            {
+                Post? editedPost = await this._repoLayer.GetPostByPostId(editPostDto.PostId);
+                return editedPost;
+            }
+            else return null;
+        }
+        else return null;
     }
 
 }

@@ -1,4 +1,5 @@
 using Models;
+using System;
 
 namespace Test.Yoink
 {
@@ -118,6 +119,7 @@ namespace Test.Yoink
 
 
             //Act
+
             Buy? buy = new Buy(guid, guid, "GOOGL", 2000, 100, 50, new DateTime());
             Buy testBuy = new Buy
             {
@@ -144,7 +146,7 @@ namespace Test.Yoink
 
 
             //Act
-            Comment? buy = new Comment(guid, guid, guid, "GOOGL", new DateTime(), new DateTime());
+            Comment? comment = new Comment(guid, guid, guid, "GOOGL", new DateTime(), new DateTime());
             Comment testComment = new Comment
             {
                 CommentID = testCommentID,
@@ -172,7 +174,7 @@ namespace Test.Yoink
 
 
             //Act
-            Friend? buy = new Friend(testFriendID, testFriendID, testFriendID, new DateTime());
+            Friend? friend = new Friend(testFriendID, testFriendID, testFriendID, new DateTime());
 
             Friend testFriend = new Friend
             {
@@ -348,6 +350,191 @@ namespace Test.Yoink
 
             Assert.Equal(portfolio.PortfolioID, guid);
 
+
+        }
+
+        [Fact]
+        public void BuyDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            BuyDto buydto1 = new BuyDto(guid, "GOOGL", 500, 2000,250);
+
+            BuyDto buydto = new BuyDto()
+            {
+                BuyID = guid,
+                Symbol = "GOOGL",
+                CurrentPrice = 500,
+                AmountBought = 1500,
+                PriceBought = 2,
+            };
+
+
+            //Assert
+
+            Assert.Equal(buydto.BuyID, guid);
+
+
+        }
+
+
+        [Fact]
+        public void buyWorksCorrectly()
+        {
+            //Arrange
+            Guid guid = Guid.NewGuid();
+
+            Guid testbuyID = new Guid();
+            Guid testFk_PortfolioID = new Guid();
+            string symbol = "Duke";
+
+
+            //Act
+
+            Buy? buy = new Buy(guid, guid, "GOOGL", 2000, 100, 50, new DateTime());
+            Buy testBuy = new Buy
+            {
+                BuyID = testbuyID,
+                Fk_PortfolioID = testFk_PortfolioID,
+                Symbol = symbol
+            };
+            //Assert
+            Assert.Equal(testbuyID, testBuy.BuyID);
+            Assert.Equal(testFk_PortfolioID, testBuy.Fk_PortfolioID);
+            Assert.Equal(symbol, testBuy.Symbol);
+        }
+
+
+        [Fact]
+        public void Get_BuysDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            Get_BuysDto get_buydto1 = new Get_BuysDto(guid, "GOOGL");
+
+            Get_BuysDto get_buydto = new Get_BuysDto()
+            {
+                Get_BuysID = guid,
+                Symbol = "GOOGL",
+               
+            };
+
+
+            //Assert
+
+            Assert.Equal(get_buydto.Get_BuysID, guid);
+            Assert.Equal(get_buydto1.Get_BuysID, guid);
+
+        }
+
+        
+        [Fact]
+        public void GetInvestmentDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            GetInvestmentDto getInvest = new GetInvestmentDto(guid, "GOOGL");
+
+            GetInvestmentDto getInvest2 = new GetInvestmentDto()
+            {
+                PortfolioId = guid,
+                Symbol = "GOOGL",
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(getInvest.PortfolioId, guid);
+            Assert.Equal(getInvest2.PortfolioId, guid);
+
+        }
+
+
+        [Fact]
+        public void GetInvestmentByTimeDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            GetInvestmentByTimeDto getInvesttime = new GetInvestmentByTimeDto(DT, DT, guid, "GOOGL");
+
+            GetInvestmentByTimeDto getInvesttime2 = new GetInvestmentByTimeDto()
+            {
+                StartTime = DT,
+                EndTime = DT,
+                PortfolioId = guid,
+                Symbol = "GOOGL",
+               
+            };
+
+
+            //Assert
+
+            Assert.Equal(getInvesttime.PortfolioId, guid);
+            Assert.Equal(getInvesttime2.PortfolioId, guid);
+
+        }
+
+
+
+        [Fact]
+        public void SellDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            SellDto getInvesttime = new SellDto(guid, "GOOGL", 30, 700, 300);
+
+            SellDto getInvesttime2 = new SellDto()
+            {
+                Fk_PortfolioID = guid,
+                Symbol = "GOOGL",
+                AmountSold = 30,
+                PriceSold = 700,
+                PNL = 300,
+                
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(getInvesttime.Fk_PortfolioID, guid);
+            Assert.Equal(getInvesttime2.Fk_PortfolioID, guid);
 
         }
 
