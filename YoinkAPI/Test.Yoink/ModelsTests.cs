@@ -1,4 +1,5 @@
 using Models;
+using Models.ModelDTOs.BackToFrontEnd;
 using System;
 
 namespace Test.Yoink
@@ -657,6 +658,42 @@ namespace Test.Yoink
 
             Assert.Equal(UserID, getProfileDto.UserID);
             Assert.Equal(UserID, getProfileDto2.UserID);
+
+        }
+
+
+        [Fact]
+        public void PostWithCommentCountDtoWorksCorrectly()
+        {
+
+            //Arrange
+            Guid guid = new Guid();
+            DateTime DT = new DateTime();
+
+
+            //Act
+            PostWithCommentCountDto postcommentcountDto = new PostWithCommentCountDto(guid, "7899999", "Hello World", 6, 7, 3, DT, DT);
+
+            PostWithCommentCountDto postcommentcountDto2 = new PostWithCommentCountDto()
+            {
+                PostID = guid,
+                Fk_UserID = "7899999",
+                Content = "Hello World",
+                Likes = 6,
+                Comments = 7,
+                PrivacyLevel = 3,
+                DateCreated = DT,
+                DateModified = DT,
+
+
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(postcommentcountDto.PostID, guid);
+            Assert.Equal(postcommentcountDto2.PostID, guid);
 
         }
 
