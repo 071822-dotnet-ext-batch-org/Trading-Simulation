@@ -166,4 +166,10 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return returnedPosts;   
     }
 
+    public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+    {
+        List<Investment?> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
+        return investments;
+    }
+
 }

@@ -23,6 +23,7 @@ namespace RepoLayer
         Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
         Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto);
         Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime);
+        Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
         //Homepage
         Task<int> GetNumberOfUsersAsync();

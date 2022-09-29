@@ -451,6 +451,40 @@ namespace RepoLayer
             }
         }
 
+        public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+        {
+            List<Investment?> invList = new List<Investment?>();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolioID", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioID", portfolioID);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Investment i = new Investment(
+                        ret.GetGuid(0), 
+                        ret.GetGuid(1), 
+                        ret.GetString(2), 
+                        ret.GetDecimal(3),
+                        ret.GetDecimal(4),
+                        ret.GetDecimal(5),
+                        ret.GetDecimal(6),
+                        ret.GetDecimal(7),
+                        ret.GetDecimal(8),
+                        ret.GetDecimal(9),
+                        ret.GetDateTime(10),
+                        ret.GetDateTime(11)
+                    );
+                    
+                    invList.Add(i);
+                }
+
+                _conn.Close();
+                return invList;
+            }
+        }
+
 
     }
 }

@@ -23,6 +23,7 @@ namespace BusinessLayer
         Task<List<Portfolio?>> GetALLPortfoliosByUserIDAsync(string? auth0Id);
         Task<Investment?> GetInvestmentByPortfolioIDAsync(GetInvestmentDto investmentDto);
         Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime);
+        Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
 
         //Profile Section
@@ -39,5 +40,6 @@ namespace BusinessLayer
         //Posts
         Task<Post?> CreatePostAsync(string auth0Id, CreatePostDto post);
         Task<List<Post>> GetAllPostAsync();
+        
     }
 }
