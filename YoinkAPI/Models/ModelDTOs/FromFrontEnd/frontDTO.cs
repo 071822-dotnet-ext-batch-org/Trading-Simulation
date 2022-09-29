@@ -48,15 +48,15 @@ namespace Models
     /// </summary>
     public class BuyDto
     {
-        public Guid? BuyID { get; set; }
+        public Guid? portfolioId { get; set; }  
         public string? Symbol { get; set; }
         public decimal? CurrentPrice { get; set; }
         public decimal? AmountBought { get; set; }
         public decimal? PriceBought { get; set; }
         public BuyDto(){}
-        public BuyDto(Guid? Fk_PortfolioID, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought)
+        public BuyDto(Guid? portfolioId, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought)
         {
-            this.BuyID = Fk_PortfolioID;
+            this.portfolioId = portfolioId; 
             this.Symbol = Symbol;
             this.CurrentPrice = CurrentPrice;
             this.AmountBought  = AmountBought;
@@ -176,6 +176,20 @@ namespace Models
         }
 
         public Guid? PortfolioID { get; set; }
+    }
+
+    public class EditPostDto
+    {
+        public Guid? PostId { get; set; }
+        public string? Content { get; set; }
+        public int? PrivacyLevel { get; set; }
+        public EditPostDto() { }
+        public EditPostDto(Guid? PostId, string? Content, int? PrivacyLevel)
+        {
+            this.PostId = PostId;
+            this.Content = Content;
+            this.PrivacyLevel = PrivacyLevel;
+        }
     }
 
 }
