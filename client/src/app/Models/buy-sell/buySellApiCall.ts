@@ -3,6 +3,7 @@ export interface callBuySellApi {
   price: number
 }
 
+// Used in createBuy Service
 export interface Buy {
   buyID: string;
   fk_portfolioID: string;
@@ -20,8 +21,19 @@ export interface BuyDto {
   priceBought: number;
 }
 
+// Used in createSell service
 export interface Sell {
+  sellID: string;
+  fk_PortfolioID: string;
   symbol: string,
-  amount: number,
-  price: number
+  amountSold: number,
+  priceSold: number,
+  dateSold: Date
+}
+
+export interface SellDto {
+  fk_PortfolioID: string;
+  symbol: string;
+  amountSold: number;
+  priceSold: number;
 }
