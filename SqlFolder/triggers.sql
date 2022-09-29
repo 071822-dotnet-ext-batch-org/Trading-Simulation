@@ -271,7 +271,7 @@ AFTER INSERT
 AS 
 	UPDATE [dbo].[Posts]
 	SET likes = likes +1
-	WHERE postID=(SELECT postID FROM inserted);
+	WHERE postID=(SELECT fk_postID FROM inserted);
 	GO
 
 
@@ -283,4 +283,13 @@ As
 	SET likes = likes + 1
 	WHERE commentID = (SELECT commentID FROM inserted);
 
+
+CREATE TRIGGER DeleteLikesToPost
+ON[dbo].[LikesPosts]
+AFTER DELETE
+AS
+UPDATE[dbo].[Posts]
+SET likes = likes - 1
+WHERE postID = (SELECT fk_postID FROM deleted);
+GO
 

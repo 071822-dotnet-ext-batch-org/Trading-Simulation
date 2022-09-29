@@ -43,5 +43,9 @@ namespace BusinessLayer
         Task<List<PostWithCommentCountDto>> GetAllPostAsync();
         Task<Post?> UpdatePostAsync(string? auth0UserId, EditPostDto editPostDto);
         Task<Guid?> DeletePostAsync(string? auth0UserId, Guid? postId);
+        Task<List<PostWithCommentCountDto>> GetAllPostByUserIdAsync(string userId);
+        Task<PostWithCommentCountDto?> GetPostByPostIdAsync(Guid? postId);
+        Task<int?> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId);
+        Task<int?> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId);
     }
 }

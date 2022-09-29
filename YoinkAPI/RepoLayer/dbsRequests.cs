@@ -616,5 +616,88 @@ namespace RepoLayer
         }
 
 
+        public async Task<List<Post>> GetAllPostByUserIdAsync(string userId)
+        {
+            List<Post> postList = new List<Post>();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts WHERE fk_userID=@userId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@userId", userId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Post p = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+                    postList.Add(p);
+
+                }
+
+                _conn.Close();
+                return postList;
+            }
+        }
+
+        public async Task<Post?> GetPostByPostIdAsync(Guid? postId)
+        {
+            Post? post = null;
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts WHERE postID=@postId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@postId", postId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    post = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+
+                }
+
+                _conn.Close();
+                return post;
+            }
+        }
+
+
+        public async Task<bool> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO LikesPosts (fk_postID, fk_userID) VALUES (@PostId, @UserId)", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", like.PostId);
+                command.Parameters.AddWithValue("@UserId", auth0UserId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesPosts WHERE fk_postID=@PostId AND fk_userId=@UserId", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", unlike.PostId);
+                command.Parameters.AddWithValue("@UserId", auth0UserId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+
     }
 }
