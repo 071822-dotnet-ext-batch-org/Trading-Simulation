@@ -36,10 +36,26 @@ namespace APILayer.Controllers
 
 
         [HttpGet("my-profile")]
-        public async Task<ActionResult<Profile?>> GetProfileByUserIDAsync()
+        public async Task<ActionResult<Profile?>> GetMyProfileAsync()
         {
             string? auth0Id = User.Identity?.Name;
             Profile? retrievedProfile = await this._businessLayer.GetProfileByUserIDAsync(auth0Id);
+            return Ok(retrievedProfile);
+        }
+
+
+        //added this to get user info for posts - rodin 
+        [HttpPost("get-profile")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Profile?>> GetProfileByUserIDAsync(GetProfileDto u)
+        {
+            Profile? retrievedProfile = await this._businessLayer.GetProfileByUserIDAsync(u.UserID);
+            
+            if (retrievedProfile==null)
+            {
+                return NotFound(new {userNotFound = u.UserID});
+            }
+
             return Ok(retrievedProfile);
         }
 

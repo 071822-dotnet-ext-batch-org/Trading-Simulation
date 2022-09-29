@@ -43,7 +43,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
-import { environment as env } from 'src/environments/environment'
+import { environment as env } from 'src/environments/environment';
+import { PostsComponent } from './components/posts/posts.component';
+import { PostCardComponent } from './components/post-card/post-card.component'
 
 @NgModule({
   declarations: [
@@ -62,6 +64,8 @@ import { environment as env } from 'src/environments/environment'
     ProfileComponent,
     HomeLayoutComponent,
     CreatePortfolioModalComponent,
+    PostsComponent,
+    PostCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +89,7 @@ import { environment as env } from 'src/environments/environment'
           env.baseURL + '/my-profile',
           env.baseURL + '/edit-profile',
           env.baseURL + '/my-portfolios',
-          env.baseURL + '/create-portfolio'
+          env.baseURL + '/create-portfolio',
          ], //for now
       }
 

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Profile } from 'src/app/Models/Profile';
-import { baseURL } from '../base-url';
+import { environment as env } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,6 @@ export class UpdateProfileService {
   constructor(private http: HttpClient) { }
 
   public updateProfile(profileName:any, profileEmail:any, profilePrivacyLevel:any): Observable<Profile>{
-    return this.http.put<Profile>(baseURL + '/edit-profile', { profileName, profileEmail, profilePrivacyLevel })
+    return this.http.put<Profile>(env.baseURL + '/edit-profile', { profileName, profileEmail, profilePrivacyLevel })
   }
 }

@@ -28,7 +28,6 @@ export class PortfolioComponent {
 
   ngOnInit(): void {
     this.getPortfolios();
-    localStorage.getItem('news')
   }
 
   getPortfolios(): void {
