@@ -11,10 +11,11 @@ import { BuySellToPortfolioService } from 'src/app/Services/buy-sell/buy-sell-to
   selector: 'app-buy-sell',
   templateUrl: './buy-sell.component.html',
   styleUrls: ['./buy-sell.component.css'],
-  template:`<div>
+  template: `<div>
 
   </div>`
 })
+
 export class BuySellComponent implements OnInit {
 
   constructor(
@@ -35,54 +36,45 @@ export class BuySellComponent implements OnInit {
   results: Results[] = [];
   portfolioID: string = '';
   buyResult: any;
+  sellResult: any;
 
-
+  // Dropdown box on web page options
   options: Options[] = [
     { value: 'Buy', viewValue: 'Buy' },
-    // { value: 'Buy at the open', viewValue: 'Buy at open' },
-    // { value: 'Buy at the close', viewValue: 'Buy at close' },
-    // { value: 'Set buy limit', viewValue: 'Set buy limit' },
     { value: 'Sell', viewValue: 'Sell' },
-    // { value: 'Sell at the open', viewValue: 'Sell at open' },
-    // { value: 'Sell at the close', viewValue: 'Sell at close' },
-    // { value: 'Set sell limit', viewValue: 'Set sell limit' }
   ];
 
-
-  costTotal = [{quantity: 5, price: 10 }];
+  //TEMP DATA DELETE BEFORE FOR PRODUCTION *****
+  costTotal = [{ quantity: 5, price: 10 }];
   totalPrice = 0;
 
+  // For payment buttons
   onPayment() {
-    
-    if(!this.symbol.value) return;
+
+    if (!this.symbol.value) return;
 
     this.buySell.getTickerData(this.symbol.value).subscribe(res => {
 
       console.log(this.portfolioID, this.symbol.value, this.qty, res.results[0].c)
-      if(this.selected === 'Buy'){
-        if(!this.symbol.value) return;
+      console.log(this.selected);
+      if (this.selected === 'Buy') {
+        if (!this.symbol.value) return;
         this.createBuy(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
       }
 
-      if(this.selected === 'Sell'){
-        if(!this.symbol.value) return;
+      if (this.selected === 'Sell') {
+        if (!this.symbol.value) return;
         this.createSell(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
       }
     })
-  }
+  }// End on payment
 
   ngOnInit(): void {
-    this.GMP.getMyPortfolios().subscribe(portArr => this.portfolios=portArr)
+    this.GMP.getMyPortfolios().subscribe(portArr => this.portfolios = portArr)
   };
 
-  calculateTotal() {
-    this.costTotal.map((cost) => {
-      this.totalPrice = cost.quantity * cost.price;
-    });
-  }
-
+  // Retuns the ticker data from Polygon.io
   getTickerData(tickerSymbol: any) {
-    
     if (!tickerSymbol) return;
     this.buySell.getTickerData(tickerSymbol).subscribe(tickerData => {
       this.tickerData = (tickerData.results)
@@ -90,13 +82,25 @@ export class BuySellComponent implements OnInit {
     });
   }
 
-  createBuy(portfolioID: string, symbol: string, qty: number, buyPrice: number): void{
+  // Creates buy request to the database
+  createBuy(portfolioID: string, symbol: string, qty: number, buyPrice: number): void {
     this.BSP.createBuy(portfolioID, symbol, qty, buyPrice).subscribe(br => {
       this.buyResult = br;
+      console.log(br);
     });
   }
 
-  createSell(portfolioID: string, symbol: string, qty: number, sellPrice: number): void{
-
+  // Creates sell request to the database
+  createSell(portfolioID: string, symbol: string, qty: number, sellPrice: number): void {
+    this.BSP.createSell(portfolioID, symbol, qty, sellPrice).subscribe(sr => {
+      this.sellResult = sr
+    })
   }
-}
+
+  //////////// TODO /////////////
+  public calculateTotal(qty: number, buyPrice: number) {
+    return this.totalPrice = qty * buyPrice;
+  };
+
+
+}//End BuySellComponent
