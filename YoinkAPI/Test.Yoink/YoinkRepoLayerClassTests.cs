@@ -151,47 +151,38 @@ namespace Test.Yoink
 
             var dataSource2 = new Mock<IdbsRequests>();
             dataSource
-                .Setup(p => p.CreatePortfolioAsync(It.IsAny<PortfolioDto>()))
+                .Setup(p => p.CreatePortfolioAsync(It.IsAny<string>(), It.IsAny<PortfolioDto>()))
                 .Returns(Task.FromResult(true));
-
 
             var dataSource3 = new Mock<IdbsRequests>();
             dataSource
                 .Setup(p => p.EditPortfolioAsync(It.IsAny<PortfolioDto>()))
                 .Returns(Task.FromResult(true));
-
+            
             var dataSource4 = new Mock<IdbsRequests>();
             dataSource
                 .Setup(p => p.GetPortfolioByPorfolioIDAsync(It.IsAny<Guid>()))
-                .Returns(Task.FromResult(portmockList));
+                .Returns(Task.FromResult(portfolio));
 
             var dataSource6 = new Mock<IdbsRequests>();
             dataSource
-                .Setup(p => p.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
-                .Returns(Task.FromResult(investmentList));
+                .Setup(p => p.GetRecentPortfoliosByUserIDAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(portfolio));
 
-            var dataSource7 = new Mock<IdbsRequests>();
-            dataSource
-                .Setup(p => p.GetInvestmentByTimeAsync(It.IsAny<GetInvestmentByTimeDto>()))
-                .Returns(Task.FromResult(investmentList));
+
 
 
             //Act
 
-            var AllTheUserPortfolioWasGotByUserID = TheClassBeingTested.GetALL_PortfoliosByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");//
+            var AllTheUserPortfolioWasGotByUserID = TheClassBeingTested.GetALL_PortfoliosByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");
 
-            var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfoliodto);//not done
+            var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfoliodto);
 
-            var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);//
+            var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);
 
-            var TheUserPortfolioWasGotByPortfolioID = TheClassBeingTested.GetPortfolioByPorfolioIDAsync(guid);//not done
+            var TheUserPortfolioWasGotByPortfolioID = TheClassBeingTested.GetPortfolioByPorfolioIDAsync(guid);
 
-            var TheUserInvestmentByPortfolioIDWasMade = TheClassBeingTested.GetInvestmentByPortfolioIDAsync(investmentDto);//not done shoulf go to investment section
-
-            var TheUserInvestmentWasGotByTime = TheClassBeingTested.GetInvestmentByTimeAsync(investmentByTime);//not done should go to investment section
-
-            //GetRecentPortfoliosByUserIDAsync
-            //GetAllInvestmentsByPortfolioIDAsync //not done should go to investment section
+            var TheRecentPortfolioWasGotByUserID = TheClassBeingTested.GetRecentPortfoliosByUserIDAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30");
 
 
 
@@ -212,18 +203,19 @@ namespace Test.Yoink
         {
 
             //Arrange
+            Guid guid = Guid.NewGuid();
 
             GetSellsDto selldto = new GetSellsDto()
             {
-                PortfolioId = new Guid(),
+                PortfolioId = guid,
                 Symbol = "GOOGL",
 
             };
 
             Sell? sell = new Sell()
             {
-                SellID = new Guid(),
-                Fk_PortfolioID = new Guid(),
+                SellID = guid,
+                Fk_PortfolioID = guid,
                 Symbol = "GOOGL",
                 AmountSold = 2000,
                 PriceSold = 1000,
@@ -264,9 +256,9 @@ namespace Test.Yoink
 
             var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(selldto);
 
-            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync("GOOGL", 2000, 1000, "2022-09-26T14:07:41.3700000");
+            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(guid, "GOOGL", 2000, 1000, sell.DateSold);
 
-            var NewSellWasAddedBool = TheClassBeingTested2.AddNewSellAsync("GOOGL", 2000, 1000, "2022-09-27");
+            var NewSellWasAddedBool = TheClassBeingTested2.AddNewSellAsync(guid, "GOOGL", 2000, 1000, sell.DateSold);
 
 
             //Assert
@@ -347,6 +339,8 @@ namespace Test.Yoink
 
             Guid invt = new Guid();
 
+            Guid guid = Guid.NewGuid();
+
             DateTime DT = new DateTime();
 
             GetInvestmentDto getInvest2 = new GetInvestmentDto()
@@ -401,8 +395,14 @@ namespace Test.Yoink
 
             var dataSource2 = new Mock<IdbsRequests>();
             dataSource
-                .Setup(I => I.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentByTimeDto>()))
-                .Returns(Task.FromResult(investmentList));
+                .Setup(I => I.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
+                .Returns(Task.FromResult(newinvestment));
+
+            var dataSource3 = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(I => I.GetAllInvestmentsByPortfolioIDAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(investmentmockList));
+
 
 
             //Act
@@ -410,6 +410,10 @@ namespace Test.Yoink
             var InvestmentGotByTime = TheClassBeingTested.GetInvestmentByTimeAsync(getInvesttime2);
 
             var InvestmentGotByPortfolioID = TheClassBeingTested.GetInvestmentByPortfolioIDAsync(getInvest2);
+
+            var AllInvestmentGotByPortfolioID = TheClassBeingTested.GetAllInvestmentsByPortfolioIDAsync(guid);
+
+
 
 
             //Assert
@@ -488,7 +492,7 @@ namespace Test.Yoink
 
         }
 
-
+        /**
         [Fact]
         public void TestingGetNumberOfSellsByDay()
         {
@@ -521,6 +525,7 @@ namespace Test.Yoink
 
 
         }
+        **/
 
 
 
@@ -559,7 +564,6 @@ namespace Test.Yoink
 
 
 
-
         [Fact]
         public void TestingGetNumberOfSellsAsync()
         {
@@ -590,10 +594,146 @@ namespace Test.Yoink
 
             Assert.Equal(350, sellsCount);
 
-            /**Task<bool> CreatePostAsync(string auth0Id, CreatePostDto post);
-            Task<Post?> GetRecentPostByUserId(string auth0Id);
-            Task<List<Post>> GetAllPostAsync();
-            **/
+
+        }
+
+
+
+        [Fact]
+        public void TestingCreatePost()
+        {
+
+            //Arrange
+            CreatePostDto createPost = new CreatePostDto()
+            {
+                Content = "I just bought some APPL stock!",
+                PrivacyLevel = 2,
+            };
+
+            CreatePostDto createPostDto = new CreatePostDto()
+            {
+                Content = "I just bought some APPL stock!",
+                PrivacyLevel = 2,
+            };
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .Returns(Task.FromResult(true));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .Returns(Task.FromResult(true));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GetsNumberOfUsers = TheClassBeingTested.CreatePostAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", createPostDto);
+
+
+            //Assert
+
+            Assert.True(true);
+
+    
+        }
+
+
+
+        [Fact]
+        public void TestingGetRecentPostByUserId()
+        {
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetRecentPostByUserId(It.IsAny<string>()))
+                .Returns(Task.FromResult(post));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.GetRecentPostByUserId(It.IsAny<string>()))
+                .Returns(Task.FromResult(post));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GotRecentPostByUserId = TheClassBeingTested.GetRecentPostByUserId("d44d63fc-ffa8-4eb7-b81d-644547136d30");
+
+
+            //Assert
+
+            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", post.Fk_UserID);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingGetAllPostAsync()
+        {
+
+            //Arrange
+            int postsCount = 100;
+
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+            List<Post> postList = new List<Post>();
+            postList.Add(post);
+
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetAllPostAsync())
+                .Returns(Task.FromResult(postList));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.GetAllPostAsync())
+                .Returns(Task.FromResult(postList));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GetsNumberOfUsers = TheClassBeingTested.GetAllPostAsync();
+
+
+            //Assert
+
+            Assert.Equal(100, postsCount);
 
 
         }
