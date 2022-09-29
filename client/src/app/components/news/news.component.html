@@ -1,5 +1,17 @@
-<h1> Stock News </h1>
+<br>
+<h1> Yoink! News </h1>
+
+<div> 
+   <mat-card class="tip">
+        <p class="title"><b>Yoink! TIP</b></p>
+        <p class="subtitle"><b><i>BE IN THE KNOW</i></b></p>
+        <p class="content"><b> It is important to be well-informed about the stock you are buying or selling. A great place to start is by reading the news... Check it out below!</b></p>
+    </mat-card>
+</div>
+<br>
+<br> 
 <div *ngFor="let newsArticle of newsData">
+    
     <img src ="{{newsArticle.image_url}}" alt="news article image" width="100">
     <h3>{{newsArticle.title}}</h3>
     <h5>{{newsArticle.description}}</h5>
