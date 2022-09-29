@@ -19,14 +19,21 @@ namespace RepoLayer
         //Portfolio Section
         Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID);
         Task<List<Portfolio?>> GetALL_PortfoliosByUserIDAsync(string? userID);
+        Task<Portfolio?> GetRecentPortfoliosByUserIDAsync(string auth0Id);
         Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
         Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto);
         Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime);
+        Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
         //Homepage
         Task<int> GetNumberOfUsersAsync();
         Task<int> GetNumberOfPostsAsync();
         Task<int> GetNumberOfBuysAsync();
         Task<int> GetNumberOfSellsAsync();
+
+        //Post
+        Task<bool> CreatePostAsync(string auth0Id, CreatePostDto post);
+        Task<Post?> GetRecentPostByUserId(string auth0Id);
+        Task<List<Post>> GetAllPostAsync();
     }
 }

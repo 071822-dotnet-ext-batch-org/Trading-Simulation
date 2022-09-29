@@ -45,7 +45,7 @@ namespace Test.Yoink
 
             //Act
 
-            var TheUserProfileWasGot = TheClassBeingTested.GetProfileByUserIDAsync();
+            var TheUserProfileWasGot = TheClassBeingTested.GetMyProfileAsync();
 
             var TheUserProfileWasCreated = TheClassBeingTested.CreateProfileAsync(profiledto);
 
@@ -175,6 +175,7 @@ namespace Test.Yoink
 
         }
 
+        // }
 
 
 
@@ -214,13 +215,17 @@ namespace Test.Yoink
 
             var TheClassBeingTested = new YoinkController(dataSource.Object);
 
+        //     var TheClassBeingTested = new YoinkController(dataSource.Object);
 
             //Act
 
             var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(selldto);
 
+            // var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
+
             var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 
+        //     var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 
             //Assert
 
