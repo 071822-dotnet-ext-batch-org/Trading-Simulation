@@ -17,6 +17,8 @@ export class EditProfileComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  isClicked: boolean = false;
+  
   updateProfile(profile:Profile) {
     this.UpdatePro
     .updateProfile(profile.name, profile.email, profile.picture, profile.privacyLevel)
