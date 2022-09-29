@@ -1,10 +1,10 @@
 <div class="container">
     <mat-card class="card">
         <mat-card-header>
-            <img mat-card-avatar src={{this.profile.picture}}>
-            <mat-card-title>Name: {{this.profile.name}}</mat-card-title>
-            <mat-card-subtitle>E-mail: {{this.profile.email}}</mat-card-subtitle>
-            <mat-card-subtitle>Privacy level: {{this.profile.privacyLevel}}</mat-card-subtitle>
+            <img mat-card-avatar src={{this.profile?.picture}}>
+            <mat-card-title>Name: {{this.profile?.name}}</mat-card-title>
+            <mat-card-subtitle>E-mail: {{this.profile?.email}}</mat-card-subtitle>
+            <mat-card-subtitle>Privacy level: {{this.profile?.privacyLevel}}</mat-card-subtitle>
         </mat-card-header>
         </mat-card>
         </div>
@@ -12,11 +12,11 @@
     <p>Name: <p>
 <div *ngIf="showProfileName">
     <p class="editable">
-        <span  class="not-on-file" *ngIf="this.profile.name===''">
+        <span  class="not-on-file" *ngIf="this.profile?.name===''">
             No name given
         </span>
 
-        {{this.profile.name}}
+        {{this.profile?.name}}
 
         <button mat-button (click)="editName()">
             <mat-icon>edit</mat-icon>
