@@ -20,6 +20,7 @@ export class BuySellService {
   constructor(private http: HttpClient) { }
 
   public getTickerData(tickerSymbol: string): Observable<any> {
+    console.log(this.lastQuote + tickerSymbol + this.lastQuoteKey);
     return this.http.get<any>(this.lastQuote + tickerSymbol + this.lastQuoteKey);
   }
 

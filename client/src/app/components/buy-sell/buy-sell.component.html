@@ -1,47 +1,79 @@
-<form class="BuySell-Panel">
-  <h2 class='title' style="font-size:xx-large">Buy and Sell</h2>
-  <div class="dropdown-fields">
-    <h2>Choose buy or sell:</h2>
-    <mat-form-field>
-      <mat-label>Buy or Sell</mat-label>
-      <mat-select [required]="true">
-        <mat-option *ngFor="let option of options" [value]="option.value">
-          {{ option.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+<h2 class='title' style="font-size:xx-large">Buy and Sell</h2>
+<div class="component-container">
+  <div class="form-container">
+
+    <form class="BuySell-Panel">
+      <div class="dropdown-fields">
+        <h2>Choose buy or sell:</h2>
+        <mat-form-field>
+          <mat-label>Buy or Sell</mat-label>
+          <mat-select [required]="true" [(value)]="selected">
+            <mat-option *ngFor="let option of options" value="option.value">
+              {{ option.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="input-fields">
+        <div class="Row-2">
+          <mat-form-field appearance="fill">
+            <mat-label>Enter Ticker Symbol</mat-label>
+            <input matInput #input maxlength="5" placeholder="Ticker Symbol" [required]="true" [formControl]="symbol">
+            <!-- <div *ngFor="let result of results"></div> !!!!GOES IN THE ABOVE LINE!!! name="input" value="" [ngModel]="getTickerData(input.value)" -->
+          </mat-form-field>
+        </div>
+        <div class="Row-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Enter Quantity</mat-label>
+            <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty" [ngModelOptions]="{standalone: true}" [required]="true">
+          </mat-form-field>
+        </div>
+        <p></p>
+      </div>
+      <div class="dropdown-fields">
+        <mat-form-field>
+          <mat-label>Portfolio</mat-label>
+          <mat-select [required]="true" [(value)]="portfolioID">
+            <mat-option *ngFor="let port of portfolios" value="{{port.portfolioID}}">
+              {{ port.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="purchase-result">
+    
+      </div>
+      <div class="total">
+        <div *ngFor="let cost of costTotal">
+          <p ng-change=""> Total Price: $ {{ totalPrice }} </p>
+        </div>
+      </div>
+      <div>
+        <button class="back-btn" [routerLink]="'/Portfolio'">Back</button>
+        <button class="buy-btn" (click)="onPayment()">Buy</button>
+      </div>
+      <!-- <div>
+        <ul class="ticker-group">
+          <li *ngFor="let ticker of tickerPrice" class="list-group-item">
+            {{ ticker.tickerSymbol }}
+          </li>
+        </ul>
+      </div> -->
+    </form>
   </div>
-  <div class="input-fields">
-    <div class="Row-2">
-      <mat-form-field appearance="fill">
-        <mat-label>Enter Ticker Symbol</mat-label>
-        <input matInput #input maxlength="5" placeholder="Ticker Symbol" [required]="true">
-        <!-- <div *ngFor="let result of results"></div> !!!!GOES IN THE ABOVE LINE!!! name="input" value="" [ngModel]="getTickerData(input.value)" -->
+  <div class="search-container">
+    <form class="search-form">
+      <mat-form-field class="search-form-field" appearance="fill">
+        <mat-label>Symbol search</mat-label>
+        <input matInput placeholder="Ex. AAPL" [formControl]="symbolSearch">
+        <button mat-icon-button (click)="getTickerData(symbolSearch.value)" (submit)="getTickerData(symbolSearch.value)">
+          <mat-icon>search</mat-icon>
+        </button>
       </mat-form-field>
-    </div>
-    <div class="Row-3">
-      <mat-form-field appearance="fill">
-        <mat-label>Enter Quantity</mat-label>
-        <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty" [ngModelOptions]="{standalone: true}" [required]="true">
-      </mat-form-field>
-    </div>
-    <p></p>
-  </div>
-  <div class="total">
-    <div *ngFor="let cost of costTotal">
-      <p ng-change=""> Total Price: $ {{ totalPrice }} </p>
+    </form>
+    <div class="search-results">
+
     </div>
   </div>
-  <div>
-    <button class="back-btn" [routerLink]="'/Portfolio'">Back</button>
-    <button class="buy-btn" (click)="onPayment()"
-      [routerLink]="'/Portfolio'">Buy</button>
-  </div>
-  <!-- <div>
-    <ul class="ticker-group">
-      <li *ngFor="let ticker of tickerPrice" class="list-group-item">
-        {{ ticker.tickerSymbol }}
-      </li>
-    </ul>
-  </div> -->
-</form>
+
+</div>
