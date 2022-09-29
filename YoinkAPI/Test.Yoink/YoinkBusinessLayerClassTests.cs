@@ -234,7 +234,10 @@ namespace Test.Yoink
 
             };
 
-            List<Post> PostsmockList = new List<Post?>(){
+            List<Post?> PostsmockList = new List<Post?>(){//nullable
+                post
+            };
+            List<Post> PostsmockList_Non_Null = new List<Post>(){//non-nullable
                 post
             };
 
@@ -243,7 +246,7 @@ namespace Test.Yoink
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(s => s.GetAllPostAsync())
-                .Returns(Task.FromResult(PostsmockList));
+                .Returns(Task.FromResult(PostsmockList_Non_Null));
 
             var dataSource2 = new Mock<IdbsRequests>();
             dataSource
@@ -280,6 +283,14 @@ namespace Test.Yoink
         {
 
             //Arrange
+            BuyDto makeBuyOrder = new BuyDto()
+            {
+                portfolioId = Guid.NewGuid(),
+                Symbol = "TSLA",
+                CurrentPrice = 860,
+                AmountBought = 1000000,
+                PriceBought = 12
+            };
 
             Get_BuysDto AllBuys = new Get_BuysDto()
             {
@@ -310,7 +321,7 @@ namespace Test.Yoink
 
             var dataSource2 = new Mock<IdbsRequests>();
             dataSource
-                .Setup(b => b.AddNewBuyAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<DateTime>()))
+                .Setup(b => b.AddNewBuyAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
                 .Returns(Task.FromResult(true));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
@@ -320,9 +331,9 @@ namespace Test.Yoink
 
             var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
 
-            var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
+            var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(makeBuyOrder);
 
-            var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(buy);
+            var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(makeBuyOrder);
 
             //Assert
 
@@ -378,14 +389,18 @@ namespace Test.Yoink
 
             };
 
-            List<Investment?> investmentmockList = new List<Investment?>();
+            List<Investment?> investmentmockList = new List<Investment?>(); //nullable
+            List<Investment>? investmentmockList_Non_Null = new List<Investment>()
+            {
+                newinvestment
+            }; //nullable
 
             investmentmockList.Add(newinvestment);
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(I => I.GetInvestmentByTimeAsync(It.IsAny<GetInvestmentByTimeDto>()))
-                .Returns(Task.FromResult(investmentmockList));
+                .Returns(Task.FromResult(investmentmockList_Non_Null));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 

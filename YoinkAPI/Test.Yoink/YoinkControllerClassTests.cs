@@ -151,6 +151,15 @@ namespace Test.Yoink
 
             };
 
+            BuyDto buyDTO = new BuyDto()
+            {
+                portfolioId = new Guid(),
+                Symbol = "GOOGL",
+                CurrentPrice = 2000,
+                AmountBought = 100,
+                PriceBought = 50,
+            };
+
             List<Buy?> buymockList = new List<Buy?>();
 
             buymockList.Add(buy);
@@ -167,7 +176,7 @@ namespace Test.Yoink
 
             var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
 
-            var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
+            var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buyDTO);
 
 
             //Assert

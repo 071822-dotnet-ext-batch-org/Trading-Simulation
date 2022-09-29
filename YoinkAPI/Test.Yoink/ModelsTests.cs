@@ -51,20 +51,19 @@ namespace Test.Yoink
         {
             //Arrange
             Guid TestpostID = new Guid();
-            Guid TestFk_UserID = new Guid();
+            string? TestFk_UserID = "UserID";
 
             //Act
-            Post TestPost1 = new Post(TestpostID, TestFk_UserID, "Sold big", "1", new DateTime(), 2, new DateTime());
-            Post TestPost = new Post 
+            Post TestPost1 = new Post(TestpostID, TestFk_UserID, "Sold big", 0,  2, new DateTime(), new DateTime());
+            Post TestPost = new Post()
             { PostID = TestpostID, 
               Fk_UserID = TestFk_UserID,
               Content = "Sold big",
-              Likes = "1",
-              DateCreated = new DateTime(),
+              Likes = 0,
               PrivacyLevel = 2,
-              DateModified = new DateTime(),
-
-        };
+              DateCreated = DateTime.Now,
+              DateModified = DateTime.Now,
+            };
 
             //Assert
             Assert.Equal(TestpostID, TestPost.PostID);
@@ -331,7 +330,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -361,7 +360,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -369,7 +368,7 @@ namespace Test.Yoink
 
             BuyDto buydto = new BuyDto()
             {
-                BuyID = guid,
+                portfolioId = guid,
                 Symbol = "GOOGL",
                 CurrentPrice = 500,
                 AmountBought = 1500,
@@ -379,7 +378,7 @@ namespace Test.Yoink
 
             //Assert
 
-            Assert.Equal(buydto.BuyID, guid);
+            Assert.Equal(buydto.portfolioId, guid);
 
 
         }
@@ -420,7 +419,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -450,7 +449,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -513,11 +512,11 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
-            SellDto getInvesttime = new SellDto(guid, "GOOGL", 30, 700, 300);
+            SellDto getInvesttime = new SellDto(guid, "GOOGL", 30, 700);
 
             SellDto getInvesttime2 = new SellDto()
             {
@@ -525,7 +524,6 @@ namespace Test.Yoink
                 Symbol = "GOOGL",
                 AmountSold = 30,
                 PriceSold = 700,
-                PNL = 300,
                 
 
             };

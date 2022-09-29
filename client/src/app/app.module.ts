@@ -22,6 +22,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { MatTableModule } from '@angular/material/table';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
@@ -47,7 +49,8 @@ import { CreatePortfolioModalComponent } from './components/create-portfolio-mod
 import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
-import { InvestmentsComponent } from './components/investments/investments.component'
+import { InvestmentsComponent } from './components/investments/investments.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
 
 @NgModule({
   declarations: [
@@ -69,6 +72,7 @@ import { InvestmentsComponent } from './components/investments/investments.compo
     PostsComponent,
     PostCardComponent,
     InvestmentsComponent,
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,6 +82,8 @@ import { InvestmentsComponent } from './components/investments/investments.compo
     FormsModule,
     HttpClientModule,
     MatDialogModule,
+    MatTableModule,
+    ReactiveFormsModule,
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
@@ -89,8 +95,10 @@ import { InvestmentsComponent } from './components/investments/investments.compo
           env.baseURL + '/edit-profile',
           env.baseURL + '/my-portfolios',
           env.baseURL + '/create-portfolio',
-          env.baseURL + '/all-investments'
-         ], //for now
+          env.baseURL + '/all-investments',
+          env.baseURL + '/create-buy',
+          env.baseURL + '/create-sell'
+        ], //for now
       }
 
     }),

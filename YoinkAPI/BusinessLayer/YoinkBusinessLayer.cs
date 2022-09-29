@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.ModelDTOs.BackToFrontEnd;
 using RepoLayer;
 
 namespace BusinessLayer;
@@ -77,12 +78,14 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return getALL_portfolios;
     }
 
-    public async Task<Buy?> AddNewBuyAsync(Buy buy)
+    public async Task<Buy?> AddNewBuyAsync(BuyDto buy)
     {
-        bool? check = await this._repoLayer.AddNewBuyAsync(buy.Fk_PortfolioID, buy.Symbol, buy.CurrentPrice, buy.AmountBought, buy.PriceBought, buy.DateBought);
+        buy.CurrentPrice = buy.PriceBought;
+        bool? check = await this._repoLayer.AddNewBuyAsync(buy.portfolioId, buy.Symbol, buy.CurrentPrice, buy.AmountBought, buy.PriceBought);
         if (true == check)
         {
-            return (buy);
+            Buy? createdBuy = await this._repoLayer.GetRecentBuyByPortfolioId(buy.portfolioId);
+            return (createdBuy);
         }
         else return (null);
     }
@@ -160,16 +163,47 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return null;
     }
 
-    public async Task<List<Post>> GetAllPostAsync()
+    public async Task<List<PostWithCommentCountDto>> GetAllPostAsync()
     {
+        List<PostWithCommentCountDto> listWithCommentCount = new List<PostWithCommentCountDto>();
         List<Post> returnedPosts = await this._repoLayer.GetAllPostAsync();
-        return returnedPosts;   
+        foreach(Post post in returnedPosts)
+        { 
+            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
+            PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
+            postWithCommentCountDto.PostID = post.PostID;
+            postWithCommentCountDto.Fk_UserID = post.Fk_UserID;
+            postWithCommentCountDto.Content = post.Content;
+            postWithCommentCountDto.Likes = post.Likes;
+            postWithCommentCountDto.Comments = count;
+            postWithCommentCountDto.PrivacyLevel = post.PrivacyLevel;
+            postWithCommentCountDto.DateCreated = post.DateCreated;
+            postWithCommentCountDto.DateModified = post.DateModified;
+            listWithCommentCount.Add(postWithCommentCountDto);
+        }
+        return listWithCommentCount;   
     }
 
     public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
     {
         List<Investment?> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
         return investments;
+    }
+
+    public async Task<Post?> UpdatePostAsync(string? auth0UserId, EditPostDto editPostDto)
+    {
+        string? user = await this._repoLayer.GetUserWithPostIdAsync(editPostDto.PostId);
+        if (auth0UserId == user)
+        {
+            bool checkUpdate = await this._repoLayer.UpdatePostAsync(editPostDto);
+            if (checkUpdate)
+            {
+                Post? editedPost = await this._repoLayer.GetPostByPostId(editPostDto.PostId);
+                return editedPost;
+            }
+            else return null;
+        }
+        else return null;
     }
 
 }

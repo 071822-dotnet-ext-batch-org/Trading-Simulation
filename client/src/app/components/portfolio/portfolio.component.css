@@ -25,6 +25,10 @@
   place-items: center center;
 }
 
+.investment-container {
+  width: 100%;
+}
+
 #subheading {
   text-align: center;
 }

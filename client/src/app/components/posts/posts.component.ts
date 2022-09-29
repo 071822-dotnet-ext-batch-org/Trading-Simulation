@@ -32,6 +32,8 @@ export class PostsComponent implements OnInit {
         this.loadingPosts = false;
         sessionStorage.setItem('posts', JSON.stringify(allPosts));
       });
+    } else {
+      this.loadingPosts = false;
     }
   }
 }

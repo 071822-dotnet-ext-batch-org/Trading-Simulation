@@ -11,7 +11,7 @@ export class UpdateProfileService {
 
   constructor(private http: HttpClient) { }
 
-  public updateProfile(profileName:any, profileEmail:any, profilePrivacyLevel:any): Observable<Profile>{
-    return this.http.put<Profile>(env.baseURL + '/edit-profile', { profileName, profileEmail, profilePrivacyLevel })
+  public updateProfile(profileName:any, profileEmail:any, profilePicture:any, profilePrivacyLevel:any): Observable<Profile>{
+    return this.http.put<Profile>(env.baseURL + '/edit-profile', { name:profileName, email:profileEmail, picture:profilePicture, privacyLevel:profilePrivacyLevel })
   }
 }
