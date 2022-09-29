@@ -18,7 +18,7 @@ export class PostCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getProfile(this.post.fk_UserID)
+    this.getProfile(this.post?.fk_UserID)
   }
 
   getProfile(userID: string): void {
