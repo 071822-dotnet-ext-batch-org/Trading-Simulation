@@ -152,7 +152,7 @@ namespace APILayer.Controllers
         }
 
         [HttpGet("my-sells")]
-        public async Task<List<Sell?>> GetAllSellBySymbolAsync(string symbol, Guid portfolioID)
+        public async Task<ActionResult<List<Sell?>>> GetAllSellBySymbolAsync(Models.GetSellsDto  sellsDto)
         {
             if(ModelState.IsValid)
             {

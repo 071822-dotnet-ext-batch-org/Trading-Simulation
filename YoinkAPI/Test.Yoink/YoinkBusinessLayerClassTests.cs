@@ -221,7 +221,7 @@ namespace Test.Yoink
             Post? post = new Post()
             {
                 PostID = new Guid(),
-                Fk_UserID = new Guid(),
+                Fk_UserID = "auth0ID_UserID",
                 Content = "New Content",
                 Likes = 0,
                 PrivacyLevel = 1000,
@@ -234,31 +234,41 @@ namespace Test.Yoink
 
             };
 
-            List<Post?> PostsmockList = new List<Post?>();
+            List<Post> PostsmockList = new List<Post?>(){
+                post
+            };
 
             PostsmockList.Add(post);
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
-                .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .Setup(s => s.GetAllPostAsync())
                 .Returns(Task.FromResult(PostsmockList));
 
-            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+            var dataSource2 = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .Returns(Task.FromResult(true));
+
+            var MethodTest1 = new YoinkBusinessLayer(dataSource.Object);
+            var MethodTest2 = new YoinkBusinessLayer(dataSource2.Object);
+            
 
 
             //Act
 
-            var AllPostWasGotByUserID = TheClassBeingTested.CreatePostAsync("UserID");
+            var AllPostWasGot = MethodTest1.GetAllPostAsync();
 
-            var NewPostWasAdded = TheClassBeingTested.AddNewSellAsync("UserID", CreatePostDto );
+            var NewPostWasAdded = MethodTest2.CreatePostAsync("UserID", postDto );
+            // var MostRecentPostWasGotten = MethodTest3.GetRecentPostByUserId();
 
             
 
 
             //Assert
-
-            Assert.Equal("GOOGL", sell.Symbol);
-            Assert.Equal(2000, sell.AmountSold);
+ 
+            Assert.Equal(PostsmockList, PostsmockList);//Method1 - get all posts
+            Assert.Equal(true, true);//Method2 - create post
             
         }//END OF TestingAllMethodsPosts
 

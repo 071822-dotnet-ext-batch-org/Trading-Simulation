@@ -32,8 +32,8 @@ namespace RepoLayer
         Task<int> GetNumberOfSellsAsync();
 
         //Post
+        Task<List<Post>> GetAllPostAsync();
         Task<bool> CreatePostAsync(string auth0Id, CreatePostDto post);
         Task<Post?> GetRecentPostByUserId(string auth0Id);
-        Task<List<Post>> GetAllPostAsync();
     }
 }

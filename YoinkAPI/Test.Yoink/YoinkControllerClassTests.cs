@@ -21,6 +21,7 @@ namespace Test.Yoink
 
                 Name = "Tony",
                 Email = "Rodin@yahoo.com",
+                Picture = "src/Picture",
                 PrivacyLevel = 2,
 
             };
@@ -31,7 +32,8 @@ namespace Test.Yoink
                 Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
                 Name = "Tony",
                 Email = "Rodin@yahoo.com",
-                PrivacyLevel = 2,
+                Picture = "src/Picture",
+                PrivacyLevel = 2
 
             };
 
