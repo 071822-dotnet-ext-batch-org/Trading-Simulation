@@ -49,6 +49,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+ 
+ 
 
 @NgModule({
   declarations: [
@@ -72,9 +75,7 @@ import { CreatePortfolioModalComponent } from './components/create-portfolio-mod
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
- 
-   
-
+    NgxPaginationModule,
  
     FormsModule,
     HttpClientModule,
