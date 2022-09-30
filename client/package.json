@@ -31,7 +31,9 @@
     "echarts-gl": "^2.0.9",
     "highcharts": "^10.2.1",
     "highcharts-angular": "^3.0.0",
+    "lint-staged": "^13.0.3",
     "ngx-echarts": "^14.0.0",
+    "ngx-pagination": "^6.0.2",
     "react-router-dom": "^6.4.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
@@ -51,4 +53,5 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "typescript": "~4.7.2"
   }
+  
 }

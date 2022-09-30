@@ -155,8 +155,8 @@ namespace APILayer.Controllers
             else return BadRequest(buysDto);
         }
 
-        [HttpPost("my-sell")]
-        public async Task<ActionResult<List<Sell?>>> GetAllSellBySymbolAsync(GetSellsDto sellsDto)
+        [HttpGet("my-sells")]
+        public async Task<ActionResult<List<Sell?>>> GetAllSellBySymbolAsync(Models.GetSellsDto  sellsDto)
         {
             if(ModelState.IsValid)
             {

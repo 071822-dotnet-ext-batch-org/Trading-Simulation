@@ -1,5 +1,15 @@
 
+ 
+
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+        
+      <!-- Card stats -->
+      <div class="row">
+ 
 <br>
+ 
 
 <!-- Card stats -->
 <br>
@@ -70,138 +80,149 @@
 </div>
 
 
+<p class="explore"><b>Explore</b> some of our tools and info to become more financially savvy</p>
 
 <!-- Currency Converter-->
-<div class="col-xl-4">
-  <p class="explore"><b>Explore</b> some of our tools and info to become more financially savvy</p>
-  <div class="card shadow">
-    <div class="card-header bg-transparent">
-      <div class="row align-items-center">
-        <div class="col">
-          
-          <h2 class="mb-0">Currency Converter</h2>
-        </div>
-      </div>
-    </div>
-    <div class="card-body">
-      <!-- Chart -->
-      <div class="main-container">
-        <div class="selection-cont">
-          <select #c1 name = "" id = "country1" (mouseleave) = "changebase(c1.value)">
-            <option value="USD">US Dollar</option>
-            <option value="INR">Indian Rupee</option>
-            <option value="EUR">Euro</option>
-            <option value="KWD">Kuwaiti Dinar</option>
-            <option value="BHD">Bahraini Dinar</option>
-          </select>
-          
-          <p> To </p>
-          
-          <select #c2 name = "" id = "country1" (mouseleave) = "tocountry(c2.value)">
-            <option value="USD">US Dollar</option>
-            <option value="INR">Indian Rupee</option>
-            <option value="EUR">Euro</option>
-            <option value="KWD">Kuwaiti Dinar</option>
-            <option value="BHD">Bahraini Dinar</option>
-          </select><br/> <br/> 
-          
-          
-          <button mat-raised-button color="basic" (click) ="convert()">Submit</button><br/>
-          
-          
-        </div>
-        
-      </div>
-    </div>
-    <div class="resultcontainer">
-      <p>1 {{base}} = {{result}} {{cont2}}</p>
-      
-    </div>
-    
-  </div>
-</div>
-    
-<br>  
-    
-    
-    <div class="col-xl-4">
-      <div class="card shadow">
-        <div class="card-header border-0">
-          <div class="row align-items-center">
-            <div class="col">
-              <h3 class="mb-0">Top 5 highest currencies</h3>
-            </div>
+<div class="currencyconverter">
+  <div class="col-xl-4">
+    <div class="card shadow">
+      <div class="card-header bg-transparent">
+        <div class="row align-items-center">
+          <div class="col">
             
+            <h2 class="mb-0">Currency Converter</h2>
           </div>
         </div>
-        <div class="table-responsive">
-          <!-- Projects table -->
-          <table class="table align-items-center table-flush">
-            <thead class="thead-light">
-              <tr>
-                <th scope="col">Country</th>
-                <th scope="col">Rank</th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">
-                  Kuwaiti Dinar
-                </th>
-                <td>
-                  1
-                </td>
-                
-              </tr>
-              <tr>
-                <th scope="row">
-                  Bahraini Dinar
-                </th>
-                <td>
-                  2
-                </td>
-                
-              </tr>
-              <tr>
-                <th scope="row">
-                  Oman Rial
-                </th>
-                <td>
-                  3
-                </td>
-                
-              </tr>
-              <tr>
-                <th scope="row">
-                  
-                  Jordan Dinar
-                </th>
-                <td>
-                  4
-                </td>
-                
-              </tr>
-              <tr>
-                <th scope="row">
-                  British Pound 
-                </th>
-                <td>
-                  5
-                </td>
-                
-              </tr>
-            </tbody>
-          </table>
+      </div>
+      <div class="card-body">
+        <!-- Chart -->
+        <div class="main-container">
+          <div class="selection-cont">
+            <select #c1 name = "" id = "country1" (mouseleave) = "changebase(c1.value)">
+              <option value="USD">US Dollar</option>
+              <option value="INR">Indian Rupee</option>
+              <option value="EUR">Euro</option>
+              <option value="KWD">Kuwaiti Dinar</option>
+              <option value="BHD">Bahraini Dinar</option>
+            </select>
+            
+            <p> To </p>
+            
+            <select #c2 name = "" id = "country1" (mouseleave) = "tocountry(c2.value)">
+              <option value="USD">US Dollar</option>
+              <option value="INR">Indian Rupee</option>
+              <option value="EUR">Euro</option>
+              <option value="KWD">Kuwaiti Dinar</option>
+              <option value="BHD">Bahraini Dinar</option>
+            </select><br/> <br/> 
+            
+            
+            <button mat-raised-button color="basic" (click) ="convert()">Submit</button><br/>
+          </div>
+        </div>
+      </div>
+      <div class="resultcontainer">
+        <p>1 {{base}} = {{result}} {{cont2}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<br/><br/>
+
+<div class="container-fluid mt--7">
+  <div class="row">
+
+    <div class="col-xl-7 mb-5 mb-xl-0">
+      <div class="card bg-gradient-default shadow">
+        <div class="card-header bg-transparent">
+ 
+          <div class="subheader">
+              
+                <marquee behavior="scroll" direction="left" scrollamount="4" onmouseover="this.stop();" onmouseout="this.start();">
+              <p> (1) Learn how to make investments without risking your own money. (2) Register to get startedt. (3) Create a portfoliot. (4) Start buying and selling virtual</p>
+               
+            </marquee>
+
+            <!-- <marquee behavior="scroll" onmouseover="stop()" onmouseout="start()" loop="infinite" direction="left"> 
+               <div class="row">
+
+               </div>
+            </marquee>-->
+          </div>
+        </div>
+
+        <div class="card-body">
+         
+          <p><a href="https://www.google.com">
+            <img src="assets/img/b.jpg" alt="google.com" width="100%" height="132">
+            </a></p>
+
+
         </div>
       </div>
     </div>
-  
-  
-  <br>
-  <br>
 
-  <p class="check"><b>Check</b> us out!</p>
+
+    <div class="col-xl-5">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+              <h2 class="mb-0">Currency Convert</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Chart -->
+           <div class="main-container">
+              <div class="selection-cont">
+                <select #c1 name = "" id = "country1" (mouseleave) = "changebase(c1.value)">
+                  <option value="USD">US Dollar</option>
+                  <option value="INR">Indian Rupee</option>
+                  <option value="EUR">Euro</option>
+                  <option value="KWD">Kuwaiti Dinar</option>
+                  <option value="BHD">Bahraini Dinar</option>
+                </select>
+
+                <p> To </p>
+
+                <select #c2 name = "" id = "country1" (mouseleave) = "tocountry(c2.value)">
+                  <option value="USD">US Dollar</option>
+                  <option value="INR">Indian Rupee</option>
+                  <option value="EUR">Euro</option>
+                  <option value="KWD">Kuwaiti Dinar</option>
+                  <option value="BHD">Bahraini Dinar</option>
+                </select><br/> <br/> 
+                
+                
+                <button mat-raised-button color="primary" (click) ="convert()">Submit</button><br/>
+                
+                
+              </div>
+
+           </div>
+        </div>
+        <div class="resultcontainer">
+          <p>1 {{base}} = {{result}} {{cont2}}</p>
+ 
+<br>  
+<br>
+<br>
+            
+<p class="check"><b>Check</b> us out!</p>
+            
+ 
+          
+        
+      
+    
+    
+    
+
+  
+
   <!-- Card stats -->
   <div class="row">
     
@@ -211,7 +232,7 @@
           <div class="row">
             <div class="col">
               <h5 class="card-title text-uppercase text-muted mb-0">Total Posts</h5>
-              <span class="h2 font-weight-bold mb-0">35</span>
+              <span class="h2 font-weight-bold mb-0">{{numOfPosts}}</span>
             </div>
             <div class="col-auto">
               <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -231,8 +252,8 @@
         <div class="card-body">
           <div class="row">
             <div class="col">
-              <h5 class="card-title text-uppercase text-muted mb-0">Total users</h5>
-              <span class="h2 font-weight-bold mb-0">2,356</span>
+              <h5 class="card-title text-uppercase text-muted mb-0">Total Users</h5>
+              <span class="h2 font-weight-bold mb-0">{{numOfUsers}}</span>
             </div>
             <div class="col-auto">
               <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -252,8 +273,8 @@
         <div class="card-body">
           <div class="row">
             <div class="col">
-              <h5 class="card-title text-uppercase text-muted mb-0">Total Sales</h5>
-              <span class="h2 font-weight-bold mb-0">924</span>
+              <h5 class="card-title text-uppercase text-muted mb-0">Total Sell Orders</h5>
+              <span class="h2 font-weight-bold mb-0">{{numOfSells}}</span>
             </div>
             <div class="col-auto">
               <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -268,13 +289,13 @@
       </div>
     </div>
     
-    <div class="col-xl-3 col-lg-6">
+    <div class="col-xl-3 col-lg-6 margin" >
       <div class="card card-stats mb-4 mb-xl-0">
         <div class="card-body">
           <div class="row">
             <div class="col">
-              <h5 class="card-title text-uppercase text-muted mb-0">Total Buy</h5>
-              <span class="h2 font-weight-bold mb-0">49</span>
+              <h5 class="card-title text-uppercase text-muted mb-0">Total Buy Orders</h5>
+              <span class="h2 font-weight-bold mb-0">{{numOfBuys}}</span>
             </div>
             <div class="col-auto">
               <div class="icon icon-shape bg-info text-white rounded-circle shadow">

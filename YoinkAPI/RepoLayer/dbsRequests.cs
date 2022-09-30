@@ -282,8 +282,13 @@ namespace RepoLayer
                 return SellList;
             }
         }
-        public async Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime)
+        public async Task<List<Investment?>> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime)
         {
+            if (investmentByTime is null)
+            {
+                throw new ArgumentNullException(nameof(investmentByTime));
+            }
+
             List<Investment?> investmentList = new List<Investment?>();
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolioid AND symbol=@symbol AND dateCreated BETWEEN @startTime AND @endTime ORDER BY dateModified DESC", _conn))
             {
@@ -314,11 +319,24 @@ namespace RepoLayer
                 using (SqlCommand cmdCount = new SqlCommand(stmt, _conn))
                 {
                     _conn.Open();
-                    count = (int)cmdCount.ExecuteScalar();
-                    _conn.Close();
+
+                    SqlDataReader? data = await cmdCount.ExecuteReaderAsync();
+                    if(data.Read())
+                    {
+                        count = data.GetInt32(0);
+                        Console.WriteLine($"\n\n\t\t\tThe current Number of Users is: {count} - checked at '{DateTime.Now}' \n\n");
+                        _conn.Close();
+                        return count;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"\n\n\t\t\tThe current Number of Users is: {count} - checked at '{DateTime.Now}' \n\n");
+                        _conn.Close();
+                        return count;
+                    }
                 }
+
             
-            return count;
 
         }
 
