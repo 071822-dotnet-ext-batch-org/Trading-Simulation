@@ -3,7 +3,7 @@ using System;
 namespace Models
 {
     /// <summary>
-    /// This is the model for Profile
+    /// This is the Model to create a new Profile - contains ProfileID, Fk_UserID, Name, Email, Picture, PrivacyLevel
     /// </summary>
     public class Profile
     {
@@ -16,14 +16,14 @@ namespace Models
         public int? PrivacyLevel { get; set; }
 
         /// <summary>
-        /// The default constructor for a Profile
+        /// The default Constructor for a Profile that is empty
         /// </summary>
         public Profile()
         {
         }
 
         /// <summary>
-        /// This constructor must have parameters to create a Profile
+        /// This is the Constructor to create a new Profile - contains ProfileID, Fk_UserID, Name, Email, Picture, PrivacyLevel
         /// </summary>
         /// <param name="profileID"></param>
         /// <param name="fk_UserID"></param>
