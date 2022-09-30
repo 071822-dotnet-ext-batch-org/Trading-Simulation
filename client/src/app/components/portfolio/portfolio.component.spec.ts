@@ -8,7 +8,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PortfolioComponent } from './portfolio.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -19,6 +20,12 @@ describe('PortfolioComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PortfolioComponent],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {}
+        },
+      ],
       imports: [
         HttpClientModule,
         NoopAnimationsModule,
@@ -28,7 +35,7 @@ describe('PortfolioComponent', () => {
         MatListModule,
         MatSidenavModule,
         MatToolbarModule,
-        MatDialog
+        MatDialogModule
       ]
     }).compileComponents();
   }));
