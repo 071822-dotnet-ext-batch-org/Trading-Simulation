@@ -1,4 +1,5 @@
 using Models;
+using Models.ModelDTOs.BackToFrontEnd;
 using System;
 
 namespace Test.Yoink
@@ -51,7 +52,7 @@ namespace Test.Yoink
         {
             //Arrange
             Guid TestpostID = new Guid();
-            Guid TestFk_UserID = new Guid();
+            string? TestFk_UserID = "UserID";
 
             //Act
             Post TestPost1 = new Post(TestpostID, "TestFk_UserID", "Sold big", 1, 2, new DateTime(), new DateTime());
@@ -335,7 +336,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -365,7 +366,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -424,7 +425,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -454,7 +455,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -517,11 +518,11 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
-            SellDto getInvesttime = new SellDto(guid, "GOOGL", 30, 700, 300);
+            SellDto getInvesttime = new SellDto(guid, "GOOGL", 30, 700);
 
             SellDto getInvesttime2 = new SellDto()
             {
@@ -529,7 +530,6 @@ namespace Test.Yoink
                 Symbol = "GOOGL",
                 AmountSold = 30,
                 PriceSold = 700,
-                PNL = 300,
                 
 
             };
@@ -659,6 +659,72 @@ namespace Test.Yoink
             Assert.Equal(UserID, getProfileDto2.UserID);
 
         }
+
+
+        [Fact]
+        public void PostWithCommentCountDtoWorksCorrectly()
+        {
+
+            //Arrange
+            Guid guid = new Guid();
+            DateTime DT = new DateTime();
+
+
+            //Act
+            PostWithCommentCountDto postcommentcountDto = new PostWithCommentCountDto(guid, "7899999", "Hello World", 6, 7, 3, DT, DT);
+
+            PostWithCommentCountDto postcommentcountDto2 = new PostWithCommentCountDto()
+            {
+                PostID = guid,
+                Fk_UserID = "7899999",
+                Content = "Hello World",
+                Likes = 6,
+                Comments = 7,
+                PrivacyLevel = 3,
+                DateCreated = DT,
+                DateModified = DT,
+
+
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(postcommentcountDto.PostID, guid);
+            Assert.Equal(postcommentcountDto2.PostID, guid);
+
+        }
+
+
+        [Fact]
+        public void LikeDtoWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = new Guid();
+
+
+            //Act
+            LikeDto likeDto = new LikeDto(guid);
+
+            LikeDto likeDto2 = new LikeDto()
+            {
+                PostId = guid,
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(likeDto.PostId , guid);
+            Assert.Equal(likeDto2.PostId, guid);
+
+        }
+
+
+
 
 
     }

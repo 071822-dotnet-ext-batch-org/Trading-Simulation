@@ -20,6 +20,12 @@ namespace RepoLayer
             _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
         }
 
+        /// <summary>
+        /// Presents profile information to the user.
+        /// Retrieves user info for posts.
+        /// Requires logged in user via Auth0.        
+        /// </summary>
+        /// <returns>retrievedProfile Profile object</returns>
         public async Task<Profile?> GetProfileByUserIDAsync(string userID)
         {
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Profiles WHERE fk_userID=@userid ", _conn))
@@ -38,6 +44,14 @@ namespace RepoLayer
             }
         }
 
+        /// <summary>
+        /// This creates a new profile for a new user.
+        /// Takes nullable ProfileDto (name, email, picture, privacyLevel)
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="auth0Id">contains authentication credentials</param>
+        /// <param name="p">ProfileDto</param>
+        /// <returns>new portfolio object</returns>
         public async Task<bool> CreateProfileAsync(string? userID, string? Name, string? Email, string? Picture ,int? Privacy)
         {
             using (SqlCommand command = new SqlCommand($"INSERT INTO Profiles (fk_userID, name, email, picture, privacyLevel) VALUES (@userid, @name, @email , @picture , @privacy)", _conn))
@@ -83,6 +97,12 @@ namespace RepoLayer
             }
             
         }
+
+        /// <summary>
+        /// Retrieves ALL portfolios from the database which match the User's ID.
+        /// Requires logged in user via Auth0.      
+        /// </summary>
+        /// <returns>new portfolio object</returns>
         public async Task<List<Portfolio?>> GetALL_PortfoliosByUserIDAsync(string? userID)
         {
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE fk_userID = @userid ORDER BY dateModified DESC", _conn))
@@ -105,6 +125,13 @@ namespace RepoLayer
             }
         }//End OF Get PORTFOLIO BY userID
 
+        /// <summary>
+        /// Retrieves Portfolio based on PortfolioID. 
+        /// Takes Guid of PortfolioID
+        /// Requires logged in user via Auth0.      
+        /// </summary>
+        /// <param name="portfolioID">Guid from database</param>
+        /// <returns>new portfolio object, named retrievedPortfolio</returns>
         public async Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID)
         {
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Portfolios WHERE portfolioID=@portfolioID", _conn))
@@ -127,6 +154,14 @@ namespace RepoLayer
             }
         }
 
+        /// <summary>
+        /// Creates a new Portfolio for the user's profile.
+        /// Takes PortfolioDto (portfolioID, name, originalLiquid, and privacyLevel)
+        /// Requires logged in user via Auth0.      
+        /// </summary>
+        /// <param name="auth0Id">contains authentication credentials</param>
+        /// <param name="p">PortfolioDto</param>
+        /// <returns>new portfolio object</returns>
         public async Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
         {
             using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, originalLiquid, liquid) VALUES (@auth0Id, @name, @privacylevel, @originalliquid, @liquid)", _conn))
@@ -150,6 +185,11 @@ namespace RepoLayer
             }
         }
 
+        /// <summary>
+        /// Allows user to edit their portfolio, things like name, privacyLevel, etc.
+        /// </summary>
+        /// <param name="p">PortfolioDto</param>
+        /// <returns>updated portfolio object, named editedPortfolio</returns>
         public async Task<bool> EditPortfolioAsync(Models.PortfolioDto p)
         {
 
@@ -171,6 +211,11 @@ namespace RepoLayer
             }
         }
 
+        /// <summary>
+        /// Retrieves an investment by its associated PortfolioID.
+        /// </summary>
+        /// <param name="investmentDto"></param>
+        /// <returns></returns>
         public async Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
         {
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolioid AND symbol=@symbol", _conn))
@@ -191,6 +236,11 @@ namespace RepoLayer
             }
         }        
         
+        /// <summary>
+        /// Adds user's purchase as a buy in the database.
+        /// </summary>
+        /// <param name="buy">BuyDto</param>
+        /// <returns>Newly created Buy object</returns>        
         public async Task<bool> AddNewBuyAsync(Guid? PortfolioId, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought)
         {
             using (SqlCommand command = new SqlCommand("INSERT INTO Buys (fk_portfolioID, symbol, currentPrice, amountBought, priceBought) VALUES (@portfolioid, @symbol, @currentprice, @amountbought, @pricebought)", _conn))
@@ -212,6 +262,12 @@ namespace RepoLayer
             }
         }
         
+        /// <summary>
+        /// Returns all of user's buys for a particular Stock option (by symbol).
+        /// Sendes really likes underscores.
+        /// </summary>
+        /// <param name="buysDto">Get_BuysDto</param>
+        /// <returns>A list of Buy objects, named buyList.</returns>
         public async Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys)
         {
             List<Buy?> buyList = new List<Buy?>();
@@ -260,6 +316,12 @@ namespace RepoLayer
 
 
         }
+
+        /// <summary>
+        /// Returns all of user's sells for a particular Stock option (by symbol).
+        /// </summary>
+        /// <param name="sellsDto">GetSellsDto</param>
+        /// <returns>A list of sell objects, named sellList.</returns>
         public async Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto)
         {
             List<Sell?> SellList = new List<Sell?>();
@@ -282,6 +344,12 @@ namespace RepoLayer
                 return SellList;
             }
         }
+
+        /// <summary>
+        /// Retrieves (potentially) a list of Investment objects from the database by time.
+        /// </summary>
+        /// <param name="investmentByTime">GetInvestmentByTimeDto</param>
+        /// <returns>a list of Investment objects named returnedInvestment</returns>
         public async Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime)
         {
             List<Investment?> investmentList = new List<Investment?>();
@@ -449,6 +517,11 @@ namespace RepoLayer
             }
         }
 
+        /// <summary>
+        /// Retrieves all investments by the Portfolio's ID number.
+        /// </summary>
+        /// <param name="investmentDto">GetAllInvestmentsDto</param>
+        /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
         public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
         {
             List<Investment?> invList = new List<Investment?>();
@@ -616,5 +689,86 @@ namespace RepoLayer
         }
 
 
+        public async Task<List<Post>> GetAllPostByUserIdAsync(string userId)
+        {
+            List<Post> postList = new List<Post>();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts WHERE fk_userID=@userId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@userId", userId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Post p = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+                    postList.Add(p);
+
+                }
+
+                _conn.Close();
+                return postList;
+            }
+        }
+
+        public async Task<Post?> GetPostByPostIdAsync(Guid? postId)
+        {
+            Post? post = null;
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts WHERE postID=@postId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@postId", postId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    post = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+
+                }
+
+                _conn.Close();
+                return post;
+            }
+        }
+
+
+        public async Task<bool> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO LikesPosts (fk_postID, fk_userID) VALUES (@PostId, @UserId)", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", like.PostId);
+                command.Parameters.AddWithValue("@UserId", auth0UserId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesPosts WHERE fk_postID=@PostId AND fk_userId=@UserId", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", unlike.PostId);
+                command.Parameters.AddWithValue("@UserId", auth0UserId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
     }
 }

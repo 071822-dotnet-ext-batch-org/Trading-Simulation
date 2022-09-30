@@ -1,6 +1,9 @@
 ﻿using System;
 namespace Models
 {
+    /// <summary>
+    /// This is the Model to create a new Comment
+    /// </summary>
     public class Comment
     {
         public Guid? CommentID { get; set; }
@@ -9,10 +12,23 @@ namespace Models
         public string? Content { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
+
+        /// <summary>
+        /// This is the Constructor to create a new Buy that is empty
+        /// </summary>
         public Comment()
         {
         }
 
+        /// <summary>
+        /// This is the Constructor to create a new Comment with porperties
+        /// </summary>
+        /// <param name="commentID"></param>
+        /// <param name="fk_UserID"></param>
+        /// <param name="fk_PostID"></param>
+        /// <param name="content"></param>
+        /// <param name="dateCreated"></param>
+        /// <param name="dateModified"></param>
         public Comment(Guid? commentID, Guid? fk_UserID, Guid? fk_PostID, string? content, DateTime? dateCreated, DateTime? dateModified)
         {
             this.CommentID = commentID;

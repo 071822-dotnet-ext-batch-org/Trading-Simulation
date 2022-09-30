@@ -22,6 +22,7 @@ namespace Test.Yoink
 
                 Name = "Tony",
                 Email = "Rodin@yahoo.com",
+                Picture = "src/Picture",
                 PrivacyLevel = 2,
 
             };
@@ -32,7 +33,8 @@ namespace Test.Yoink
                 Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
                 Name = "Tony",
                 Email = "Rodin@yahoo.com",
-                PrivacyLevel = 2,
+                Picture = "src/Picture",
+                PrivacyLevel = 2
 
             };
 
@@ -157,6 +159,15 @@ namespace Test.Yoink
 
             };
 
+            BuyDto buyDTO = new BuyDto()
+            {
+                portfolioId = new Guid(),
+                Symbol = "GOOGL",
+                CurrentPrice = 2000,
+                AmountBought = 100,
+                PriceBought = 50,
+            };
+
             List<Buy?> buymockList = new List<Buy?>();
 
             buymockList.Add(buy);
@@ -199,13 +210,21 @@ namespace Test.Yoink
 
             //Arrange
 
-            GetSellsDto selldto1 = new GetSellsDto(new Guid(), "GOOGL");
+            GetSellsDto getselldto1 = new GetSellsDto(new Guid(), "GOOGL");
 
-            GetSellsDto selldto = new GetSellsDto()
+            GetSellsDto getselldto = new GetSellsDto()
             {
                 PortfolioId = new Guid(),
                 Symbol = "GOOGL",
 
+            };
+
+            SellDto  sellDto = new SellDto()
+            {
+                Fk_PortfolioID = new Guid("2be4e71a-c21f-4b2c-9719-bb8a86b55e2b"),
+                Symbol = "GOOGL",
+                AmountSold = 1,
+                PriceSold = 190
             };
 
             Sell? sell = new Sell()
@@ -233,11 +252,11 @@ namespace Test.Yoink
 
             //Act
 
-            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(selldto);
+            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(getselldto);
 
             // var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
 
-            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
+            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sellDto);
 
         //     var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
 
@@ -245,7 +264,7 @@ namespace Test.Yoink
 
             Assert.Equal("GOOGL", sell.Symbol);
             Assert.Equal(2000, sell.AmountSold);
-            Assert.Equal("GOOGL", selldto.Symbol);
+            Assert.Equal("GOOGL", sellDto.Symbol);
         }
 
 

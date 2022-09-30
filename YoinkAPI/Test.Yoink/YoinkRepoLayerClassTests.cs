@@ -238,12 +238,12 @@ namespace Test.Yoink
 
             var dataSource2 = new Mock<IConfiguration>();
             dataSource
-                .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<DateTime>()))
+                .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
                 .Returns(Task.FromResult(true));
 
             var dataSource55 = new Mock<IConfiguration>();
             dataSource
-            .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<DateTime>()))
+            .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
             .Returns(Task.FromResult(true));
 
             var TheClassBeingTested = new dbsRequests(dataSource5.Object);
@@ -253,9 +253,9 @@ namespace Test.Yoink
 
             var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(selldto);
 
-            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(guid, "GOOGL", 2000, 1000, sell.DateSold);
+            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(guid, "GOOGL", 2000, 1000);
 
-            var NewSellWasAddedBool = TheClassBeingTested2.AddNewSellAsync(guid, "GOOGL", 2000, 1000, sell.DateSold);
+            var NewSellWasAddedBool = TheClassBeingTested2.AddNewSellAsync(guid, "GOOGL", 2000, 1000);
 
 
             //Assert
@@ -291,6 +291,15 @@ namespace Test.Yoink
                 PriceBought = 50,
                 DateBought = new DateTime(),
 
+            };
+
+            BuyDto buyDTO = new BuyDto()
+            {
+                portfolioId = new Guid(),
+                Symbol = "GOOGL",
+                CurrentPrice = 2000,
+                AmountBought = 100,
+                PriceBought = 50,
             };
 
             List<Buy?> buymockList = new List<Buy?>();
