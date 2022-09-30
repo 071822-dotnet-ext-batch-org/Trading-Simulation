@@ -697,6 +697,36 @@ namespace Test.Yoink
         }
 
 
+        [Fact]
+        public void LikeDtoWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = new Guid();
+
+
+            //Act
+            LikeDto likeDto = new LikeDto(guid);
+
+            LikeDto likeDto2 = new LikeDto()
+            {
+                PostId = guid,
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(likeDto.PostId , guid);
+            Assert.Equal(likeDto2.PostId, guid);
+
+        }
+
+
+
+
+
     }
 
 

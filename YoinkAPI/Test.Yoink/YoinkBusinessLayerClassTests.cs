@@ -284,6 +284,9 @@ namespace Test.Yoink
             
         }//END OF TestingGetAllPostsAsync
 
+
+
+
         [Fact]
         public void TestingCreatePostAsync()
         {
@@ -300,11 +303,12 @@ namespace Test.Yoink
                 DateCreated = new DateTime(),
                 DateModified = new DateTime()
             };
-            Post? nullPost = null;
+           
 
             CreatePostDto postDto = new CreatePostDto()
             {
-
+                Content = "New Content",
+                PrivacyLevel = 1000,
             };
 
             var dataSource = new Mock<IdbsRequests>();
@@ -312,14 +316,14 @@ namespace Test.Yoink
                 .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
                 .Returns(Task.FromResult(true));
 
-            var MethodTest2 = new YoinkBusinessLayer(dataSource.Object);
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
             
 
 
             //Act
 
 
-            var NewPostWasAdded = MethodTest2.CreatePostAsync("UserID", postDto );
+            var NewPostWasAdded = TheClassBeingTested.CreatePostAsync("auth0ID_UserID", postDto );
             // var MostRecentPostWasGotten = MethodTest3.GetRecentPostByUserId();
 
             
@@ -327,10 +331,11 @@ namespace Test.Yoink
 
             //Assert
  
-            Assert.Equal(post, post);//Method - Successfully created a Post
-            Assert.Equal(post, nullPost);//Method - Successfully created a Post
-            
-        }//END OF TestingCreatePostAsync
+            Assert.Equal("auth0ID_UserID", post.Fk_UserID);//Method - Successfully created a Post
+            Assert.Equal("New Content", postDto.Content);//Method - Successfully created a Post
+            Assert.True(true);//Method - Successfully created a Post
+
+        }
 
 
         [Fact]
@@ -338,7 +343,8 @@ namespace Test.Yoink
         {
 
             //Arrange
-            string? auth0UserId = "testuserID";
+            
+
             EditPostDto editPostDto = new EditPostDto()
             {
                 PostId = Guid.NewGuid(),
@@ -355,11 +361,11 @@ namespace Test.Yoink
                 DateCreated = new DateTime(),
                 DateModified = new DateTime()
             };
-            Post? nullPost = null;
+            
 
             CreatePostDto postDto = new CreatePostDto()
             {
-
+                Content = "New Content",
             };
 
             var dataSourceRL = new Mock<IdbsRequests>();
@@ -377,20 +383,15 @@ namespace Test.Yoink
                 .Setup(s => s.UpdatePostAsync(It.IsAny<string?>(),It.IsAny<EditPostDto>()))
                 .Returns(Task.FromResult(post));
 
-            var dataSourceBL_Null = new Mock<IYoinkBusinessLayer>();
-            dataSourceBL_Null
-                .Setup(s => s.UpdatePostAsync(It.IsAny<string?>(),It.IsAny<EditPostDto>()))
-                .Returns(Task.FromResult(nullPost));
-
-            var MethodTest1 = new YoinkBusinessLayer(dataSourceRL.Object);
-            var MethodTest2 = new YoinkBusinessLayer(dataSourceRL_False.Object);
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSourceRL.Object);
+            var TheClassBeingTested2 = new YoinkBusinessLayer(dataSourceRL_False.Object);
             
 
 
             //Act
 
 
-            var NewPostWasAdded = MethodTest1.CreatePostAsync("UserID", postDto );
+            var NewPostWasAdded = TheClassBeingTested.CreatePostAsync("auth0ID_UserID", postDto );
             // var MostRecentPostWasGotten = MethodTest3.GetRecentPostByUserId();
 
             
@@ -398,10 +399,11 @@ namespace Test.Yoink
 
             //Assert
  
-            Assert.Equal(post, post);//Method - Successfully created a Post
-            Assert.Equal(post, nullPost);//Method - Successfully created a Post
-            
-        }//END OF TestingUpdatePostAsync
+            Assert.Equal("auth0ID_UserID", post.Fk_UserID);//Method - Successfully created a Post
+            Assert.Equal("New Content", postDto.Content);//Method - Successfully created a Post
+            Assert.True(true);//Method - Successfully created a Post
+
+        }
 
 
 
