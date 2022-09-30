@@ -55,17 +55,6 @@ namespace Test.Yoink
             string? TestFk_UserID = "UserID";
 
             //Act
-<<<<<<< HEAD
-            Post TestPost1 = new Post(TestpostID, TestFk_UserID, "Sold big", 0,  2, new DateTime(), new DateTime());
-            Post TestPost = new Post()
-            { PostID = TestpostID, 
-              Fk_UserID = TestFk_UserID,
-              Content = "Sold big",
-              Likes = 0,
-              PrivacyLevel = 2,
-              DateCreated = DateTime.Now,
-              DateModified = DateTime.Now,
-=======
             Post TestPost1 = new Post(TestpostID, "TestFk_UserID", "Sold big", 1, 2, new DateTime(), new DateTime());
             
             Post TestPost = new Post 
@@ -80,7 +69,6 @@ namespace Test.Yoink
               DateModified = new DateTime(),
 
 
->>>>>>> bd7cbb34af56558f6fa1c058885f9c2daccdd260
             };
 
             //Assert

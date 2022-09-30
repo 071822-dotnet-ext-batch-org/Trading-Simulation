@@ -36,6 +36,7 @@ namespace Test.Yoink
                 Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
                 Name = "Tony",
                 Email = "Rodin@yahoo.com",
+                Picture = "src/testpic",
                 PrivacyLevel = 2,
                    
             };
@@ -157,12 +158,20 @@ namespace Test.Yoink
 
             //Arrange
 
-            GetSellsDto selldto = new GetSellsDto()
+            GetSellsDto getselldto = new GetSellsDto()
             {
                 PortfolioId = new Guid(),
                 Symbol = "GOOGL",
 
             };
+            SellDto sellDto = new SellDto()
+            {
+                Fk_PortfolioID = new Guid("e549725f-472d-4042-be38-0bc8e28c364b"),
+                Symbol = "GOOGL",
+                AmountSold = 2000,
+                PriceSold = 1000
+            };
+
 
             Sell? sell = new Sell()
             {
@@ -186,7 +195,7 @@ namespace Test.Yoink
 
             var dataSource2 = new Mock<IdbsRequests>();
             dataSource
-                .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<DateTime>()))
+                .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
                 .Returns(Task.FromResult(true));
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
@@ -194,11 +203,11 @@ namespace Test.Yoink
 
             //Act
 
-            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(selldto);
+            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(getselldto);
 
-            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
+            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sellDto);
 
-            var NewSellWasAddedBool = TheClassBeingTested2.AddNewSellAsync(sell);
+            var NewSellWasAddedBool = TheClassBeingTested2.AddNewSellAsync(sellDto);
 
 
             //Assert
@@ -206,14 +215,14 @@ namespace Test.Yoink
             Assert.Equal("GOOGL", sell.Symbol);
             Assert.Equal(2000, sell.AmountSold);
 
-            Assert.Equal("GOOGL", selldto.Symbol);
+            Assert.Equal("GOOGL", sellDto.Symbol);
             Assert.True(true);
             
         }//END OF TestingAllMethodsAssociatedSell
 
 
         [Fact]
-        public void TestingAllMethodsPosts()
+        public void TestingGetAllPostAsync()
         {
 
             //Arrange
@@ -273,7 +282,127 @@ namespace Test.Yoink
             Assert.Equal(PostsmockList, PostsmockList);//Method1 - get all posts
             Assert.Equal(true, true);//Method2 - create post
             
-        }//END OF TestingAllMethodsPosts
+        }//END OF TestingGetAllPostsAsync
+
+        [Fact]
+        public void TestingCreatePostAsync()
+        {
+
+            //Arrange
+
+            Post? post = new Post()
+            {
+                PostID = new Guid(),
+                Fk_UserID = "auth0ID_UserID",
+                Content = "New Content",
+                Likes = 0,
+                PrivacyLevel = 1000,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
+            Post? nullPost = null;
+
+            CreatePostDto postDto = new CreatePostDto()
+            {
+
+            };
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .Returns(Task.FromResult(true));
+
+            var MethodTest2 = new YoinkBusinessLayer(dataSource.Object);
+            
+
+
+            //Act
+
+
+            var NewPostWasAdded = MethodTest2.CreatePostAsync("UserID", postDto );
+            // var MostRecentPostWasGotten = MethodTest3.GetRecentPostByUserId();
+
+            
+
+
+            //Assert
+ 
+            Assert.Equal(post, post);//Method - Successfully created a Post
+            Assert.Equal(post, nullPost);//Method - Successfully created a Post
+            
+        }//END OF TestingCreatePostAsync
+
+
+        [Fact]
+        public void TestingUpdatePostAsync()
+        {
+
+            //Arrange
+            string? auth0UserId = "testuserID";
+            EditPostDto editPostDto = new EditPostDto()
+            {
+                PostId = Guid.NewGuid(),
+                Content = "TestContent",
+                PrivacyLevel = 1
+            };
+            Post? post = new Post()
+            {
+                PostID = new Guid(),
+                Fk_UserID = "auth0ID_UserID",
+                Content = "New Content",
+                Likes = 0,
+                PrivacyLevel = 1000,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
+            Post? nullPost = null;
+
+            CreatePostDto postDto = new CreatePostDto()
+            {
+
+            };
+
+            var dataSourceRL = new Mock<IdbsRequests>();
+            dataSourceRL
+                .Setup(s => s.UpdatePostAsync(It.IsAny<EditPostDto>()))
+                .Returns(Task.FromResult(true));
+
+            var dataSourceRL_False = new Mock<IdbsRequests>();
+            dataSourceRL_False
+                .Setup(s => s.UpdatePostAsync(It.IsAny<EditPostDto>()))
+                .Returns(Task.FromResult(false));
+
+            var dataSourceBL = new Mock<IYoinkBusinessLayer>();
+            dataSourceBL
+                .Setup(s => s.UpdatePostAsync(It.IsAny<string?>(),It.IsAny<EditPostDto>()))
+                .Returns(Task.FromResult(post));
+
+            var dataSourceBL_Null = new Mock<IYoinkBusinessLayer>();
+            dataSourceBL_Null
+                .Setup(s => s.UpdatePostAsync(It.IsAny<string?>(),It.IsAny<EditPostDto>()))
+                .Returns(Task.FromResult(nullPost));
+
+            var MethodTest1 = new YoinkBusinessLayer(dataSourceRL.Object);
+            var MethodTest2 = new YoinkBusinessLayer(dataSourceRL_False.Object);
+            
+
+
+            //Act
+
+
+            var NewPostWasAdded = MethodTest1.CreatePostAsync("UserID", postDto );
+            // var MostRecentPostWasGotten = MethodTest3.GetRecentPostByUserId();
+
+            
+
+
+            //Assert
+ 
+            Assert.Equal(post, post);//Method - Successfully created a Post
+            Assert.Equal(post, nullPost);//Method - Successfully created a Post
+            
+        }//END OF TestingUpdatePostAsync
+
 
 
 
@@ -283,7 +412,6 @@ namespace Test.Yoink
         {
 
             //Arrange
-<<<<<<< HEAD
             BuyDto makeBuyOrder = new BuyDto()
             {
                 portfolioId = Guid.NewGuid(),
@@ -292,9 +420,6 @@ namespace Test.Yoink
                 AmountBought = 1000000,
                 PriceBought = 12
             };
-=======
-            Guid guid = new Guid();
->>>>>>> bd7cbb34af56558f6fa1c058885f9c2daccdd260
 
             Get_BuysDto AllBuys = new Get_BuysDto()
             {
@@ -343,13 +468,9 @@ namespace Test.Yoink
 
             var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
 
-<<<<<<< HEAD
             var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(makeBuyOrder);
 
             var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(makeBuyOrder);
-=======
-            var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(buydto);
->>>>>>> bd7cbb34af56558f6fa1c058885f9c2daccdd260
 
             //Assert
 
