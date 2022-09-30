@@ -39,12 +39,13 @@
       </div>
       <div class="total"> <!-- Total order cost -->
         <div> <!-- *ngFor="let cost of costTotal" -->
-          <p ng-change=""> Total Price: $ {{ 0 }} </p>
+          <button class="calc-Btn" (click)="calculateTotal(symbol.value, qty)" >Calculate Total</button>
+          <p> Total Price: {{ totalPrice | currency }} </p> <!--WORK IN PROGRESS-->
         </div>
       </div>
-      <div> <!-- Confirm and cancel buttons -->
+      <div class="payment-btn"> <!-- Confirm and cancel buttons -->
         <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
-        <button class="buy-btn" (click)="onPayment()">Payment</button>
+        <button class="buy-btn" (click)="onPayment()" >Payment</button>
       </div>
     </form> <!-- End of Buy/sell form -->
   </div> <!-- End form container -->
@@ -58,7 +59,6 @@
           <mat-icon>search</mat-icon>
         </button>
       </mat-form-field>
-    </form>
     <div class="table-responsive">
       <table class="table">
         <thead>
@@ -103,5 +103,6 @@
         </tbody>
       </table>
     </div> <!-- End table response container -->
+    </form>
   </div> <!-- End search container -->
 </div><!--Component Container-->

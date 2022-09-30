@@ -35,6 +35,8 @@ export class BuySellComponent implements OnInit {
   portfolioID: string = ''; // Used in onPayment, createBuy, and createSell below
   buyResult: any; // Used in createBuy below
   sellResult: any; // Used in createSell below
+  buyPrice: number = 0;
+  totalPrice: any;
 
   // What is shown in the dropdown box on web page options.
   options: Options[] = [
@@ -42,15 +44,20 @@ export class BuySellComponent implements OnInit {
     { value: 'Sell', viewValue: 'Sell' },
   ];
 
-  //TEMP DATA DELETE BEFORE FOR PRODUCTION *****
-  totalPrice = 0;
+  public onConfirm() {
+    window.alert('Your order has been sent.')
+  }
+
+  public onCancel() {
+    window.alert('Your order has been canceled.')
+  }
 
   // This method uses the getTickerData() method and conencts to the Polygon.io api after which,
   // if the user choses 'Buy' in the drop down box, it will run the createBuy() method which sends the data
   // transfer object to our database once all required fields are filled. If the uese choses the
   // sell option then it will chose the createSell() method and send a data transfer object to
   // our database and removes the order from the database.
-  onPayment() {
+  public onPayment() {
 
     if (!this.symbol.value) return;
 
@@ -74,11 +81,12 @@ export class BuySellComponent implements OnInit {
   }// End on payment
 
   ngOnInit(): void {
-    this.GMP.getMyPortfolios().subscribe(portArr => this.portfolios = portArr)
+    this.GMP.getMyPortfolios().subscribe(portArr => this.portfolios = portArr);
+    this.calculateTotal(this.tickerSymbol, this.qty);
   };
 
   // Retuns the ticker data from Polygon.io after the user enters information into the search bar.
-  getTickerData(tickerSymbol: any) {
+  public getTickerData(tickerSymbol: any) {
     if (!tickerSymbol) return;
     this.buySell.getTickerData(tickerSymbol).subscribe(tickerData => {
       this.tickerData = (tickerData.results)
@@ -88,7 +96,7 @@ export class BuySellComponent implements OnInit {
 
   // Creates buy request using the createBuy from the services and sends data transfer object
   // with the required fields to out database.
-  createBuy(portfolioID: string, symbol: string, qty: number, buyPrice: number): void {
+  public createBuy(portfolioID: string, symbol: string, qty: number, buyPrice: number): void {
     this.BSP.createBuy(portfolioID, symbol, qty, buyPrice).subscribe(br => {
       this.buyResult = br;
       console.log(br);
@@ -97,15 +105,23 @@ export class BuySellComponent implements OnInit {
 
   // Creates sell request using the createBuy from the services and sends data transfer object
   // with the required fields to out database.
-  createSell(portfolioID: string, symbol: string, qty: number, sellPrice: number): void {
+  public createSell(portfolioID: string, symbol: string, qty: number, sellPrice: number): void {
     this.BSP.createSell(portfolioID, symbol, qty, sellPrice).subscribe(sr => {
       this.sellResult = sr
     })
   }
 
   //////////// TODO /////////////
-  public calculateTotal(qty: number, buyPrice: number) {
-    return this.totalPrice = qty * buyPrice;
+  public calculateTotal(tickerSymbol: any, qty: number) {
+    if (!tickerSymbol) return;
+    console.log(tickerSymbol)
+    this.buySell.getTickerData(tickerSymbol).subscribe(tickerData => {
+      console.log(tickerData)
+      this.tickerData = (tickerData.results[0])
+      console.log(tickerData.results)
+      return this.totalPrice = qty * this.tickerData.c;
+    });
+
   };
 
 

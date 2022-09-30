@@ -16,11 +16,6 @@
   justify-content: space-between;
 }
 
-/* Moves boxes away from edge of page */
-.example-container .mat-form-field+.mat-form-field {
-  margin-left: 8px;
-}
-
 /* The portfolio and buy/sell dropdown boxes */
 .dropdown-fields {
   text-align: left;
@@ -35,7 +30,6 @@
   font-size: large;
   margin-left: 15px;
   text-decoration: underline;
-
 }
 
 /* The total amount of the order */
@@ -48,7 +42,7 @@
   text-decoration: underline;
   margin-left: 20px;
   position: absolute;
-  bottom: 150px;
+  bottom: 140px;
 }
 
 /* The red cancel button */
@@ -77,8 +71,20 @@
   letter-spacing: 1px;
   border: black;
   border-radius: 25px;
-  margin-right: 50px;
   position: absolute;
   bottom: 140px;
   left: 800px;
+}
+
+.calc-Btn {
+  background-color: rgb(229, 215, 215);
+  font-size: 15px;
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  border: white;
+  border-radius: 25px;
+  margin-bottom: 30px;
+  margin-left: 10px;
 }
