@@ -236,15 +236,14 @@ namespace RepoLayer
         }
 
 
-        public async Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold)
+        public async Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold)
         {
-            using (SqlCommand command = new SqlCommand("INSERT INTO Sells (fk_Portfolio, symbol, amountSold, priceSold, dateSold) VALUES (@portfolioid, @symbol, @amountSold, @priceSold, @dateSold)", _conn))
+            using (SqlCommand command = new SqlCommand("INSERT INTO Sells (fk_portfolioID, symbol, amountSold, priceSold) VALUES (@portfolioid, @symbol, @amountSold, @priceSold)", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioid", PortfolioId);
                 command.Parameters.AddWithValue("@symbol", Symbol);
                 command.Parameters.AddWithValue("@amountSold", amountSold);
                 command.Parameters.AddWithValue("@priceSold", priceSold);
-                command.Parameters.AddWithValue("@dateSold", dateSold);
 
                 _conn.Open();
                 int ret = await command.ExecuteNonQueryAsync();
@@ -579,7 +578,125 @@ namespace RepoLayer
             }
         }
 
+        public async Task<bool> DeletePostAsync(Guid? postId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM Posts WHERE postID=@PostId", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", postId);
+                _conn.Open();
 
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        public async Task<Sell?> GetRecentSellByPortfolioId(Guid? fk_PortfolioID)
+        {
+            using (SqlCommand command = new SqlCommand($"Select TOP (1) * FROM Sells WHERE fk_portfolioID = @portfolioId ORDER BY dateSold DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioId", fk_PortfolioID);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                Sell? recentSell = null;
+                if (ret.Read())
+                {
+                    recentSell = new Sell(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDateTime(5));
+
+                }
+
+                _conn.Close();
+                return recentSell;
+            }
+        }
+
+
+        public async Task<List<Post>> GetAllPostByUserIdAsync(string userId)
+        {
+            List<Post> postList = new List<Post>();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts WHERE fk_userID=@userId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@userId", userId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Post p = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+                    postList.Add(p);
+
+                }
+
+                _conn.Close();
+                return postList;
+            }
+        }
+
+        public async Task<Post?> GetPostByPostIdAsync(Guid? postId)
+        {
+            Post? post = null;
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts WHERE postID=@postId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@postId", postId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    post = new Post(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+
+                }
+
+                _conn.Close();
+                return post;
+            }
+        }
+
+
+        public async Task<bool> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO LikesPosts (fk_postID, fk_userID) VALUES (@PostId, @UserId)", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", like.PostId);
+                command.Parameters.AddWithValue("@UserId", auth0UserId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesPosts WHERE fk_postID=@PostId AND fk_userId=@UserId", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", unlike.PostId);
+                command.Parameters.AddWithValue("@UserId", auth0UserId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
 
 
     }

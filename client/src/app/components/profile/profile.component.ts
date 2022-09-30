@@ -45,6 +45,7 @@ export class ProfileComponent implements OnInit {
         this.profile = pro
         console.log(pro)
        })
+       
     })
    }
 

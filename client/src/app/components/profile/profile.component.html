@@ -8,8 +8,8 @@
             <mat-card-subtitle>Privacy level: {{this.profile.privacyLevel}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="content"></mat-card-content>
-        <div><button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true">Create Profile</button></div>
-        <div><button style="font-size:large" mat-button color="primary" (click)="editProfile(profile)">Edit Profile</button></div>
+        <div><button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true" *ngIf="!profile">Create Profile</button></div>
+        <div><button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="editProfile(profile); isClicked=true">Edit Profile</button></div>
 <app-edit-profile [profile]="profileToEdit" (profileUpdated)="updateProfileList($event)">Save</app-edit-profile>
        
     

@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Models;
 using BusinessLayer;
 using Models.ModelDTOs.BackToFrontEnd;
+using Microsoft.AspNetCore.Routing;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 
 namespace APILayer.Controllers
 {
@@ -130,7 +133,7 @@ namespace APILayer.Controllers
 
 
         [HttpPost("create-sell")]
-        public async Task<ActionResult<Sell>> AddNewSellAsync(Sell sell)
+        public async Task<ActionResult<Sell>> AddNewSellAsync(SellDto sell)
         {
             if (ModelState.IsValid)
             {
@@ -254,12 +257,59 @@ namespace APILayer.Controllers
             return Ok(returnedPosts);
         }
 
-        [HttpPut]
+        [HttpPut("edit-post")]
         public async Task<ActionResult<Post?>> UpdatePostAsync(EditPostDto editPostDto)
         {
             string? auth0UserId = User.Identity?.Name;
             Post? editedPost = await this._businessLayer.UpdatePostAsync(auth0UserId, editPostDto);
             return Ok(editedPost);
+        }
+
+        [HttpDelete("delete-post")]
+        public async Task<ActionResult<Post?>> DeletePostAsync(Guid? postId)
+        {
+            string? auth0UserId = User.Identity?.Name;
+            Guid? deletedPostId = await this._businessLayer.DeletePostAsync(auth0UserId, postId);
+            return Ok(deletedPostId);
+        }
+
+
+        [HttpPost("get-userposts")]
+        public async Task<ActionResult<List<PostWithCommentCountDto?>>> GetAllPostByUserIdAsync(string userId)
+        {
+            List<PostWithCommentCountDto> returnedPosts = await this._businessLayer.GetAllPostByUserIdAsync(userId);
+            return Ok(returnedPosts);
+        }
+
+        [HttpPost("get-post")]
+        public async Task<ActionResult<PostWithCommentCountDto?>> GetPostByPostIdAsync(Guid? postId)
+        {
+            PostWithCommentCountDto? returnedPost = await this._businessLayer.GetPostByPostIdAsync(postId);
+            return Ok(returnedPost);
+        }
+
+        [HttpPost("add-like-on-post")]
+        public async Task<ActionResult<int?>> CreateLikeOnPostAsync(LikeDto like)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                int? likeCount = await this._businessLayer.CreateLikeOnPostAsync(like, auth0UserId);
+                return Created("", likeCount);
+            }
+            else return BadRequest("Like did not get added");
+        }
+
+        [HttpDelete("remove-like-on-post")]
+        public async Task<ActionResult<int?>> DeleteLikeOnPostAsync(LikeDto unlike)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                int? likeCount = await this._businessLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
+                return Created("", likeCount);
+            }
+            else return BadRequest("Like did not get removed");
         }
 
 

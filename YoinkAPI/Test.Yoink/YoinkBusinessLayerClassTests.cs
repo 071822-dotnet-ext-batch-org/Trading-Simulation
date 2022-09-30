@@ -213,11 +213,18 @@ namespace Test.Yoink
         {
 
             //Arrange
+            Guid guid = new Guid();
 
             Get_BuysDto AllBuys = new Get_BuysDto()
             {
                 Symbol = "GOOGL",
                        
+            };
+
+            BuyDto buydto = new BuyDto()
+            {
+                Symbol = "GOOGL",
+
             };
 
             Buy? buy = new Buy()
@@ -243,8 +250,10 @@ namespace Test.Yoink
 
             var dataSource2 = new Mock<IdbsRequests>();
             dataSource
-                .Setup(b => b.AddNewBuyAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<DateTime>()))
+                .Setup(b => b.AddNewBuyAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
                 .Returns(Task.FromResult(true));
+
+           
 
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
             var TheClassBeingTested2 = new YoinkBusinessLayer(dataSource2.Object);
@@ -253,9 +262,7 @@ namespace Test.Yoink
 
             var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
 
-            var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(buy);
-
-            var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(buy);
+            var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(buydto);
 
             //Assert
 

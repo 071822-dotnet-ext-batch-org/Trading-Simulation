@@ -90,14 +90,15 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return (null);
     }
 
-    public async Task<Sell?> AddNewSellAsync(Sell sell)
+    public async Task<Sell?> AddNewSellAsync(SellDto sell)
     {
         //fix null bool in repo
-        bool? check = await this._repoLayer.AddNewSellAsync(sell.Fk_PortfolioID, sell.Symbol, sell.AmountSold, sell.PriceSold, sell.DateSold);
+        bool? check = await this._repoLayer.AddNewSellAsync(sell.Fk_PortfolioID, sell.Symbol, sell.AmountSold, sell.PriceSold);
 
         if (true == check)
         {
-            return (sell);
+            Sell? createdSell = await this._repoLayer.GetRecentSellByPortfolioId(sell.Fk_PortfolioID);
+            return (createdSell);
         }
         else return (null);
 
@@ -205,5 +206,93 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         }
         else return null;
     }
+
+    public async Task<Guid?> DeletePostAsync(string? auth0UserId, Guid? postId)
+    {
+        string? user = await this._repoLayer.GetUserWithPostIdAsync(postId);
+        if (auth0UserId == user)
+        {
+            bool deletePostCheck = await this._repoLayer.DeletePostAsync(postId);
+            if (deletePostCheck)
+            {
+                return postId;
+            }
+            else return null;
+        }
+        else return null;
+    }
+
+    public async Task<List<PostWithCommentCountDto>> GetAllPostByUserIdAsync(string userId)
+    {
+        List<PostWithCommentCountDto> listWithCommentCount = new List<PostWithCommentCountDto>();
+        List<Post> returnedPosts = await this._repoLayer.GetAllPostByUserIdAsync(userId);
+        foreach (Post post in returnedPosts)
+        {
+            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
+            PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
+            postWithCommentCountDto.PostID = post.PostID;
+            postWithCommentCountDto.Fk_UserID = post.Fk_UserID;
+            postWithCommentCountDto.Content = post.Content;
+            postWithCommentCountDto.Likes = post.Likes;
+            postWithCommentCountDto.Comments = count;
+            postWithCommentCountDto.PrivacyLevel = post.PrivacyLevel;
+            postWithCommentCountDto.DateCreated = post.DateCreated;
+            postWithCommentCountDto.DateModified = post.DateModified;
+            listWithCommentCount.Add(postWithCommentCountDto);
+        }
+        return listWithCommentCount;
+    }
+
+    public async Task<PostWithCommentCountDto?> GetPostByPostIdAsync(Guid? postId)
+    {
+            //fills post object with retrieved post
+            Post? returnedPost = await this._repoLayer.GetPostByPostIdAsync(postId);
+
+
+            //creates post object with the comment count added
+            PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
+
+        if (returnedPost != null)
+        {
+            //count int stores comment counts for that post
+            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(postId);
+
+            //fills the postdto with values retrieved
+            postWithCommentCountDto.PostID = returnedPost.PostID;
+            postWithCommentCountDto.Fk_UserID = returnedPost.Fk_UserID;
+            postWithCommentCountDto.Content = returnedPost.Content;
+            postWithCommentCountDto.Likes = returnedPost.Likes;
+            postWithCommentCountDto.Comments = count;
+            postWithCommentCountDto.PrivacyLevel = returnedPost.PrivacyLevel;
+            postWithCommentCountDto.DateCreated = returnedPost.DateCreated;
+            postWithCommentCountDto.DateModified = returnedPost.DateModified;
+            return postWithCommentCountDto;
+        }
+
+        else return null;
+    }
+
+    public async Task<int?> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
+    {
+        bool createdLike = await this._repoLayer.CreateLikeOnPostAsync(like, auth0UserId);
+        if (createdLike)
+        {
+            Post? post = await this._repoLayer.GetPostByPostId(like.PostId);
+            return post.Likes;
+        }
+        return null;
+    }
+
+    public async Task<int?> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
+    {
+        bool removedLike = await this._repoLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
+        if (removedLike)
+        {
+            Post? post = await this._repoLayer.GetPostByPostId(unlike.PostId);
+            return post.Likes;
+        }
+        return null;
+    }
+
 
 }
