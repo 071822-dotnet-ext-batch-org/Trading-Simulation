@@ -446,7 +446,7 @@ namespace Test.Yoink
 
             //Arrange
 
-            int userCount = 500;
+            int? userCount = 500;
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
@@ -480,7 +480,7 @@ namespace Test.Yoink
 
             //Arrange
 
-            int userCount = 500;
+            int? userCount = 500;
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
@@ -550,7 +550,7 @@ namespace Test.Yoink
 
             //Arrange
 
-            int buysCount = 300;
+            int? buysCount = 300;
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
@@ -585,7 +585,7 @@ namespace Test.Yoink
 
             //Arrange
 
-            int sellsCount = 350;
+            int? sellsCount = 350;
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
