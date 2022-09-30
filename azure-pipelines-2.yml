@@ -38,6 +38,7 @@ steps:
   inputs:
     command: 'build'
     project: 'client'
+    prod: false
     DisableAnalytics: false
 
 - task: AngularCLI@1
