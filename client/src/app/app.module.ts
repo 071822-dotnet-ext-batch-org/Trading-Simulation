@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Auth0ClientService, AuthModule } from '@auth0/auth0-angular';
+import { Auth0ClientService, AuthModule } from '@auth0/auth0-angular'; //First we have downloaded Auth0 package (ng add @auth0/auth0-angular) then imoprted the package here (sam)
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from '@auth0/auth0-angular';
 
@@ -24,6 +24,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+
 
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
@@ -49,7 +52,8 @@ import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { InvestmentsComponent } from './components/investments/investments.component';
-import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { CommentsComponent } from './components/comments/comments.component'
 
 @NgModule({
   declarations: [
@@ -71,6 +75,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     PostCardComponent,
     InvestmentsComponent,
     EditProfileComponent,
+    CommentsComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,10 +86,12 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     HttpClientModule,
     MatDialogModule,
     MatTableModule,
+    MatDialogModule,
+    MatIconModule,
     ReactiveFormsModule,
     AuthModule.forRoot({
-      domain: 'dev-pxtkabk5.us.auth0.com',
-      clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
+      domain: 'dev-pxtkabk5.us.auth0.com',             // getting connected with auth0 by using personal account information:
+      clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',    // domain, clientID (they are unique to all users) (sam)
       audience: 'https://localhost:7280/api/Yoink',
       httpInterceptor: {
         allowedList: [
@@ -96,7 +103,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
           env.baseURL + '/all-investments',
           env.baseURL + '/create-buy',
           env.baseURL + '/create-sell'
-        ], //for now
+        ],
       }
 
     }),
