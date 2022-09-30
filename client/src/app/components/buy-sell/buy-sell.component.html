@@ -1,9 +1,9 @@
 <h2 class='title' style="font-size:xx-large">Buy and Sell</h2>
-<div class="component-container">
-  <div class="form-container">
-    <form class="BuySell-Panel">
-      <div class="dropdown-fields">
-        <div>
+<div class="component-container"> <!-- entire container -->
+  <div class="form-container"> <!-- Has portfolio, order type, ticker, quantity, total and buttons -->
+    <form class="BuySell-Panel"> <!-- What's needed for a buy or sell order-->
+      <div class="dropdown-fields"> <!-- Just dropdown boxes -->
+        <div> <!-- Chose which portfolio to use drop down box -->
           <mat-form-field>
             <mat-label>Chose Portfolio</mat-label>
             <mat-select [required]="true" [(value)]="portfolioID">
@@ -13,7 +13,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <mat-form-field>
+        <mat-form-field> <!-- Chose either buy or sell drop down box -->
           <mat-label>Chose Buy or Sell</mat-label>
           <mat-select [required]="true" [(value)]="selected">
             <mat-option *ngFor="let option of options" value="{{option.value}}">
@@ -22,37 +22,34 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="input-fields">
-        <div class="Row-2">
+      <div class="input-fields"> <!-- Order Fill in boxes -->
+        <div class="Row-2"> <!-- Enter ticker fill in box -->
           <mat-form-field appearance="fill">
             <mat-label>Enter Ticker Symbol</mat-label>
             <input matInput #input maxlength="5" placeholder="Ticker Symbol" [required]="true" [formControl]="symbol">
           </mat-form-field>
         </div>
-        <div class="Row-3">
+        <div class="Row-3"> <!-- Enter quantity fillin box -->
           <mat-form-field appearance="fill">
             <mat-label>Enter Quantity</mat-label>
             <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty"
               [ngModelOptions]="{standalone: true}" [required]="true">
           </mat-form-field>
         </div>
-        <p></p>
       </div>
-      <div class="purchase-result">
-      </div>
-      <div class="total">
-        <div *ngFor="let cost of costTotal">
-          <p ng-change=""> Total Price: $ {{ totalPrice }} </p>
+      <div class="total"> <!-- Total order cost -->
+        <div> <!-- *ngFor="let cost of costTotal" -->
+          <p ng-change=""> Total Price: $ {{ 0 }} </p>
         </div>
       </div>
-      <div>
+      <div> <!-- Confirm and cancel buttons -->
         <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
         <button class="buy-btn" (click)="onPayment()">Payment</button>
       </div>
-    </form>
-  </div>
+    </form> <!-- End of Buy/sell form -->
+  </div> <!-- End form container -->
   <div class="search-container">
-    <form class="search-form">
+    <form class="search-form"> <!-- Search box -->
       <mat-form-field class="search-form-field" appearance="fill">
         <mat-label>Symbol search</mat-label>
         <input matInput placeholder="Ex. AAPL" [formControl]="symbolSearch">
@@ -105,6 +102,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>
+    </div> <!-- End table response container -->
+  </div> <!-- End search container -->
 </div><!--Component Container-->
