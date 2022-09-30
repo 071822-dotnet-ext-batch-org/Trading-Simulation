@@ -155,7 +155,7 @@ namespace Test.Yoink
             dataSource
                 .Setup(p => p.EditPortfolioAsync(It.IsAny<PortfolioDto>()))
                 .Returns(Task.FromResult(true));
-            
+
             var dataSource4 = new Mock<IConfiguration>();
             dataSource
                 .Setup(p => p.GetPortfolioByPorfolioIDAsync(It.IsAny<Guid>()))
@@ -246,6 +246,14 @@ namespace Test.Yoink
             .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
             .Returns(Task.FromResult(true));
 
+
+            var dataSource6 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(s => s.GetRecentSellByPortfolioId(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(sell));
+
+
+
             var TheClassBeingTested = new dbsRequests(dataSource5.Object);
             var TheClassBeingTested2 = new dbsRequests(dataSource55.Object);
 
@@ -257,6 +265,8 @@ namespace Test.Yoink
 
             var NewSellWasAddedBool = TheClassBeingTested2.AddNewSellAsync(guid, "GOOGL", 2000, 1000);
 
+            var GotRecentSellByPortfolioId = TheClassBeingTested.GetRecentSellByPortfolioId(guid);
+
 
             //Assert
 
@@ -264,6 +274,7 @@ namespace Test.Yoink
             Assert.Equal(2000, sell.AmountSold);
             Assert.Equal("GOOGL", selldto.Symbol);
             Assert.True(true);
+            Assert.Equal(guid, sell.Fk_PortfolioID);
         }
 
 
@@ -321,6 +332,13 @@ namespace Test.Yoink
                 .Setup(b => b.AddNewBuyAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
                 .Returns(Task.FromResult(true));
 
+
+            var dataSource3 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(b => b.GetRecentBuyByPortfolioId(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(buy));
+
+
             var TheClassBeingTested = new dbsRequests(dataSource1.Object);
             var TheClassBeingTested2 = new dbsRequests(dataSource2.Object);
 
@@ -334,12 +352,15 @@ namespace Test.Yoink
 
             var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(guid, "GOOGL", 2000, 100, 50);
 
+            var GotRecentBuyByPortfolioId = TheClassBeingTested.GetRecentBuyByPortfolioId(guid);
+
 
             //Assert
 
             Assert.Equal("GOOGL", AllBuys.Symbol);
             Assert.Equal(2000, buy.CurrentPrice);
             Assert.True(true);
+            //Assert.Equal(guid, buy.Fk_PortfolioID);
 
         }
 
@@ -613,96 +634,6 @@ namespace Test.Yoink
         }
 
 
-
-        [Fact]
-        public void TestingCreatePost()
-        {
-
-            //Arrange
-            CreatePostDto createPost = new CreatePostDto()
-            {
-                Content = "I just bought some APPL stock!",
-                PrivacyLevel = 2,
-            };
-
-            CreatePostDto createPostDto = new CreatePostDto()
-            {
-                Content = "I just bought some APPL stock!",
-                PrivacyLevel = 2,
-            };
-
-
-            var dataSource = new Mock<IdbsRequests>();
-            dataSource
-                .Setup(p => p.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
-                .Returns(Task.FromResult(true));
-
-            var dataSource5 = new Mock<IConfiguration>();
-            dataSource
-                .Setup(p => p.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
-                .Returns(Task.FromResult(true));
-
-            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
-
-
-            //Act
-
-            var GetsNumberOfUsers = TheClassBeingTested.CreatePostAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", createPostDto);
-
-
-            //Assert
-
-            Assert.True(true);
-
-    
-        }
-
-
-
-        [Fact]
-        public void TestingGetRecentPostByUserId()
-        {
-            Guid guid = Guid.NewGuid();
-
-            Post? post = new Post()
-            {
-                PostID = guid,
-                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
-                Content = "I just bought some more APPL stock!",
-                Likes = 16,
-                PrivacyLevel = 2,
-                DateCreated = new DateTime(),
-                DateModified = new DateTime(),
-            };
-
-
-            var dataSource = new Mock<IdbsRequests>();
-            dataSource
-                .Setup(p => p.GetRecentPostByUserId(It.IsAny<string>()))
-                .Returns(Task.FromResult(post));
-
-            var dataSource5 = new Mock<IConfiguration>();
-            dataSource
-                .Setup(p => p.GetRecentPostByUserId(It.IsAny<string>()))
-                .Returns(Task.FromResult(post));
-
-            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
-
-
-            //Act
-
-            var GotRecentPostByUserId = TheClassBeingTested.GetRecentPostByUserId("d44d63fc-ffa8-4eb7-b81d-644547136d30");
-
-
-            //Assert
-
-            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", post.Fk_UserID);
-
-
-        }
-
-
-
         [Fact]
         public void TestingGetAllPostAsync()
         {
@@ -752,5 +683,483 @@ namespace Test.Yoink
 
 
         }
+
+
+
+
+
+
+        [Fact]
+        public void TestingCreatePost()
+        {
+
+            //Arrange
+            CreatePostDto createPost = new CreatePostDto()
+            {
+                Content = "I just bought some APPL stock!",
+                PrivacyLevel = 2,
+            };
+
+            CreatePostDto createPostDto = new CreatePostDto()
+            {
+                Content = "I just bought some APPL stock!",
+                PrivacyLevel = 2,
+            };
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .Returns(Task.FromResult(true));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .Returns(Task.FromResult(true));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GetsNumberOfUsers = TheClassBeingTested.CreatePostAsync("d44d63fc-ffa8-4eb7-b81d-644547136d30", createPostDto);
+
+
+            //Assert
+
+            Assert.True(true);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingGetRecentPostByUserId()
+        {
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetRecentPostByUserId(It.IsAny<string>()))
+                .Returns(Task.FromResult(post));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.GetRecentPostByUserId(It.IsAny<string>()))
+                .Returns(Task.FromResult(post));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GotRecentPostByUserId = TheClassBeingTested.GetRecentPostByUserId("d44d63fc-ffa8-4eb7-b81d-644547136d30");
+
+
+            //Assert
+
+            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", post.Fk_UserID);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingGetNumberOfCommentsByPostIdAsync()
+        {
+            int numberOfComments = 10;
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetNumberOfCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(numberOfComments));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.GetNumberOfCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(numberOfComments));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GotNumberOfCommentsByPostId = TheClassBeingTested.GetNumberOfCommentsByPostIdAsync(guid);
+
+
+            //Assert
+
+            Assert.Equal(guid, post.PostID);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingGetUserWithPostIdAsync()
+        {
+
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetUserWithPostIdAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(post.Fk_UserID));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.GetUserWithPostIdAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(post.Fk_UserID));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GotUserWithPostId = TheClassBeingTested.GetUserWithPostIdAsync(guid);
+
+
+            //Assert
+
+            Assert.Equal(guid, post.PostID);
+
+
+        }
+
+        //UpdatePost
+
+
+
+        [Fact]
+        public void TestingGetPostByPostId()
+        {
+
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetPostByPostId(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(post));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.GetPostByPostId(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(post));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GotPostByPostId = TheClassBeingTested.GetPostByPostId(guid);
+
+
+            //Assert
+
+            Assert.Equal(guid, post.PostID);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingDeletePostAsync()
+        {
+
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.DeletePostAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(true));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.DeletePostAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(true));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var DeletedPost = TheClassBeingTested.DeletePostAsync(guid);
+
+
+            //Assert
+
+            Assert.Equal(guid, post.PostID);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingGetAllPostByUserIdAsync()
+        {
+
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+            List<Post> postList = new List<Post>();
+            postList.Add(post);
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetAllPostByUserIdAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(postList));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.GetAllPostByUserIdAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(postList));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GotAllPostByUserId = TheClassBeingTested.GetAllPostByUserIdAsync(post.Fk_UserID);
+
+
+            //Assert
+
+            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", post.Fk_UserID);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingGetPostByPostIdAsync()
+        {
+
+            Guid guid = Guid.NewGuid();
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+            List<Post> postList = new List<Post>();
+            postList.Add(post);
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetPostByPostIdAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(post));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.GetPostByPostIdAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(post));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var GotPostByPostIdAsync = TheClassBeingTested.GetPostByPostIdAsync(post.PostID);
+
+
+            //Assert
+
+            Assert.Equal(guid, post.PostID);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingCreateLikeOnPostAsync()
+        {
+
+            Guid guid = Guid.NewGuid();
+
+            LikeDto? likedto = new LikeDto()
+            {
+                PostId = guid,
+            };
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+            List<Post> postList = new List<Post>();
+            postList.Add(post);
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.CreateLikeOnPostAsync(It.IsAny<LikeDto>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(true));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.CreateLikeOnPostAsync(It.IsAny<LikeDto>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(true));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var CreatedLikeOnPostAsync = TheClassBeingTested.CreateLikeOnPostAsync(likedto, "d44d63fc-ffa8-4eb7-b81d-644547136d30");
+
+
+            //Assert
+
+            Assert.True(true);
+
+
+        }
+
+
+
+        [Fact]
+        public void TestingDeleteLikeOnPostAsync()
+        {
+
+            Guid guid = Guid.NewGuid();
+
+            LikeDto? unlikedto = new LikeDto()
+            {
+                PostId = guid,
+            };
+
+            Post? post = new Post()
+            {
+                PostID = guid,
+                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+                Content = "I just bought some more APPL stock!",
+                Likes = 16,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+            List<Post> postList = new List<Post>();
+            postList.Add(post);
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.DeleteLikeOnPostAsync(It.IsAny<LikeDto>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(true));
+
+            var dataSource5 = new Mock<IConfiguration>();
+            dataSource
+                .Setup(p => p.DeleteLikeOnPostAsync(It.IsAny<LikeDto>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(true));
+
+            var TheClassBeingTested = new dbsRequests(dataSource5.Object);
+
+
+            //Act
+
+            var DeletedLikeOnPostAsync = TheClassBeingTested.DeleteLikeOnPostAsync(unlikedto, "d44d63fc-ffa8-4eb7-b81d-644547136d30");
+
+
+            //Assert
+
+            Assert.True(true);
+
+
+        }
     }
+
+        
 }
