@@ -39,26 +39,30 @@ describe('UserComponent', () => {
     fixture.detectChanges();
   });
 
-  
+  //Tests the H1 html element to be false
     it('test header1 to be false', () => {
       const data = fixture.nativeElement.querySelector('h1');
       expect(data).toBeFalsy();
   });
+  //Test the div with the row class to be false
    it('test div',()=>{
     const data = fixture.nativeElement.querySelector('.row');
     expect(data).toBeFalsy();
    });
+   //Test the entire UserComponent to be working
    it('should create userpage', () =>{
     const fixture =TestBed.createComponent(UserComponent)
     const user = fixture.debugElement.componentInstance;
     expect(user).toBeTruthy();
    });
-   it('should create header1',()=>{
+   //commented out for now
+   xit('should create header1',()=>{
     const fixture = TestBed.createComponent(UserComponent);
     fixture.detectChanges();
     const complied = fixture.debugElement.nativeElement.querySelector('#titleInterpolation');
     expect(complied).toBeTruthy;
   });
+  //Test the ProfileJson value to see if it's equal to ""
    it('testing profileJSON',()=>{
     expect(component.profileJson).toBe("")
    });
