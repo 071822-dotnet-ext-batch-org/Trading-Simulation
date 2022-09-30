@@ -179,4 +179,14 @@ h1 {
     background-color: rgb(125, 181, 236);
     color: rgb(109, 40, 174);
 }
-
+.margin{
+ margin-bottom: 150px;
+ 
+ 
+}
+.pagination{
+  text-align: center;
+  display: block;
+  margin-top:70px;
+ 
+}

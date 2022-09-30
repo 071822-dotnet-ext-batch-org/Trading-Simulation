@@ -91,7 +91,9 @@
     </div>
 </div>
 -->
+<div class="margin"> 
 <h1>News</h1>
+
  <div class="container-fluid mt-5">
     <div class="row">
       <div *ngFor="let d of topheadingDisplay | paginate : {itemsPerPage: 4, currentPage: p}">
@@ -103,6 +105,13 @@
         </div>
        
       </div>
+      
     </div>
+    
  </div>
- <pagination-controls (pageChange) = "p = $event" class="float-right"></pagination-controls>
+ <div class="pagination"> 
+  <pagination-controls (pageChange) = "p = $event" class="float-right"></pagination-controls>
+ </div>
+
+    
+</div>
