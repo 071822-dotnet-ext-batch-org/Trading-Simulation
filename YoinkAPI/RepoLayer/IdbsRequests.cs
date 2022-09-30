@@ -15,8 +15,8 @@ namespace RepoLayer
         Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold);
         Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys);
         Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto);
-        Task<Buy?> GetRecentBuyByPortfolioId(Guid? portfolioId); //Weird stufd with Assert //No async?
-        Task<Sell?> GetRecentSellByPortfolioId(Guid? fk_PortfolioID); //No async?
+        Task<Buy?> GetRecentBuyByPortfolioId(Guid? portfolioId);
+        Task<Sell?> GetRecentSellByPortfolioId(Guid? fk_PortfolioID);
 
         //Portfolio Section
         Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID);
@@ -36,11 +36,11 @@ namespace RepoLayer
         //Post
         Task<List<Post?>> GetAllPostAsync();
         Task<bool> CreatePostAsync(string auth0Id, CreatePostDto post);
-        Task<Post?> GetRecentPostByUserId(string auth0Id); // No Async?
+        Task<Post?> GetRecentPostByUserId(string auth0Id);
         Task<int> GetNumberOfCommentsByPostIdAsync(Guid? PostId); 
         Task<string?> GetUserWithPostIdAsync(Guid? postId); 
-        Task<bool> UpdatePostAsync(EditPostDto editPostDto); // this is "passing" even though this test doesnt exist in the repo layer
-        Task<Post?> GetPostByPostId(Guid? PostId); //No Async? // There are 2 GetPostByPostIds in the repo layer
+        Task<bool> UpdatePostAsync(EditPostDto editPostDto);
+        Task<Post?> GetPostByPostId(Guid? PostId);
         Task<bool> DeletePostAsync(Guid? postId); 
         Task<List<Post>> GetAllPostByUserIdAsync(string userId); 
         Task<Post?> GetPostByPostIdAsync(Guid? postId); 
