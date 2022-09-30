@@ -11,6 +11,14 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         _repoLayer = repoLayer;
     }
 
+    /// <summary>
+    /// This creates a new profile for a new user.
+    /// Takes nullable ProfileDto (name, email, picture, privacyLevel)
+    /// Requires logged in user via Auth0.
+    /// </summary>
+    /// <param name="auth0Id">contains authentication credentials</param>
+    /// <param name="p">ProfileDto</param>
+    /// <returns>new portfolio object</returns>
     public async Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p)
     {
         Profile? newProfile = null;
@@ -23,6 +31,12 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return newProfile;
     }
 
+    /// <summary>
+    /// Presents profile information to the user.
+    /// Retrieves user info for posts.
+    /// Requires logged in user via Auth0.        
+    /// </summary>
+    /// <returns>retrievedProfile Profile object</returns>
     public async Task<Profile?> GetProfileByUserIDAsync(string? auth0Id)
     {
         Profile? retrievedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
@@ -41,7 +55,14 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return updatedProfile;
     }
 
-
+    /// <summary>
+    /// Creates a new Portfolio for the user's profile.
+    /// Takes PortfolioDto (portfolioID, name, originalLiquid, and privacyLevel)
+    /// Requires logged in user via Auth0.      
+    /// </summary>
+    /// <param name="auth0Id">contains authentication credentials</param>
+    /// <param name="p">PortfolioDto</param>
+    /// <returns>new portfolio object</returns>
     public async Task<Portfolio?> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
     {
         Portfolio? updatedListOfPortfolios = null;
@@ -54,6 +75,11 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return updatedListOfPortfolios;
     }
 
+    /// <summary>
+    /// Allows user to edit their portfolio, things like name, privacyLevel, etc.
+    /// </summary>
+    /// <param name="p">PortfolioDto</param>
+    /// <returns>updated portfolio object, named editedPortfolio</returns>
     public async Task<Portfolio?> EditPortfolioAsync(Models.PortfolioDto p)
     {
         Portfolio? updatedPortfolio = null;
@@ -65,19 +91,36 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         }
         else return updatedPortfolio;
     }
+
+    /// <summary>
+    /// Retrieves Portfolio based on PortfolioID. 
+    /// Takes Guid of PortfolioID
+    /// Requires logged in user via Auth0.      
+    /// </summary>
+    /// <param name="portfolioID">Guid from database</param>
+    /// <returns>new portfolio object, named retrievedPortfolio</returns>
     public async Task<Portfolio?> GetPortfolioByPortfolioIDAsync(Guid? portfolioID)
     {
         Portfolio? portfolio = await this._repoLayer.GetPortfolioByPorfolioIDAsync(portfolioID);
         return portfolio;
     }
 
-
+    /// <summary>
+    /// Retrieves ALL portfolios from the database which match the User's ID.
+    /// Requires logged in user via Auth0.      
+    /// </summary>
+    /// <returns>new portfolio object</returns>
     public async Task<List<Portfolio?>> GetALLPortfoliosByUserIDAsync(string? auth0userID)
     {
         List<Portfolio?> getALL_portfolios = await this._repoLayer.GetALL_PortfoliosByUserIDAsync(auth0userID);
         return getALL_portfolios;
     }
 
+    /// <summary>
+    /// Adds user's purchase as a buy in the database.
+    /// </summary>
+    /// <param name="buy">BuyDto</param>
+    /// <returns>Newly created Buy object</returns>
     public async Task<Buy?> AddNewBuyAsync(BuyDto buy)
     {
         buy.CurrentPrice = buy.PriceBought;
@@ -104,54 +147,97 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
     }
 
+    /// <summary>
+    /// Returns all of user's buys for a particular Stock option (by symbol).
+    /// Sendes really likes underscores.
+    /// </summary>
+    /// <param name="buysDto">Get_BuysDto</param>
+    /// <returns>A list of Buy objects, named buyList.</returns>
     public async Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys)
     {
         List<Buy?> buyList = await this._repoLayer.GetAllBuyBySymbolAsync(AllBuys);
         return buyList;
     }
 
+    /// <summary>
+    /// Returns all of user's sells for a particular Stock option (by symbol).
+    /// </summary>
+    /// <param name="sellsDto">GetSellsDto</param>
+    /// <returns>A list of sell objects, named sellList.</returns>
     public async Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto)
     {
         List<Sell?> sellList = await this._repoLayer.GetAllSellBySymbolAsync(sellsDto);
         return sellList;
     }
 
+    /// <summary>
+    /// Retrieves an investment by its associated PortfolioID.
+    /// </summary>
+    /// <param name="investmentDto"></param>
+    /// <returns></returns>
     public async Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
     {
         Investment? investment = await this._repoLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
         return investment;
     }
 
+    /// <summary>
+    /// Retrieves (potentially) a list of Investment objects from the database by time.
+    /// </summary>
+    /// <param name="investmentByTime">GetInvestmentByTimeDto</param>
+    /// <returns>a list of Investment objects named returnedInvestment</returns>
     public async Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime)
     {
         List<Investment>? returnedInvestment = await this._repoLayer.GetInvestmentByTimeAsync(investmentByTime);
         return returnedInvestment;
     }
 
+    /// <summary>
+    /// Retrieves a count of users in the database.
+    /// </summary>
+    /// <returns>Integer count of users.</returns>
     public async Task<int> GetNumberOfUsersAsync()
     {
         int userCount = await this._repoLayer.GetNumberOfUsersAsync();
         return userCount;
     }
 
+    /// <summary>
+    /// Retrieves a count of all posts in the database.
+    /// </summary>
+    /// <returns>Integer count of posts.</returns>
     public async Task<int> GetNumberOfPostsAsync()
     {
         int userCount = await this._repoLayer.GetNumberOfPostsAsync();
         return userCount;
     }
 
+    /// <summary>
+    /// Retrieves a count of all buys in the database.
+    /// </summary>
+    /// <returns>Integer count of buys.</returns>
     public async Task<int> GetNumberOfBuysAsync()
     {
         int buysCount = await this._repoLayer.GetNumberOfBuysAsync();
         return buysCount;
     }
 
+    /// <summary>
+    /// Retrieves a count of all sells in the database.
+    /// </summary>
+    /// <returns>Integer count of sells.</returns>
     public async Task<int> GetNumberOfSellsAsync()
     {
         int sellsCount = await this._repoLayer.GetNumberOfSellsAsync();
         return sellsCount;
     }
 
+    /// <summary>
+    /// Allows the user to create a new post in the database.
+    /// Requires logged in user via Auth0.  
+    /// </summary>
+    /// <param name="post">CreatePostDto</param>
+    /// <returns>new Post object named createdPost.</returns>
     public async Task<Post?> CreatePostAsync(string auth0Id, CreatePostDto post)
     {
         //List<Post?> userList = null;    
@@ -164,6 +250,11 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return null;
     }
 
+    /// <summary>
+    /// Retrieves the full post feed from the database, ordered by time descending.
+    /// The reason for the PostWithCommentCountDto is because the database table Posts lacked a count (int) of Comments.
+    /// </summary>
+    /// <returns>List of post objects, named returnedPosts.</returns>
     public async Task<List<PostWithCommentCountDto>> GetAllPostAsync()
     {
         List<PostWithCommentCountDto> listWithCommentCount = new List<PostWithCommentCountDto>();
@@ -185,12 +276,23 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return listWithCommentCount;   
     }
 
+    /// <summary>
+    /// Retrieves all investments by the Portfolio's ID number.
+    /// </summary>
+    /// <param name="investmentDto">GetAllInvestmentsDto</param>
+    /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
     public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
     {
         List<Investment?> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
         return investments;
     }
 
+    /// <summary>
+    /// Allows user to update a created post in the database.
+    /// Requires logged in user via Auth0.  
+    /// </summary>
+    /// <param name="editPostDto">EditPostDto</param>
+    /// <returns>Updated post named editedPost</returns>
     public async Task<Post?> UpdatePostAsync(string? auth0UserId, EditPostDto editPostDto)
     {
         string? user = await this._repoLayer.GetUserWithPostIdAsync(editPostDto.PostId);
@@ -207,6 +309,12 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return null;
     }
 
+    /// <summary>
+    /// Allows the user to delete their own post.
+    /// Requires logged in user via Auth0.  
+    /// </summary>
+    /// <param name="postId">nullable Guid</param>
+    /// <returns>Confirmation of deletion.</returns>
     public async Task<Guid?> DeletePostAsync(string? auth0UserId, Guid? postId)
     {
         string? user = await this._repoLayer.GetUserWithPostIdAsync(postId);
@@ -222,6 +330,12 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return null;
     }
 
+    /// <summary>
+    /// Allows user to retrieve all Posts from a particular user, along with comment count.
+    /// Requires logged in user via Auth0.  
+    /// </summary>
+    /// <param name="userId">string</param>
+    /// <returns>A list of PostWithCommentCountDto containing the returned posts along with a count of comments. This is required because the database table named Posts did not include a count (int) of Comments.</returns>
     public async Task<List<PostWithCommentCountDto>> GetAllPostByUserIdAsync(string userId)
     {
         List<PostWithCommentCountDto> listWithCommentCount = new List<PostWithCommentCountDto>();
@@ -243,6 +357,12 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return listWithCommentCount;
     }
 
+    /// <summary>
+    /// Allows user to click on a post they want to see details about, and retrieve the applicable details, e.g., comments, etc.
+    /// Requires logged in user via Auth0.  
+    /// </summary>
+    /// <param name="postId"></param>
+    /// <returns>A PostWithCommentCountDto object, named returnedPost, containing the returned posts along with a count of comments. This is required because the database table named Posts did not include a count (int) of Comments.</returns>
     public async Task<PostWithCommentCountDto?> GetPostByPostIdAsync(Guid? postId)
     {
             //fills post object with retrieved post
@@ -272,6 +392,12 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return null;
     }
 
+    /// <summary>
+    /// Allows the user to like a post.
+    /// Requires logged in user via Auth0.  
+    /// </summary>
+    /// <param name="like"></param>
+    /// <returns>likeCount integer, (and triggers a +1 like to the Post on the Posts table in the database.)</returns>
     public async Task<int?> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
     {
         bool createdLike = await this._repoLayer.CreateLikeOnPostAsync(like, auth0UserId);
@@ -283,6 +409,11 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return null;
     }
 
+    /// <summary>
+    /// Deletes the user's like(s) on the selected post.
+    /// </summary>
+    /// <param name="unlike">LikeDto</param>
+    /// <returns>updated likeCount integer, (and triggers a -1 like to the Post on the Posts table in the database.)</returns>
     public async Task<int?> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
     {
         bool removedLike = await this._repoLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
@@ -293,6 +424,4 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         }
         return null;
     }
-
-
 }

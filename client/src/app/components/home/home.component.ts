@@ -26,8 +26,10 @@ result : string = '1' ;
   ngOnInit(): void {
     this.getNumberOfUsers()
     this.getNumberOfPosts()
+    this.getNumberOfSells()
+    this.getNumberOfBuys()
   }
-  //method for number of users for home page card at bottom of page in the "Check us out section"
+  //Beverly - method for number of users for home page card at bottom of page in the "Check us out section"
   getNumberOfUsers():void{
     this.homeService.getNumberOfUsers()
     .subscribe(numberOfUsers => {
@@ -35,7 +37,7 @@ result : string = '1' ;
       console.log(numberOfUsers)
     });
   }
-  //method for number of posts for home page card at the bottom of page in the "Check us out section"
+  //Beverly - method for number of posts for home page card at the bottom of page in the "Check us out section"
   getNumberOfPosts():void{
     this.homeService.getNumberOfPosts()
     .subscribe(numberOfPosts => {
@@ -43,7 +45,7 @@ result : string = '1' ;
       console.log(numberOfPosts)
     });
   }
-  //method for number of buys for the home page card at the bottom of page in the "Check us out section"
+  //Beverly - method for number of buys for the home page card at the bottom of page in the "Check us out section"
   getNumberOfBuys():void{
     this.homeService.getNumberOfBuys()
     .subscribe(numberOfBuys => {
@@ -51,7 +53,7 @@ result : string = '1' ;
       console.log(numberOfBuys)
     });
   }
-
+  //Beverly - method for number of sells for the home page card at the bottom of page in the "Check us out section"
   getNumberOfSells():void{
     this.homeService.getNumberOfSells()
     .subscribe(numberOfSells => {
@@ -59,6 +61,7 @@ result : string = '1' ;
       console.log(numberOfSells)
     });
   }
+
   changebase(a : string){
     this.base = a;
     console.log(this.base)
