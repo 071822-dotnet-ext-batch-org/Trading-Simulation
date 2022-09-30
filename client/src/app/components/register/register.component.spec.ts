@@ -40,14 +40,16 @@ describe('RegisterComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
+//Test will check if the component is working
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+//Test will check if the anchor tag is working
   it('test buttion', ()=>{
     let data = fixture.nativeElement.querySelector('a')
     expect(data.textContent).toBeTruthy();
   })
+//Test will check if anchor tag is working
   it('test buttion', ()=>{
     let data = fixture.nativeElement.querySelector('a')
     expect(component.register).toBeTruthy();
