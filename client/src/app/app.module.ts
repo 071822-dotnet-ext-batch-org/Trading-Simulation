@@ -28,7 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
 
-
+import { HomeService } from './Services/home/home.service';
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SigninComponent } from './components/signin/signin.component';
@@ -97,7 +97,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
           env.baseURL + '/create-portfolio',
           env.baseURL + '/all-investments',
           env.baseURL + '/create-buy',
-          env.baseURL + '/create-sell'
+          env.baseURL + '/create-sell',
         ], //for now
       }
 

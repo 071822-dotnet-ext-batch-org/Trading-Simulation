@@ -87,6 +87,7 @@
 .explore{
   font-size: 20px;
   color:rgb(32, 32, 76);
+  text-align: center;
 }
 .check{
   font-size: 20px;
@@ -100,7 +101,6 @@
     max-width: 400px;
   }
   .main-container{
-    background-color: rgb(red, green, blue);
     width: 350px;
     border-radius:10px;
     display: center;
@@ -119,7 +119,21 @@
     text-align: center;
   }
  
- 
+  .currencyconverter{
+    display:flex;
+    justify-content: center;
+  }
+  .margin{
+    margin-bottom: 150px;
+  }
+
+  .highest{
+    display: flex;
+    justify-content: center;
+  }
+  
+
+
   
   
  
