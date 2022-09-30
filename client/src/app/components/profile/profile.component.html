@@ -1,7 +1,5 @@
 <div class="container">
-    <mat-card class="card">
-
-        <mat-card-header *ngIf="profile">
+    <mat-card class="card">        <mat-card-header *ngIf="profile">
             <img mat-card-avatar src={{this.profile.picture}}>
             <mat-card-title>Name: {{this.profile.name}}</mat-card-title>
             <mat-card-subtitle>E-mail: {{this.profile.email}}</mat-card-subtitle>
@@ -11,10 +9,5 @@
         <div><button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="createProfile(); isClicked=true" *ngIf="!profile">Create Profile</button></div>
         <div><button style="font-size:large" mat-button color="primary" [disabled]="isClicked" (click)="editProfile(profile); isClicked=true">Edit Profile</button></div>
 <app-edit-profile [profile]="profileToEdit" (profileUpdated)="updateProfileList($event)">Save</app-edit-profile>
-       
-    
-
-<!-- <button style="font-size:large" mat-button color="primary" (click)="updateProfile()">Update Profile</button> -->
-
 
 

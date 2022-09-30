@@ -2,6 +2,9 @@ using System;
 
 namespace Models
 {
+    /// <summary>
+    /// This is the model for Profile
+    /// </summary>
     public class Profile
     {
 
@@ -12,10 +15,22 @@ namespace Models
         public string? Picture { get; set; }
         public int? PrivacyLevel { get; set; }
 
+        /// <summary>
+        /// The default constructor for a Profile
+        /// </summary>
         public Profile()
         {
         }
 
+        /// <summary>
+        /// This constructor must have parameters to create a Profile
+        /// </summary>
+        /// <param name="profileID"></param>
+        /// <param name="fk_UserID"></param>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="picture"></param>
+        /// <param name="privacyLevel"></param>
         public Profile(Guid? profileID, string? fk_UserID, string? name, string? email, string? picture, int? privacyLevel)
         {
             this.ProfileID = profileID;

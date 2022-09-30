@@ -52,7 +52,7 @@ namespace Test.Yoink
         {
             //Arrange
             Guid TestpostID = new Guid();
-            Guid TestFk_UserID = new Guid();
+            string? TestFk_UserID = "UserID";
 
             //Act
             Post TestPost1 = new Post(TestpostID, "TestFk_UserID", "Sold big", 1, 2, new DateTime(), new DateTime());
@@ -336,7 +336,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -366,7 +366,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -425,7 +425,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -455,7 +455,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -518,11 +518,11 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
-            SellDto getInvesttime = new SellDto(guid, "GOOGL", 30, 700, 300);
+            SellDto getInvesttime = new SellDto(guid, "GOOGL", 30, 700);
 
             SellDto getInvesttime2 = new SellDto()
             {
@@ -530,7 +530,6 @@ namespace Test.Yoink
                 Symbol = "GOOGL",
                 AmountSold = 30,
                 PriceSold = 700,
-                PNL = 300,
                 
 
             };

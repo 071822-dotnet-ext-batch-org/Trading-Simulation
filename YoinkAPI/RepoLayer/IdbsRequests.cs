@@ -24,7 +24,7 @@ namespace RepoLayer
         Task<Portfolio?> GetRecentPortfoliosByUserIDAsync(string auth0Id);
         Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p);
         Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto);
-        Task<List<Investment>?> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime);
+        Task<List<Investment?>> GetInvestmentByTimeAsync(GetInvestmentByTimeDto investmentByTime);
         Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
         //Homepage
@@ -34,9 +34,9 @@ namespace RepoLayer
         Task<int> GetNumberOfSellsAsync();
 
         //Post
+        Task<List<Post?>> GetAllPostAsync();
         Task<bool> CreatePostAsync(string auth0Id, CreatePostDto post);
         Task<Post?> GetRecentPostByUserId(string auth0Id);
-        Task<List<Post>> GetAllPostAsync();
         Task<int> GetNumberOfCommentsByPostIdAsync(Guid? PostId);
         Task<string?> GetUserWithPostIdAsync(Guid? postId);
         Task<bool> UpdatePostAsync(EditPostDto editPostDto);
