@@ -12,7 +12,7 @@ namespace BusinessLayer
     {
         //Buy and Sell Section
         Task<Buy?> AddNewBuyAsync(BuyDto buy);
-        Task<Sell?> AddNewSellAsync(Sell sell);
+        Task<Sell?> AddNewSellAsync(SellDto sell);
         Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys);
         Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto);
 
@@ -42,5 +42,6 @@ namespace BusinessLayer
         Task<Post?> CreatePostAsync(string auth0Id, CreatePostDto post);
         Task<List<PostWithCommentCountDto>> GetAllPostAsync();
         Task<Post?> UpdatePostAsync(string? auth0UserId, EditPostDto editPostDto);
+        Task<Guid?> DeletePostAsync(string? auth0UserId, Guid? postId);
     }
 }

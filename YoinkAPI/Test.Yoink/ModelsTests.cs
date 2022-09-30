@@ -1,4 +1,5 @@
 using Models;
+using Models.ModelDTOs.BackToFrontEnd;
 using System;
 
 namespace Test.Yoink
@@ -54,6 +55,7 @@ namespace Test.Yoink
             string? TestFk_UserID = "UserID";
 
             //Act
+<<<<<<< HEAD
             Post TestPost1 = new Post(TestpostID, TestFk_UserID, "Sold big", 0,  2, new DateTime(), new DateTime());
             Post TestPost = new Post()
             { PostID = TestpostID, 
@@ -63,11 +65,27 @@ namespace Test.Yoink
               PrivacyLevel = 2,
               DateCreated = DateTime.Now,
               DateModified = DateTime.Now,
+=======
+            Post TestPost1 = new Post(TestpostID, "TestFk_UserID", "Sold big", 1, 2, new DateTime(), new DateTime());
+            
+            Post TestPost = new Post 
+            { 
+
+              PostID = TestpostID, 
+              Fk_UserID = "TestFk_UserID",
+              Content = "Sold big",
+              Likes = 1,
+              PrivacyLevel = 2,
+              DateCreated = new DateTime(),
+              DateModified = new DateTime(),
+
+
+>>>>>>> bd7cbb34af56558f6fa1c058885f9c2daccdd260
             };
 
             //Assert
             Assert.Equal(TestpostID, TestPost.PostID);
-            Assert.Equal(TestFk_UserID, TestPost.Fk_UserID);
+            Assert.Equal("TestFk_UserID", TestPost.Fk_UserID);
         }
 
 
@@ -537,6 +555,158 @@ namespace Test.Yoink
         }
 
 
+        [Fact]
+        public void CreatPostDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            CreatePostDto createpostdto = new CreatePostDto("Hello World", 2);
+
+            CreatePostDto createpostdto2 = new CreatePostDto()
+            {
+                Content = "Hello World",
+                PrivacyLevel= 2,
+             
+            };
+
+
+            //Assert
+
+            Assert.Equal(2, createpostdto.PrivacyLevel);
+            Assert.Equal(2, createpostdto2.PrivacyLevel);
+
+        }
+
+
+
+        [Fact]
+        public void EditPostDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            EditPostDto editpostdto = new EditPostDto(guid, "Hello World", 2);
+
+            EditPostDto editpostdto2 = new EditPostDto()
+            { 
+                PostId = guid,
+                Content = "Hello World",
+                PrivacyLevel = 2,
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(2, editpostdto.PrivacyLevel);
+            Assert.Equal(2, editpostdto.PrivacyLevel);
+
+        }
+
+
+        [Fact]
+        public void GetAllInvestmentsDtoWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            GetAllInvestmentsDto getallInvestmentdto = new GetAllInvestmentsDto(guid);
+
+            GetAllInvestmentsDto getallInvestmentdto2 = new GetAllInvestmentsDto()
+            {
+                PortfolioID = guid,
+               
+            };
+
+
+            //Assert
+
+            Assert.Equal(getallInvestmentdto.PortfolioID, guid);
+            Assert.Equal(getallInvestmentdto.PortfolioID, guid);
+
+        }
+
+
+        [Fact]
+        public void GetProfileDtoDtoWorksCorrectly()
+        {
+
+            //Arrange
+
+            String UserID = "45678788";
+
+
+            //Act
+            GetProfileDto getProfileDto = new GetProfileDto(UserID);
+
+            GetProfileDto getProfileDto2 = new GetProfileDto()
+            {
+                UserID = UserID,
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(UserID, getProfileDto.UserID);
+            Assert.Equal(UserID, getProfileDto2.UserID);
+
+        }
+
+
+        [Fact]
+        public void PostWithCommentCountDtoWorksCorrectly()
+        {
+
+            //Arrange
+            Guid guid = new Guid();
+            DateTime DT = new DateTime();
+
+
+            //Act
+            PostWithCommentCountDto postcommentcountDto = new PostWithCommentCountDto(guid, "7899999", "Hello World", 6, 7, 3, DT, DT);
+
+            PostWithCommentCountDto postcommentcountDto2 = new PostWithCommentCountDto()
+            {
+                PostID = guid,
+                Fk_UserID = "7899999",
+                Content = "Hello World",
+                Likes = 6,
+                Comments = 7,
+                PrivacyLevel = 3,
+                DateCreated = DT,
+                DateModified = DT,
+
+
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(postcommentcountDto.PostID, guid);
+            Assert.Equal(postcommentcountDto2.PostID, guid);
+
+        }
 
 
     }

@@ -90,14 +90,15 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         else return (null);
     }
 
-    public async Task<Sell?> AddNewSellAsync(Sell sell)
+    public async Task<Sell?> AddNewSellAsync(SellDto sell)
     {
         //fix null bool in repo
-        bool? check = await this._repoLayer.AddNewSellAsync(sell.Fk_PortfolioID, sell.Symbol, sell.AmountSold, sell.PriceSold, sell.DateSold);
+        bool? check = await this._repoLayer.AddNewSellAsync(sell.Fk_PortfolioID, sell.Symbol, sell.AmountSold, sell.PriceSold);
 
         if (true == check)
         {
-            return (sell);
+            Sell? createdSell = await this._repoLayer.GetRecentSellByPortfolioId(sell.Fk_PortfolioID);
+            return (createdSell);
         }
         else return (null);
 
@@ -205,5 +206,21 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         }
         else return null;
     }
+
+    public async Task<Guid?> DeletePostAsync(string? auth0UserId, Guid? postId)
+    {
+        string? user = await this._repoLayer.GetUserWithPostIdAsync(postId);
+        if (auth0UserId == user)
+        {
+            bool deletePostCheck = await this._repoLayer.DeletePostAsync(postId);
+            if (deletePostCheck)
+            {
+                return postId;
+            }
+            else return null;
+        }
+        else return null;
+    }
+
 
 }

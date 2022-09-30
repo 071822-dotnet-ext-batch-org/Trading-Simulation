@@ -283,6 +283,7 @@ namespace Test.Yoink
         {
 
             //Arrange
+<<<<<<< HEAD
             BuyDto makeBuyOrder = new BuyDto()
             {
                 portfolioId = Guid.NewGuid(),
@@ -291,11 +292,20 @@ namespace Test.Yoink
                 AmountBought = 1000000,
                 PriceBought = 12
             };
+=======
+            Guid guid = new Guid();
+>>>>>>> bd7cbb34af56558f6fa1c058885f9c2daccdd260
 
             Get_BuysDto AllBuys = new Get_BuysDto()
             {
                 Symbol = "GOOGL",
                        
+            };
+
+            BuyDto buydto = new BuyDto()
+            {
+                Symbol = "GOOGL",
+
             };
 
             Buy? buy = new Buy()
@@ -324,6 +334,8 @@ namespace Test.Yoink
                 .Setup(b => b.AddNewBuyAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
                 .Returns(Task.FromResult(true));
 
+           
+
             var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
             var TheClassBeingTested2 = new YoinkBusinessLayer(dataSource2.Object);
 
@@ -331,9 +343,13 @@ namespace Test.Yoink
 
             var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
 
+<<<<<<< HEAD
             var NewBuyWasAdded = TheClassBeingTested.AddNewBuyAsync(makeBuyOrder);
 
             var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(makeBuyOrder);
+=======
+            var NewBuyWasAddedBool = TheClassBeingTested2.AddNewBuyAsync(buydto);
+>>>>>>> bd7cbb34af56558f6fa1c058885f9c2daccdd260
 
             //Assert
 

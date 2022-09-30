@@ -12,10 +12,11 @@ namespace RepoLayer
 
         //Buy and Sell Section
         Task<bool> AddNewBuyAsync(Guid? PortfolioId, string? Symbol, decimal? CurrentPrice, decimal? AmountBought, decimal? PriceBought);
-        Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold);
+        Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold);
         Task<List<Buy?>> GetAllBuyBySymbolAsync(Models.Get_BuysDto AllBuys);
         Task<List<Sell?>> GetAllSellBySymbolAsync(Models.GetSellsDto sellsDto);
         Task<Buy?> GetRecentBuyByPortfolioId(Guid? portfolioId);
+        Task<Sell?> GetRecentSellByPortfolioId(Guid? fk_PortfolioID);
 
         //Portfolio Section
         Task<Portfolio?> GetPortfolioByPorfolioIDAsync(Guid? porfolioID);
@@ -40,5 +41,6 @@ namespace RepoLayer
         Task<string?> GetUserWithPostIdAsync(Guid? postId);
         Task<bool> UpdatePostAsync(EditPostDto editPostDto);
         Task<Post?> GetPostByPostId(Guid? PostId);
+        Task<bool> DeletePostAsync(Guid? postId);
     }
 }

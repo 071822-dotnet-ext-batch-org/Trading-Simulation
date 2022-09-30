@@ -236,15 +236,14 @@ namespace RepoLayer
         }
 
 
-        public async Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold, DateTime? dateSold)
+        public async Task<bool> AddNewSellAsync(Guid? PortfolioId, string? Symbol, decimal? amountSold, decimal? priceSold)
         {
-            using (SqlCommand command = new SqlCommand("INSERT INTO Sells (fk_Portfolio, symbol, amountSold, priceSold, dateSold) VALUES (@portfolioid, @symbol, @amountSold, @priceSold, @dateSold)", _conn))
+            using (SqlCommand command = new SqlCommand("INSERT INTO Sells (fk_portfolioID, symbol, amountSold, priceSold) VALUES (@portfolioid, @symbol, @amountSold, @priceSold)", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioid", PortfolioId);
                 command.Parameters.AddWithValue("@symbol", Symbol);
                 command.Parameters.AddWithValue("@amountSold", amountSold);
                 command.Parameters.AddWithValue("@priceSold", priceSold);
-                command.Parameters.AddWithValue("@dateSold", dateSold);
 
                 _conn.Open();
                 int ret = await command.ExecuteNonQueryAsync();
@@ -597,7 +596,42 @@ namespace RepoLayer
             }
         }
 
+        public async Task<bool> DeletePostAsync(Guid? postId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM Posts WHERE postID=@PostId", _conn))
+            {
+                command.Parameters.AddWithValue("@PostId", postId);
+                _conn.Open();
 
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        public async Task<Sell?> GetRecentSellByPortfolioId(Guid? fk_PortfolioID)
+        {
+            using (SqlCommand command = new SqlCommand($"Select TOP (1) * FROM Sells WHERE fk_portfolioID = @portfolioId ORDER BY dateSold DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioId", fk_PortfolioID);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                Sell? recentSell = null;
+                if (ret.Read())
+                {
+                    recentSell = new Sell(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDateTime(5));
+
+                }
+
+                _conn.Close();
+                return recentSell;
+            }
+        }
 
 
     }
