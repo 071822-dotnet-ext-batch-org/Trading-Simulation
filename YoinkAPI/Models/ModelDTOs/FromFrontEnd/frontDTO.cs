@@ -11,9 +11,7 @@ namespace Models
     public class PortfolioDto
     {
         public Guid? PortfolioID {get;set;}
-        // public string? UserID {get;set;}
         public string? Name { get; set; } 
-        // public decimal? CurrentInvestment { get; set; } //These three values will be used case by case - Just depending on which amount needs to be udated
         public decimal? OriginalLiquid { get; set; }// Each one is optional so we wont get a callback if its empty - original liquid value given
         public int? PrivacyLevel { get; set; } 
 
@@ -36,7 +34,6 @@ namespace Models
             this.OriginalLiquid = originalLiquid;
             this.PrivacyLevel = privacyLevel;
         }
-        // public decimal? Liquid { get; set; }// Current portfolio liquad value
     }//End of Portfolio from front end to update portfolio in DB
 
     /// <summary>
