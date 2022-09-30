@@ -190,4 +190,14 @@ namespace Models
         }
     }
 
+    public class LikeDto
+    {
+        public Guid PostId { get; set; }
+        public LikeDto() { }
+        public LikeDto(Guid PostId)
+        {
+            this.PostId = PostId;
+        }
+    }
+
 }

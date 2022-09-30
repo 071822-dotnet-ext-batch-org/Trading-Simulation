@@ -42,5 +42,9 @@ namespace RepoLayer
         Task<bool> UpdatePostAsync(EditPostDto editPostDto);
         Task<Post?> GetPostByPostId(Guid? PostId);
         Task<bool> DeletePostAsync(Guid? postId);
+        Task<List<Post>> GetAllPostByUserIdAsync(string userId);
+        Task<Post?> GetPostByPostIdAsync(Guid? postId);
+        Task<bool> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId);
+        Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId);
     }
 }
