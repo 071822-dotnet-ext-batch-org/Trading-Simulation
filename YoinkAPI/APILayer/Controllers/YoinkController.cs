@@ -148,6 +148,7 @@ namespace APILayer.Controllers
 
         /// <summary>
         /// Allows user to edit their portfolio, things like name, privacyLevel, etc.
+        /// Requires logged in user via Auth0.  
         /// </summary>
         /// <param name="p">PortfolioDto</param>
         /// <returns>updated portfolio object, named editedPortfolio</returns>
@@ -164,6 +165,7 @@ namespace APILayer.Controllers
 
         /// <summary>
         /// Adds user's purchase as a buy in the database.
+        /// Requires logged in user via Auth0.  
         /// </summary>
         /// <param name="buy">BuyDto</param>
         /// <returns>Newly created Buy object</returns>
@@ -180,6 +182,7 @@ namespace APILayer.Controllers
 
         /// <summary>
         /// Adds user's sell transaction as a sell in the database.
+        /// Requires logged in user via Auth0.  
         /// </summary>
         /// <param name="sell"></param>
         /// <returns>Newly created sell object</returns>
@@ -196,6 +199,7 @@ namespace APILayer.Controllers
 
         /// <summary>
         /// Returns all of user's buys for a particular Stock option (by symbol).
+        /// Requires logged in user via Auth0.  
         /// Sendes really likes underscores.
         /// </summary>
         /// <param name="buysDto">Get_BuysDto</param>
@@ -213,6 +217,7 @@ namespace APILayer.Controllers
 
         /// <summary>
         /// Returns all of user's sells for a particular Stock option (by symbol).
+        /// Requires logged in user via Auth0.  
         /// </summary>
         /// <param name="sellsDto">GetSellsDto</param>
         /// <returns>A list of sell objects, named sellList.</returns>
@@ -228,10 +233,11 @@ namespace APILayer.Controllers
         }
 
         /// <summary>
-        /// Retrieves a single investment by the Portfolio's ID number.
+        /// Retrieves a single investment by the Portfolio's ID number and symbol.
+        /// Requires logged in user via Auth0.  
         /// </summary>
         /// <param name="investmentDto">Models.GetInvestmentDto</param>
-        /// <returns>Investment object populated with data from investmentDto named investment.</returns>
+        /// <returns>Investment object based on user's input.</returns>
         [HttpPost("single-investment")]
         public async Task<ActionResult<Investment?>> GetSingleInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto)
         {
@@ -245,6 +251,7 @@ namespace APILayer.Controllers
 
         /// <summary>
         /// Retrieves all investments by the Portfolio's ID number.
+        /// Requires logged in user via Auth0.  
         /// </summary>
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
@@ -260,7 +267,8 @@ namespace APILayer.Controllers
         }
 
         /// <summary>
-        /// Retrieves (potentially) a list of Investment objects from the database by time.
+        /// Retrieves a list of Investment objects from the database by time.
+        /// Requires logged in user via Auth0.  
         /// </summary>
         /// <param name="investmentByTime">GetInvestmentByTimeDto</param>
         /// <returns>a list of Investment objects named returnedInvestment</returns>
@@ -273,8 +281,12 @@ namespace APILayer.Controllers
                 return Ok(returnedInvestment);
             }
             return BadRequest(investmentByTime);
-        }
+        }//*
 
+        /// <summary>
+        /// Retrieves a count of users in the database.
+        /// </summary>
+        /// <returns>Integer count of users.</returns>
         [AllowAnonymous]
         [HttpGet("number-of-users")]
         public async Task<ActionResult<int>> GetNumberOfUsersAsync()
@@ -283,6 +295,10 @@ namespace APILayer.Controllers
             return Ok(userCount);   
         }
 
+        /// <summary>
+        /// Retrieves a count of all posts in the database.
+        /// </summary>
+        /// <returns>Integer count of posts.</returns>
         [AllowAnonymous]
         [HttpGet("number-of-posts")]
         public async Task<ActionResult<int>> GetNumberOfPostsAsync()
@@ -291,6 +307,10 @@ namespace APILayer.Controllers
             return Ok(postCount);
         }
 
+        /// <summary>
+        /// Retrieves a count of all buys in the database.
+        /// </summary>
+        /// <returns>Integer count of buys.</returns>
         [AllowAnonymous]
         [HttpGet("number-of-buys")]
         public async Task<ActionResult<int>> GetNumberOfBuysAsync()
@@ -299,7 +319,10 @@ namespace APILayer.Controllers
             return Ok(buyCount);
         }
 
-
+        /// <summary>
+        /// Retrieves a count of all sells in the database.
+        /// </summary>
+        /// <returns>Integer count of sells.</returns>
         [AllowAnonymous]
         [HttpGet("number-of-sells")]
         public async Task<ActionResult<int>> GetNumberOfSellsAsync()
@@ -308,7 +331,12 @@ namespace APILayer.Controllers
             return Ok(sellCount);
         }
 
-        
+        /// <summary>
+        /// Allows the user to create a new post in the database.
+        /// Requires logged in user via Auth0.  
+        /// </summary>
+        /// <param name="post">CreatePostDto</param>
+        /// <returns>new Post object named createdPost.</returns>
         [HttpPost("create-post")]
         public async Task<ActionResult<Post?>> CreatePostAsync(CreatePostDto post)
         {
@@ -321,6 +349,10 @@ namespace APILayer.Controllers
             return BadRequest(post);
         }
 
+        /// <summary>
+        /// Retrieves the full post feed from the database, ordered by time descending.
+        /// </summary>
+        /// <returns>List of post objects, named returnedPosts.</returns>
         [AllowAnonymous]
         [HttpGet("get-all-post")]
         public async Task<ActionResult<List<PostWithCommentCountDto>>> GetAllPostsAsync()
@@ -329,6 +361,12 @@ namespace APILayer.Controllers
             return Ok(returnedPosts);
         }
 
+        /// <summary>
+        /// Allows user to update a created post in the database.
+        /// Requires logged in user via Auth0.  
+        /// </summary>
+        /// <param name="editPostDto">EditPostDto</param>
+        /// <returns>Updated post named editedPost</returns>
         [HttpPut("edit-post")]
         public async Task<ActionResult<Post?>> UpdatePostAsync(EditPostDto editPostDto)
         {
@@ -337,6 +375,12 @@ namespace APILayer.Controllers
             return Ok(editedPost);
         }
 
+        /// <summary>
+        /// Allows the user to delete their own post.
+        /// Requires logged in user via Auth0.  
+        /// </summary>
+        /// <param name="postId">nullable Guid</param>
+        /// <returns>Confirmation of deletion.</returns>
         [HttpDelete("delete-post")]
         public async Task<ActionResult<Post?>> DeletePostAsync(Guid? postId)
         {
@@ -345,7 +389,12 @@ namespace APILayer.Controllers
             return Ok(deletedPostId);
         }
 
-
+        /// <summary>
+        /// Allows user to retrieve all Posts from a particular user, along with comment count.
+        /// Requires logged in user via Auth0.  
+        /// </summary>
+        /// <param name="userId">string</param>
+        /// <returns>A list of PostWithCommentCountDto containing the returned posts along with a count of comments. This is required because the database table named Posts did not include a count (int) of Comments.</returns>
         [HttpPost("get-userposts")]
         public async Task<ActionResult<List<PostWithCommentCountDto?>>> GetAllPostByUserIdAsync(string userId)
         {
@@ -353,6 +402,12 @@ namespace APILayer.Controllers
             return Ok(returnedPosts);
         }
 
+        /// <summary>
+        /// Allows user to click on a post they want to see details about, and retrieve the applicable details, e.g., comments, etc.
+        /// Requires logged in user via Auth0.  
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns>A PostWithCommentCountDto object, named returnedPost, containing the returned posts along with a count of comments. This is required because the database table named Posts did not include a count (int) of Comments.</returns>
         [HttpPost("get-post")]
         public async Task<ActionResult<PostWithCommentCountDto?>> GetPostByPostIdAsync(Guid? postId)
         {
@@ -360,6 +415,12 @@ namespace APILayer.Controllers
             return Ok(returnedPost);
         }
 
+        /// <summary>
+        /// Allows the user to like a post.
+        /// Requires logged in user via Auth0.  
+        /// </summary>
+        /// <param name="like"></param>
+        /// <returns>likeCount integer, (and triggers a +1 like to the Post on the Posts table in the database.)</returns>
         [HttpPost("add-like-on-post")]
         public async Task<ActionResult<int?>> CreateLikeOnPostAsync(LikeDto like)
         {
@@ -372,6 +433,11 @@ namespace APILayer.Controllers
             else return BadRequest("Like did not get added");
         }
 
+        /// <summary>
+        /// Deletes the user's like(s) on the selected post.
+        /// </summary>
+        /// <param name="unlike">LikeDto</param>
+        /// <returns>updated likeCount integer, (and triggers a -1 like to the Post on the Posts table in the database.)</returns>
         [HttpDelete("remove-like-on-post")]
         public async Task<ActionResult<int?>> DeleteLikeOnPostAsync(LikeDto unlike)
         {
