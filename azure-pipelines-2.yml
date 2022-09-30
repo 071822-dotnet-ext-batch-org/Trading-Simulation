@@ -34,16 +34,17 @@ steps:
     workingDir: client
     verbose: false
 
-- task: RaulARuiz.angular-cli-1.angular-cli-build-task.AngularCLI@1
-  displayName: 'ng build'
+- task: AngularCLI@1
   inputs:
-    project: client
+    command: 'build'
+    project: 'client'
+    DisableAnalytics: false
 
-- task: RaulARuiz.angular-cli-1.angular-cli-build-task.AngularCLI@1
-  displayName: 'ng test'
+- task: AngularCLI@1
   inputs:
-    command: test
-    project: client
+    command: 'test'
+    project: 'client'
+    DisableAnalytics: false
 
 - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
