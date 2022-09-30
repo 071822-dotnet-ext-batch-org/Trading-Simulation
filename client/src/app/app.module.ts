@@ -45,11 +45,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
+ 
+import { NgxPaginationModule } from 'ngx-pagination';
+ 
+ 
+ 
 import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { InvestmentsComponent } from './components/investments/investments.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
+ 
 
 @NgModule({
   declarations: [
@@ -76,7 +82,12 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+ 
+    NgxPaginationModule,
+ 
+ 
     CdkAccordionModule,
+ 
     FormsModule,
     HttpClientModule,
     MatDialogModule,
