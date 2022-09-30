@@ -25,9 +25,6 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
    this.ProService.getProfiles().subscribe(data => {
     this.profile = data;
-    if(this.profile) {
-      this.router.NavBarComponent
-    }
    });   
   }
 

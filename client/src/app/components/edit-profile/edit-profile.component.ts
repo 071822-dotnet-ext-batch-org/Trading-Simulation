@@ -10,7 +10,6 @@ import { UpdateProfileService } from 'src/app/Services/update-profile-service/up
 export class EditProfileComponent implements OnInit {
   @Input() profile?: Profile;
   @Output() profileUpdated = new EventEmitter<Profile>();
-  isChecked = true;
 
 
   constructor(private UpdatePro: UpdateProfileService) { }

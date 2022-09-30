@@ -11,7 +11,7 @@ export class GetPostsService {
 
   constructor(private http: HttpClient) { }
 
- public getAllPosts(): Observable<Post[]> {
+  getAllPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(environment.baseURL + '/get-all-post');
   }
 }

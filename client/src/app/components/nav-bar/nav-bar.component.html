@@ -14,12 +14,11 @@
     
     <a><button style="font-size:large" mat-button color="" [routerLink]="'/Posts'">Posts</button></a>
 
-    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'" *ngIf="auth.user$ | async as user">Friends</button></a> (Stretch goal)-->
-    
+
+    <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'" *ngIf="auth.user$ | async as user">Friends</button></a> -->
     <a style="font-size:large" routerLink="/user" routerLinkActive="active" *ngIf="auth.user$ | async as user">{{ user.name }} <img [src]="user.picture"alt="Profile Pic" width="25" height="25">
-    <!-- If logged in user is authorized user by Auth0, then it will display user user's name and avatar. Also this button will take the user to the user page. User page and Profile page (they are seperate components). User page contains profile page. (sam)  -->
     </a>
-    <app-auth-button></app-auth-button> <!--  auth-buttons is a container component for user buttons (login, logout, register) (sam) -->
+    <app-auth-button></app-auth-button>
 
   </div>
 </nav>
