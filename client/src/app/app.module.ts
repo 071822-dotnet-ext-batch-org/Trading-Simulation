@@ -21,11 +21,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { MatTableModule } from '@angular/material/table';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
 
-
+import { HomeService } from './Services/home/home.service';
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SigninComponent } from './components/signin/signin.component';
@@ -33,24 +36,25 @@ import { SignOutComponent } from './components/sign-out/sign-out.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserComponent } from './components/user/user.component';
- 
- 
- 
 import { NewsComponent } from './components/news/news.component';
-import { NewsService } from './service/news.service';
+import { NewsService } from './Services/news/news.service';
 import { ProfileComponent } from './components/profile/profile.component';
- 
-
-import { baseURL } from './Services/base-url';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
-import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
+ 
 import { NgxPaginationModule } from 'ngx-pagination';
  
+ 
+ 
+import { environment as env } from 'src/environments/environment';
+import { PostsComponent } from './components/posts/posts.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
+import { InvestmentsComponent } from './components/investments/investments.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
  
 
 @NgModule({
@@ -68,31 +72,42 @@ import { NgxPaginationModule } from 'ngx-pagination';
     UserComponent,
     NewsComponent,
     ProfileComponent,
-    HomeLayoutComponent,
     CreatePortfolioModalComponent,
+    PostsComponent,
+    PostCardComponent,
+    InvestmentsComponent,
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+ 
     NgxPaginationModule,
+ 
+ 
+    CdkAccordionModule,
  
     FormsModule,
     HttpClientModule,
     MatDialogModule,
- 
+    MatTableModule,
+    ReactiveFormsModule,
     AuthModule.forRoot({
       domain: 'dev-pxtkabk5.us.auth0.com',
       clientId: 'XpigNZhlmh9GXncdhIqEy26BhT0M18yI',
       audience: 'https://localhost:7280/api/Yoink',
       httpInterceptor: {
         allowedList: [
-          baseURL + '/create-profile',
-          baseURL + '/my-profile',
-          baseURL + '/edit-profile',
-          baseURL + '/my-portfolios',
-          baseURL + '/create-portfolio'
-         ], //for now
+          env.baseURL + '/create-profile',
+          env.baseURL + '/my-profile',
+          env.baseURL + '/edit-profile',
+          env.baseURL + '/my-portfolios',
+          env.baseURL + '/create-portfolio',
+          env.baseURL + '/all-investments',
+          env.baseURL + '/create-buy',
+          env.baseURL + '/create-sell',
+        ], //for now
       }
 
     }),
@@ -113,7 +128,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatSelectModule,
     MatCheckboxModule,
     MatProgressSpinnerModule
-
   ],
 providers: [
     NewsService,

@@ -1,11 +1,109 @@
+
+  #firstleft{
+    float:left;
+    padding-inline: 15px;
+  }
+
+  #secondleft{
+    float:left;
+    padding-inline: 15px;
+  }
+
+
+  #firstright{
+    float:left;
+    padding-inline: 15px;
+  }
+
+  #secondright{
+    float:right;
+    padding-inline: 15px;
+  }
+
+  .tip{
+    background-color: rgb(244, 130, 37);
+    display:flex;
+  }
+  .pagetitle{
+    font-size: 25px;
+    text-align: center;
+    color: rgb(54, 54, 116);
+    line-height: 1.5 ;
+    text-shadow:1px 1px rgb(0, 170, 255)
+  }
+  
+  .title {
+    font-size: xx-large;
+    text-align: center;
+    color: rgb(54, 54, 116);
+    text-shadow: 2px 2px 8px #fc3a98;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    text-align: center;
+    color:  rgb(255, 255, 255);
+    text-shadow:2px 2px rgb(54, 54, 116)
+  }
+
+  .content{
+    font-size: 15px;
+    text-align: center;
+    color: rgb(255, 255, 255)
+  }
+
+/* The navigation menu links */
+ .sidenav {
+  text-align: center;
+ }
+
+.YoinkTips{
+  color:  rgb(32, 32, 76);
+  font-size: 15px;
+  padding: 15px;
+}
+.image{
+  text-align: center;
+  width: 100%
+}
+.choose{
+  font-size: 25px;
+  color: rgb(32, 32, 76);
+  text-align: center;
+}
+.whychoose{
+  font-size: 15px;
+  color: rgb(32, 32, 76);
+  text-align: center;
+  list-style: none;
+}
+.signup{
+  background-color: rgb(250, 228, 116);
+  text-align: center;
+  display: inline-block;
+  margin-left: 40%
+}
+
+.explore{
+  font-size: 20px;
+  color:rgb(32, 32, 76);
+  text-align: center;
+}
+.check{
+  font-size: 20px;
+  color:rgb(32, 32, 76)
+}
+.card{
+  background-color: rgb(252, 180, 86);
+}
+
 .example-card {
     max-width: 400px;
   }
   .main-container{
-    background-color: rgb(red, green, blue);
     width: 350px;
     border-radius:10px;
-    display: flex;
+    display: center;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -20,3 +118,21 @@
   .resultcontainer{
     text-align: center;
   }
+ 
+ 
+ 
+  .currencyconverter{
+    display:flex;
+    justify-content: center;
+  }
+  .margin{
+    margin-bottom: 150px;
+  }
+
+  .highest{
+    display: flex;
+    justify-content: center;
+  }
+  
+
+

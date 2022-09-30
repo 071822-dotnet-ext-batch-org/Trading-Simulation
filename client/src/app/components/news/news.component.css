@@ -1,3 +1,4 @@
+
  
 /*
   Image slide
@@ -167,3 +168,15 @@
     font-size: 16px;
     font-weight: bold;
   }
+
+
+h1 {
+    font-size: 40px;
+    color:rgb(109, 40, 174);
+}
+
+.tip{
+    background-color: rgb(125, 181, 236);
+    color: rgb(109, 40, 174);
+}
+

@@ -1,4 +1,6 @@
 using Models;
+using Models.ModelDTOs.BackToFrontEnd;
+using System;
 
 namespace Test.Yoink
 {
@@ -50,24 +52,28 @@ namespace Test.Yoink
         {
             //Arrange
             Guid TestpostID = new Guid();
-            Guid TestFk_UserID = new Guid();
+            string? TestFk_UserID = "UserID";
 
             //Act
-            Post TestPost1 = new Post(TestpostID, TestFk_UserID, "Sold big", "1", new DateTime(), 2, new DateTime());
+            Post TestPost1 = new Post(TestpostID, "TestFk_UserID", "Sold big", 1, 2, new DateTime(), new DateTime());
+            
             Post TestPost = new Post 
-            { PostID = TestpostID, 
-              Fk_UserID = TestFk_UserID,
+            { 
+
+              PostID = TestpostID, 
+              Fk_UserID = "TestFk_UserID",
               Content = "Sold big",
-              Likes = "1",
-              DateCreated = new DateTime(),
+              Likes = 1,
               PrivacyLevel = 2,
+              DateCreated = new DateTime(),
               DateModified = new DateTime(),
 
-        };
+
+            };
 
             //Assert
             Assert.Equal(TestpostID, TestPost.PostID);
-            Assert.Equal(TestFk_UserID, TestPost.Fk_UserID);
+            Assert.Equal("TestFk_UserID", TestPost.Fk_UserID);
         }
 
 
@@ -118,6 +124,7 @@ namespace Test.Yoink
 
 
             //Act
+
             Buy? buy = new Buy(guid, guid, "GOOGL", 2000, 100, 50, new DateTime());
             Buy testBuy = new Buy
             {
@@ -144,7 +151,7 @@ namespace Test.Yoink
 
 
             //Act
-            Comment? buy = new Comment(guid, guid, guid, "GOOGL", new DateTime(), new DateTime());
+            Comment? comment = new Comment(guid, guid, guid, "GOOGL", new DateTime(), new DateTime());
             Comment testComment = new Comment
             {
                 CommentID = testCommentID,
@@ -172,7 +179,7 @@ namespace Test.Yoink
 
 
             //Act
-            Friend? buy = new Friend(testFriendID, testFriendID, testFriendID, new DateTime());
+            Friend? friend = new Friend(testFriendID, testFriendID, testFriendID, new DateTime());
 
             Friend testFriend = new Friend
             {
@@ -329,7 +336,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+            // DateTime DT = new DateTime();
 
 
             //Act
@@ -351,7 +358,343 @@ namespace Test.Yoink
 
         }
 
+        [Fact]
+        public void BuyDTOWorksCorrectly()
+        {
 
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            // DateTime DT = new DateTime();
+
+
+            //Act
+            BuyDto buydto1 = new BuyDto(guid, "GOOGL", 500, 2000,250);
+
+            BuyDto buydto = new BuyDto()
+            {
+                portfolioId = guid,
+                Symbol = "GOOGL",
+                CurrentPrice = 500,
+                AmountBought = 1500,
+                PriceBought = 2,
+            };
+
+
+            //Assert
+
+            Assert.Equal(buydto.portfolioId, guid);
+
+
+        }
+
+
+        [Fact]
+        public void buyWorksCorrectly()
+        {
+            //Arrange
+            Guid guid = Guid.NewGuid();
+
+            Guid testbuyID = new Guid();
+            Guid testFk_PortfolioID = new Guid();
+            string symbol = "Duke";
+
+
+            //Act
+
+            Buy? buy = new Buy(guid, guid, "GOOGL", 2000, 100, 50, new DateTime());
+            Buy testBuy = new Buy
+            {
+                BuyID = testbuyID,
+                Fk_PortfolioID = testFk_PortfolioID,
+                Symbol = symbol
+            };
+            //Assert
+            Assert.Equal(testbuyID, testBuy.BuyID);
+            Assert.Equal(testFk_PortfolioID, testBuy.Fk_PortfolioID);
+            Assert.Equal(symbol, testBuy.Symbol);
+        }
+
+
+        [Fact]
+        public void Get_BuysDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            // DateTime DT = new DateTime();
+
+
+            //Act
+            Get_BuysDto get_buydto1 = new Get_BuysDto(guid, "GOOGL");
+
+            Get_BuysDto get_buydto = new Get_BuysDto()
+            {
+                Get_BuysID = guid,
+                Symbol = "GOOGL",
+               
+            };
+
+
+            //Assert
+
+            Assert.Equal(get_buydto.Get_BuysID, guid);
+            Assert.Equal(get_buydto1.Get_BuysID, guid);
+
+        }
+
+        
+        [Fact]
+        public void GetInvestmentDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            // DateTime DT = new DateTime();
+
+
+            //Act
+            GetInvestmentDto getInvest = new GetInvestmentDto(guid, "GOOGL");
+
+            GetInvestmentDto getInvest2 = new GetInvestmentDto()
+            {
+                PortfolioId = guid,
+                Symbol = "GOOGL",
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(getInvest.PortfolioId, guid);
+            Assert.Equal(getInvest2.PortfolioId, guid);
+
+        }
+
+
+        [Fact]
+        public void GetInvestmentByTimeDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            GetInvestmentByTimeDto getInvesttime = new GetInvestmentByTimeDto(DT, DT, guid, "GOOGL");
+
+            GetInvestmentByTimeDto getInvesttime2 = new GetInvestmentByTimeDto()
+            {
+                StartTime = DT,
+                EndTime = DT,
+                PortfolioId = guid,
+                Symbol = "GOOGL",
+               
+            };
+
+
+            //Assert
+
+            Assert.Equal(getInvesttime.PortfolioId, guid);
+            Assert.Equal(getInvesttime2.PortfolioId, guid);
+
+        }
+
+
+
+        [Fact]
+        public void SellDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            // DateTime DT = new DateTime();
+
+
+            //Act
+            SellDto getInvesttime = new SellDto(guid, "GOOGL", 30, 700);
+
+            SellDto getInvesttime2 = new SellDto()
+            {
+                Fk_PortfolioID = guid,
+                Symbol = "GOOGL",
+                AmountSold = 30,
+                PriceSold = 700,
+                
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(getInvesttime.Fk_PortfolioID, guid);
+            Assert.Equal(getInvesttime2.Fk_PortfolioID, guid);
+
+        }
+
+
+        [Fact]
+        public void CreatPostDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            CreatePostDto createpostdto = new CreatePostDto("Hello World", 2);
+
+            CreatePostDto createpostdto2 = new CreatePostDto()
+            {
+                Content = "Hello World",
+                PrivacyLevel= 2,
+             
+            };
+
+
+            //Assert
+
+            Assert.Equal(2, createpostdto.PrivacyLevel);
+            Assert.Equal(2, createpostdto2.PrivacyLevel);
+
+        }
+
+
+
+        [Fact]
+        public void EditPostDTOWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            EditPostDto editpostdto = new EditPostDto(guid, "Hello World", 2);
+
+            EditPostDto editpostdto2 = new EditPostDto()
+            { 
+                PostId = guid,
+                Content = "Hello World",
+                PrivacyLevel = 2,
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(2, editpostdto.PrivacyLevel);
+            Assert.Equal(2, editpostdto.PrivacyLevel);
+
+        }
+
+
+        [Fact]
+        public void GetAllInvestmentsDtoWorksCorrectly()
+        {
+
+            //Arrange
+
+            Guid guid = Guid.NewGuid();
+
+            DateTime DT = new DateTime();
+
+
+            //Act
+            GetAllInvestmentsDto getallInvestmentdto = new GetAllInvestmentsDto(guid);
+
+            GetAllInvestmentsDto getallInvestmentdto2 = new GetAllInvestmentsDto()
+            {
+                PortfolioID = guid,
+               
+            };
+
+
+            //Assert
+
+            Assert.Equal(getallInvestmentdto.PortfolioID, guid);
+            Assert.Equal(getallInvestmentdto.PortfolioID, guid);
+
+        }
+
+
+        [Fact]
+        public void GetProfileDtoDtoWorksCorrectly()
+        {
+
+            //Arrange
+
+            String UserID = "45678788";
+
+
+            //Act
+            GetProfileDto getProfileDto = new GetProfileDto(UserID);
+
+            GetProfileDto getProfileDto2 = new GetProfileDto()
+            {
+                UserID = UserID,
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(UserID, getProfileDto.UserID);
+            Assert.Equal(UserID, getProfileDto2.UserID);
+
+        }
+
+
+        [Fact]
+        public void PostWithCommentCountDtoWorksCorrectly()
+        {
+
+            //Arrange
+            Guid guid = new Guid();
+            DateTime DT = new DateTime();
+
+
+            //Act
+            PostWithCommentCountDto postcommentcountDto = new PostWithCommentCountDto(guid, "7899999", "Hello World", 6, 7, 3, DT, DT);
+
+            PostWithCommentCountDto postcommentcountDto2 = new PostWithCommentCountDto()
+            {
+                PostID = guid,
+                Fk_UserID = "7899999",
+                Content = "Hello World",
+                Likes = 6,
+                Comments = 7,
+                PrivacyLevel = 3,
+                DateCreated = DT,
+                DateModified = DT,
+
+
+
+            };
+
+
+            //Assert
+
+            Assert.Equal(postcommentcountDto.PostID, guid);
+            Assert.Equal(postcommentcountDto2.PostID, guid);
+
+        }
 
 
     }
