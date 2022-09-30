@@ -1,29 +1,30 @@
-
+/* "sign up"*/
   #firstleft{
     float:left;
     padding-inline: 15px;
   }
-
+/* "Create a portfolio"*/
   #secondleft{
     float:left;
     padding-inline: 15px;
   }
 
-
+/* "Pick an investment" */
   #firstright{
     float:left;
     padding-inline: 15px;
   }
-
+/* "Yoink!"*/
   #secondright{
     float:right;
     padding-inline: 15px;
   }
-
+/* stying for banner at the top of the page */
   .tip{
     background-color: rgb(244, 130, 37);
     display:flex;
   }
+/* styling for "How Yoink! works" */
   .pagetitle{
     font-size: 25px;
     text-align: center;
@@ -31,21 +32,21 @@
     line-height: 1.5 ;
     text-shadow:1px 1px rgb(0, 170, 255)
   }
-  
+  /* styling for steps 1,2,3,4 */
   .title {
     font-size: xx-large;
     text-align: center;
     color: rgb(54, 54, 116);
     text-shadow: 2px 2px 8px #fc3a98;
   }
-
+/* styling for sign up, create protfolio, etc.*/
   .subtitle {
     font-size: 20px;
     text-align: center;
     color:  rgb(255, 255, 255);
     text-shadow:2px 2px rgb(54, 54, 116)
   }
-
+/* styling for step descriptions */
   .content{
     font-size: 15px;
     text-align: center;
@@ -53,50 +54,51 @@
   }
 
 /* The navigation menu links */
- .sidenav {
+ .imageposition {
   text-align: center;
  }
 
-.YoinkTips{
-  color:  rgb(32, 32, 76);
-  font-size: 15px;
-  padding: 15px;
-}
+/* styling for yoink! image in the center under the banner */
 .image{
   text-align: center;
   width: 100%
 }
+/* styling for "why choose yoink!" title  */
 .choose{
   font-size: 25px;
   color: rgb(32, 32, 76);
   text-align: center;
 }
+/* styling for "why choose yoink!"  3 statements */
 .whychoose{
   font-size: 15px;
   color: rgb(32, 32, 76);
   text-align: center;
   list-style: none;
 }
+/* styling for sign up button */
 .signup{
   background-color: rgb(250, 228, 116);
   text-align: center;
   display: inline-block;
   margin-left: 40%
 }
-
+/* styling for explore statement at the bottom of page */
 .explore{
   font-size: 20px;
   color:rgb(32, 32, 76);
   text-align: center;
 }
+/* styling to the check us out statement at the bottom of the page */
 .check{
   font-size: 20px;
   color:rgb(32, 32, 76)
 }
+/* styling for the currency converter and other cards at the bottom of page */
 .card{
   background-color: rgb(252, 180, 86);
 }
-
+/* styles the main container */
 .example-card {
     max-width: 400px;
   }
@@ -123,6 +125,7 @@
     display:flex;
     justify-content: center;
   }
+  /* Adds space to the bottom of the page */
   .margin{
     margin-bottom: 150px;
   }
