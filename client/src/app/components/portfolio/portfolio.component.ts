@@ -6,7 +6,7 @@ import { DataShareService } from 'src/app/Services/data-share/data-share.service
 import { GetMyPortfoliosService } from 'src/app/Services/get-my-portfolios/get-my-portfolios.service';
 import { CreatePortfolioModalComponent } from '../create-portfolio-modal/create-portfolio-modal.component';
 
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-portfolio',
