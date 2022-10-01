@@ -22,17 +22,6 @@ Yoink! is a paper trading application that is used as an educational tool to get
 
 [Yoink! Deployment Site](https://yoinktestclient.azurewebsites.net/home)
 
-## Installation
-
-```bash
-Install trading-simulation using these commands
-```
-
-## Usage
-
-```C#
-Use trading-simulation using these statements
-```
 
 ## How to Navigate the Application 💰
 
