@@ -510,7 +510,7 @@ namespace APILayer.Controllers
         /// </summary>
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
-        [HttpPost("get-all-comment")]
+        [HttpGet("get-all-comment")]
         public async Task<ActionResult<List<Comment>>> GetCommentsByPostIdAsync(Guid postId)
         {
             if (ModelState.IsValid)
