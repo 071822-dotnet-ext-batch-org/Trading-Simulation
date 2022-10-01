@@ -781,7 +781,7 @@ namespace Test.Yoink
         [Fact]
         public void TestingGetNumberOfCommentsByPostIdAsync()
         {
-            int numberOfComments = 10;
+            int? numberOfComments = 10;
             Guid guid = Guid.NewGuid();
 
             Post? post = new Post()
