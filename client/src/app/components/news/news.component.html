@@ -1,7 +1,117 @@
-<h1> Stock News </h1>
+
+<div id="homepage-slider" class="st-slider">
+
+    <input type="radio" class="cs_anchor radio" name="slider" id="slide1"/>
+    <input type="radio" class="cs_anchor radio" name="slider" id="slide2"/>
+    <input type="radio" class="cs_anchor radio" name="slider" id="slide3"/>
+    <input type="radio" class="cs_anchor radio" name="slider" id="play1" checked=""/>
+  
+    <div class="images">
+       <div class="images-inner" >
+        <div class="image-slide" >
+          <div class="image bg-yellow">
+            <p><a href="https://www.google.com">
+                <img src="assets/img/news1.jpg" alt="google.com" width="100%" height="132">
+                </a></p>
+          </div>
+
+        </div>
+    
+        <div class="image-slide">
+          <div class="image bg-blue">
+            <p><a href="https://www.google.com">
+                <img src="assets/img/news2.jpg" alt="google.com" width="100%" height="132">
+                </a></p>
+          </div>
+        </div>
+        <div class="image-slide">
+          <div class="image bg-red">
+            <p><a href="https://www.google.com">
+                <img src="assets/img/b.jpg" alt="google.com" width="100%" height="132">
+                </a></p>
+          </div>
+        </div>
+    
+      </div>
+    </div>
+  
+    <div class="labels">
+      
+        <div class="fake-radio">
+          <label for="slide1" class="radio-btn"></label>
+          <label for="slide2" class="radio-btn"></label>
+          <label for="slide3" class="radio-btn"></label>
+        </div>
+    </div>
+  </div>
+
+<!-- 
+<h1> Stock News </h1
+<div *ngFor="let newsArticle of newsData | paginate : {itemsPerPage: 4, currentPage: p}">
+=======
+
+<br>
+<h1> Yoink! News </h1>
+
+<div> 
+   <mat-card class="tip">
+        <p class="title"><b>Yoink! TIP</b></p>
+        <p class="subtitle"><b><i>BE IN THE KNOW</i></b></p>
+        <p class="content"><b> It is important to be well-informed about the stock you are buying or selling. A great place to start is by reading the news... Check it out below!</b></p>
+    </mat-card>
+</div>
+<br>
+<br> 
 <div *ngFor="let newsArticle of newsData">
+
+    
+>>>>>>> 34647b39a17d4e1a2b5fa3256f01a5b6ea12bd69
     <img src ="{{newsArticle.image_url}}" alt="news article image" width="100">
     <h3>{{newsArticle.title}}</h3>
     <h5>{{newsArticle.description}}</h5>
+    
 
+</div>
+ <pagination-controls (pageChange) = "p = $event" class="float-right"></pagination-controls>
+-->
+
+<!-- 
+<div class="container">
+    <div class="row">
+        <ng-container *ngFor="let newsArticle of newsData ">
+            <div class="card col-md-3">
+                <img src="{{newsArticle.image_url}}" alt="">
+                <h5 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 100ch;">{{newsArticle.title}}</h5>
+                <p style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 100ch;">{{newsArticle.description}}</p>
+                
+                <button class="btn btn-primary">Learn more</button>
+            </div>
+        </ng-container>
+
+    </div>
+</div>
+-->
+<div class="margin"> 
+<h1>News</h1>
+
+ <div class="container-fluid mt-5">
+    <div class="row">
+      <div *ngFor="let d of topheadingDisplay | paginate : {itemsPerPage: 4, currentPage: p}">
+        <div class="box">
+        <img src="{{d.urlToImage}}" width ="20%" >
+                <h5 class="mt-2 mb-2">{{d.title}}</h5>
+                <a href="{{d.url}}" class="btn btn-dark btn-sm">Read more</a>
+
+        </div>
+       
+      </div>
+      
+    </div>
+    
+ </div>
+ <div class="pagination"> 
+  <pagination-controls (pageChange) = "p = $event" class="float-right"></pagination-controls>
+ </div>
+
+    
 </div>

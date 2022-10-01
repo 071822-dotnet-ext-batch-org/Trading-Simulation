@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
-import { NewsService } from 'src/app/service/news.service';
-import { News } from 'src/Models/News';
+import { NewsService } from 'src/app/Services/news/news.service';
+import { News } from 'src/app/Models/News';
 
 @Component({
   selector: 'app-news',
@@ -11,6 +11,10 @@ import { News } from 'src/Models/News';
 export class NewsComponent implements OnInit {
   title = 'Stock News';
   newsData: any;
+  newsApiData : any;
+  p: any;
+   // new news Api add
+  topheadingDisplay: any = [];
 
 
   constructor(private GetNewsService: NewsService) { }
@@ -29,5 +33,17 @@ export class NewsComponent implements OnInit {
         const parseNews = JSON.parse(news || "")
         this.newsData = parseNews.results
       }
-      
-    }}
+
+       // new news Api add
+       this.GetNewsService.getAllNews().subscribe((result) =>{
+       console.log(result);
+       this.topheadingDisplay = result.articles;
+       })
+
+
+    }
+    
+   
+
+
+  }

@@ -8,6 +8,7 @@ import { UserComponent } from './components/user/user.component';
 import { NewsComponent } from './components/news/news.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { PostsComponent } from './components/posts/posts.component';
 
 
 
@@ -16,12 +17,14 @@ import { ProfileComponent } from './components/profile/profile.component';
 const routes: Routes = [
 
   {path: '', redirectTo:'home',pathMatch:'full'},
-  {path: "BuySell", component: BuySellComponent},
-  {path: 'Portfolio', component: PortfolioComponent},
+  {path: "BuySell", component: BuySellComponent, canActivate: [AuthGuard]},
+  {path: 'Portfolio', component: PortfolioComponent, canActivate: [AuthGuard]},
   {path: 'home', component: HomeComponent },
   {path: 'user', component: UserComponent, canActivate: [AuthGuard]},
   {path: 'News', component: NewsComponent},
   {path: 'Profile', component: ProfileComponent },
+  {path: 'Posts', component: PostsComponent }, 
+  {path: "postfeed", component: PostsComponent}//comeback for this
 
 
 ];

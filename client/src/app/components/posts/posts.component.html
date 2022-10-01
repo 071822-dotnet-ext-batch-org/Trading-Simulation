@@ -1,0 +1,11 @@
+<div class="post-list-container">
+
+    <mat-progress-spinner class="spinner" mode="indeterminate" *ngIf="loadingPosts"></mat-progress-spinner>
+    
+    <mat-list class="post-list">
+        <mat-list-item class="post-card" *ngFor="let post of posts">
+            <app-post-card [post]="post"></app-post-card>
+        </mat-list-item>
+    </mat-list>
+
+</div>

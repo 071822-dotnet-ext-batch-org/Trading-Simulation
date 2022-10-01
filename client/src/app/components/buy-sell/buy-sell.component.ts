@@ -1,63 +1,128 @@
-import { HttpClient } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { BuySellDetails, Options } from '../../Models/buy-sell/buySellOptions';
 import { BuySellService } from 'src/app/Services/buy-sell/buy-sell.service';
-import { BuySellOptions } from '../../Models/buy-sell/buySellOptions';
+import { Results } from 'src/app/Models/buy-sell/polygonResults';
+import { FormControl } from '@angular/forms';
+import { GetMyPortfoliosService } from 'src/app/Services/get-my-portfolios/get-my-portfolios.service';
+import { Portfolio } from 'src/app/Models/Portfolio';
+import { BuySellToPortfolioService } from 'src/app/Services/buy-sell/buy-sell-to-portfolio.service';
 
 @Component({
   selector: 'app-buy-sell',
   templateUrl: './buy-sell.component.html',
   styleUrls: ['./buy-sell.component.css'],
-  template:`<div>
-
-  </div>`
 })
+
 export class BuySellComponent implements OnInit {
 
-  constructor(private http: HttpClient, private buySell: BuySellService) { }
+  // Creates instances from services located in the Services/buy-sell folder
+  constructor(
+    private buySell: BuySellService,
+    private GMP: GetMyPortfoliosService,
+    private BSP: BuySellToPortfolioService
+  ) { }
 
+  symbolSearch = new FormControl(''); // Used in html search ln: 58
+  symbol = new FormControl(''); // Used in onPayment, createBuy and createSell below
+  qty: any; // Used in onPayment, createBuy and createSell below
+  // tickerPrice: any;
+  tickerData: any; // Used in getTickerData
+  selected: string = 'Buy'; // Used in onPayment
+  portfolios: Portfolio[] = [];
+  tickerSymbol: any; // Used in getTickerData
+  // details: BuySellDetails[] = [];
+  results: Results[] = []; // Used in getTickerData and onPayment
+  portfolioID: string = ''; // Used in onPayment, createBuy, and createSell below
+  buyResult: any; // Used in createBuy below
+  sellResult: any; // Used in createSell below
+  buyPrice: number = 0;
+  totalPrice: any;
 
-  qty: any;
-  tickerPrice: any;
-
-  details: BuySellDetails[] = [];
-
-
+  // What is shown in the dropdown box on web page options.
   options: Options[] = [
     { value: 'Buy', viewValue: 'Buy' },
-    { value: 'Buy at the open', viewValue: 'Buy at open' },
-    { value: 'Buy at the close', viewValue: 'Buy at close' },
-    { value: 'Set buy limit', viewValue: 'Set buy limit' },
     { value: 'Sell', viewValue: 'Sell' },
-    { value: 'Sell at the open', viewValue: 'Sell at open' },
-    { value: 'Sell at the close', viewValue: 'Sell at close' },
-    { value: 'Set sell limit', viewValue: 'Set sell limit' }
-
   ];
 
-  getQty() {
-    this.qty;
+  public onConfirm() {
+    window.alert('Your order has been sent.')
   }
 
-  costTotal = [{quantity: 5, price: 10 }];
-  totalPrice = 0;
-
-  onPayment() {
-    window.alert('Your order has been submitted!');
+  public onCancel() {
+    window.alert('Your order has been canceled.')
   }
+
+  // This method uses the getTickerData() method and conencts to the Polygon.io api after which,
+  // if the user choses 'Buy' in the drop down box, it will run the createBuy() method which sends the data
+  // transfer object to our database once all required fields are filled. If the uese choses the
+  // sell option then it will chose the createSell() method and send a data transfer object to
+  // our database and removes the order from the database.
+  public onPayment() {
+
+    if (!this.symbol.value) return;
+
+    this.buySell.getTickerData(this.symbol.value).subscribe(res => {
+
+      console.log(this.portfolioID, this.symbol.value, this.qty, res.results[0].c)
+      console.log(this.selected);
+
+      // Buy condition
+      if (this.selected === 'Buy') {
+        if (!this.symbol.value) return;
+        this.createBuy(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
+      }
+
+      // Sell condition
+      if (this.selected === 'Sell') {
+        if (!this.symbol.value) return;
+        this.createSell(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
+      }
+    })
+  }// End on payment
 
   ngOnInit(): void {
-    this.calculateTotal();
-
-    CUSTOM_ELEMENTS_SCHEMA;
+    this.GMP.getMyPortfolios().subscribe(portArr => this.portfolios = portArr);
+    this.calculateTotal(this.tickerSymbol, this.qty);
   };
 
-  calculateTotal() {
-    this.costTotal.map((cost) => {
-      this.totalPrice = cost.quantity * cost.price;
+  // Retuns the ticker data from Polygon.io after the user enters information into the search bar.
+  public getTickerData(tickerSymbol: any) {
+    if (!tickerSymbol) return;
+    this.buySell.getTickerData(tickerSymbol).subscribe(tickerData => {
+      this.tickerData = (tickerData.results)
+      console.log(tickerData.results)
     });
   }
-  // this.buySellService.getTickerPrice().subscribe(response => {this.tickerPrice = response;}
 
-}
+  // Creates buy request using the createBuy from the services and sends data transfer object
+  // with the required fields to out database.
+  public createBuy(portfolioID: string, symbol: string, qty: number, buyPrice: number): void {
+    this.BSP.createBuy(portfolioID, symbol, qty, buyPrice).subscribe(br => {
+      this.buyResult = br;
+      console.log(br);
+    });
+  }
+
+  // Creates sell request using the createBuy from the services and sends data transfer object
+  // with the required fields to out database.
+  public createSell(portfolioID: string, symbol: string, qty: number, sellPrice: number): void {
+    this.BSP.createSell(portfolioID, symbol, qty, sellPrice).subscribe(sr => {
+      this.sellResult = sr
+    })
+  }
+
+  //////////// TODO /////////////
+  public calculateTotal(tickerSymbol: any, qty: number) {
+    if (!tickerSymbol) return;
+    console.log(tickerSymbol)
+    this.buySell.getTickerData(tickerSymbol).subscribe(tickerData => {
+      console.log(tickerData)
+      this.tickerData = (tickerData.results[0])
+      console.log(tickerData.results)
+      return this.totalPrice = qty * this.tickerData.c;
+    });
+
+  };
+
+
+}//End BuySellComponent

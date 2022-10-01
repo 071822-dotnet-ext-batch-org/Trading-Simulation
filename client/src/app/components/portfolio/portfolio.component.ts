@@ -6,7 +6,7 @@ import { DataShareService } from 'src/app/Services/data-share/data-share.service
 import { GetMyPortfoliosService } from 'src/app/Services/get-my-portfolios/get-my-portfolios.service';
 import { CreatePortfolioModalComponent } from '../create-portfolio-modal/create-portfolio-modal.component';
 
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-portfolio',
@@ -15,9 +15,13 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 })
 export class PortfolioComponent {
 
-  portfolios:Portfolio[] = [];
-  loading:boolean = false;
+  items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  // expandedIndex = 0;
 
+  portfolios:Portfolio[] = [];
+  portfolioID:string = '';
+  loading:boolean = false;
+  showPortfolios:boolean = true;
 
   constructor(
     private GMP: GetMyPortfoliosService,
@@ -50,8 +54,13 @@ export class PortfolioComponent {
     })
   }
 
-  displayPortfolio(portfolioID:string): void {
-    console.log(portfolioID)
+  displayInvestments(portfolioID:string): void {
+    this.showPortfolios = false;
+    this.portfolioID = portfolioID;
+  }
+
+  displayPortfolios(): void {
+    this.showPortfolios = true;
   }
 
 }
