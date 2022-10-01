@@ -206,5 +206,37 @@ namespace BusinessLayer
         /// <param name="unlike">LikeDto</param>
         /// <returns>updated likeCount integer, (and triggers a -1 like to the Post on the Posts table in the database.)</returns>
         Task<int?> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId);
+
+        /// <summary>
+        /// Create a comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">CommentDto</param>
+        /// <returns>True if created, false if not.</returns>
+        Task<bool> CreateCommentOnPostAsync(CommentDto comment, string? auth0UserId);
+
+        /// <summary>
+        /// Edit a comment's content.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">EditCommentDto</param>
+        /// <returns>Edited comment object</returns>
+        Task<Comment?> EditCommentAsync(EditCommentDto comment);
+
+        /// <summary>
+        /// Delete a comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Id of comment to be deleted</param>
+        /// <returns>True if deleted, false if not.</returns>
+        Task<bool> DeleteCommentAsync(Guid commentId, string? auth0UserId);
+
+        /// <summary>
+        /// Get a lits of comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="postId">postId</param>
+        /// <returns>A list of comments.</returns>
+        Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
     }
 }

@@ -1,5 +1,6 @@
 <div class="container">
-    <mat-card class="card">        <mat-card-header *ngIf="profile">
+    <mat-card class="card">        
+        <mat-card-header *ngIf="profile">
             <img mat-card-avatar src={{this.profile.picture}}>
             <mat-card-title>Name: {{this.profile.name}}</mat-card-title>
             <mat-card-subtitle>E-mail: {{this.profile.email}}</mat-card-subtitle>

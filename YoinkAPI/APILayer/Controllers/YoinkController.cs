@@ -447,7 +447,78 @@ namespace APILayer.Controllers
                 int? likeCount = await this._businessLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
                 return Created("", likeCount);
             }
-            else return BadRequest("Like did not get removed");
+            else return BadRequest("Like did not get removed.");
+        }
+
+
+        /// <summary>
+        /// Create a comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">CommentDto</param>
+        /// <returns>True if created, false if not.</returns>
+        [HttpPost("add-comment")]
+        public async Task<ActionResult<bool>> CreateCommentOnPostAsync(CommentDto comment)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                bool createdComment = await this._businessLayer.CreateCommentOnPostAsync(comment, auth0UserId);
+                return Created("", createdComment);
+            }
+            else return BadRequest("Comment did not get added.");
+        }
+
+        /// <summary>
+        /// Edit a comment's content.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">EditCommentDto</param>
+        /// <returns>Edited comment object</returns>
+        [HttpPut("edit-comment")]
+        public async Task<ActionResult<Comment?>> EditCommentAsync(EditCommentDto comment)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment? editedComment = await this._businessLayer.EditCommentAsync(comment);
+                return Ok(editedComment);
+            }
+            else return BadRequest("Comment did not get edited.");
+        }
+
+        /// <summary>
+        /// Delete a comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Id of comment to be deleted</param>
+        /// <returns>True if deleted, false if not.</returns>
+        [HttpDelete("delete-comment")]
+        public async Task<ActionResult<bool>> DeleteCommentAsync(Guid commentId)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                bool? deleteComment = await this._businessLayer.DeleteCommentAsync(commentId, auth0UserId);
+                return Ok(deleteComment);
+            }
+            else return BadRequest("Comment did not get deleted.");
+        }
+
+        /// <summary>
+        /// Get a lits of comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="postId">postId</param>
+        /// <returns>A list of comments.</returns>
+        [HttpPost("get-all-comment")]
+        public async Task<ActionResult<List<Comment>>> GetCommentsByPostIdAsync(Guid postId)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Comment> comments = await this._businessLayer.GetCommentsByPostIdAsync(postId);
+                return Ok(comments);
+            }
+            else return BadRequest(postId);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace RepoLayer
         /// <param name="Picture"></param>
         /// <param name="Privacy"></param>
         /// <returns>true/false</returns>
-        public async Task<bool> CreateProfileAsync(string? userID, string? Name, string? Email, string? Picture ,int? Privacy)
+        public async Task<bool> CreateProfileAsync(string? userID, string? Name, string? Email, string? Picture, int? Privacy)
         {
             using (SqlCommand command = new SqlCommand($"INSERT INTO Profiles (fk_userID, name, email, picture, privacyLevel) VALUES (@userid, @name, @email , @picture , @privacy)", _conn))
             {
@@ -72,7 +72,7 @@ namespace RepoLayer
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
                 if (ret.Read())
                 {
-                    Profile p = new Profile(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3),ret.GetString(4), ret.GetInt32(5));
+                    Profile p = new Profile(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3), ret.GetString(4), ret.GetInt32(5));
                     return p;
                 }
                 _conn.Close();
@@ -110,7 +110,7 @@ namespace RepoLayer
                 _conn.Close();
                 return false;
             }
-            
+
         }//End of Edit Profile Async
 
 
@@ -135,11 +135,11 @@ namespace RepoLayer
                 // add list stuff
                 while (ret.Read())
                 {
-                    Portfolio p = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDecimal(10),ret.GetDateTime(11), ret.GetDateTime(12));
+                    Portfolio p = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDecimal(10), ret.GetDateTime(11), ret.GetDateTime(12));
                     portList.Add(p);
 
                 }
-                
+
                 _conn.Close();
                 return portList;
             }
@@ -162,9 +162,9 @@ namespace RepoLayer
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
                 // add list stuff
 
-                if(ret.Read())
+                if (ret.Read())
                 {
-                    Portfolio p = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDecimal(10),ret.GetDateTime(11), ret.GetDateTime(12));
+                    Portfolio p = new Portfolio(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3), ret.GetInt32(4), ret.GetDecimal(5), ret.GetDecimal(6), ret.GetDecimal(7), ret.GetDecimal(8), ret.GetInt32(9), ret.GetDecimal(10), ret.GetDateTime(11), ret.GetDateTime(12));
                     _conn.Close();
                     return p;
 
@@ -185,7 +185,7 @@ namespace RepoLayer
         public async Task<bool> CreatePortfolioAsync(string auth0Id, PortfolioDto p)
         {
             using (SqlCommand command = new SqlCommand($"INSERT INTO Portfolios (fk_userID, name, privacyLevel, originalLiquid, liquid) VALUES (@auth0Id, @name, @privacylevel, @originalliquid, @liquid)", _conn))
-            {             
+            {
                 command.Parameters.AddWithValue("@auth0Id", auth0Id);
                 command.Parameters.AddWithValue("@name", p.Name);
                 command.Parameters.AddWithValue("@privacylevel", p.PrivacyLevel);
@@ -239,9 +239,9 @@ namespace RepoLayer
         {
 
             using (SqlCommand command = new SqlCommand($"UPDATE Portfolios SET name = @name, privacyLevel = @privacylevel WHERE portfolioID = @portfolioid", _conn))
-            {            
+            {
                 command.Parameters.AddWithValue("@portfolioid", p.PortfolioID);
-                command.Parameters.AddWithValue("@name", p.Name); 
+                command.Parameters.AddWithValue("@name", p.Name);
                 command.Parameters.AddWithValue("@privacylevel", p.PrivacyLevel);
                 _conn.Open();
 
@@ -256,14 +256,14 @@ namespace RepoLayer
             }
         }//End of Edit Portfolio
 
-        
+
 
 
 
 
 
         //--------------------------------Buy and Sell Section----------------------------
-        
+
         /// <summary>
         /// Adds user's purchase as a buy in the database
         /// </summary>
@@ -293,7 +293,7 @@ namespace RepoLayer
                 return false;
             }
         }//End of Add new Buy Order
-        
+
         /// <summary>
         /// Returns all of user's buys for a particular Stock option (by symbol).
         /// Sendes really likes underscores.
@@ -507,14 +507,14 @@ namespace RepoLayer
         {
             string stmt = "SELECT COUNT(userID) FROM Users";
             int? count = 0;
-           
-                using (SqlCommand cmdCount = new SqlCommand(stmt, _conn))
-                {
-                    _conn.Open();
-                    count = (int?)(await cmdCount.ExecuteScalarAsync());
-                    _conn.Close();
-                }
-            
+
+            using (SqlCommand cmdCount = new SqlCommand(stmt, _conn))
+            {
+                _conn.Open();
+                count = (int?)(await cmdCount.ExecuteScalarAsync());
+                _conn.Close();
+            }
+
             return count;
 
         }//End of Get number of total Users
@@ -564,7 +564,7 @@ namespace RepoLayer
         /// <returns>int number</returns>
         public async Task<int?> GetNumberOfSellsAsync()
         {
-            
+
             string stmt = "SELECT COUNT(sellID) FROM Sells";
             int? count = 0;
             using (SqlCommand cmdCount = new SqlCommand(stmt, _conn))
@@ -598,7 +598,7 @@ namespace RepoLayer
                 command.Parameters.AddWithValue("@auth0Id", auth0Id);
                 command.Parameters.AddWithValue("@content", post.Content);
                 command.Parameters.AddWithValue("@privacylevel", post.PrivacyLevel);
-                
+
                 // command.Parameters.AddWithValue("@currenttotal", p.CurrentInvestment);
                 _conn.Open();
 
@@ -647,7 +647,7 @@ namespace RepoLayer
             List<Post> postList = new List<Post>();
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts ORDER BY dateModified DESC", _conn))
             {
-                
+
                 _conn.Open();
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
 
@@ -680,9 +680,9 @@ namespace RepoLayer
                 while (ret.Read())
                 {
                     Investment i = new Investment(
-                        ret.GetGuid(0), 
-                        ret.GetGuid(1), 
-                        ret.GetString(2), 
+                        ret.GetGuid(0),
+                        ret.GetGuid(1),
+                        ret.GetString(2),
                         ret.GetDecimal(3),
                         ret.GetDecimal(4),
                         ret.GetDecimal(5),
@@ -693,7 +693,7 @@ namespace RepoLayer
                         ret.GetDateTime(10),
                         ret.GetDateTime(11)
                     );
-                    
+
                     invList.Add(i);
                 }
 
@@ -780,7 +780,7 @@ namespace RepoLayer
         /// <returns>Post?</returns>
         public async Task<Post?> GetPostByPostId(Guid? PostId)
         {
-            Post? p = null;  
+            Post? p = null;
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Posts WHERE postID=@PostId ORDER BY dateModified DESC", _conn))
             {
                 command.Parameters.AddWithValue("@PostId", PostId);
@@ -822,7 +822,7 @@ namespace RepoLayer
             }
         }//End of Delete Post
 
-        
+
         /// <summary>
         /// Allows user to get all of their posts - Needs auth0userID
         /// </summary>
@@ -1012,14 +1012,174 @@ namespace RepoLayer
                 int ret = await command.ExecuteNonQueryAsync();
                 if (ret > 0)
                 {
-                    //A like is already made by this user to this post
                     _conn.Close();
                     return true;
                 }
-                // This user does not have a like on this post
                 _conn.Close();
                 return false;
-            }            
-        }//End of Update to buy investment ceurrent price 
+            }
+        }
+
+        /// <summary>
+        /// Edit a comment's content.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">EditCommentDto</param>
+        /// <returns>True if edited, false if not edited.</returns>
+        public async Task<bool> EditCommentAsync(EditCommentDto comment)
+        {
+            using (SqlCommand command = new SqlCommand($"UPDATE Comments SET content=@content WHERE commentID=@commentId", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", comment.CommentId);
+                command.Parameters.AddWithValue("@content", comment.Content);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Get a comment searching with the commentId.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Guid commentId</param>
+        /// <returns>Comment object of the updated comment.</returns>
+        public async Task<Comment?> GetCommentByCommentIdAsync(Guid? commentId)
+        {
+            Comment? comment = null;
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Comments WHERE commentID=@commentId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", commentId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+                    comment = new Comment(ret.GetGuid(0), ret.GetString(1), ret.GetGuid(2), ret.GetString(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+
+                }
+
+                _conn.Close();
+                return comment;
+            }
+        }
+
+        /// <summary>
+        /// Gets a userId that is associated with a specific comment.
+        /// </summary>
+        /// <param name="commentId">Id of comment</param>
+        /// <returns>UserId string.</returns>
+        public async Task<string?> GetUserWithCommentIdAsync(Guid commentId)
+        {
+            string? User = "";
+            using (SqlCommand command = new SqlCommand($"SELECT fk_userID FROM Comments WHERE commentID=@commentId", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", commentId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+                    User = ret.GetString(0);
+
+                }
+
+                _conn.Close();
+                return User;
+            }
+        }
+
+        /// <summary>
+        /// Delete a comment and ensures user can delete only their own comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Id of comment to be deleted</param>
+        /// <returns>True if deleted, false if not.</returns>
+        public async Task<bool> DeleteCommentAsync(Guid commentId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM Comments WHERE commentID=@commentId", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", commentId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Create a comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">CommentDto</param>
+        /// <returns>True if created, false if not.</returns>
+        public async Task<bool> CreateCommentOnPostAsync(CommentDto comment, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Comments (fk_userID, fk_postID, content) VALUES (@auth0Id, @postId, @content)", _conn))
+            {
+                command.Parameters.AddWithValue("@auth0Id", auth0UserId);
+                command.Parameters.AddWithValue("@content", comment.Content);
+                command.Parameters.AddWithValue("@postId", comment.PostId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }//End of Create a Comment on Post
+        /// <summary>
+        /// Get a lits of comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="postId">postId</param>
+        /// <returns>A list of comments.</returns>
+        public async Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId)
+        {
+            List<Comment> commList = new List<Comment>();
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Comments WHERE fk_postID = @postId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@postId", postId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Comment c = new Comment(
+                        ret.GetGuid(0),
+                        ret.GetString(1),
+                        ret.GetGuid(2),
+                        ret.GetString(3),
+                        ret.GetInt32(4),
+                        ret.GetDateTime(5),
+                        ret.GetDateTime(6));
+
+                    commList.Add(c);
+                }
+
+                _conn.Close();
+                return commList;
+            }
+        }
     }
 }
