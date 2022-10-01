@@ -4,7 +4,7 @@
     overflow: auto;
     min-width: 400px;
     max-width: 600px;
-    padding: 0 1em;
+    padding: 1em;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -26,5 +26,5 @@ input {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    direction: ltr;
+    direction: ltr ;
 }
