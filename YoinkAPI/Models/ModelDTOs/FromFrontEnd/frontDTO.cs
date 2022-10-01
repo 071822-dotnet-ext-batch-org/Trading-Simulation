@@ -364,4 +364,53 @@ namespace Models
         }
     }
 
+    /// <summary>
+    /// This is the Model to create a new CommentDto - contains PostId, Content
+    /// </summary>
+    public class CommentDto
+    {
+        public Guid? PostId { get; set; }
+        public string? Content { get; set; }
+
+        /// <summary>
+        /// This is the Constructor to create a new CommentDto that is empty
+        /// </summary>
+        public CommentDto() { }
+
+        /// <summary>
+        /// This is the Constructor to create a new CommentDto - contains PostId, Content
+        /// </summary>
+        /// <param name="PostId"></param>
+        /// <param name="Content"></param>
+        public CommentDto(Guid? PostId, string? Content)
+        {
+            this.PostId = PostId;
+            this.Content = Content;
+        }
+    }
+
+    /// <summary>
+    /// This is the Model to create a new EditCommentDto - contains CommentId, Content.
+    /// </summary>
+    public class EditCommentDto
+    {
+        public Guid? CommentId { get; set; }
+        public string? Content { get; set; }
+
+        /// <summary>
+        /// This is the Constructor to create an EditCommentDto that is empty.
+        /// </summary>
+        public EditCommentDto() { }
+
+        /// <summary>
+        /// This is the Constructor to create an EditCommentDto - contains CommentId, Content.
+        /// </summary>
+        /// <param name="CommentId"></param>
+        /// <param name="Content"></param>
+        public EditCommentDto(Guid CommentId, string Content)
+        {
+            this.CommentId = CommentId;
+            this.Content = Content;
+        }
+    }
 }
