@@ -291,7 +291,7 @@ namespace APILayer.Controllers
         [HttpGet("number-of-users")]
         public async Task<ActionResult<int>> GetNumberOfUsersAsync()
         {
-            int userCount = await this._businessLayer.GetNumberOfUsersAsync();
+            int? userCount = await this._businessLayer.GetNumberOfUsersAsync();
             return Ok(userCount);   
         }
 
@@ -303,7 +303,7 @@ namespace APILayer.Controllers
         [HttpGet("number-of-posts")]
         public async Task<ActionResult<int>> GetNumberOfPostsAsync()
         {
-            int postCount = await this._businessLayer.GetNumberOfPostsAsync();
+            int? postCount = await this._businessLayer.GetNumberOfPostsAsync();
             return Ok(postCount);
         }
 
@@ -315,7 +315,7 @@ namespace APILayer.Controllers
         [HttpGet("number-of-buys")]
         public async Task<ActionResult<int>> GetNumberOfBuysAsync()
         {
-            int buyCount = await this._businessLayer.GetNumberOfBuysAsync();
+            int? buyCount = await this._businessLayer.GetNumberOfBuysAsync();
             return Ok(buyCount);
         }
 
@@ -327,7 +327,7 @@ namespace APILayer.Controllers
         [HttpGet("number-of-sells")]
         public async Task<ActionResult<int>> GetNumberOfSellsAsync()
         {
-            int sellCount = await this._businessLayer.GetNumberOfSellsAsync();
+            int? sellCount = await this._businessLayer.GetNumberOfSellsAsync();
             return Ok(sellCount);
         }
 
