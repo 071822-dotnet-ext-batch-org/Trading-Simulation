@@ -283,5 +283,53 @@ namespace RepoLayer
         /// <param name="auth0UserId"></param>
         /// <returns>true/false</returns>
         Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId);
+
+        /// <summary>
+        /// Create a comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">CommentDto</param>
+        /// <returns>True if created, false if not.</returns>
+        Task<bool> CreateCommentOnPostAsync(CommentDto comment, string? auth0UserId);
+
+
+        /// <summary>
+        /// Edit a comment's content.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">EditCommentDto</param>
+        /// <returns>True if edited, false if not edited.</returns>
+        Task<bool> EditCommentAsync(EditCommentDto comment);
+
+        /// <summary>
+        /// Get a comment searching with the commentId.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Guid commentId</param>
+        /// <returns>Comment object of the updated comment.</returns>
+        Task<Comment?> GetCommentByCommentIdAsync(Guid? commentId);
+
+        /// <summary>
+        /// Gets a userId that is associated with a specific comment.
+        /// </summary>
+        /// <param name="commentId">Id of comment</param>
+        /// <returns>UserId string.</returns>
+        Task<string?> GetUserWithCommentIdAsync(Guid commentId);
+
+        /// <summary>
+        /// Delete a comment and ensures user can delete only their own comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Id of comment to be deleted</param>
+        /// <returns>True if deleted, false if not.</returns>
+        Task<bool> DeleteCommentAsync(Guid commentId);
+
+        /// <summary>
+        /// Get a lits of comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="postId">postId</param>
+        /// <returns>A list of comments.</returns>
+        Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
     }
 }
