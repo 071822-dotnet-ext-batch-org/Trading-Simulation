@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit {
    this.ProService.getProfiles().subscribe(data => {
     this.profile = data;
     if(this.profile) {
-      this.router.NavBarComponent
+      // this.router.NavBarComponent
     }
    });   
   }
