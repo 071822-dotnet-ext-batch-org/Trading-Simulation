@@ -12,6 +12,7 @@ import { CreateProfileService } from 'src/app/Services/CreateProfile/create-prof
 export class ProfileComponent implements OnInit {
 
   profileToEdit?: Profile;
+  profile: any;
   
   constructor(
     private ProService: ProfileServiceService,
@@ -19,7 +20,7 @@ export class ProfileComponent implements OnInit {
     private CreatePro: CreateProfileService,
     ) { }
     
-    profile: any;
+
 
   ngOnInit(): void {
    this.ProService.getProfiles().subscribe(data => {
