@@ -20,8 +20,8 @@ steps:
   inputs:
     SonarCloud: 'Yoink_SonarCloud_Connection'
     organization: yoinkp3
-    projectKey: 'YoinkP3_Yoink-Pipeline  '
-    projectName: 'Yoink Pipeline '
+    projectKey: 'YoinkP3_Yoink-Pipeline'
+    projectName: 'Yoink Pipeline'
 
 - task: NodeTool@0
   displayName: 'Use Node 16.x'
@@ -29,27 +29,40 @@ steps:
     versionSpec: 16.x
 
 - task: Npm@1
-  displayName: 'npm install'
+  displayName: 'Install angular-cli'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'install @angular/cli@latest'
+
+- task: Npm@1
+  displayName: 'Install Node_modules'
   inputs:
     workingDir: client
     verbose: false
 
-- task: AngularCLI@1
+- task: Npm@1
+  displayName: 'Build Angular Project'
   inputs:
-    command: 'build'
-    project: 'client'
-    DisableAnalytics: false
+    command: custom
+    workingDir: client
+    verbose: false
+    customCommand: 'run ng build --prod'
+  continueOnError: true
 
-- task: AngularCLI@1
-  inputs:
-    command: 'test'
-    project: 'client'
-    DisableAnalytics: false
+- script: |
+    npx ng test --watch=false --karmaConfig karma.conf.ci.js --code-coverage
+  displayName: 'perform unit tests'  
+  continueOnError: true
 
 - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
 
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: client/dist
+
 - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
   displayName: 'Publish Quality Gate Result'
-
 
