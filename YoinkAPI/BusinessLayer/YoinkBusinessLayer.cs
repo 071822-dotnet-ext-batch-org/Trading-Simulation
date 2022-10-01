@@ -196,9 +196,9 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// Retrieves a count of users in the database.
     /// </summary>
     /// <returns>Integer count of users.</returns>
-    public async Task<int> GetNumberOfUsersAsync()
+    public async Task<int?> GetNumberOfUsersAsync()
     {
-        int userCount = await this._repoLayer.GetNumberOfUsersAsync();
+        int? userCount = await this._repoLayer.GetNumberOfUsersAsync();
         return userCount;
     }
 
@@ -206,9 +206,9 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// Retrieves a count of all posts in the database.
     /// </summary>
     /// <returns>Integer count of posts.</returns>
-    public async Task<int> GetNumberOfPostsAsync()
+    public async Task<int?> GetNumberOfPostsAsync()
     {
-        int userCount = await this._repoLayer.GetNumberOfPostsAsync();
+        int? userCount = await this._repoLayer.GetNumberOfPostsAsync();
         return userCount;
     }
 
@@ -216,9 +216,9 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// Retrieves a count of all buys in the database.
     /// </summary>
     /// <returns>Integer count of buys.</returns>
-    public async Task<int> GetNumberOfBuysAsync()
+    public async Task<int?> GetNumberOfBuysAsync()
     {
-        int buysCount = await this._repoLayer.GetNumberOfBuysAsync();
+        int? buysCount = await this._repoLayer.GetNumberOfBuysAsync();
         return buysCount;
     }
 
@@ -226,9 +226,9 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// Retrieves a count of all sells in the database.
     /// </summary>
     /// <returns>Integer count of sells.</returns>
-    public async Task<int> GetNumberOfSellsAsync()
+    public async Task<int?> GetNumberOfSellsAsync()
     {
-        int sellsCount = await this._repoLayer.GetNumberOfSellsAsync();
+        int? sellsCount = await this._repoLayer.GetNumberOfSellsAsync();
         return sellsCount;
     }
 
@@ -261,7 +261,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         List<Post> returnedPosts = await this._repoLayer.GetAllPostAsync();
         foreach(Post post in returnedPosts)
         { 
-            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
+            int? count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
             PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
             postWithCommentCountDto.PostID = post.PostID;
             postWithCommentCountDto.Fk_UserID = post.Fk_UserID;
@@ -342,7 +342,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         List<Post> returnedPosts = await this._repoLayer.GetAllPostByUserIdAsync(userId);
         foreach (Post post in returnedPosts)
         {
-            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
+            int? count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
             PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
             postWithCommentCountDto.PostID = post.PostID;
             postWithCommentCountDto.Fk_UserID = post.Fk_UserID;
@@ -375,7 +375,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         if (returnedPost != null)
         {
             //count int stores comment counts for that post
-            int count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(postId);
+            int? count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(postId);
 
             //fills the postdto with values retrieved
             postWithCommentCountDto.PostID = returnedPost.PostID;
@@ -404,7 +404,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         if (createdLike)
         {
             Post? post = await this._repoLayer.GetPostByPostId(like.PostId);
-            return post.Likes;
+            return post?.Likes;
         }
         return null;
     }
@@ -420,7 +420,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         if (removedLike)
         {
             Post? post = await this._repoLayer.GetPostByPostId(unlike.PostId);
-            return post.Likes;
+            return post?.Likes;
         }
         return null;
     }

@@ -123,25 +123,25 @@ namespace BusinessLayer
         /// Retrieves a count of users in the database.
         /// </summary>
         /// <returns>Integer count of users.</returns>
-        Task<int> GetNumberOfUsersAsync();
+        Task<int?> GetNumberOfUsersAsync();
 
         /// <summary>
         /// Retrieves a count of all posts in the database.
         /// </summary>
         /// <returns>Integer count of posts.</returns>
-        Task<int> GetNumberOfPostsAsync();
+        Task<int?> GetNumberOfPostsAsync();
 
         /// <summary>
         /// Retrieves a count of all buys in the database.
         /// </summary>
         /// <returns>Integer count of buys.</returns>
-        Task<int> GetNumberOfBuysAsync();
+        Task<int?> GetNumberOfBuysAsync();
 
         /// <summary>
         /// Retrieves a count of all sells in the database.
         /// </summary>
         /// <returns>Integer count of sells.</returns>
-        Task<int> GetNumberOfSellsAsync();
+        Task<int?> GetNumberOfSellsAsync();
 
         //Posts
 
