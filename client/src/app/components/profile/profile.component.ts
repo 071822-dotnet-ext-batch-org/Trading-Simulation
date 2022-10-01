@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProfileServiceService } from 'src/app/Services/profile-service/profile-service.service';
 import { Profile } from 'src/app/Models/Profile';
-import { ResultType } from '@remix-run/router/dist/utils';
 import { AuthService } from '@auth0/auth0-angular';
 import { CreateProfileService } from 'src/app/Services/CreateProfile/create-profile.service';
 
@@ -25,9 +24,6 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
    this.ProService.getProfiles().subscribe(data => {
     this.profile = data;
-    if(this.profile) {
-      // this.router.NavBarComponent
-    }
    });   
   }
 
