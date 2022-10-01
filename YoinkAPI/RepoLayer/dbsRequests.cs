@@ -908,7 +908,7 @@ namespace RepoLayer
         /// <returns>true/false</returns>
         public async Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
         {
-            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesPosts WHERE fk_postID=@PostId AND fk_userId=@UserId", _conn))
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesPosts WHERE fk_postID=@PostId AND fk_userID=@UserId", _conn))
             {
                 command.Parameters.AddWithValue("@PostId", unlike.PostId);
                 command.Parameters.AddWithValue("@UserId", auth0UserId);
@@ -925,5 +925,101 @@ namespace RepoLayer
                 return false;
             }
         }//End of Remove like from a Post
+
+
+        /// <summary>
+        /// Checks if a specific user already has a record on a table - Needs an auth0userID, a Guid ID of a record in a Table, that table name, a columnName, and an optional columnName
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="relationColumnID"></param>
+        /// <param name="table_Name"></param>
+        /// <param name="where1"></param>
+        /// <param name="where2"></param>
+        /// <returns>true/false</returns>
+        public async Task<bool> CheckIfUserAlreadyHasSomething(string? auth0UserId, Guid relationColumnID, string table_Name, string? where1, string? where2)
+        {
+            if(where2 != null)
+            {
+                using (SqlCommand command = new SqlCommand($"SELECT TOP (1) FROM @TableName WHERE @Where1=@PostId AND @Where2=@UserId", _conn))
+                {
+                    command.Parameters.AddWithValue("@RelationColumnToCheck", relationColumnID);
+                    command.Parameters.AddWithValue("@UserId", auth0UserId);
+                    //Inputs for the query
+                    command.Parameters.AddWithValue("@TableName", table_Name);
+                    command.Parameters.AddWithValue("@Where1", where1);
+                    command.Parameters.AddWithValue("@Where2", where2);
+                    
+
+                    _conn.Open();
+
+                    SqlDataReader? ret = await command.ExecuteReaderAsync();
+                    if (ret.Read())
+                    {
+                        //A like is already made by this user to this post
+                        _conn.Close();
+                        return true;
+                    }
+                    // This user does not have a like on this post
+                    _conn.Close();
+                    return false;
+                }
+            }else
+            {
+                using (SqlCommand command = new SqlCommand($"SELECT TOP (1) FROM @TableName WHERE @Where1=@RelationColumnToCheck", _conn))
+                {
+                    command.Parameters.AddWithValue("@RelationColumnToCheck", relationColumnID);
+                    command.Parameters.AddWithValue("@UserId", auth0UserId);
+                    //Inputs for the query
+                    command.Parameters.AddWithValue("@TableName", table_Name);
+                    command.Parameters.AddWithValue("@Where1", where1);
+                    
+
+                    _conn.Open();
+
+                    SqlDataReader? ret = await command.ExecuteReaderAsync();
+                    if (ret.Read())
+                    {
+                        //A like is already made by this user to this post
+                        _conn.Close();
+                        return true;
+                    }
+                    // This user does not have a like on this post
+                    _conn.Close();
+                    return false;
+                }            
+            }
+        }//End of the Check if User has Something on a table
+
+
+        /// <summary>
+        /// Allows user to update the current prices of their ivestment by symbol - Needs Sybmol, Update Price, and Portfolio ID
+        /// </summary>
+        /// <param name="Symbol"></param>
+        /// <param name="UpdatePrice"></param>
+        /// <param name="portfolioID"></param>
+        /// <returns>true/false</returns>
+        public async Task<bool> UpdateSymbolCurrentPriceofBuy(string? Symbol, decimal? UpdatePrice, Guid portfolioID)
+        {
+            using (SqlCommand command = new SqlCommand($"Update Investments SET currentPrice = @UpdatePrice Where fk_portfolioID = @fk_portfolioID AND symbol = @symbol", _conn))
+            {
+                command.Parameters.AddWithValue("@UpdatePrice", UpdatePrice);
+                command.Parameters.AddWithValue("@fk_portfolioID", portfolioID);
+                command.Parameters.AddWithValue("@symbol", Symbol);
+                
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    //A like is already made by this user to this post
+                    _conn.Close();
+                    return true;
+                }
+                // This user does not have a like on this post
+                _conn.Close();
+                return false;
+            }            
+        }//End of Update to buy investment ceurrent price 
     }
 }

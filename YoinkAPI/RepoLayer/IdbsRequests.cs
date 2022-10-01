@@ -151,7 +151,7 @@ namespace RepoLayer
         Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto);
 
         /// <summary>
-        /// Retrieves (potentially) a list of Investment objects from the database by time.
+        /// Retrieves (potentially) a list of Investment objects from the database by time. - Returns a list of investments by a specific symbol
         /// </summary>
         /// <param name="investmentByTime">GetInvestmentByTimeDto</param>
         /// <returns>a list of Investment objects named returnedInvestment</returns>
@@ -283,5 +283,35 @@ namespace RepoLayer
         /// <param name="auth0UserId"></param>
         /// <returns>true/false</returns>
         Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId);
+
+        /// <summary>
+        /// Checks if a specific user already has a like on a post - Needs an auth0userID and a likeDto
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="like"></param>
+        /// <returns>true/false</returns>
+        // Task<bool> CheckIfUserAlreadyHasPostLike(string? auth0UserId, LikeDto like);
+
+        /// <summary>
+        /// Checks if a specific user already has a record on a table - Needs an auth0userID, a Guid ID of a record in a Table, that table name, a columnName, and an optional columnName
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="relationColumnID"></param>
+        /// <param name="table_Name"></param>
+        /// <param name="where1"></param>
+        /// <param name="where2"></param>
+        /// <returns>true/false</returns>
+        Task<bool> CheckIfUserAlreadyHasSomething(string? auth0UserId, Guid relationColumnID, string table_Name, string? where1, string? where2);
+
+        /// <summary>
+        /// Allows user to update the current prices of their ivestment by symbol - Needs Sybmol, Update Price, and Portfolio ID
+        /// </summary>
+        /// <param name="Symbol"></param>
+        /// <param name="UpdatePrice"></param>
+        /// <param name="portfolioID"></param>
+        /// <returns>true/false</returns>
+        Task<bool> UpdateSymbolCurrentPriceofBuy(string? Symbol, decimal? UpdatePrice, Guid portfolioID);
+
+
     }
 }
