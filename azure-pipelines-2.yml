@@ -15,14 +15,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
-  displayName: 'Prepare analysis on SonarCloud'
-  inputs:
-    SonarCloud: 'Yoink_SonarCloud_Connection'
-    organization: yoinkp3
-    projectKey: 'YoinkP3_Yoink-Pipeline'
-    projectName: 'Yoink Pipeline'
-
 - task: NodeTool@0
   displayName: 'Use Node 16.x'
   inputs:
@@ -50,21 +42,11 @@ steps:
     customCommand: 'run ng build --prod'
   continueOnError: true
 
-- script: |
-    npx ng test --watch=false --karmaConfig karma.conf.ci.js --code-coverage
-  displayName: 'perform unit tests'  
-  continueOnError: true
-
-- task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
-  displayName: 'Run Code Analysis'
-
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
     PathtoPublish: client/dist
 
-- task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
-  displayName: 'Publish Quality Gate Result'
 
 
 
