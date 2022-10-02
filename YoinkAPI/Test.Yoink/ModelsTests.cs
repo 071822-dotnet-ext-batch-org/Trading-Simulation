@@ -146,7 +146,6 @@ namespace Test.Yoink
             //Arrange
             Guid guid = Guid.NewGuid();
             Guid testCommentID = new Guid();
-            Guid testFk_UserID = new Guid();
             Guid testFk_PostID = new Guid();
 
 
@@ -552,8 +551,6 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
-
 
             //Act
             CreatePostDto createpostdto = new CreatePostDto("Hello World", 2);
@@ -583,7 +580,6 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
 
 
             //Act
@@ -614,7 +610,7 @@ namespace Test.Yoink
 
             Guid guid = Guid.NewGuid();
 
-            DateTime DT = new DateTime();
+
 
 
             //Act
