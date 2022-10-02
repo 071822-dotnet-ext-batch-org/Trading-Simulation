@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Investment } from 'src/app/Models/Investment';
 import { GetInvestmentsService } from 'src/app/Services/get-investments/get-investments.service';
 import { MatTable } from '@angular/material/table';
+import { BuySellService } from 'src/app/Services/buy-sell/buy-sell.service';
 
 @Component({
   selector: 'app-investments',
@@ -24,16 +25,22 @@ export class InvestmentsComponent implements OnInit {
     'dateModified'
   ]
 
-  constructor(private GIS: GetInvestmentsService) { }
+  constructor(
+    private GIS: GetInvestmentsService,
+    private BSS: BuySellService
+  ) { }
 
   ngOnInit(): void {
     this.getInvestments(this.portfolioID);
-
   }
 
   getInvestments(portfolioID: string) {
     this.GIS.getInvestments(portfolioID).subscribe(inv => {
       this.investments = inv;
     })
+  }
+
+  updatePrices(invs: Investment[]) {
+    
   }
 }
