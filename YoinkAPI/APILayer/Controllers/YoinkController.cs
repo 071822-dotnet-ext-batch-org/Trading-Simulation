@@ -265,11 +265,11 @@ namespace APILayer.Controllers
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
         [HttpPost("all-investments")]
-        public async Task<ActionResult<List<Investment?>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
+        public async Task<ActionResult<List<Investment>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
         {
             if(ModelState.IsValid)
             {
-                List<Investment?> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
+                List<Investment> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
                 return Ok(investment);
             }
             return BadRequest(investmentDto);

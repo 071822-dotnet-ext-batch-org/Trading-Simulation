@@ -688,9 +688,9 @@ namespace RepoLayer
         /// </summary>
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-        public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+        public async Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
         {
-            List<Investment?> invList = new List<Investment?>();
+            List<Investment> invList = new List<Investment>();
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolioID", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioID", portfolioID);
