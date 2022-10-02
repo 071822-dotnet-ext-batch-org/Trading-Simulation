@@ -545,8 +545,11 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0UserId = User.Identity?.Name;
-                LikeComment? newLikeForComment = await this._businessLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
-                return Ok(newLikeForComment);
+                if(createLikeForCommentDto != null && auth0UserId != null) 
+                {
+                    bool newLikeForComment = await this._businessLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+                    return Ok(newLikeForComment);
+                }
             }
             return BadRequest("Comment was not liked");
         }
@@ -559,8 +562,12 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0UserId = User.Identity?.Name;
-                bool? deleteComment = await this._businessLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
-                return Ok(deleteComment);
+
+                if (deleteLikeForCommentDto != null && auth0UserId != null)
+                {
+                    bool? deleteComment = await this._businessLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
+                    return Ok(deleteComment);
+                }
             }
             return BadRequest("Comment was not unliked.");
         }

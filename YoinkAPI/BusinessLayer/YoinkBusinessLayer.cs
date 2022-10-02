@@ -505,9 +505,9 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
 
 
-    public async Task<LikeComment?> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId)
+    public async Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId)
     {
-        LikeComment likedcomment = await this._repoLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+        bool likedcomment = await this._repoLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
         return likedcomment;
     }
 

@@ -50,7 +50,9 @@ export class PortfolioComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('closed');
       if(!result) return;
-      this.CP.createPortfolio(result.name, result.originalLiquid, result.privacyLevel).subscribe(ports => this.portfolios = ports);
+      this.CP.createPortfolio(result.name, result.originalLiquid, result.privacyLevel).subscribe(port => {
+        this.portfolios.unshift(port);
+      });
     })
   }
 
