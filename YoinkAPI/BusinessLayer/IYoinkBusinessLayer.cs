@@ -237,6 +237,6 @@ namespace BusinessLayer
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
         Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
-        Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u);
+        Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id);
     }
 }

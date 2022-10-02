@@ -488,7 +488,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     }
 
 
-    public async Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u)
+    public async Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id)
     {
         AllUpdatedRowsDto aurdto = new AllUpdatedRowsDto();
 
@@ -496,29 +496,35 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         {
             bool updateBuys = await this._repoLayer.UpdateBuysCurrentPriceAsync(u);
 
-            aurdto.Buys = await this._repoLayer.GetAllBuyBySymbolNoPortfolioAsync(u.Symbol);
+            List<Buy> allUpdatedBuys = await this._repoLayer.GetAllBuyBySymbolNoPortfolioAsync(u.Symbol);
             
-            List<Guid?> uniquePortfolioIDs = aurdto.Buys.Select(b => b.Fk_PortfolioID).Distinct().ToList();
+            List<Guid?> uniquePortfolioIDs = allUpdatedBuys.Select(b => b.Fk_PortfolioID).Distinct().ToList();
             
             bool updateInvestments = await this._repoLayer.UpdateInvestmentsCurrentPriceAsync(u);
 
             bool updatePortfolios = await this._repoLayer.UpdatePortfoliosCurrentPriceAsync(uniquePortfolioIDs);
 
-            foreach (Guid? pid in uniquePortfolioIDs)
+            List<Portfolio?> myPortfolios = await this._repoLayer.GetALL_PortfoliosByUserIDAsync(auth0id);
+
+            foreach (Portfolio? myP in myPortfolios)
             {
-                GetInvestmentDto gidto = new GetInvestmentDto(pid, u.Symbol);
-                Investment? i = await this._repoLayer.GetInvestmentByPortfolioIDAsync(gidto);
-                
-                if (i != null)
+                if(uniquePortfolioIDs.Contains(myP?.PortfolioID))
                 {
-                    aurdto.Investments.Add(i);
+                    aurdto.Portfolios.Add(myP);
                 }
+            }
 
-                Portfolio? p = await this._repoLayer.GetPortfolioByPorfolioIDAsync(pid);
-
-                if (p != null)
+            foreach (Portfolio? p in aurdto.Portfolios)
+            {
+                if(p != null)
                 {
-                    aurdto.Portfolios.Add(p);
+                    GetInvestmentDto gidto = new GetInvestmentDto(p.PortfolioID, u.Symbol);
+                    Investment? i = await this._repoLayer.GetInvestmentByPortfolioIDAsync(gidto);
+                    
+                    if (i != null)
+                    {
+                        aurdto.Investments.Add(i);
+                    }
                 }
             }
         }
