@@ -158,7 +158,7 @@ namespace RepoLayer
         /// </summary>
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-        Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
+        Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
 
 
@@ -330,7 +330,7 @@ namespace RepoLayer
 
 
 
-        Task<LikeComment> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId);
+        Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId);
 
         Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId);
 

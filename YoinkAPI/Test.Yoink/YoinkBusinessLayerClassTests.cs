@@ -601,7 +601,7 @@ namespace Test.Yoink
             };
 
 
-            List<Investment?> InvestmockList = new List<Investment?>();
+            List<Investment> InvestmockList = new List<Investment>();
 
             InvestmockList.Add(newinvestment3);
 
@@ -909,7 +909,7 @@ namespace Test.Yoink
             };
 
 
-            List<Post?> postmockList = new List<Post?>();
+            List<Post> postmockList = new List<Post>();
 
             postmockList.Add(TestPost);
 
@@ -917,7 +917,7 @@ namespace Test.Yoink
             // dataSource will decouple the tested method from the database and use the local data set above for the test
 
             var dataSource = new Mock<IdbsRequests>();
-            if (postmockList != null){}
+
             dataSource
                 .Setup(p => p.GetAllPostByUserIdAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(postmockList));

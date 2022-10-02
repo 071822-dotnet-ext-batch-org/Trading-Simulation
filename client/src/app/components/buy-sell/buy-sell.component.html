@@ -5,7 +5,7 @@
       <div class="dropdown-fields"> <!-- Just dropdown boxes -->
         <div> <!-- Chose which portfolio to use drop down box -->
           <mat-form-field>
-            <mat-label>Chose Portfolio</mat-label>
+            <mat-label>Portfolio</mat-label>
             <mat-select [required]="true" [(value)]="portfolioID">
               <mat-option *ngFor="let port of portfolios" value="{{port.portfolioID}}">
                 {{ port.name }}
@@ -14,7 +14,7 @@
           </mat-form-field>
         </div>
         <mat-form-field> <!-- Chose either buy or sell drop down box -->
-          <mat-label>Chose Buy or Sell</mat-label>
+          <mat-label>Choose Buy or Sell</mat-label>
           <mat-select [required]="true" [(value)]="selected">
             <mat-option *ngFor="let option of options" value="{{option.value}}">
               {{ option.viewValue }}
@@ -60,7 +60,7 @@
         </button>
       </mat-form-field>
     </form>
-    <div class="table-responsive" *ngFor="let data of tickerData"> <!-- The data displayed from ticker-->
+    <div class="table-responsive"> <!-- The data displayed from ticker-->
       <table class="table">
         <thead>
           <tr>
@@ -72,30 +72,25 @@
         </thead>
       </table>
       <table> <!--Data chart interperlated from tickerData in getTickerData from component page-->
+        <thead>
+          <tr>
+            <th class="table-info">Ticker</th>
+            <th class="table-info">Close</th>
+            <th class="table-info">High</th>
+            <th class="table-info">Low</th>
+            <th class="table-info">Open</th>
+            <th class="table-info">Vol.</th>
+          </tr>
+        </thead>
+        
         <tbody>
-          <tr>
-            <td>Ticker:</td> <!-- The ticker symbol-->
-            <td>{{data.T}}</td>
-          </tr>
-          <tr>
-            <td>Price at Close:</td>  <!-- Stock price at closing of the trading day from getTickerData-->
-            <td>{{data.c}}</td>
-          </tr>
-          <tr>
-            <td>High of the day:</td> <!-- Highest of the trading day from getTickerData-->
-            <td>{{data.h}}</td>
-          </tr>
-          <tr>
-            <td>Low of the day:</td> <!-- Lowest stock price of the trading day from getTickerData-->
-            <td>{{data.l}}</td>
-          </tr>
-          <tr>
-            <td>Price at open:</td> <!-- Stock price at opening of the trading day from getTickerData-->
-            <td>{{data.o}}</td>
-          </tr>
-          <tr>
-            <td>Trading volume per day:</td> <!-- The total number of stock that were traded during the day from getTickerData-->
-            <td>{{data.v}}</td>
+          <tr *ngFor="let data of tickerData">
+            <td class="table-info">{{data.T}}</td>
+            <td class="table-info">{{data.c | currency}}</td>
+            <td class="table-info">{{data.h | currency}}</td>
+            <td class="table-info">{{data.l | currency}}</td>
+            <td class="table-info">{{data.o | currency}}</td>
+            <td class="table-info">{{data.v}}</td>
           </tr>
         </tbody>
       </table>

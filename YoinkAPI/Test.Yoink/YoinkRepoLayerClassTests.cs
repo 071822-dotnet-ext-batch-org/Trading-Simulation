@@ -429,7 +429,7 @@ namespace Test.Yoink
 
             };
 
-            List<Investment?> investmentmockList = new List<Investment?>();
+            List<Investment> investmentmockList = new List<Investment>();
 
             investmentmockList.Add(newinvestment);
 
@@ -446,15 +446,21 @@ namespace Test.Yoink
 
             var TheClassBeingTested = new dbsRequests(dataSource5.Object);
 
+            if (newinvestment == null) {}
+
             var dataSource2 = new Mock<IdbsRequests>();
             dataSource
                 .Setup(I => I.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
                 .Returns(Task.FromResult(newinvestment));
 
-            var dataSource3 = new Mock<IdbsRequests>();
-            dataSource
-                .Setup(I => I.GetAllInvestmentsByPortfolioIDAsync(It.IsAny<Guid>()))
-                .Returns(Task.FromResult(investmentmockList));
+            if(investmentmockList != null) 
+            {
+                var dataSource3 = new Mock<IdbsRequests>();
+                dataSource
+                    .Setup(I => I.GetAllInvestmentsByPortfolioIDAsync(It.IsAny<Guid>()))
+                    .Returns(Task.FromResult(investmentmockList));
+            }
+
 
 
 

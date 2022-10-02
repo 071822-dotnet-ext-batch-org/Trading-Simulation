@@ -297,9 +297,9 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// </summary>
     /// <param name="investmentDto">GetAllInvestmentsDto</param>
     /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-    public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+    public async Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
     {
-        List<Investment?> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
+        List<Investment> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
         return investments;
     }
 
@@ -505,9 +505,9 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
 
 
-    public async Task<LikeComment?> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId)
+    public async Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId)
     {
-        LikeComment likedcomment = await this._repoLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+        bool likedcomment = await this._repoLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
         return likedcomment;
     }
 

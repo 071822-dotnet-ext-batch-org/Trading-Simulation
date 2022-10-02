@@ -688,9 +688,9 @@ namespace RepoLayer
         /// </summary>
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-        public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+        public async Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
         {
-            List<Investment?> invList = new List<Investment?>();
+            List<Investment> invList = new List<Investment>();
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolioID", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioID", portfolioID);
@@ -1109,7 +1109,7 @@ namespace RepoLayer
         }
 
 
-        public async Task<LikeComment> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId)
+        public async Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId)
         {
             using (SqlCommand command = new SqlCommand($"INSERT INTO LikesComments (fk_commentID, fk_userID) VALUES (@commentId, @auth0Id) Select TOP (1) * FROM LikesComments WHERE fk_userID = @userId ORDER BY dateCreated DESC", _conn))
             {
@@ -1117,15 +1117,11 @@ namespace RepoLayer
                 command.Parameters.AddWithValue("@userId", auth0UserId);
 
                 _conn.Open();
-                SqlDataReader? ret = await command.ExecuteReaderAsync();
-                LikeComment? likeComment = null;
-                if (ret.Read())
-                {
-                    likeComment = new LikeComment(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDateTime(3), ret.GetDateTime(4));
-                }
-
+                int ret = await command.ExecuteNonQueryAsync();
                 _conn.Close();
-                return likeComment;
+
+                
+                return (ret > 0);
             }
         }
 

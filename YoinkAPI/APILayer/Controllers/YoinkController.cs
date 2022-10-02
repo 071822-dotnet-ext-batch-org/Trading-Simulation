@@ -265,11 +265,11 @@ namespace APILayer.Controllers
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
         [HttpPost("all-investments")]
-        public async Task<ActionResult<List<Investment?>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
+        public async Task<ActionResult<List<Investment>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
         {
             if(ModelState.IsValid)
             {
-                List<Investment?> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
+                List<Investment> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
                 return Ok(investment);
             }
             return BadRequest(investmentDto);
@@ -545,8 +545,11 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0UserId = User.Identity?.Name;
-                LikeComment? newLikeForComment = await this._businessLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
-                return Ok(newLikeForComment);
+                if(createLikeForCommentDto != null && auth0UserId != null) 
+                {
+                    bool newLikeForComment = await this._businessLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+                    return Ok(newLikeForComment);
+                }
             }
             return BadRequest("Comment was not liked");
         }
@@ -559,8 +562,12 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0UserId = User.Identity?.Name;
-                bool? deleteComment = await this._businessLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
-                return Ok(deleteComment);
+
+                if (deleteLikeForCommentDto != null && auth0UserId != null)
+                {
+                    bool? deleteComment = await this._businessLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
+                    return Ok(deleteComment);
+                }
             }
             return BadRequest("Comment was not unliked.");
         }
