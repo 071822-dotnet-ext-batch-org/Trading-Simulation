@@ -39,7 +39,7 @@ namespace Models
         {
         }
 
-        public AllUpdatedRowsDto(List<Investment> investments, List<Portfolio> portfolios, List<Buy> buys)
+        public AllUpdatedRowsDto(List<Investment> investments, List<Portfolio?> portfolios, List<Buy> buys)
         {
             Investments = investments;
             Portfolios = portfolios;
@@ -47,7 +47,7 @@ namespace Models
         }
 
         public List<Investment> Investments { get; set; } = new List<Investment>();
-        public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
+        public List<Portfolio?> Portfolios { get; set; } = new List<Portfolio?>();
         public List<Buy> Buys { get; set; } = new List<Buy>();
     }
 }

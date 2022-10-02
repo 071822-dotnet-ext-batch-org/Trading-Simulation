@@ -523,13 +523,16 @@ namespace APILayer.Controllers
 
 
         [HttpPut("update-current-price")]
-        [AllowAnonymous]
         public async Task<ActionResult<AllUpdatedRowsDto>> UpdateCurrentPriceAsync(UpdatePriceDto u)
         {
             if (ModelState.IsValid)
             {
-                AllUpdatedRowsDto aurdto = await this._businessLayer.UpdateCurrentPriceAsync(u);
-                return Ok(aurdto);
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    AllUpdatedRowsDto aurdto = await this._businessLayer.UpdateCurrentPriceAsync(u, auth0id);
+                    return Ok(aurdto);
+                }
             }
             return BadRequest(u);
         }
