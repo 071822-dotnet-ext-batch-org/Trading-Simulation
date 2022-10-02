@@ -416,4 +416,18 @@ namespace Models
             this.Content = Content;
         }
     }
+
+
+    public class LikeForCommentDto
+    {
+        public Guid? CommentId { get; set; }
+
+        public LikeForCommentDto() { }
+
+        public LikeForCommentDto(Guid CommentId, string UserID)
+        {
+            this.CommentId= CommentId;
+ 
+        }
+    }
 }

@@ -8,6 +8,7 @@ using Models.ModelDTOs.BackToFrontEnd;
 using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using Microsoft.Extensions.Hosting;
 
 namespace APILayer.Controllers
 {
@@ -145,6 +146,10 @@ namespace APILayer.Controllers
             List<Portfolio?> retrievedPortfolios = await this._businessLayer.GetALLPortfoliosByUserIDAsync(auth0UserId);
             return Ok(retrievedPortfolios);
         }
+
+
+
+
 
         /// <summary>
         /// Allows user to edit their portfolio, things like name, privacyLevel, etc.
@@ -535,6 +540,42 @@ namespace APILayer.Controllers
                 return Ok(comments);
             }
             else return BadRequest(postId);
+        }
+
+
+
+        [HttpPost("create-like-for-comment")]
+        public async Task<ActionResult<LikeComment?>> CreateLikeForCommentAsync(LikeForCommentDto? createLikeForCommentDto)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                LikeComment? newLikeForComment = await this._businessLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+                return Ok(newLikeForComment);
+            }
+            return BadRequest("Comment was not liked");
+        }
+
+
+
+        [HttpDelete("delete-like-for-comment")]
+        public async Task<ActionResult<bool>> DeleteLikeForCommentAsync(LikeForCommentDto? deleteLikeForCommentDto)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                bool? deleteComment = await this._businessLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
+                return Ok(deleteComment);
+            }
+            return BadRequest("Comment was not unliked.");
+        }
+
+
+        [HttpGet("number-of-comments-by-postId")]
+        public async Task<ActionResult<int>> GetCountofCommentsByPostIdAsync(Guid? postId)
+        {
+            int? GotcommentCountByPostId = await this._businessLayer.GetCountofCommentsByPostIdAsync(postId);
+            return Ok(GotcommentCountByPostId);
         }
     }
 }
