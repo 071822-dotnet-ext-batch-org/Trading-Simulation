@@ -43,6 +43,8 @@ namespace Test.Yoink
             };
 
             var dataSource = new Mock<IdbsRequests>();
+
+            if(profile == null){}
             dataSource
                 .Setup(m => m.GetProfileByUserIDAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(profile));
@@ -70,9 +72,11 @@ namespace Test.Yoink
 
             
             //Assert
-
-            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
-            Assert.Equal(profiledto.Name, profile.Name);
+            if (profile != null)
+            {
+                Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
+                Assert.Equal(profiledto.Name, profile.Name);
+            }
         }//END OF TestingAllMethodsAssociatedWithUserProfile
 
 
@@ -381,6 +385,8 @@ namespace Test.Yoink
                 .Returns(Task.FromResult(false));
 
             var dataSourceBL = new Mock<IYoinkBusinessLayer>();
+
+            if(post == null){}
             dataSourceBL
                 .Setup(s => s.UpdatePostAsync(It.IsAny<string?>(),It.IsAny<EditPostDto>()))
                 .Returns(Task.FromResult(post));
@@ -400,8 +406,10 @@ namespace Test.Yoink
 
 
             //Assert
- 
-            Assert.Equal("auth0ID_UserID", post.Fk_UserID);//Method - Successfully created a Post
+            if(post != null)
+            {
+                Assert.Equal("auth0ID_UserID", post.Fk_UserID);//Method - Successfully created a Post
+            }
             Assert.Equal("New Content", postDto.Content);//Method - Successfully created a Post
             Assert.True(true);//Method - Successfully created a Post
 
@@ -539,6 +547,9 @@ namespace Test.Yoink
             investmentmockList.Add(newinvestment);
 
             var dataSource = new Mock<IdbsRequests>();
+
+            if(investmentmockList_Non_Null == null){}
+
             dataSource
                 .Setup(I => I.GetInvestmentByTimeAsync(It.IsAny<GetInvestmentByTimeDto>()))
                 .Returns(Task.FromResult(investmentmockList_Non_Null));
@@ -800,6 +811,8 @@ namespace Test.Yoink
                 .Returns(Task.FromResult(true));
 
             var dataSource2 = new Mock<IdbsRequests>();
+
+            if(auhOUserId == null){}
             dataSource
                 .Setup(p => p.GetUserWithPostIdAsync(It.IsAny<Guid>()))
                 .Returns(Task.FromResult(auhOUserId));
@@ -843,6 +856,7 @@ namespace Test.Yoink
             //Returns a string
 
             var dataSource = new Mock<IdbsRequests>();
+            if(auhOUserId == null) {}
             dataSource
                 .Setup(p => p.GetUserWithPostIdAsync(It.IsAny<Guid>()))
                 .Returns(Task.FromResult(auhOUserId));
@@ -880,7 +894,6 @@ namespace Test.Yoink
             //set the data for testing the methods
             //Arrange
             Guid guid = Guid.NewGuid();
-            DateTime DT = new DateTime();
             string userId = "789999";
 
             Post TestPost = new Post
@@ -904,6 +917,7 @@ namespace Test.Yoink
             // dataSource will decouple the tested method from the database and use the local data set above for the test
 
             var dataSource = new Mock<IdbsRequests>();
+            if (postmockList != null){}
             dataSource
                 .Setup(p => p.GetAllPostByUserIdAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(postmockList));

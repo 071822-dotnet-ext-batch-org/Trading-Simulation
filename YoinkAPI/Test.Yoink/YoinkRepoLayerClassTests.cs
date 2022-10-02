@@ -41,12 +41,15 @@ namespace Test.Yoink
 
             };
 
+            if(profile == null) {}
+
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(m => m.GetProfileByUserIDAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(profile));
 
             var dataSource5 = new Mock<IConfiguration>();
+            if(profile == null){}
             dataSource
             .Setup(m => m.GetProfileByUserIDAsync(It.IsAny<string>()))
             .Returns(Task.FromResult(profile));
@@ -74,10 +77,12 @@ namespace Test.Yoink
 
 
             //Assert
-
-            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
+            if(profile != null)
+            {
+                Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
+                Assert.Equal(profiledto.Name, profile.Name);
+            }
             Assert.True(true);
-            Assert.Equal(profiledto.Name, profile.Name);
         }
 
 
@@ -157,6 +162,8 @@ namespace Test.Yoink
                 .Returns(Task.FromResult(true));
 
             var dataSource4 = new Mock<IConfiguration>();
+
+            if(portfolio != null){}
             dataSource
                 .Setup(p => p.GetPortfolioByPorfolioIDAsync(It.IsAny<Guid>()))
                 .Returns(Task.FromResult(portfolio));
@@ -184,13 +191,14 @@ namespace Test.Yoink
 
 
             //Assert
-
-            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfolio.Fk_UserID);
-            Assert.Equal(portfoliodto.Name, portfolio.Name);
-            Assert.Equal(2, portfolio.PrivacyLevel);
-            Assert.Equal(portfolio.PortfolioID, guid);
+            if(portfolio != null)
+            {
+                Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfolio.Fk_UserID);
+                Assert.Equal(portfoliodto.Name, portfolio.Name);
+                Assert.Equal(2, portfolio.PrivacyLevel);
+                Assert.Equal(portfolio.PortfolioID, guid);
+            }
             Assert.True(true);
-
         }
 
 
@@ -246,7 +254,7 @@ namespace Test.Yoink
             .Setup(s => s.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<Decimal>(), It.IsAny<Decimal>()))
             .Returns(Task.FromResult(true));
 
-
+            if(sell != null) {}
             var dataSource6 = new Mock<IConfiguration>();
             dataSource
                 .Setup(s => s.GetRecentSellByPortfolioId(It.IsAny<Guid>()))
@@ -269,12 +277,14 @@ namespace Test.Yoink
 
 
             //Assert
-
-            Assert.Equal("GOOGL", sell.Symbol);
-            Assert.Equal(2000, sell.AmountSold);
+            if (sell != null)
+            {
+                Assert.Equal("GOOGL", sell.Symbol);
+                Assert.Equal(2000, sell.AmountSold);
+                Assert.Equal(guid, sell.Fk_PortfolioID);
+            }
             Assert.Equal("GOOGL", selldto.Symbol);
             Assert.True(true);
-            Assert.Equal(guid, sell.Fk_PortfolioID);
         }
 
 
@@ -334,6 +344,9 @@ namespace Test.Yoink
 
 
             var dataSource3 = new Mock<IConfiguration>();
+            
+            if(buy == null) {}
+
             dataSource
                 .Setup(b => b.GetRecentBuyByPortfolioId(It.IsAny<Guid>()))
                 .Returns(Task.FromResult(buy));
@@ -358,7 +371,10 @@ namespace Test.Yoink
             //Assert
 
             Assert.Equal("GOOGL", AllBuys.Symbol);
-            Assert.Equal(2000, buy.CurrentPrice);
+            if(buy != null)
+            {
+                Assert.Equal(2000, buy.CurrentPrice);
+            }
             Assert.True(true);
             //Assert.Equal(guid, buy.Fk_PortfolioID);
 
@@ -418,6 +434,7 @@ namespace Test.Yoink
             investmentmockList.Add(newinvestment);
 
             var dataSource = new Mock<IdbsRequests>();
+            if(investmentmockList == null){}
             dataSource
                 .Setup(I => I.GetInvestmentByTimeAsync(It.IsAny<GetInvestmentByTimeDto>()))
                 .Returns(Task.FromResult(investmentmockList));
@@ -752,6 +769,7 @@ namespace Test.Yoink
 
 
             var dataSource = new Mock<IdbsRequests>();
+            if(post == null){}
             dataSource
                 .Setup(p => p.GetRecentPostByUserId(It.IsAny<string>()))
                 .Returns(Task.FromResult(post));
@@ -770,8 +788,10 @@ namespace Test.Yoink
 
 
             //Assert
-
-            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", post.Fk_UserID);
+            if (post != null)
+            {
+                Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", post.Fk_UserID);
+            }
 
 
         }
@@ -842,6 +862,7 @@ namespace Test.Yoink
 
 
             var dataSource = new Mock<IdbsRequests>();
+            if(post.Fk_UserID == null){}
             dataSource
                 .Setup(p => p.GetUserWithPostIdAsync(It.IsAny<Guid>()))
                 .Returns(Task.FromResult(post.Fk_UserID));
@@ -887,6 +908,7 @@ namespace Test.Yoink
                 DateModified = new DateTime(),
             };
 
+            if (post == null) {}
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
@@ -907,8 +929,10 @@ namespace Test.Yoink
 
 
             //Assert
-
-            Assert.Equal(guid, post.PostID);
+            if(post != null)
+            {
+                Assert.Equal(guid, post.PostID);
+            }
 
 
         }
@@ -1028,7 +1052,7 @@ namespace Test.Yoink
             List<Post> postList = new List<Post>();
             postList.Add(post);
 
-
+            if (post != null) {}
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(p => p.GetPostByPostIdAsync(It.IsAny<Guid>()))
@@ -1044,12 +1068,17 @@ namespace Test.Yoink
 
             //Act
 
-            var GotPostByPostIdAsync = TheClassBeingTested.GetPostByPostIdAsync(post.PostID);
+            if (post != null)
+            {
+                var GotPostByPostIdAsync = TheClassBeingTested.GetPostByPostIdAsync(post.PostID);
+            }
 
 
             //Assert
-
-            Assert.Equal(guid, post.PostID);
+            if (post != null)
+            {
+                Assert.Equal(guid, post.PostID);
+            }
 
 
         }
