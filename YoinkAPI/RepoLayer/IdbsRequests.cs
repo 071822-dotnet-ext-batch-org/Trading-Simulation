@@ -327,6 +327,15 @@ namespace RepoLayer
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
         Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
+
+
+
+        Task<LikeComment> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId);
+
+        Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId);
+
+        Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId);
+
         
 
         //Updates the currentPrice column from the Investments table with new price.
@@ -337,5 +346,6 @@ namespace RepoLayer
         Task<bool> UpdateInvestmentAsync(Investment i);
         Task<bool> UpdateInvestmentsCurrentPriceAsync(UpdatePriceDto u);
         Task<bool> UpdatePortfoliosCurrentPriceAsync(List<Guid?> uniquePortfolioIDs);
+
     }
 }

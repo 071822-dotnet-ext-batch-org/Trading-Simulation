@@ -237,6 +237,18 @@ namespace BusinessLayer
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
         Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
+
+
+
+
+        Task<LikeComment?> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId);
+
+        Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId);
+
+        Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId);
+
         Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id);
+
     }
+
 }

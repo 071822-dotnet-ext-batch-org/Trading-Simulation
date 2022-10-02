@@ -503,6 +503,29 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     }
 
 
+
+
+    public async Task<LikeComment?> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId)
+    {
+        LikeComment likedcomment = await this._repoLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+        return likedcomment;
+    }
+
+
+    public async Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId)
+    {
+        bool unlikedcomment = await this._repoLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
+        return unlikedcomment;
+    }
+
+
+    public async Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId)
+    {
+        int? GotcommentCountByPostId = await this._repoLayer.GetCountofCommentsByPostIdAsync(postId);
+        return GotcommentCountByPostId;
+    }
+}
+
     public async Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id)
     {
         AllUpdatedRowsDto aurdto = new AllUpdatedRowsDto();
@@ -548,3 +571,4 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     }
 
 }
+

@@ -418,6 +418,20 @@ namespace Models
         }
     }
 
+
+
+    public class LikeForCommentDto
+    {
+        public Guid? CommentId { get; set; }
+
+        public LikeForCommentDto() { }
+
+        public LikeForCommentDto(Guid CommentId, string UserID)
+        {
+            this.CommentId= CommentId;
+ 
+        }
+
     public class UpdatePriceDto
     {
         public UpdatePriceDto()
@@ -432,5 +446,6 @@ namespace Models
 
         public decimal? Price { get; set; }
         public string? Symbol { get; set; }
+
     }
 }

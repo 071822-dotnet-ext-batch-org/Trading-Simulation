@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using System.Xml.Linq;
 
 
 namespace RepoLayer
@@ -1107,6 +1108,65 @@ namespace RepoLayer
             }
         }
 
+
+        public async Task<LikeComment> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO LikesComments (fk_commentID, fk_userID) VALUES (@commentId, @auth0Id) Select TOP (1) * FROM LikesComments WHERE fk_userID = @userId ORDER BY dateCreated DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", createLikeForCommentDto.CommentId);
+                command.Parameters.AddWithValue("@userId", auth0UserId);
+
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                LikeComment? likeComment = null;
+                if (ret.Read())
+                {
+                    likeComment = new LikeComment(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDateTime(3), ret.GetDateTime(4));
+                }
+
+                _conn.Close();
+                return likeComment;
+            }
+        }
+
+
+
+        public async Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesComments WHERE likesCommentsID = @commentId AND fk_userID = @userId", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", deleteLikeForCommentDto.CommentId);
+                command.Parameters.AddWithValue("@userId", auth0UserId);
+
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+
+        public async Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId)
+        {
+            int? count = 0;
+            using (SqlCommand cmdCount = new SqlCommand("SELECT COUNT(commentID) FROM Comments WHERE fk_postID=@postId", _conn))
+            {
+                cmdCount.Parameters.AddWithValue("@postId", postId);
+                _conn.Open();
+                count = (int?)(await cmdCount.ExecuteScalarAsync());
+                _conn.Close();
+            }
+
+            return count;
+        }
+
+
+
         public async Task<bool> UpdateBuysCurrentPriceAsync(UpdatePriceDto u)
         {
             string sql = @"
@@ -1235,5 +1295,6 @@ namespace RepoLayer
                 return true;
             }
         }
+
     }
 }
