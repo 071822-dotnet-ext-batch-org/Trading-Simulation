@@ -1106,5 +1106,134 @@ namespace RepoLayer
                 return commList;
             }
         }
+
+        public async Task<bool> UpdateBuysCurrentPriceAsync(UpdatePriceDto u)
+        {
+            string sql = @"
+                UPDATE Buys
+                SET currentPrice = @currentPrice
+                WHERE symbol = @symbol
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@currentPrice", u.Price);
+                command.Parameters.AddWithValue("@symbol", u.Symbol);
+
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                return (ret > 0);
+            }
+        }
+
+        public async Task<List<Buy>> GetAllBuyBySymbolNoPortfolioAsync(string symbol)
+        {
+            List<Buy> buys = new List<Buy>();
+
+            string sql = @"
+                SELECT *
+                FROM Buys
+                WHERE symbol = @symbol
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@symbol", symbol);
+
+                _conn.Open();
+                
+                SqlDataReader ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Buy b = new Buy(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDateTime(6));
+                    buys.Add(b);
+                }
+
+                _conn.Close();
+                return buys;
+            }
+        }
+
+        public async Task<bool> UpdateInvestmentAsync(Investment i)
+        {
+            string sql = @"
+                UPDATE Investments
+                SET currentPrice = @currentPrice,
+                    pnl = @pnl
+                WHERE investmentID = @investmentID
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@currentPrice", i.CurrentPrice);
+                command.Parameters.AddWithValue("@pnl", i.TotalPNL);
+                command.Parameters.AddWithValue("@investmentID", i.InvestmentID);
+                
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                return (ret > 0);
+            }
+        }
+
+        public async Task<bool> UpdateInvestmentsCurrentPriceAsync(UpdatePriceDto u)
+        {
+            string sql = @"
+                UPDATE Investments
+                SET currentPrice = @currentPrice,
+                    pnl = (@currentPrice * currentAmount) - moneyInvested
+                WHERE symbol = @symbol
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@currentPrice", u.Price);
+                command.Parameters.AddWithValue("@symbol", u.Symbol);
+                
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                return (ret > 0);
+            }
+        }
+
+        public async Task<bool> UpdatePortfoliosCurrentPriceAsync(List<Guid?> uniquePortfolioIDs)
+        {
+            string sql = @"
+                UPDATE Portfolios
+                SET currentInvestment = (SELECT SUM(currentAmount * currentPrice) FROM Investments WHERE fk_portfolioID = @portfolioID),
+                    currentTotal = liquid + (SELECT SUM(currentAmount * currentPrice) FROM Investments WHERE fk_portfolioID = @portfolioID),
+                    pnl = liquid + (SELECT SUM(currentAmount * currentPrice) FROM Investments WHERE fk_portfolioID = @portfolioID) - originalLiquid
+                WHERE portfolioID = @portfolioID
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                _conn.Open();
+                foreach(Guid? pid in uniquePortfolioIDs)
+                {
+                    command.Parameters.Clear();
+                    if (pid != null) 
+                    {
+                        command.Parameters.AddWithValue("@portfolioID", pid);
+                        int ret = await command.ExecuteNonQueryAsync();
+
+                        if (ret == 0) 
+                        {
+                            _conn.Close();
+                            return false;
+                        }
+                    }
+                }
+                
+                _conn.Close();
+                return true;
+            }
+        }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Models;
 using BusinessLayer;
-using Models.ModelDTOs.BackToFrontEnd;
 using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -231,22 +230,6 @@ namespace APILayer.Controllers
             }
             return BadRequest(sellsDto);
         }
-
-
-        [HttpPut("update-current-price")]
-        public async Task<ActionResult<Investment?>> UpdateCurrentPriceAsync(Models.GetInvestmentDto investmentDto, decimal currentPrice)
-        {
-            if (ModelState.IsValid)
-            {
-                Investment? investment = await this._businessLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
-                return Ok(investment);
-            }
-            return BadRequest(investmentDto);
-        }
-
-
-
-
 
         /// <summary>
         /// Retrieves a single investment by the Portfolio's ID number and symbol.
@@ -536,5 +519,20 @@ namespace APILayer.Controllers
             }
             else return BadRequest(postId);
         }
+
+
+
+        [HttpPut("update-current-price")]
+        [AllowAnonymous]
+        public async Task<ActionResult<AllUpdatedRowsDto>> UpdateCurrentPriceAsync(UpdatePriceDto u)
+        {
+            if (ModelState.IsValid)
+            {
+                AllUpdatedRowsDto aurdto = await this._businessLayer.UpdateCurrentPriceAsync(u);
+                return Ok(aurdto);
+            }
+            return BadRequest(u);
+        }
+
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
-using Models.ModelDTOs.BackToFrontEnd;
 
 namespace BusinessLayer
 {
@@ -238,5 +237,6 @@ namespace BusinessLayer
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
         Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
+        Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u);
     }
 }

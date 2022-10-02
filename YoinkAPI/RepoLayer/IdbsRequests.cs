@@ -92,16 +92,6 @@ namespace RepoLayer
         /// <returns>The most recent Sell Order</returns>
         Task<Sell?> GetRecentSellByPortfolioId(Guid? fk_PortfolioID);
 
-
-        //Updates the currentPrice column from the Investments table with new price.
-        //Inputs: "guid fk_PortfolioID" and "string Symbol" are from Investments table. "currentPrice" is from a 3rd party api?
-        //Outputs: A true/false into the BusinessLayer. The BusinessLayer will later output the portfolioID and Symbol using GetInvestmentByPortfolioIDAsync().
-        Task<bool> UpdateCurrentPriceAsync(Models.GetInvestmentDto investmentDto, decimal currentPrice);
-
-
-
-
-
         //--------------------Portfolio Section------------------
 
         /// <summary>
@@ -337,5 +327,15 @@ namespace RepoLayer
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
         Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
+        
+
+        //Updates the currentPrice column from the Investments table with new price.
+        //Inputs: "guid fk_PortfolioID" and "string Symbol" are from Investments table. "currentPrice" is from a 3rd party api?
+        //Outputs: A true/false into the BusinessLayer. The BusinessLayer will later output the portfolioID and Symbol using GetInvestmentByPortfolioIDAsync().
+        Task<bool> UpdateBuysCurrentPriceAsync(UpdatePriceDto u);
+        Task<List<Buy>> GetAllBuyBySymbolNoPortfolioAsync(string symbol);
+        Task<bool> UpdateInvestmentAsync(Investment i);
+        Task<bool> UpdateInvestmentsCurrentPriceAsync(UpdatePriceDto u);
+        Task<bool> UpdatePortfoliosCurrentPriceAsync(List<Guid?> uniquePortfolioIDs);
     }
 }
