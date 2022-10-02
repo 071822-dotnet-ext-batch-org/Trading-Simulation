@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
-using Models.ModelDTOs.BackToFrontEnd;
 
 namespace BusinessLayer
 {
@@ -241,11 +240,15 @@ namespace BusinessLayer
 
 
 
+
         Task<LikeComment?> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId);
 
         Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId);
 
         Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId);
+
+        Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id);
+
     }
 
 }

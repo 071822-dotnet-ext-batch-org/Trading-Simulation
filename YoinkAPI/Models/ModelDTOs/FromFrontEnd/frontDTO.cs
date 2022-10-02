@@ -242,6 +242,7 @@ namespace Models
         }
     }//End of SELL
 
+
     /// <summary>
     /// This is the Model to create a new CreatePostDto - contains Content, PrivacyLevel
     /// </summary>
@@ -418,6 +419,7 @@ namespace Models
     }
 
 
+
     public class LikeForCommentDto
     {
         public Guid? CommentId { get; set; }
@@ -429,5 +431,21 @@ namespace Models
             this.CommentId= CommentId;
  
         }
+
+    public class UpdatePriceDto
+    {
+        public UpdatePriceDto()
+        {
+        }
+
+        public UpdatePriceDto(decimal price, string symbol)
+        {
+            Price = price;
+            Symbol = symbol;
+        }
+
+        public decimal? Price { get; set; }
+        public string? Symbol { get; set; }
+
     }
 }

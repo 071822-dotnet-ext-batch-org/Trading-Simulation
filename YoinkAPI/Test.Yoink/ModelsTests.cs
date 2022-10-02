@@ -1,11 +1,12 @@
 using Models;
-using Models.ModelDTOs.BackToFrontEnd;
 using System;
 
 namespace Test.Yoink
 {
     public class ModelsTests
     {
+
+        // This method would test the Investment models 
         [Fact]
         public void InvestmentWorksCorrectly()
         {
@@ -16,7 +17,7 @@ namespace Test.Yoink
 
             DateTime DT = new DateTime();
 
-
+            // The Investment constructors with arguments were also tested
             //Act
             Investment newinvestment1 = new Investment(invt, invt, "AAPL", 1200, 100, 50, 4, 2, 150, 50, DT, DT);
 
@@ -52,7 +53,6 @@ namespace Test.Yoink
         {
             //Arrange
             Guid TestpostID = new Guid();
-            string? TestFk_UserID = "UserID";
 
             //Act
             Post TestPost1 = new Post(TestpostID, "TestFk_UserID", "Sold big", 1, 2, new DateTime(), new DateTime());
@@ -151,20 +151,21 @@ namespace Test.Yoink
 
 
             //Act
-            Comment? comment = new Comment(guid, guid, guid, "GOOGL", new DateTime(), new DateTime());
+            Comment? comment = new Comment(guid,"guid", guid, "GOOGL", 5, new DateTime(), new DateTime());
             Comment testComment = new Comment
             {
                 CommentID = testCommentID,
-                Fk_UserID = testFk_UserID,
+                Fk_UserID = "testFk_UserID",
                 Fk_PostID = testFk_PostID,
                 Content = "Hello World",
+                Likes = 5,
                 DateCreated = new DateTime(),
                 DateModified = new DateTime(),
             };
 
             //Assert
             Assert.Equal(testCommentID, testComment.CommentID);
-            Assert.Equal(testFk_UserID, testComment.Fk_UserID);
+            Assert.Equal("testFk_UserID", testComment.Fk_UserID);
             Assert.Equal(testFk_PostID, testComment.Fk_PostID);
         }
 

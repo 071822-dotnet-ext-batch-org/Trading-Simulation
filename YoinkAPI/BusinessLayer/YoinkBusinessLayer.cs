@@ -1,5 +1,4 @@
 ﻿using Models;
-using Models.ModelDTOs.BackToFrontEnd;
 using RepoLayer;
 
 namespace BusinessLayer;
@@ -22,13 +21,17 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     public async Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p)
     {
         Profile? newProfile = null;
-        bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        if (newProfileSaved)
+
+        if(p != null)
         {
-            newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-            return newProfile;
+            bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+            if (newProfileSaved && auth0Id != null)
+            {
+                newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            }
         }
-        else return newProfile;
+
+        return newProfile;
     }
 
     /// <summary>
@@ -37,22 +40,33 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// Requires logged in user via Auth0.        
     /// </summary>
     /// <returns>retrievedProfile Profile object</returns>
-    public async Task<Profile?> GetProfileByUserIDAsync(string? auth0Id)
+    public async Task<Profile> GetProfileByUserIDAsync(string? auth0Id)
     {
-        Profile? retrievedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-        return (retrievedProfile);
+        if(auth0Id != null)
+        {
+            Profile? retrievedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            if(retrievedProfile != null)
+            {
+                return (retrievedProfile);
+            }
+        }
+
+        return new Profile();
     }
 
     public async Task<Profile?> EditProfileAsync(string? auth0Id, ProfileDto? p)
     {
         Profile? updatedProfile = null;
-        bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        if (newProfileSaved)
+        if (p != null)
         {
-            updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-            return updatedProfile;
+            bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+            if (newProfileSaved && auth0Id != null)
+            {
+                updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            }
         }
-        else return updatedProfile;
+        
+        return updatedProfile;
     }
 
     /// <summary>
@@ -171,19 +185,6 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     }
 
     /////////////////////
-
-    public async Task<Investment?> UpdateCurrentPriceAsync(Models.GetInvestmentDto investmentDto, decimal currentPrice)
-    {
-        bool PriceWasUpdated = await this._repoLayer.UpdateCurrentPriceAsync(investmentDto, currentPrice);
-
-        if (PriceWasUpdated == true)
-        {
-            Investment? investment = await this._repoLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
-            return investment;
-        }
-        return null;
-    }
-
 
     /// <summary>
     /// Retrieves an investment by its associated PortfolioID.
@@ -503,6 +504,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
 
 
+
     public async Task<LikeComment?> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId)
     {
         LikeComment likedcomment = await this._repoLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
@@ -523,3 +525,50 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return GotcommentCountByPostId;
     }
 }
+
+    public async Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id)
+    {
+        AllUpdatedRowsDto aurdto = new AllUpdatedRowsDto();
+
+        if(u.Symbol != null && u.Price != null)
+        {
+            bool updateBuys = await this._repoLayer.UpdateBuysCurrentPriceAsync(u);
+
+            List<Buy> allUpdatedBuys = await this._repoLayer.GetAllBuyBySymbolNoPortfolioAsync(u.Symbol);
+            
+            List<Guid?> uniquePortfolioIDs = allUpdatedBuys.Select(b => b.Fk_PortfolioID).Distinct().ToList();
+            
+            bool updateInvestments = await this._repoLayer.UpdateInvestmentsCurrentPriceAsync(u);
+
+            bool updatePortfolios = await this._repoLayer.UpdatePortfoliosCurrentPriceAsync(uniquePortfolioIDs);
+
+            List<Portfolio?> myPortfolios = await this._repoLayer.GetALL_PortfoliosByUserIDAsync(auth0id);
+
+            foreach (Portfolio? myP in myPortfolios)
+            {
+                if(uniquePortfolioIDs.Contains(myP?.PortfolioID))
+                {
+                    aurdto.Portfolios.Add(myP);
+                }
+            }
+
+            foreach (Portfolio? p in aurdto.Portfolios)
+            {
+                if(p != null)
+                {
+                    GetInvestmentDto gidto = new GetInvestmentDto(p.PortfolioID, u.Symbol);
+                    Investment? i = await this._repoLayer.GetInvestmentByPortfolioIDAsync(gidto);
+                    
+                    if (i != null)
+                    {
+                        aurdto.Investments.Add(i);
+                    }
+                }
+            }
+        }
+
+        return aurdto;
+    }
+
+}
+

@@ -1,5 +1,5 @@
-import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { BuySellDetails, Options } from '../../Models/buy-sell/buySellOptions';
+import { Component, OnInit } from '@angular/core';
+import { Options } from '../../Models/buy-sell/buySellOptions';
 import { BuySellService } from 'src/app/Services/buy-sell/buy-sell.service';
 import { Results } from 'src/app/Models/buy-sell/polygonResults';
 import { FormControl } from '@angular/forms';
@@ -22,35 +22,25 @@ export class BuySellComponent implements OnInit {
     private BSP: BuySellToPortfolioService
   ) { }
 
+  title = 'Buy and Sell'; // Page title
   symbolSearch = new FormControl(''); // Used in html search ln: 58
   symbol = new FormControl(''); // Used in onPayment, createBuy and createSell below
   qty: any; // Used in onPayment, createBuy and createSell below
-  // tickerPrice: any;
   tickerData: any; // Used in getTickerData
   selected: string = 'Buy'; // Used in onPayment
-  portfolios: Portfolio[] = [];
+  portfolios: Portfolio[] = []; // Used in ngOnInit to get Portfolio
   tickerSymbol: any; // Used in getTickerData
-  // details: BuySellDetails[] = [];
   results: Results[] = []; // Used in getTickerData and onPayment
   portfolioID: string = ''; // Used in onPayment, createBuy, and createSell below
   buyResult: any; // Used in createBuy below
   sellResult: any; // Used in createSell below
-  buyPrice: number = 0;
-  totalPrice: any;
+  totalPrice: any; // Used in the calculateTotal method
 
   // What is shown in the dropdown box on web page options.
   options: Options[] = [
     { value: 'Buy', viewValue: 'Buy' },
     { value: 'Sell', viewValue: 'Sell' },
   ];
-
-  public onConfirm() {
-    window.alert('Your order has been sent.')
-  }
-
-  public onCancel() {
-    window.alert('Your order has been canceled.')
-  }
 
   // This method uses the getTickerData() method and conencts to the Polygon.io api after which,
   // if the user choses 'Buy' in the drop down box, it will run the createBuy() method which sends the data
@@ -111,7 +101,9 @@ export class BuySellComponent implements OnInit {
     })
   }
 
-  //////////// TODO /////////////
+  // This method takes two parameters and after confirming the ticker through the getTickerData method
+  // in the Polygon.io api, it will return in the "results[0]" the first index which is the stock
+  // price. Then that will be multiplied by the qty that the users enters in the quantity box on the order page.
   public calculateTotal(tickerSymbol: any, qty: number) {
     if (!tickerSymbol) return;
     console.log(tickerSymbol)
@@ -123,6 +115,5 @@ export class BuySellComponent implements OnInit {
     });
 
   };
-
 
 }//End BuySellComponent

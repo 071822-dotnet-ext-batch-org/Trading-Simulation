@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Models;
 using BusinessLayer;
-using Models.ModelDTOs.BackToFrontEnd;
 using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -110,10 +109,15 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0Id = User.Identity?.Name;
-                Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
-                return Created("", newPortfolio);
+
+                if (auth0Id != null && p != null)
+                {
+                    Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
+                    return Created("", newPortfolio);
+                }
             }
-            else return BadRequest(p);
+            
+            return BadRequest(p);
         }
 
         /// <summary>
@@ -237,22 +241,6 @@ namespace APILayer.Controllers
             return BadRequest(sellsDto);
         }
 
-
-        [HttpPut("update-current-price")]
-        public async Task<ActionResult<Investment?>> UpdateCurrentPriceAsync(Models.GetInvestmentDto investmentDto, decimal currentPrice)
-        {
-            if (ModelState.IsValid)
-            {
-                Investment? investment = await this._businessLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
-                return Ok(investment);
-            }
-            return BadRequest(investmentDto);
-        }
-
-
-
-
-
         /// <summary>
         /// Retrieves a single investment by the Portfolio's ID number and symbol.
         /// Requires logged in user via Auth0.  
@@ -364,8 +352,14 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0UserId = User.Identity?.Name;
-                Post? createdPost = await this._businessLayer.CreatePostAsync(auth0UserId, post);
-                return Created("", createdPost);
+                if(auth0UserId != null)
+                {
+                    Post? createdPost = await this._businessLayer.CreatePostAsync(auth0UserId, post);
+                    if (createdPost != null)
+                    {
+                        return Created("", createdPost);
+                    }
+                }
             }
             return BadRequest(post);
         }
@@ -544,6 +538,7 @@ namespace APILayer.Controllers
 
 
 
+
         [HttpPost("create-like-for-comment")]
         public async Task<ActionResult<LikeComment?>> CreateLikeForCommentAsync(LikeForCommentDto? createLikeForCommentDto)
         {
@@ -577,5 +572,22 @@ namespace APILayer.Controllers
             int? GotcommentCountByPostId = await this._businessLayer.GetCountofCommentsByPostIdAsync(postId);
             return Ok(GotcommentCountByPostId);
         }
+
+        [HttpPut("update-current-price")]
+        public async Task<ActionResult<AllUpdatedRowsDto>> UpdateCurrentPriceAsync(UpdatePriceDto u)
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    AllUpdatedRowsDto aurdto = await this._businessLayer.UpdateCurrentPriceAsync(u, auth0id);
+                    return Ok(aurdto);
+                }
+            }
+            return BadRequest(u);
+        }
+
+
     }
 }
