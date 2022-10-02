@@ -431,6 +431,7 @@ namespace Models
             this.CommentId= CommentId;
  
         }
+    }
 
     public class UpdatePriceDto
     {
