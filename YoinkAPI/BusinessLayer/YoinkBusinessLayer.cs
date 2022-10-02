@@ -524,7 +524,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         int? GotcommentCountByPostId = await this._repoLayer.GetCountofCommentsByPostIdAsync(postId);
         return GotcommentCountByPostId;
     }
-}
+
 
     public async Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id)
     {
