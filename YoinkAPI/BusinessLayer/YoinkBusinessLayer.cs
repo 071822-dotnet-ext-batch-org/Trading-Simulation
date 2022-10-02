@@ -21,13 +21,17 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     public async Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p)
     {
         Profile? newProfile = null;
-        bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        if (newProfileSaved)
+
+        if(p != null)
         {
-            newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-            return newProfile;
+            bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+            if (newProfileSaved && auth0Id != null)
+            {
+                newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            }
         }
-        else return newProfile;
+
+        return newProfile;
     }
 
     /// <summary>
@@ -36,22 +40,33 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// Requires logged in user via Auth0.        
     /// </summary>
     /// <returns>retrievedProfile Profile object</returns>
-    public async Task<Profile?> GetProfileByUserIDAsync(string? auth0Id)
+    public async Task<Profile> GetProfileByUserIDAsync(string? auth0Id)
     {
-        Profile? retrievedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-        return (retrievedProfile);
+        if(auth0Id != null)
+        {
+            Profile? retrievedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            if(retrievedProfile != null)
+            {
+                return (retrievedProfile);
+            }
+        }
+
+        return new Profile();
     }
 
     public async Task<Profile?> EditProfileAsync(string? auth0Id, ProfileDto? p)
     {
         Profile? updatedProfile = null;
-        bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        if (newProfileSaved)
+        if (p != null)
         {
-            updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-            return updatedProfile;
+            bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+            if (newProfileSaved && auth0Id != null)
+            {
+                updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            }
         }
-        else return updatedProfile;
+        
+        return updatedProfile;
     }
 
     /// <summary>

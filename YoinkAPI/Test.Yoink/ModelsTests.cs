@@ -53,7 +53,6 @@ namespace Test.Yoink
         {
             //Arrange
             Guid TestpostID = new Guid();
-            string? TestFk_UserID = "UserID";
 
             //Act
             Post TestPost1 = new Post(TestpostID, "TestFk_UserID", "Sold big", 1, 2, new DateTime(), new DateTime());

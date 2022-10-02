@@ -108,10 +108,15 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0Id = User.Identity?.Name;
-                Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
-                return Created("", newPortfolio);
+
+                if (auth0Id != null && p != null)
+                {
+                    Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
+                    return Created("", newPortfolio);
+                }
             }
-            else return BadRequest(p);
+            
+            return BadRequest(p);
         }
 
         /// <summary>
@@ -342,8 +347,14 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0UserId = User.Identity?.Name;
-                Post? createdPost = await this._businessLayer.CreatePostAsync(auth0UserId, post);
-                return Created("", createdPost);
+                if(auth0UserId != null)
+                {
+                    Post? createdPost = await this._businessLayer.CreatePostAsync(auth0UserId, post);
+                    if (createdPost != null)
+                    {
+                        return Created("", createdPost);
+                    }
+                }
             }
             return BadRequest(post);
         }
