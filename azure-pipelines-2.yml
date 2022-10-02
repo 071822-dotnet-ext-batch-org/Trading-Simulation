@@ -41,17 +41,11 @@ steps:
     verbose: false
     customCommand: 'run ng build --prod'
   continueOnError: true
-  
-- task: CopyFiles@2
-  inputs:
-    contents: '**/*.drop'
-    targetFolder: '$(Build.ArtifactStagingDirectory)'  
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
 
 
 
