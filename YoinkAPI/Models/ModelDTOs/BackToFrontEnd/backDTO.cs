@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Models.ModelDTOs.BackToFrontEnd
+namespace Models
 {
     public class PostWithCommentCountDto
     {
@@ -31,5 +31,23 @@ namespace Models.ModelDTOs.BackToFrontEnd
             this.PrivacyLevel = privacyLevel;
             this.DateModified = dateModified;
         }
+    }
+
+    public class AllUpdatedRowsDto
+    {
+        public AllUpdatedRowsDto()
+        {
+        }
+
+        public AllUpdatedRowsDto(List<Investment> investments, List<Portfolio> portfolios, List<Buy> buys)
+        {
+            Investments = investments;
+            Portfolios = portfolios;
+            Buys = buys;
+        }
+
+        public List<Investment> Investments { get; set; } = new List<Investment>();
+        public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
+        public List<Buy> Buys { get; set; } = new List<Buy>();
     }
 }

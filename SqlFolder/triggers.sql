@@ -6,7 +6,7 @@ DROP TRIGGER sellTrigger;
 
 CREATE TRIGGER buyTrigger
 ON Buys
-AFTER INSERT
+AFTER INSERT, UPDATE
 AS
 	IF EXISTS (SELECT * FROM Investments WHERE symbol = (SELECT symbol FROM inserted) AND fk_portfolioID = (SELECT fk_portfolioID FROM inserted))
 		BEGIN

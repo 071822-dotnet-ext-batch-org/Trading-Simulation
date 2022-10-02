@@ -1,5 +1,6 @@
 ﻿
 using BusinessLayer;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Models;
 using Moq;
 using RepoLayer;
@@ -151,6 +152,7 @@ namespace Test.Yoink
         }
 
 
+        
 
         [Fact]
         public void TestingAllMethodsAssociatedWithSell()
@@ -560,6 +562,65 @@ namespace Test.Yoink
 
 
 
+        //This methods would test GetAllInvestmentsByPortfolioID 
+
+        [Fact]
+        public void TestingGetAllInvestmentsByPortfolioID()
+        {
+            //set the data for testing the methods
+            //Arrange
+            Guid guid = Guid.NewGuid();
+
+
+            Investment newinvestment3 = new Investment()
+            {
+                InvestmentID = guid,
+                Fk_PortfolioID = guid,
+                Symbol = "AAPL",
+                AmountInvested = 1200,
+                CurrentAmount = 100,
+                CurrentPrice = 50,
+                TotalAmountBought = 4,
+                TotalAmountSold = 2,
+                AveragedBuyPrice = 150,
+                TotalPNL = 50,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+
+            };
+
+
+            List<Investment?> InvestmockList = new List<Investment?>();
+
+            InvestmockList.Add(newinvestment3);
+
+
+            // dataSource will decouple the tested method from the database and use the local data set above for the test
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetAllInvestmentsByPortfolioIDAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(InvestmockList));
+
+
+            //Inject the datasource into the class containing the methods to be tested
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Call the methods to be tested
+            //Act
+
+            var AllTheInvestmentWasGotByPortfolioID = TheClassBeingTested.GetAllInvestmentsByPortfolioIDAsync(guid);
+
+
+            //Assert
+
+            Assert.Equal(newinvestment3.InvestmentID, guid);
+        }
+
+
+
 
         [Fact]
         public void TestingGetNumberOfUsers()
@@ -648,6 +709,7 @@ namespace Test.Yoink
         }
 
 
+        
         [Fact]
         public void TestingGetNumberOfBuysByDay()
         {
@@ -705,6 +767,163 @@ namespace Test.Yoink
             Assert.Equal(350, sellsCount);
 
 
+        }
+
+
+        //This methods would test UpdatePost 
+
+        [Fact]
+        public void TestingUpdatePostD()
+        {
+            //set the data for testing the methods
+            //Arrange
+            Guid guid = Guid.NewGuid();
+            string auhOUserId = "56778888";
+
+            EditPostDto editpostdto = new EditPostDto(guid, "Hello World", 2);
+
+            EditPostDto editpostdto2 = new EditPostDto()
+            {
+                PostId = guid,
+                Content = "Hello World",
+                PrivacyLevel = 2,
+
+            };
+
+
+           
+            // dataSource will decouple the tested method from the database and use the local data set above for the test
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.UpdatePostAsync(It.IsAny<EditPostDto>()))
+                .Returns(Task.FromResult(true));
+
+            var dataSource2 = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetUserWithPostIdAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(auhOUserId));
+
+
+            //Inject the datasource into the class containing the methods to be tested
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Call the methods to be tested
+            //Act
+
+            var ThePostWasUpdated = TheClassBeingTested.UpdatePostAsync(auhOUserId, editpostdto2);
+
+
+            //Assert
+
+            Assert.True(true);
+            Assert.Equal(editpostdto.PostId, guid);
+        }
+
+
+
+        //This methods would test for delete post
+
+        [Fact]
+        public void TestingDeletePostD()
+        {
+            //set the data for testing the methods
+            //Arrange
+            Guid guid = Guid.NewGuid();
+            string auhOUserId = "56778888";
+
+
+            Guid PostId = guid;
+               
+
+            // dataSource will decouple the tested method from the database and use the local data set above for the test
+
+            //Returns a string
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetUserWithPostIdAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(auhOUserId));
+
+            var dataSource2 = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.DeletePostAsync(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(true));
+
+
+            //Inject the datasource into the class containing the methods to be tested
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Call the methods to be tested
+            //Act
+
+            var ThePostWasUpdated = TheClassBeingTested.DeletePostAsync(auhOUserId, PostId);
+
+
+            //Assert
+
+            Assert.True(true);
+            Assert.Equal(PostId, guid);
+        }
+
+
+
+        //This methods would test PostWithCommentCountDto 
+
+        [Fact]
+        public void TestingPostWithCommentCountDto()
+        {
+            //set the data for testing the methods
+            //Arrange
+            Guid guid = Guid.NewGuid();
+            DateTime DT = new DateTime();
+            string userId = "789999";
+
+            Post TestPost = new Post
+            {
+
+                PostID = guid,
+                Fk_UserID = "TestFk_UserID",
+                Content = "Sold big",
+                Likes = 1,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime(),
+            };
+
+
+            List<Post?> postmockList = new List<Post?>();
+
+            postmockList.Add(TestPost);
+
+
+            // dataSource will decouple the tested method from the database and use the local data set above for the test
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(p => p.GetAllPostByUserIdAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(postmockList));
+
+
+            //Inject the datasource into the class containing the methods to be tested
+
+            var TheClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+
+            //Call the methods to be tested
+            //Act
+
+            var AllPostWasGotById = TheClassBeingTested.GetAllPostByUserIdAsync(userId);
+
+
+            //Assert
+
+            Assert.Equal("789999", userId);
+            Assert.Equal("TestFk_UserID", TestPost.Fk_UserID);
         }
 
 

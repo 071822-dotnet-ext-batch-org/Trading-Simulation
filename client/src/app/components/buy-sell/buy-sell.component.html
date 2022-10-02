@@ -1,4 +1,4 @@
-<h2 class='title' style="font-size:xx-large">Buy and Sell</h2>
+<h2 class='title' style="font-size:xx-large">{{ title }}</h2>
 <div class="component-container"> <!-- entire container -->
   <div class="form-container"> <!-- Has portfolio, order type, ticker, quantity, total and buttons -->
     <form class="BuySell-Panel"> <!-- What's needed for a buy or sell order-->
@@ -45,64 +45,60 @@
       </div>
       <div class="payment-btn"> <!-- Confirm and cancel buttons -->
         <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
-        <button class="buy-btn" (click)="onPayment()" >Payment</button>
+        <button class="buy-btn" (click)="onPayment()" [routerLink]="'/Portfolio'">Payment</button>
       </div>
     </form> <!-- End of Buy/sell form -->
   </div> <!-- End form container -->
-  <div class="search-container">
-    <form class="search-form"> <!-- Search box -->
+  <div class="search-container"> <!-- Container with the search box/function and ticker data-->
+    <form class="search-form"> <!-- Contians the search box-->
       <mat-form-field class="search-form-field" appearance="fill">
         <mat-label>Symbol search</mat-label>
-        <input matInput placeholder="Ex. AAPL" [formControl]="symbolSearch">
+        <input matInput maxlength="5" placeholder="Ex. AAPL" [formControl]="symbolSearch"> <!--Ticker search box-->
         <button matSuffix mat-icon-button (click)="getTickerData(symbolSearch.value)"
-          (submit)="getTickerData(symbolSearch.value)">
+          (submit)="getTickerData(symbolSearch.value)"> <!-- returns the ticker data from Polygon.io atter running getTickerData-->
           <mat-icon>search</mat-icon>
         </button>
       </mat-form-field>
-    <div class="table-responsive">
+    </form>
+    <div class="table-responsive" *ngFor="let data of tickerData"> <!-- The data displayed from ticker-->
       <table class="table">
         <thead>
           <tr>
             <th></th>
             <th></th>
-            <th>Stock Information</th>
+            <th>Stock Information</th> <!-- Table title-->
             <th></th>
           </tr>
         </thead>
       </table>
-      <table>
+      <table> <!--Data chart interperlated from tickerData in getTickerData from component page-->
         <tbody>
           <tr>
-            <td>Ticker:</td>
-            <td>{{symbolSearch}}</td>
+            <td>Ticker:</td> <!-- The ticker symbol-->
+            <td>{{data.T}}</td>
           </tr>
           <tr>
-            <td>Close:</td>
-            <td>{{symbolSearch}}</td>
+            <td>Price at Close:</td>  <!-- Stock price at closing of the trading day from getTickerData-->
+            <td>{{data.c}}</td>
           </tr>
           <tr>
-            <td>High:</td>
-            <td>{{symbolSearch}}</td>
+            <td>High of the day:</td> <!-- Highest of the trading day from getTickerData-->
+            <td>{{data.h}}</td>
           </tr>
           <tr>
-            <td>Low:</td>
-            <td>{{symbolSearch}}</td>
+            <td>Low of the day:</td> <!-- Lowest stock price of the trading day from getTickerData-->
+            <td>{{data.l}}</td>
           </tr>
           <tr>
-            <td>Open:</td>
-            <td>{{symbolSearch}}</td>
+            <td>Price at open:</td> <!-- Stock price at opening of the trading day from getTickerData-->
+            <td>{{data.o}}</td>
           </tr>
           <tr>
-            <td>Volume:</td>
-            <td>{{symbolSearch}}</td>
-          </tr>
-          <tr>
-            <td>Market Cap:</td>
-            <td>{{symbolSearch}}</td>
+            <td>Trading volume per day:</td> <!-- The total number of stock that were traded during the day from getTickerData-->
+            <td>{{data.v}}</td>
           </tr>
         </tbody>
       </table>
-    </div> <!-- End table response container -->
-    </form>
+    </div> <!-- Container for table-->
   </div> <!-- End search container -->
 </div><!--Component Container-->
