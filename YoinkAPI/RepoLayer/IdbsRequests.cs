@@ -92,7 +92,13 @@ namespace RepoLayer
         /// <returns>The most recent Sell Order</returns>
         Task<Sell?> GetRecentSellByPortfolioId(Guid? fk_PortfolioID);
 
-        
+
+        //Updates the currentPrice column from the Investments table with new price.
+        //Inputs: "guid fk_PortfolioID" and "string Symbol" are from Investments table. "currentPrice" is from a 3rd party api?
+        //Outputs: A true/false into the BusinessLayer. The BusinessLayer will later output the portfolioID and Symbol using GetInvestmentByPortfolioIDAsync().
+        Task<bool> UpdateCurrentPriceAsync(Models.GetInvestmentDto investmentDto, decimal currentPrice);
+
+
 
 
 
