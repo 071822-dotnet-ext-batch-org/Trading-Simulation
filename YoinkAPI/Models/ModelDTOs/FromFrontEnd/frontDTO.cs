@@ -154,6 +154,9 @@ namespace Models
     /// <summary>
     /// This is the Model to create a new GetInvestmentDto - contains  PortfolioId, Symbol
     /// </summary>
+    
+    
+    
     public class GetInvestmentDto
     {
         public Guid? PortfolioId { get; set; }

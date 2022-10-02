@@ -170,6 +170,21 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return sellList;
     }
 
+    /////////////////////
+
+    public async Task<Investment?> UpdateCurrentPriceAsync(Models.GetInvestmentDto investmentDto, decimal currentPrice)
+    {
+        bool PriceWasUpdated = await this._repoLayer.UpdateCurrentPriceAsync(investmentDto, currentPrice);
+
+        if (PriceWasUpdated == true)
+        {
+            Investment? investment = await this._repoLayer.GetInvestmentByPortfolioIDAsync(investmentDto);
+            return investment;
+        }
+        return null;
+    }
+
+
     /// <summary>
     /// Retrieves an investment by its associated PortfolioID.
     /// </summary>

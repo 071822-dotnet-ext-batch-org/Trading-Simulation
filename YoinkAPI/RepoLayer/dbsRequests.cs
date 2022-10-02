@@ -435,6 +435,25 @@ namespace RepoLayer
 
 
 
+        public async Task<bool> UpdateCurrentPriceAsync(Models.GetInvestmentDto investmentDto, decimal currentPrice)
+        {
+            using (SqlCommand command = new SqlCommand($"UPDATE Investments SET currentPrice = @currentPrice Where fk_PortfolioID = @portfolioId AND symbol = @symbol", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioId", investmentDto.PortfolioId);
+                command.Parameters.AddWithValue("@symbol", investmentDto.Symbol);
+                command.Parameters.AddWithValue("@currentPrice", currentPrice);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
 
 
 
