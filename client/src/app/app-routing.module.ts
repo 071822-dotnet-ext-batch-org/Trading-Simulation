@@ -9,6 +9,7 @@ import { NewsComponent } from './components/news/news.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PostsComponent } from './components/posts/posts.component';
+import { AboutUsComponent } from './components/about-us/about-us.component';
 
 
 
@@ -24,7 +25,8 @@ const routes: Routes = [
   {path: 'News', component: NewsComponent},
   {path: 'Profile', component: ProfileComponent },
   {path: 'Posts', component: PostsComponent }, 
-  {path: "postfeed", component: PostsComponent}//comeback for this
+  {path: "postfeed", component: PostsComponent},//comeback for this
+  {path: "AboutUs", component: AboutUsComponent}
 
 
 ];

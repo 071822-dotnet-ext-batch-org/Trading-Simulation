@@ -1,42 +1,42 @@
 
-<!-- 3 Breaks to create spaces before the card banner-->
+<!-- Beverly -3 Breaks to create spaces before the card banner-->
 <br>
 <br>
 <br>
-<!-- Code the "How Yoink! Works banner  -->
+<!-- Beverly - Code the "How Yoink! Works banner  -->
 <div> 
   <mat-card class="tip">
-    <br>
+    <br> 
     <br>
     <p class="pagetitle"> <b>How Yoink! Works...<br>it's easy as 1, 2, 3, Yoink! </b></p><br>
     
-<!--SignUp-->
+<!--Beverly - SignUp-->
     <div id="firstleft">
       <br>
        <p class="title"><b>Step 1</b></p><br>
        <p class="subtitle"><b>Sign up</b><p></p>
        <p class="content">Create an account to have access to a portfolio </p>
     </div>
-<!--Create Portfolio-->    
+<!--Beverly - Create Portfolio-->    
     <div id="secondleft">
        <br>
        <p class="title"><b>Step 2</b></p><br>
        <p class="subtitle"><b>Create portfolio</b></p>
        <p class="content">Choose any amount to start investing </p>
     </div>
-<!--Pick an investment-->
+<!--Beverly - Pick an investment-->
     <div id="firstright">
        <br>
        <p class="title"><b>Step 3</b></p><br>
        <p class="subtitle"><b>Pick an investment</b></p>
        <p class="content">Use Yoink! news to do research on a potential investment</p><br>
     </div>
-<!--Place a trade-->
+<!--Beverly - Place a trade-->
     <div id="secondright">
        <br>
        <p class="title"><b>Yoink!</b></p><br>
        <p class="subtitle"><b>Place a trade</b></p>
-       <p class="content">Our Yoink! tips will guide you</p>
+       <p class="content">Buy or Sell virtual stock</p>
     </div>
    </mat-card>
 </div>
@@ -61,8 +61,9 @@
 <br>
 <br>
 <br>
-<!-- adds the button in the middle of the page for user to sign up for website-->
+<!-- Beverly - adds the button in the middle of the page for user to sign up for website-->
 <a><button class="signup" mat-raised-button color=""><app-register></app-register></button></a><br/>
+
 <br>
 <br>
 <br>
@@ -73,10 +74,10 @@
 <div>
 </div>
 
-<!-- Adds commentary on the currency converter tool-->
+<!-- Beverly - Adds commentary on the currency converter tool-->
 <p class="explore"><b>Explore</b> some of our tools and info to become more financially savvy</p>
 
-<!-- Begins the code for the Currency Converter-->
+<!-- Mominur - Begins the code for the Currency Converter-->
 <div class="currencyconverter">
   <div class="col-xl-4">
     <div class="card shadow">
@@ -89,7 +90,7 @@
         </div>
       </div>
       <div class="card-body">
-        <!-- Chart -->
+        <!-- Mominur - Chart -->
         <div class="main-container">
           <div class="selection-cont">
             <select #c1 name = "" id = "country1" (mouseleave) = "changebase(c1.value)">
@@ -110,29 +111,29 @@
               <option value="BHD">Bahraini Dinar</option>
             </select><br/> <br/> 
             
-            
             <button mat-raised-button color="basic" (click) ="convert()">Submit</button><br/>
           </div>
         </div>
       </div>
-      <div class="resultcontainer">
-        <p>1 {{base}} = {{result}} {{cont2}}</p>
-      </div>
-    </div>
+    <div class="resultcontainer">
+    <p>1 {{base}} = {{result}} {{cont2}}</p>
   </div>
 </div>
+</div>
+</div>
+            
  
 
 
 <br>  
 <br>
 <br>
-<!--End of the currency converter-->
+<!--Mominur - End of the currency converter-->
 
-<!--Beginning of the Check us out Section-->            
+<!--Beverly - Beginning of the Check us out Section-->            
 <p class="check"><b>Check</b> us out!</p>
             
-<!-- Card to display the total number of posts-->
+<!-- Beverly/Mominur - Card to display the total number of posts-->
   <div class="row">
     
     <div class="col-xl-3 col-lg-6">
@@ -141,7 +142,7 @@
           <div class="row">
             <div class="col">
               <h5 class="card-title text-uppercase text-muted mb-0">Total Posts</h5>
-              <!--Used the variable "numOfPosts" instead of the method because it would overload the API with too many calls  -->
+              <!--Beverly - Used the variable "numOfPosts" instead of the method because it would overload the API with too many calls  -->
               <span class="h2 font-weight-bold mb-0">{{numOfPosts}}</span>
             </div>
             <div class="col-auto">
@@ -156,14 +157,14 @@
         </div>
       </div>
     </div>
-    <!-- Card to display the total number of users-->
+    <!-- Beverly / Mominur -Card to display the total number of users-->
     <div class="col-xl-3 col-lg-6">
       <div class="card card-stats mb-4 mb-xl-0">
         <div class="card-body">
           <div class="row">
             <div class="col">
               <h5 class="card-title text-uppercase text-muted mb-0">Total Users</h5>
-              <!--Used the variable "numOfUsers" instead of the method because it would overload the API with too many calls  -->
+              <!-- Beverly - Used the variable "numOfUsers" instead of the method because it would overload the API with too many calls  -->
               <span class="h2 font-weight-bold mb-0">{{numOfUsers}}</span>
             </div>
             <div class="col-auto">
@@ -178,14 +179,14 @@
         </div>
       </div>
     </div>
-    <!-- Card to display the total number of sells-->
+    <!-- Beverly / Mominur - Card to display the total number of sells-->
     <div class="col-xl-3 col-lg-6">
       <div class="card card-stats mb-4 mb-xl-0">
         <div class="card-body">
           <div class="row">
             <div class="col">
               <h5 class="card-title text-uppercase text-muted mb-0">Total Sell Orders</h5>
-              <!--Used the variable "numOfSells" instead of the method because it would overload the API with too many calls  -->
+              <!-- Beverly - Used the variable "numOfSells" instead of the method because it would overload the API with too many calls  -->
               <span class="h2 font-weight-bold mb-0">{{numOfSells}}</span>
             </div>
             <div class="col-auto">
@@ -200,14 +201,14 @@
         </div>
       </div>
     </div>
-    <!-- Card to display the total number of buys-->
+    <!-- Beverly/Mominur - Card to display the total number of buys-->
     <div class="col-xl-3 col-lg-6 margin" >
       <div class="card card-stats mb-4 mb-xl-0">
         <div class="card-body">
           <div class="row">
             <div class="col">
               <h5 class="card-title text-uppercase text-muted mb-0">Total Buy Orders</h5>
-              <!--Used the variable "numOfBuys" instead of the method because it would overload the API with too many calls  -->
+              <!-- Beverly - Used the variable "numOfBuys" instead of the method because it would overload the API with too many calls  -->
               <span class="h2 font-weight-bold mb-0">{{numOfBuys}}</span>
             </div>
             <div class="col-auto">
@@ -222,7 +223,6 @@
         </div>
       </div>
     </div>
-    
   </div>
 
   

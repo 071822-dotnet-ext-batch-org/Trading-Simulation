@@ -62,8 +62,11 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
  
  
 
-//import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
-import { CommentsComponent } from './components/comment/comments.component'
+
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { CommentsComponent } from './components/comment/comments.component';
+import { AboutUsComponent } from './components/about-us/about-us.component'
+
 
  
 
@@ -87,9 +90,9 @@ import { CommentsComponent } from './components/comment/comments.component'
     PostCardComponent,
     InvestmentsComponent,
     EditProfileComponent,
-
     CommentsComponent,
- 
+    AboutUsComponent,
+
   ],
   imports: [
     BrowserModule,
