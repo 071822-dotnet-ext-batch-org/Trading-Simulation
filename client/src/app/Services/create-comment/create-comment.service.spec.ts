@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { CreateCommentService } from './create-comment.service';
@@ -6,7 +7,9 @@ describe('CreateCommentService', () => {
   let service: CreateCommentService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    });
     service = TestBed.inject(CreateCommentService);
   });
 

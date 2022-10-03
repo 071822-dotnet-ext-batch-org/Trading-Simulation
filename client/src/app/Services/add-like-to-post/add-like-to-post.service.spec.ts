@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { AddLikeToPostService } from './add-like-to-post.service';
@@ -8,7 +9,7 @@ describe('AddLikeToPostService', () => {
 let str:string  = "strm";
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports : [HttpClientModule]
+      imports: [HttpClientModule]
     });
     service = TestBed.inject(AddLikeToPostService);
     
