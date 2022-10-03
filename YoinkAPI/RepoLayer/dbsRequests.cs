@@ -926,70 +926,63 @@ namespace RepoLayer
             }
         }//End of Remove like from a Post
 
-
         /// <summary>
-        /// Checks if a specific user already has a record on a table - Needs an auth0userID, a Guid ID of a record in a Table, that table name, a columnName, and an optional columnName
+        /// Checks if a specific user already has a like on a post - Needs an auth0userID, and a post ID
         /// </summary>
         /// <param name="auth0UserId"></param>
-        /// <param name="relationColumnID"></param>
-        /// <param name="table_Name"></param>
-        /// <param name="where1"></param>
-        /// <param name="where2"></param>
+        /// <param name="fk_postID"></param>
         /// <returns>true/false</returns>
-        public async Task<bool> CheckIfUserAlreadyHasSomething(string? auth0UserId, Guid relationColumnID, string table_Name, string? where1, string? where2)
+        public async Task<bool> CheckIfUserAlreadyHasLike_OnPost(string? auth0UserId, Guid postID)
         {
-            if(where2 != null)
+            using (SqlCommand command = new SqlCommand($"SELECT TOP (1) * FROM LikesPosts WHERE fk_postID = @fk_postID AND fk_userID = @fk_userID", _conn))
             {
-                using (SqlCommand command = new SqlCommand($"SELECT TOP (1) FROM @TableName WHERE @Where1=@PostId AND @Where2=@UserId", _conn))
+                command.Parameters.AddWithValue("@fk_userID", auth0UserId);
+                command.Parameters.AddWithValue("@fk_postID", postID);
+                
+
+                _conn.Open();
+
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                if (ret.Read())
                 {
-                    command.Parameters.AddWithValue("@RelationColumnToCheck", relationColumnID);
-                    command.Parameters.AddWithValue("@UserId", auth0UserId);
-                    //Inputs for the query
-                    command.Parameters.AddWithValue("@TableName", table_Name);
-                    command.Parameters.AddWithValue("@Where1", where1);
-                    command.Parameters.AddWithValue("@Where2", where2);
-                    
-
-                    _conn.Open();
-
-                    SqlDataReader? ret = await command.ExecuteReaderAsync();
-                    if (ret.Read())
-                    {
-                        //A like is already made by this user to this post
-                        _conn.Close();
-                        return true;
-                    }
-                    // This user does not have a like on this post
+                    //A like is already made by this user to this post
                     _conn.Close();
-                    return false;
+                    return true;
                 }
-            }else
+                // This user does not have a like on this post
+                _conn.Close();
+                return false;
+            }   
+        }//End of the Check if User has like on a post
+
+        /// <summary>
+        /// Checks if a specific user already has a like on a comment - Needs an auth0userID, and a comment ID
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="fk_postID"></param>
+        /// <returns>true/false</returns>
+        public async Task<bool> CheckIfUserAlreadyHasLike_OnComment(string? auth0UserId, Guid commentID)
+        {
+            using (SqlCommand command = new SqlCommand($"SELECT TOP (1) * FROM LikesComments WHERE fk_userID = @UserId AND fk_commentID = @fk_commentID", _conn))
             {
-                using (SqlCommand command = new SqlCommand($"SELECT TOP (1) FROM @TableName WHERE @Where1=@RelationColumnToCheck", _conn))
+                command.Parameters.AddWithValue("@UserId", auth0UserId);
+                command.Parameters.AddWithValue("@fk_commentID", commentID);
+                
+
+                _conn.Open();
+
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                if (ret.Read())
                 {
-                    command.Parameters.AddWithValue("@RelationColumnToCheck", relationColumnID);
-                    command.Parameters.AddWithValue("@UserId", auth0UserId);
-                    //Inputs for the query
-                    command.Parameters.AddWithValue("@TableName", table_Name);
-                    command.Parameters.AddWithValue("@Where1", where1);
-                    
-
-                    _conn.Open();
-
-                    SqlDataReader? ret = await command.ExecuteReaderAsync();
-                    if (ret.Read())
-                    {
-                        //A like is already made by this user to this post
-                        _conn.Close();
-                        return true;
-                    }
-                    // This user does not have a like on this post
+                    //A like is already made by this user to this post
                     _conn.Close();
-                    return false;
-                }            
-            }
-        }//End of the Check if User has Something on a table
-
+                    return true;
+                }
+                // This user does not have a like on this post
+                _conn.Close();
+                return false;
+            }   
+        }//End of the Check if User has a like on a comment
 
         /// <summary>
         /// Allows user to update the current prices of their ivestment by symbol - Needs Sybmol, Update Price, and Portfolio ID
@@ -998,7 +991,7 @@ namespace RepoLayer
         /// <param name="UpdatePrice"></param>
         /// <param name="portfolioID"></param>
         /// <returns>true/false</returns>
-        public async Task<bool> UpdateSymbolCurrentPriceofBuy(string? Symbol, decimal? UpdatePrice, Guid portfolioID)
+        public async Task<bool> UpdateSymbol_CurrentPrice_ofBuy(string? Symbol, decimal? UpdatePrice, Guid portfolioID)
         {
             using (SqlCommand command = new SqlCommand($"Update Investments SET currentPrice = @UpdatePrice Where fk_portfolioID = @fk_portfolioID AND symbol = @symbol", _conn))
             {
@@ -1018,7 +1011,7 @@ namespace RepoLayer
                 _conn.Close();
                 return false;
             }
-        }
+        }//End of Update Symbol's Current Price of Buy
 
         /// <summary>
         /// Edit a comment's content.
@@ -1043,7 +1036,7 @@ namespace RepoLayer
                 _conn.Close();
                 return false;
             }
-        }
+        }//End of Edit Comment
 
         /// <summary>
         /// Get a comment searching with the commentId.
@@ -1069,7 +1062,7 @@ namespace RepoLayer
                 _conn.Close();
                 return comment;
             }
-        }
+        }//End of Get Comment by Comment ID
 
         /// <summary>
         /// Gets a userId that is associated with a specific comment.
@@ -1094,7 +1087,7 @@ namespace RepoLayer
                 _conn.Close();
                 return User;
             }
-        }
+        }//End of Get User with Comment ID
 
         /// <summary>
         /// Delete a comment and ensures user can delete only their own comment.
@@ -1119,7 +1112,7 @@ namespace RepoLayer
                 _conn.Close();
                 return false;
             }
-        }
+        }//End of Delete Comment
 
 
         /// <summary>
@@ -1148,6 +1141,9 @@ namespace RepoLayer
                 return false;
             }
         }//End of Create a Comment on Post
+
+
+
         /// <summary>
         /// Get a lits of comment on a specific post.
         /// Requires logged in user via Auth0.
@@ -1180,6 +1176,6 @@ namespace RepoLayer
                 _conn.Close();
                 return commList;
             }
-        }
+        }//End of Get comment by Post ID
     }
 }

@@ -400,14 +400,22 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// <returns>likeCount integer, (and triggers a +1 like to the Post on the Posts table in the database.)</returns>
     public async Task<int?> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
     {
-
-        bool createdLike = await this._repoLayer.CreateLikeOnPostAsync(like, auth0UserId);
-        if (createdLike)
+        bool checkIfAlreadyHaveALike = await this._repoLayer.CheckIfUserAlreadyHasLike_OnPost(auth0UserId, like.PostId);
+        if(checkIfAlreadyHaveALike == true)
         {
-            Post? post = await this._repoLayer.GetPostByPostId(like.PostId);
-            return post?.Likes;
+            bool createdLike = await this._repoLayer.CreateLikeOnPostAsync(like, auth0UserId);
+            if (createdLike)
+            {
+                Post? post = await this._repoLayer.GetPostByPostId(like.PostId);
+                return post?.Likes;
+            }
+            return null;
         }
-        return null;
+        else
+        {
+            return null;
+        }
+
     }
 
     /// <summary>
@@ -417,13 +425,21 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// <returns>updated likeCount integer, (and triggers a -1 like to the Post on the Posts table in the database.)</returns>
     public async Task<int?> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
     {
-        bool removedLike = await this._repoLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
-        if (removedLike)
+        bool checkIfAlreadyHaveALike = await this._repoLayer.CheckIfUserAlreadyHasLike_OnPost(auth0UserId, unlike.PostId);
+        if(checkIfAlreadyHaveALike == true)
         {
-            Post? post = await this._repoLayer.GetPostByPostId(unlike.PostId);
-            return post?.Likes;
+            bool removedLike = await this._repoLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
+            if (removedLike)
+            {
+                Post? post = await this._repoLayer.GetPostByPostId(unlike.PostId);
+                return post?.Likes;
+            }
+            return null;
         }
-        return null;
+        else
+        {
+            return null;
+        }
     }
 
     /// <summary>

@@ -164,6 +164,15 @@ namespace RepoLayer
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
         Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
+        /// <summary>
+        /// Allows user to update the current prices of their ivestment by symbol - Needs Sybmol, Update Price, and Portfolio ID
+        /// </summary>
+        /// <param name="Symbol"></param>
+        /// <param name="UpdatePrice"></param>
+        /// <param name="portfolioID"></param>
+        /// <returns>true/false</returns>
+        Task<bool> UpdateSymbol_CurrentPrice_ofBuy(string? Symbol, decimal? UpdatePrice, Guid portfolioID);
+
 
 
         //--------------------HomePage Section------------------
@@ -293,24 +302,24 @@ namespace RepoLayer
         // Task<bool> CheckIfUserAlreadyHasPostLike(string? auth0UserId, LikeDto like);
 
         /// <summary>
-        /// Checks if a specific user already has a record on a table - Needs an auth0userID, a Guid ID of a record in a Table, that table name, a columnName, and an optional columnName
+        /// Checks if a specific user already has a like on a post - Needs an auth0userID, and a post ID
         /// </summary>
         /// <param name="auth0UserId"></param>
-        /// <param name="relationColumnID"></param>
-        /// <param name="table_Name"></param>
-        /// <param name="where1"></param>
-        /// <param name="where2"></param>
+        /// <param name="fk_postID"></param>
         /// <returns>true/false</returns>
-        Task<bool> CheckIfUserAlreadyHasSomething(string? auth0UserId, Guid relationColumnID, string table_Name, string? where1, string? where2);
+        Task<bool> CheckIfUserAlreadyHasLike_OnPost(string? auth0UserId, Guid postID);
 
         /// <summary>
-        /// Allows user to update the current prices of their ivestment by symbol - Needs Sybmol, Update Price, and Portfolio ID
+        /// Checks if a specific user already has a like on a comment - Needs an auth0userID, and a comment ID
         /// </summary>
-        /// <param name="Symbol"></param>
-        /// <param name="UpdatePrice"></param>
-        /// <param name="portfolioID"></param>
+        /// <param name="auth0UserId"></param>
+        /// <param name="fk_postID"></param>
         /// <returns>true/false</returns>
-        Task<bool> UpdateSymbolCurrentPriceofBuy(string? Symbol, decimal? UpdatePrice, Guid portfolioID);
+        Task<bool> CheckIfUserAlreadyHasLike_OnComment(string? auth0UserId, Guid commentID);
+
+
+
+        
 
 
         /// Create a comment on a specific post.
