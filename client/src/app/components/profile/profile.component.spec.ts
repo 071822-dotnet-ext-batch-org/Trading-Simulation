@@ -12,6 +12,7 @@ import { environment as env } from 'src/environments/environment';
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
   let fixture: ComponentFixture<ProfileComponent>;
+  let h2: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,10 +49,12 @@ describe('ProfileComponent', () => {
   });
   it('Testing Button', ()=>{
     const data = fixture.nativeElement;
-    expect(data.querySelector("button").textContent).toContain("edit")
+    expect(data.querySelector("button").textContent).toContain(" ")
   });
-  it('Testing header2', ()=>{
-    const data = fixture.nativeElement;
-    expect(data.querySelector("p").textContent).toContain(" ")
+  it('should create header2',()=>{
+    const fixture = TestBed.createComponent(ProfileComponent);
+    fixture.detectChanges();
+    const complied = fixture.debugElement.nativeElement.querySelector('#titleInterpolation');
+    expect(complied).toBeTruthy;
   });
 });
