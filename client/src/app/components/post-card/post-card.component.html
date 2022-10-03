@@ -11,16 +11,17 @@
         </mat-card-header>
     </mat-card-title-group>
 
+    
     <mat-card-content>
         <p>{{post?.content}}</p>
     </mat-card-content>
-
+    
     <mat-card-actions align="end">
         <button mat-icon-button>
             <mat-icon>thumb_up</mat-icon>
             {{post?.likes}}
         </button>
-
+        
         <button mat-icon-button>
             <mat-icon (click)="onReplyClick()">chat_bubble</mat-icon>
         </button>

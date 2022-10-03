@@ -6,11 +6,11 @@ import { environment as env } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class CreateCommentService {
+export class GetAllCommentsService {
 
   constructor(private http: HttpClient) { }
-
-  createComment(content: string): Observable<Comment[]> {
-    return this.http.post<Comment[]>(env.baseURL + '/add-comment', {content})
-  }
+ 
+    getAllComments(): Observable<Comment[]> {
+      return this.http.get<Comment[]>(env.baseURL + '/get-all-comment')
+    }
 }

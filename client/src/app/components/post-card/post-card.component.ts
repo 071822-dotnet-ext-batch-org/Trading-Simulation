@@ -28,6 +28,8 @@ export class PostCardComponent implements OnInit {
     this.dialog.open(CommentsComponent)
   }
 
+  
+
   getProfile(userID: string): void {
     this.PSS.getProfile(userID).subscribe(prof => {
       this.profile = prof;
