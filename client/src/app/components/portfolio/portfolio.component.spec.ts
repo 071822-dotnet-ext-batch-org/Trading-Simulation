@@ -58,5 +58,5 @@ describe('PortfolioComponent', () => {
     fixture.detectChanges();
     const popUpHeader = document.getElementsByTagName('h1')[0];
     expect(popUpHeader.innerText).toEqual(expected_header);
-  })
+  })  
 });

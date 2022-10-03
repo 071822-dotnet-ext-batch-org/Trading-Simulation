@@ -16,4 +16,8 @@ describe('CreatePostService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should create a post', () => {
+    expect(service.createPost).toBeTruthy();
+  });
 });

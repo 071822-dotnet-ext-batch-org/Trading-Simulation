@@ -27,4 +27,8 @@ describe('UpdatePriceService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should update price', () => {
+    expect(service.updatePrice).toBeTruthy();
+  });
 });
