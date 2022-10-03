@@ -1,5 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { ViewContainerRef } from '@angular/core';
+import { ComponentFixture, flush, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PortfolioComponent } from '../portfolio/portfolio.component';
 
 import { CreatePortfolioModalComponent } from './create-portfolio-modal.component';
 
@@ -7,6 +10,8 @@ describe('CreatePortfolioModalComponent', () => {
   let component: CreatePortfolioModalComponent;
   let fixture: ComponentFixture<CreatePortfolioModalComponent>;
   let dialog: MatDialog;
+  let overlayContainerElement: HTMLElement;
+  let testViewContainerRef: ViewContainerRef;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,15 +35,28 @@ describe('CreatePortfolioModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should open a dialog with a component', () => {
-    alert(dialog);
-    const dialogRef = dialog.open(CreatePortfolioModalComponent, {
-      data: { param: '1' }
+  it('should close a dialog and get back a result', () => {
+    const dialogRef = dialog.open(PortfolioComponent, {
+      viewContainerRef: testViewContainerRef
+    });
+    flush();
+    fixture.detectChanges();
+
+    const beforeCloseHandler = jasmine.createSpy('beforeClose callback').and.callFake(() => {
+      expect(overlayContainerElement.querySelector('mat-dialog-content'))
+          .not.toBeNull('dialog container exists when beforeClose is called');
     });
 
-    // verify
-    expect(dialogRef.componentInstance instanceof CreatePortfolioModalComponent).toBe(true);
+    dialogRef.beforeClosed().subscribe(beforeCloseHandler);
+    dialogRef.close('');
+    fixture.detectChanges();
+    flush();
+
+    expect(beforeCloseHandler).toHaveBeenCalledWith('Bulbasaur');
+    expect(overlayContainerElement.querySelector('mat-dialog-container')).toBeNull();
   });
+
+
   
   it('should create', () => {
     expect(component).toBeTruthy();
