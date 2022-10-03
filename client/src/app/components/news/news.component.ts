@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsService } from 'src/app/Services/news/news.service';
 import { News } from 'src/app/Models/News';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-news',
