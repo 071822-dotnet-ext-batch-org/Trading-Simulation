@@ -42,15 +42,16 @@
         </div>
       </div>
       <div class="total"> <!-- Total order cost -->
-        <div> <!-- *ngFor="let cost of costTotal" -->
-          <button class="calc-Btn" (click)="calculateTotal(symbol.value, qty)" >Calculate Total</button>
+        <div class="calc-Btn"> <!-- *ngFor="let cost of costTotal" -->
+          <button (click)="calculateTotal(symbol.value, qty)" >Calculate Total</button>
           <p> Total Price: {{ totalPrice | currency }} </p> <!--WORK IN PROGRESS-->
         </div>
       </div>
-      <div class="payment-btn"> <!-- Confirm and cancel buttons -->
-        <button class="back-btn" (click)="resetForms()">Cancel</button>
-        <button class="buy-btn" (click)="onPayment()">Payment</button>
-        <p class="error-message"> {{this.errorMessage}}</p>
+
+      <div> <!-- Payment and cancel buttons -->
+        <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
+        <button class="buy-btn" (click)="onPayment()" [routerLink]="'/Portfolio'">Payment</button>
+
       </div>
     </form> <!-- End of Buy/sell form -->
     <div>
@@ -81,25 +82,30 @@
         </thead>
       </table>
       <table> <!--Data chart interperlated from tickerData in getTickerData from component page-->
-        <thead>
-          <tr>
-            <th class="table-info">Ticker</th>
-            <th class="table-info">Close</th>
-            <th class="table-info">High</th>
-            <th class="table-info">Low</th>
-            <th class="table-info">Open</th>
-            <th class="table-info">Vol.</th>
-          </tr>
-        </thead>
-        
         <tbody>
-          <tr *ngFor="let data of tickerData">
-            <td class="table-info">{{data.T}}</td>
-            <td class="table-info">{{data.c | currency}}</td>
-            <td class="table-info">{{data.h | currency}}</td>
-            <td class="table-info">{{data.l | currency}}</td>
-            <td class="table-info">{{data.o | currency}}</td>
-            <td class="table-info">{{data.v}}</td>
+          <tr>
+            <td>Ticker:</td> <!-- The ticker symbol-->
+            <td>{{data.T}}</td>
+          </tr>
+          <tr>
+            <td>Price at open:</td>  <!-- Stock price at opening of the trading day from getTickerData-->
+            <td>{{data.o}}</td>
+          </tr>
+          <tr>
+            <td>High of the day:</td> <!-- Highest of the trading day from getTickerData-->
+            <td>{{data.h}}</td>
+          </tr>
+          <tr>
+            <td>Low of the day:</td> <!-- Lowest stock price of the trading day from getTickerData-->
+            <td>{{data.l}}</td>
+          </tr>
+          <tr>
+            <td>Price at close:</td> <!-- Stock price at closingof the trading day from getTickerData-->
+            <td>{{data.c}}</td>
+          </tr>
+          <tr>
+            <td>Trading volume per day:</td> <!-- The total number of stock that were traded during the day from getTickerData-->
+            <td>{{data.v}}</td>
           </tr>
         </tbody>
       </table>

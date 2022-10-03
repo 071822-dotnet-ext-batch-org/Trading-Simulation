@@ -6,7 +6,8 @@ import { FormControl } from '@angular/forms';
 import { GetMyPortfoliosService } from 'src/app/Services/get-my-portfolios/get-my-portfolios.service';
 import { Portfolio } from 'src/app/Models/Portfolio';
 import { BuySellToPortfolioService } from 'src/app/Services/buy-sell/buy-sell-to-portfolio.service';
-import { GetSingleInvestmentService } from 'src/app/Services/get-single-investment/get-single-investment.service';
+import { BuyDto } from 'src/app/Models/buy-sell/buySellApiCall';
+
 
 @Component({
   selector: 'app-buy-sell',
@@ -36,17 +37,23 @@ export class BuySellComponent implements OnInit {
   portfolioID: string = ''; // Used in onPayment, createBuy, and createSell below
   buyResult: any; // Used in createBuy below
   sellResult: any; // Used in createSell below
-  totalPrice: any; // Used in the calculateTotal method
+  totalPrice: number = 0; // Used in the calculateTotal method
   errorMessage: string = '';
   invQty: number = 0;
   txLoading: boolean = false;
   success: string = '';
+
 
   // What is shown in the dropdown box on web page options.
   options: Options[] = [
     { value: 'Buy', viewValue: 'Buy' },
     { value: 'Sell', viewValue: 'Sell' },
   ];
+
+  selectedOption = new FormControl(this.options[0]); // For testing file
+  public onBuy(){
+    console.log(this.selectedOption.value?.value)
+  };
 
   // This method uses the getTickerData() method and conencts to the Polygon.io api after which,
   // if the user choses 'Buy' in the drop down box, it will run the createBuy() method which sends the data
