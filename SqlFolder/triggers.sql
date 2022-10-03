@@ -135,7 +135,17 @@ AFTER INSERT
 As 
 	UPDATE [dbo].[Comments]
 	SET likes = likes + 1
-	WHERE commentID = (SELECT commentID FROM inserted);
+	WHERE commentID = (SELECT fk_commentID FROM inserted);
+Go
+
+CREATE TRIGGER DeleteLikesToComment
+ON[dbo].[LikesComments]
+AFTER DELETE
+AS
+UPDATE[dbo].[Comments]
+SET likes = likes - 1
+WHERE commentID = (SELECT fk_commentID FROM deleted);
+GO
 
 
 CREATE TRIGGER DeleteLikesToPost
