@@ -16,5 +16,5 @@
     Privacy Level:
     <input [(ngModel)]="this.profile.privacyLevel" placeholder="PrivacyLevel"/>  
 </div>
-<button mat-raised-button (click)="updateProfile(profile)">Save</button>
+<button mat-raised-button [disabled]="isClicked" (click)="updateProfile(profile); isClicked=true">Save</button>
 </div>

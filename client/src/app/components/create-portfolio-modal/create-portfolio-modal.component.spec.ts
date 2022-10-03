@@ -1,6 +1,5 @@
-import { OverlayContainer } from '@angular/cdk/overlay';
-import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { MatDialogModule,MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
 import { CreatePortfolioModalComponent } from './create-portfolio-modal.component';
@@ -9,13 +8,21 @@ describe('CreatePortfolioModalComponent', () => {
   let component: CreatePortfolioModalComponent;
   let fixture: ComponentFixture<CreatePortfolioModalComponent>;
   let dialog: MatDialog;
-  let overlaycontainer: OverlayContainer
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogRef],
-      providers: [ MatDialogModule ],
-      declarations: [ CreatePortfolioModalComponent ]
+
+      declarations: [ CreatePortfolioModalComponent ],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {}
+        },
+        {
+          provide: MatDialogRef,
+          useValue: {}
+        }
+      ]
     })
 
     TestBed.overrideModule(BrowserDynamicTestingModule, {
@@ -29,13 +36,6 @@ describe('CreatePortfolioModalComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
-  beforeEach(inject([MatDialog, OverlayContainer],
-    (d: MatDialog, oc: OverlayContainer) => {
-      dialog = d;
-      overlaycontainer = oc;
-    })
-  );
 
   it('should open a dialog with a component', () => {
     const dialogRef = dialog.open(CreatePortfolioModalComponent, {

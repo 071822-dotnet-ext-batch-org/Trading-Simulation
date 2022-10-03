@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProfileServiceService } from 'src/app/Services/profile-service/profile-service.service';
 import { Profile } from 'src/app/Models/Profile';
-import { ResultType } from '@remix-run/router/dist/utils';
 import { AuthService } from '@auth0/auth0-angular';
 import { CreateProfileService } from 'src/app/Services/CreateProfile/create-profile.service';
 
@@ -13,6 +12,7 @@ import { CreateProfileService } from 'src/app/Services/CreateProfile/create-prof
 export class ProfileComponent implements OnInit {
 
   profileToEdit?: Profile;
+  profile: any;
   
   constructor(
     private ProService: ProfileServiceService,
@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
     private CreatePro: CreateProfileService,
     ) { }
     
-    profile: any;
+
 
   ngOnInit(): void {
    this.ProService.getProfiles().subscribe(data => {
@@ -45,6 +45,7 @@ export class ProfileComponent implements OnInit {
         this.profile = pro
         console.log(pro)
        })
+       
     })
    }
 

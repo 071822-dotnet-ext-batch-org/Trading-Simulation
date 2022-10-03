@@ -10,6 +10,7 @@ import { UpdateProfileService } from 'src/app/Services/update-profile-service/up
 export class EditProfileComponent implements OnInit {
   @Input() profile?: Profile;
   @Output() profileUpdated = new EventEmitter<Profile>();
+  isChecked = true;
 
 
   constructor(private UpdatePro: UpdateProfileService) { }
@@ -17,6 +18,8 @@ export class EditProfileComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  isClicked: boolean = false;
+  
   updateProfile(profile:Profile) {
     this.UpdatePro
     .updateProfile(profile.name, profile.email, profile.picture, profile.privacyLevel)

@@ -2,6 +2,9 @@ using System;
 
 namespace Models
 {
+    /// <summary>
+    /// This is the Model to create a new Portfolio - contains PortfolioID, Fk_UserID, Name, PrivacyLevel, Type, OriginalLiquid, CurrentInvestment, Liquid, CurrentTotal, Symbols, TotalPNL, DateCreated, DateModified
+    /// </summary>
     public class Portfolio
     {
         
@@ -19,10 +22,29 @@ namespace Models
         public DateTime? DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
+        /// <summary>
+        /// This is the Constructor to create a new Portfolio that is empty
+        /// </summary>
         public Portfolio()
         {
         }
 
+        /// <summary>
+        /// This is the Constructor to create a new Portfolio - contains PortfolioID, Fk_UserID, Name, PrivacyLevel, Type, OriginalLiquid, CurrentInvestment, Liquid, CurrentTotal, Symbols, TotalPNL, DateCreated, DateModified
+        /// </summary>
+        /// <param name="portfolioID"></param>
+        /// <param name="fk_UserID"></param>
+        /// <param name="name"></param>
+        /// <param name="privacyLevel"></param>
+        /// <param name="type"></param>
+        /// <param name="originalLiquid"></param>
+        /// <param name="currentInvestment"></param>
+        /// <param name="liquid"></param>
+        /// <param name="currentTotal"></param>
+        /// <param name="symbols"></param>
+        /// <param name="TotalPNL"></param>
+        /// <param name="dateCreated"></param>
+        /// <param name="dateModified"></param>
         public Portfolio(Guid? portfolioID, string? fk_UserID, string? name, int? privacyLevel, int? type, decimal? originalLiquid, decimal? currentInvestment, decimal? liquid, decimal? currentTotal, int? symbols,  decimal? TotalPNL, DateTime? dateCreated, DateTime? dateModified)
         {
             this.PortfolioID = portfolioID;

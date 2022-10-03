@@ -1,8 +1,10 @@
+// Interface for below class BuySellOptions
 export interface Options {
   value: string,
   viewValue: string
 }
 
+// Options for the buy sell page dropdown box
 export class BuySellOptions {
   options: Options[] = [
     { value: 'Buy', viewValue: 'Buy' },
@@ -17,10 +19,7 @@ export class BuySellOptions {
   ]
 };
 
-export interface Details{
-  value: string;
-}
-
+// Tell what each option in dropdown box on buy/sell page does
 export class BuySellDetails {
   buy = "'Buy' means your are buying stock when there is enough sell volume to fill your request!";
   buyOpen = "'Buy at the open' means you will be buying at the beginning of the day when/if your order can be filled! Note that your order may not be filled if there is not enough volume!";

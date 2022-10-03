@@ -1,19 +1,16 @@
 .center{
-  background-color: #93C6F7;
+  background-color: #c4e3ff;
   position: top;
   padding-top: 20px;
   padding-bottom: 20px;
   text-align: center;
-  color: #ecf0f5;
+  color: #0e52a5;
   
 }
-
-footer{
-  background: #93F1C7;
-  position: bottom;
-  text-align: center;
-
+image{
+ justify-content:left ;
 }
+
 /*
 section {
   display: table;

@@ -47,14 +47,47 @@ describe('ProfileComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  //Test checks if the button html element contains the text content edit
   it('Testing Button', ()=>{
     const data = fixture.nativeElement;
     expect(data.querySelector("button").textContent).toContain(" ")
   });
+<<<<<<< HEAD
   it('should create header2',()=>{
     const fixture = TestBed.createComponent(ProfileComponent);
     fixture.detectChanges();
     const complied = fixture.debugElement.nativeElement.querySelector('#titleInterpolation');
     expect(complied).toBeTruthy;
+=======
+  //
+  xit('Testing header2', ()=>{
+    const data = fixture.nativeElement;
+    expect(data.querySelector("p").textContent).toContain(" ")
+>>>>>>> 7e277965108141950845721be26d1a89653e75b9
+  });
+  //Test checks to see if the variable isClicked boolean value is false
+  it('should be false',()=>{
+   const isClicked = component.isClicked;
+   expect(isClicked).toBeFalse();
+  });
+  //Test checks if ngOnInit exist
+  it('#ngOnInit should exist ',()=>{
+   expect(component.ngOnInit).toBeTruthy();
+  });
+  //Test checks if the createProfile functions exist
+  it('#create profile should exist',()=>{
+    expect(component.createProfile).toBeTruthy();
+  });
+  //Test checks if the editprofile 
+  it('#editProfile should exist',()=>{
+    expect(component.editProfile).toBeTruthy();
+  });
+  //Test checks if the UpdateProfileList method exist
+  it('#updateProfile Should Exist',()=>{
+    expect(component.updateProfileList).toBeTruthy();
+  });
+  //Test checks if the ProfileToEdit
+  it('ProfileToEdit Should be Undefined',()=>{
+    expect(component.profileToEdit).toBeUndefined();
   });
 });
