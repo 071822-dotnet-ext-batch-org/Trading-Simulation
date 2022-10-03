@@ -130,6 +130,8 @@ namespace Test.Yoink
 
             // dataSource will decouple the tested method from the database and use the local data set above for the test
 
+            if(profile == null){}
+
             var dataSource = new Mock<IdbsRequests>();
             dataSource
             .Setup(m => m.GetProfileByUserIDAsync(It.IsAny<string>()))
@@ -169,8 +171,11 @@ namespace Test.Yoink
             //Assert
 
             Assert.True(true);
-            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
-            Assert.Equal(profiledto.Name, profile.Name);
+            if (profile != null)
+            {
+                Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
+                Assert.Equal(profiledto.Name, profile.Name);
+            }
         }
 
 
