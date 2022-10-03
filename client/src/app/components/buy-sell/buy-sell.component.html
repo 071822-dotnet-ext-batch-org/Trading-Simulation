@@ -38,12 +38,12 @@
         </div>
       </div>
       <div class="total"> <!-- Total order cost -->
-        <div> <!-- *ngFor="let cost of costTotal" -->
-          <button class="calc-Btn" (click)="calculateTotal(symbol.value, qty)" >Calculate Total</button>
+        <div class="calc-Btn"> <!-- *ngFor="let cost of costTotal" -->
+          <button (click)="calculateTotal(symbol.value, qty)" >Calculate Total</button>
           <p> Total Price: {{ totalPrice | currency }} </p> <!--WORK IN PROGRESS-->
         </div>
       </div>
-      <div class="payment-btn"> <!-- Confirm and cancel buttons -->
+      <div> <!-- Payment and cancel buttons -->
         <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
         <button class="buy-btn" (click)="onPayment()" [routerLink]="'/Portfolio'">Payment</button>
       </div>
@@ -78,8 +78,8 @@
             <td>{{data.T}}</td>
           </tr>
           <tr>
-            <td>Price at Close:</td>  <!-- Stock price at closing of the trading day from getTickerData-->
-            <td>{{data.c}}</td>
+            <td>Price at open:</td>  <!-- Stock price at opening of the trading day from getTickerData-->
+            <td>{{data.o}}</td>
           </tr>
           <tr>
             <td>High of the day:</td> <!-- Highest of the trading day from getTickerData-->
@@ -90,8 +90,8 @@
             <td>{{data.l}}</td>
           </tr>
           <tr>
-            <td>Price at open:</td> <!-- Stock price at opening of the trading day from getTickerData-->
-            <td>{{data.o}}</td>
+            <td>Price at close:</td> <!-- Stock price at closingof the trading day from getTickerData-->
+            <td>{{data.c}}</td>
           </tr>
           <tr>
             <td>Trading volume per day:</td> <!-- The total number of stock that were traded during the day from getTickerData-->

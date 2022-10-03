@@ -7,6 +7,7 @@
 /* <Div> that has everything inside of it */
 .component-container {
   display: flex;
+  /* position: absolute; */
   justify-content: space-evenly;
 }
 
@@ -35,7 +36,7 @@
 /* The total amount of the order */
 .total {
   text-align: center;
-  font-size: x-large;
+  font-size: xx-large;
   color: red;
   padding-bottom: 1px;
   position: absolute;
@@ -43,6 +44,7 @@
   margin-left: 20px;
   position: absolute;
   bottom: 140px;
+  margin-top: 5px;
 }
 
 /* The red cancel button */
@@ -59,6 +61,7 @@
   position: absolute;
   bottom: 140px;
   left: 550px;
+  top: 500px;
 }
 
 /* The green payment button */
@@ -72,19 +75,24 @@
   border: black;
   border-radius: 25px;
   position: absolute;
+  top: 500px;
   bottom: 140px;
   left: 800px;
+
 }
 
+/* The Calculation button and background */
 .calc-Btn {
-  background-color: rgb(229, 215, 215);
-  font-size: 15px;
-  width: 200px;
-  height: 50px;
+  background-color: rgb(195, 188, 188);
+  font-size: 20px;
+  width: 205px;
+  height: 70px;
   cursor: pointer;
   letter-spacing: 1px;
   border: white;
   border-radius: 25px;
-  margin-bottom: 30px;
-  margin-left: 10px;
+  margin-bottom: 1px;
+  margin-left: 1px;
+  bottom: 140px;
+
 }
