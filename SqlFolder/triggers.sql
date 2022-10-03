@@ -6,7 +6,7 @@ DROP TRIGGER sellTrigger;
 
 CREATE TRIGGER buyTrigger
 ON Buys
-AFTER INSERT
+AFTER INSERT, UPDATE
 AS
 	IF EXISTS (SELECT * FROM Investments WHERE symbol = (SELECT symbol FROM inserted) AND fk_portfolioID = (SELECT fk_portfolioID FROM inserted))
 		BEGIN
@@ -118,6 +118,46 @@ GO;
 -- TRIGGER TEST
 INSERT INTO Sells(fk_portfolioID, symbol, amountSold, priceSold) VALUES([get the portfolioID from table], 'AAPL', 3, 15.00);
 INSERT INTO Sells(fk_portfolioID, symbol, amountSold, priceSold) VALUES([get the portfolioID from table], 'AAPL', 4, 15.50);
+
+CREATE TRIGGER AddLikesToPost
+ON [dbo].[LikesPosts]
+AFTER INSERT 
+AS 
+	UPDATE [dbo].[Posts]
+	SET likes = likes +1
+	WHERE postID=(SELECT fk_postID FROM inserted);
+	GO
+
+
+CREATE TRIGGER AddLikesToComments
+ON [dbo].[LikesComments] 
+AFTER INSERT
+As 
+	UPDATE [dbo].[Comments]
+	SET likes = likes + 1
+	WHERE commentID = (SELECT fk_commentID FROM inserted);
+Go
+
+CREATE TRIGGER DeleteLikesToComment
+ON[dbo].[LikesComments]
+AFTER DELETE
+AS
+UPDATE[dbo].[Comments]
+SET likes = likes - 1
+WHERE commentID = (SELECT fk_commentID FROM deleted);
+GO
+
+
+CREATE TRIGGER DeleteLikesToPost
+ON[dbo].[LikesPosts]
+AFTER DELETE
+AS
+UPDATE[dbo].[Posts]
+SET likes = likes - 1
+WHERE postID = (SELECT fk_postID FROM deleted);
+GO
+
+
 
 -- COMBINED TRIGGERS, RUN ONLY THESE ---------------------------------------------------------------
 
@@ -263,33 +303,5 @@ AS
    UPDATE DBO.Portfolios
    SET dateModified = (SELECT dateSold from inserted)--dateSold
    WHERE symbols = (SELECT symbols FROM inserted)
-GO
-
-CREATE TRIGGER AddLikesToPost
-ON [dbo].[LikesPosts]
-AFTER INSERT 
-AS 
-	UPDATE [dbo].[Posts]
-	SET likes = likes +1
-	WHERE postID=(SELECT fk_postID FROM inserted);
-	GO
-
-
-CREATE TRIGGER AddLikesToComments
-ON [dbo].[LikesComments] 
-AFTER INSERT
-As 
-	UPDATE [dbo].[Comments]
-	SET likes = likes + 1
-	WHERE commentID = (SELECT commentID FROM inserted);
-
-
-CREATE TRIGGER DeleteLikesToPost
-ON[dbo].[LikesPosts]
-AFTER DELETE
-AS
-UPDATE[dbo].[Posts]
-SET likes = likes - 1
-WHERE postID = (SELECT fk_postID FROM deleted);
 GO
 

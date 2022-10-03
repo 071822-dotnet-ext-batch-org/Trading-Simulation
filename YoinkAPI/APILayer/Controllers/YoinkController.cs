@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Models;
 using BusinessLayer;
-using Models.ModelDTOs.BackToFrontEnd;
 using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using Microsoft.Extensions.Hosting;
 
 namespace APILayer.Controllers
 {
@@ -109,10 +109,15 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0Id = User.Identity?.Name;
-                Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
-                return Created("", newPortfolio);
+
+                if (auth0Id != null && p != null)
+                {
+                    Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
+                    return Created("", newPortfolio);
+                }
             }
-            else return BadRequest(p);
+            
+            return BadRequest(p);
         }
 
         /// <summary>
@@ -145,6 +150,10 @@ namespace APILayer.Controllers
             List<Portfolio?> retrievedPortfolios = await this._businessLayer.GetALLPortfoliosByUserIDAsync(auth0UserId);
             return Ok(retrievedPortfolios);
         }
+
+
+
+
 
         /// <summary>
         /// Allows user to edit their portfolio, things like name, privacyLevel, etc.
@@ -256,11 +265,11 @@ namespace APILayer.Controllers
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
         [HttpPost("all-investments")]
-        public async Task<ActionResult<List<Investment?>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
+        public async Task<ActionResult<List<Investment>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
         {
             if(ModelState.IsValid)
             {
-                List<Investment?> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
+                List<Investment> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
                 return Ok(investment);
             }
             return BadRequest(investmentDto);
@@ -343,8 +352,14 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0UserId = User.Identity?.Name;
-                Post? createdPost = await this._businessLayer.CreatePostAsync(auth0UserId, post);
-                return Created("", createdPost);
+                if(auth0UserId != null)
+                {
+                    Post? createdPost = await this._businessLayer.CreatePostAsync(auth0UserId, post);
+                    if (createdPost != null)
+                    {
+                        return Created("", createdPost);
+                    }
+                }
             }
             return BadRequest(post);
         }
@@ -447,7 +462,193 @@ namespace APILayer.Controllers
                 int? likeCount = await this._businessLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
                 return Created("", likeCount);
             }
-            else return BadRequest("Like did not get removed");
+            else return BadRequest("Like did not get removed.");
+        }
+
+
+        /// <summary>
+        /// Create a comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">CommentDto</param>
+        /// <returns>True if created, false if not.</returns>
+        [HttpPost("add-comment")]
+        public async Task<ActionResult<bool>> CreateCommentOnPostAsync(CommentDto comment)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                bool createdComment = await this._businessLayer.CreateCommentOnPostAsync(comment, auth0UserId);
+                return Created("", createdComment);
+            }
+            else return BadRequest("Comment did not get added.");
+        }
+
+        /// <summary>
+        /// Edit a comment's content.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">EditCommentDto</param>
+        /// <returns>Edited comment object</returns>
+        [HttpPut("edit-comment")]
+        public async Task<ActionResult<Comment?>> EditCommentAsync(EditCommentDto comment)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment? editedComment = await this._businessLayer.EditCommentAsync(comment);
+                return Ok(editedComment);
+            }
+            else return BadRequest("Comment did not get edited.");
+        }
+
+        /// <summary>
+        /// Delete a comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Id of comment to be deleted</param>
+        /// <returns>True if deleted, false if not.</returns>
+        [HttpDelete("delete-comment")]
+        public async Task<ActionResult<bool>> DeleteCommentAsync(Guid commentId)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                bool? deleteComment = await this._businessLayer.DeleteCommentAsync(commentId, auth0UserId);
+                return Ok(deleteComment);
+            }
+            else return BadRequest("Comment did not get deleted.");
+        }
+
+        /// <summary>
+        /// Get a lits of comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="postId">postId</param>
+        /// <returns>A list of comments.</returns>
+        [HttpGet("get-all-comment")]
+        public async Task<ActionResult<List<Comment>>> GetCommentsByPostIdAsync(Guid postId)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Comment> comments = await this._businessLayer.GetCommentsByPostIdAsync(postId);
+                return Ok(comments);
+            }
+            else return BadRequest(postId);
+        }
+
+        /// <summary>
+        /// Allows the user to like another usr's comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="createLikeForCommentDto"></param>
+        /// <returns>Bool: True = Ok, False = Bad Request</returns>
+        [HttpPost("create-like-for-comment")]
+        public async Task<ActionResult<bool>> CreateLikeForCommentAsync(LikeForCommentDto? createLikeForCommentDto)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                if(createLikeForCommentDto != null && auth0UserId != null) 
+                {
+                    bool newLikeForComment = await this._businessLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+                    return Ok(newLikeForComment);
+                }
+            }
+            return BadRequest("Comment was not liked");
+        }
+
+        /// <summary>
+        /// Allows the user to remove their like from a comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="deleteLikeForCommentDto"></param>
+        /// <returns>Bool: True = Ok, False = Bad Request</returns>
+        [HttpDelete("delete-like-for-comment")]
+        public async Task<ActionResult<bool>> DeleteLikeForCommentAsync(LikeForCommentDto? deleteLikeForCommentDto)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+
+                if (deleteLikeForCommentDto != null && auth0UserId != null)
+                {
+                    bool? deleteComment = await this._businessLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
+                    return Ok(deleteComment);
+                }
+            }
+            return BadRequest("Comment was not unliked.");
+        }
+
+        /// <summary>
+        /// Displays a count of comments on the post for the user.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns>Numerical count (int) of the number of comments on a post.</returns>
+        [HttpGet("number-of-comments-by-postId")]
+        public async Task<ActionResult<int>> GetCountofCommentsByPostIdAsync(Guid? postId)
+        {
+            int? GotcommentCountByPostId = await this._businessLayer.GetCountofCommentsByPostIdAsync(postId);
+            return Ok(GotcommentCountByPostId);
+        }
+
+        /// <summary>
+        /// Updates the current price in every table in the database where current price is affected (pnl, ect.).
+        /// </summary>
+        /// <param name="u"></param>
+        /// <returns>A collection of collections returning the data updated from the database.</returns>
+        [HttpPut("update-current-price")]
+        public async Task<ActionResult<AllUpdatedRowsDto>> UpdateCurrentPriceAsync(UpdatePriceDto u)
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    AllUpdatedRowsDto aurdto = await this._businessLayer.UpdateCurrentPriceAsync(u, auth0id);
+                    return Ok(aurdto);
+                }
+            }
+            return BadRequest(u);
+        }
+
+        /// <summary>
+        /// Allows the user to remove their from the database.
+        /// </summary>
+        /// <param name="portfolioID"></param>
+        /// <returns>Bool of delete success.</returns>
+        [HttpDelete("delete-portfolio")]
+        public async Task<ActionResult<bool>> DeletePortfolioAsync(DeletePortfolioDto portfolioID)
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    bool deleteSuccess = await this._businessLayer.DeletePortfolioAsync(auth0id, portfolioID);
+                    return Ok(deleteSuccess);
+                }
+            }
+            return BadRequest(false);
+        }
+
+        /// <summary>
+        /// Retrieves a list of liked posts by the user.
+        /// </summary>
+        /// <returns>returns a list of the user's liked posts.</returns>
+        [HttpGet("get-post-likes")]
+        public async Task<ActionResult<List<Guid>>> GetPostLikesByUserID()
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    List<Guid> likedPosts = await this._businessLayer.GetPostLikesByUserID(auth0id);
+                    return Ok(likedPosts);
+                }
+            }
+            return BadRequest();
         }
     }
 }

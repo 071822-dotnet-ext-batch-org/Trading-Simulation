@@ -178,6 +178,8 @@ namespace Test.Yoink
                 .Returns(Task.FromResult(buymockList));
 
             var dataSource2 = new Mock<IYoinkBusinessLayer>();
+
+            if(buy == null){}
             dataSource
                 .Setup(b => b.AddNewBuyAsync(It.IsAny<BuyDto>()))
                 .Returns(Task.FromResult(buy));
@@ -196,7 +198,10 @@ namespace Test.Yoink
             //Assert
 
             Assert.Equal("GOOGL", AllBuys.Symbol);
-            Assert.Equal(2000, buy.CurrentPrice);
+            if (buy != null)
+            {
+                Assert.Equal(2000, buy.CurrentPrice);
+            }
 
         }
 

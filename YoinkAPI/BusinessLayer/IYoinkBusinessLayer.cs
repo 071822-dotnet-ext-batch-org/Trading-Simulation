@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
-using Models.ModelDTOs.BackToFrontEnd;
 
 namespace BusinessLayer
 {
@@ -92,7 +91,7 @@ namespace BusinessLayer
         /// </summary>
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-        Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
+        Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
         //Profile Section
 
@@ -206,5 +205,51 @@ namespace BusinessLayer
         /// <param name="unlike">LikeDto</param>
         /// <returns>updated likeCount integer, (and triggers a -1 like to the Post on the Posts table in the database.)</returns>
         Task<int?> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId);
+
+        /// <summary>
+        /// Create a comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">CommentDto</param>
+        /// <returns>True if created, false if not.</returns>
+        Task<bool> CreateCommentOnPostAsync(CommentDto comment, string? auth0UserId);
+
+        /// <summary>
+        /// Edit a comment's content.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">EditCommentDto</param>
+        /// <returns>Edited comment object</returns>
+        Task<Comment?> EditCommentAsync(EditCommentDto comment);
+
+        /// <summary>
+        /// Delete a comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Id of comment to be deleted</param>
+        /// <returns>True if deleted, false if not.</returns>
+        Task<bool> DeleteCommentAsync(Guid commentId, string? auth0UserId);
+
+        /// <summary>
+        /// Get a lits of comment on a specific post.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="postId">postId</param>
+        /// <returns>A list of comments.</returns>
+        Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
+
+
+
+
+        Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId);
+
+        Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId);
+
+        Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId);
+
+        Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id);
+        Task<bool> DeletePortfolioAsync(string auth0id, DeletePortfolioDto portfolioID);
+        Task<List<Guid>> GetPostLikesByUserID(string auth0id);
     }
+
 }
