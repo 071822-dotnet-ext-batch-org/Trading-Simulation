@@ -11,7 +11,7 @@ export class CreatePortfolioService {
 
   constructor(private http: HttpClient) { }
 
-  createPortfolio(name: string, originalLiquid: number, privacyLevel: number): Observable<Portfolio[]> {
-    return this.http.post<Portfolio[]>(env.baseURL + '/create-portfolio', {portfolioID: null, name, originalLiquid, privacyLevel})
+  createPortfolio(name: string, originalLiquid: number, privacyLevel: number): Observable<Portfolio> {
+    return this.http.post<Portfolio>(env.baseURL + '/create-portfolio', {portfolioID: null, name, originalLiquid, privacyLevel})
   }
 }

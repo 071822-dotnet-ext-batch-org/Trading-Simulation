@@ -16,4 +16,8 @@ describe('UpdateProfileService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should update profile', () => {
+    expect(service.updateProfile).toBeTruthy();
+  });
 });

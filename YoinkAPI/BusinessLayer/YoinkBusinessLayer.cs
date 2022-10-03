@@ -1,5 +1,4 @@
 ﻿using Models;
-using Models.ModelDTOs.BackToFrontEnd;
 using RepoLayer;
 
 namespace BusinessLayer;
@@ -22,13 +21,17 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     public async Task<Profile?> CreateProfileAsync(string? auth0Id, ProfileDto? p)
     {
         Profile? newProfile = null;
-        bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        if (newProfileSaved)
+
+        if(p != null)
         {
-            newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-            return newProfile;
+            bool newProfileSaved = await this._repoLayer.CreateProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+            if (newProfileSaved && auth0Id != null)
+            {
+                newProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            }
         }
-        else return newProfile;
+
+        return newProfile;
     }
 
     /// <summary>
@@ -37,22 +40,33 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// Requires logged in user via Auth0.        
     /// </summary>
     /// <returns>retrievedProfile Profile object</returns>
-    public async Task<Profile?> GetProfileByUserIDAsync(string? auth0Id)
+    public async Task<Profile> GetProfileByUserIDAsync(string? auth0Id)
     {
-        Profile? retrievedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-        return (retrievedProfile);
+        if(auth0Id != null)
+        {
+            Profile? retrievedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            if(retrievedProfile != null)
+            {
+                return (retrievedProfile);
+            }
+        }
+
+        return new Profile();
     }
 
     public async Task<Profile?> EditProfileAsync(string? auth0Id, ProfileDto? p)
     {
         Profile? updatedProfile = null;
-        bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
-        if (newProfileSaved)
+        if (p != null)
         {
-            updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
-            return updatedProfile;
+            bool newProfileSaved = await this._repoLayer.EditProfileAsync(auth0Id, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+            if (newProfileSaved && auth0Id != null)
+            {
+                updatedProfile = await this._repoLayer.GetProfileByUserIDAsync(auth0Id);
+            }
         }
-        else return updatedProfile;
+        
+        return updatedProfile;
     }
 
     /// <summary>
@@ -170,6 +184,8 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return sellList;
     }
 
+    /////////////////////
+
     /// <summary>
     /// Retrieves an investment by its associated PortfolioID.
     /// </summary>
@@ -242,7 +258,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     {
         //List<Post?> userList = null;    
         bool createdPost = await this._repoLayer.CreatePostAsync(auth0Id, post);
-        if(createdPost)
+        if (createdPost)
         {
             Post? newPost = await this._repoLayer.GetRecentPostByUserId(auth0Id);
             return newPost;
@@ -259,8 +275,8 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     {
         List<PostWithCommentCountDto> listWithCommentCount = new List<PostWithCommentCountDto>();
         List<Post> returnedPosts = await this._repoLayer.GetAllPostAsync();
-        foreach(Post post in returnedPosts)
-        { 
+        foreach (Post post in returnedPosts)
+        {
             int? count = await this._repoLayer.GetNumberOfCommentsByPostIdAsync(post.PostID);
             PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
             postWithCommentCountDto.PostID = post.PostID;
@@ -273,7 +289,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
             postWithCommentCountDto.DateModified = post.DateModified;
             listWithCommentCount.Add(postWithCommentCountDto);
         }
-        return listWithCommentCount;   
+        return listWithCommentCount;
     }
 
     /// <summary>
@@ -281,9 +297,9 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// </summary>
     /// <param name="investmentDto">GetAllInvestmentsDto</param>
     /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-    public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+    public async Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
     {
-        List<Investment?> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
+        List<Investment> investments = await this._repoLayer.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
         return investments;
     }
 
@@ -365,12 +381,12 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// <returns>A PostWithCommentCountDto object, named returnedPost, containing the returned posts along with a count of comments. This is required because the database table named Posts did not include a count (int) of Comments.</returns>
     public async Task<PostWithCommentCountDto?> GetPostByPostIdAsync(Guid? postId)
     {
-            //fills post object with retrieved post
-            Post? returnedPost = await this._repoLayer.GetPostByPostIdAsync(postId);
+        //fills post object with retrieved post
+        Post? returnedPost = await this._repoLayer.GetPostByPostIdAsync(postId);
 
 
-            //creates post object with the comment count added
-            PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
+        //creates post object with the comment count added
+        PostWithCommentCountDto? postWithCommentCountDto = new PostWithCommentCountDto();
 
         if (returnedPost != null)
         {
@@ -400,6 +416,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     /// <returns>likeCount integer, (and triggers a +1 like to the Post on the Posts table in the database.)</returns>
     public async Task<int?> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
     {
+
         bool createdLike = await this._repoLayer.CreateLikeOnPostAsync(like, auth0UserId);
         if (createdLike)
         {
@@ -424,4 +441,149 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         }
         return null;
     }
+
+    /// <summary>
+    /// Create a comment on a specific post.
+    /// Requires logged in user via Auth0.
+    /// </summary>
+    /// <param name="comment">CommentDto</param>
+    /// <returns>True if created, false if not.</returns>
+    public async Task<bool> CreateCommentOnPostAsync(CommentDto comment, string? auth0UserId)
+    {
+        bool creationCheck = await this._repoLayer.CreateCommentOnPostAsync(comment, auth0UserId);
+        return creationCheck;
+    }
+
+    /// <summary>
+    /// Edit a comment's content.
+    /// Requires logged in user via Auth0.
+    /// </summary>
+    /// <param name="comment">EditCommentDto</param>
+    /// <returns>Edited comment object</returns>
+    public async Task<Comment?> EditCommentAsync(EditCommentDto comment)
+    {
+        bool editCheck = await this._repoLayer.EditCommentAsync(comment);
+        if (editCheck)
+        {
+            Comment? editedComment = await this._repoLayer.GetCommentByCommentIdAsync(comment.CommentId);
+            return editedComment;
+        }
+        else return null;
+
+    }
+
+
+    /// <summary>
+    /// Delete a comment and ensures user can delete only their own comment.
+    /// Requires logged in user via Auth0.
+    /// </summary>
+    /// <param name="commentId">Id of comment to be deleted</param>
+    /// <returns>True if deleted, false if not.</returns>
+    public async Task<bool> DeleteCommentAsync(Guid commentId, string? auth0UserId)
+    {
+        string? user = await this._repoLayer.GetUserWithCommentIdAsync(commentId);
+        if (auth0UserId == user)
+        {
+            bool deleteCommentCheck = await this._repoLayer.DeleteCommentAsync(commentId);
+            return deleteCommentCheck;
+        }
+        else return false;
+    }
+
+    /// <summary>
+    /// Get a lits of comment on a specific post.
+    /// Requires logged in user via Auth0.
+    /// </summary>
+    /// <param name="postId">postId</param>
+    /// <returns>A list of comments.</returns>
+    public async Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId)
+    {
+        List<Comment> comments = await this._repoLayer.GetCommentsByPostIdAsync(postId);
+        return comments;
+    }
+
+
+
+
+    public async Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId)
+    {
+        bool likedcomment = await this._repoLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+        return likedcomment;
+    }
+
+
+    public async Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId)
+    {
+        bool unlikedcomment = await this._repoLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
+        return unlikedcomment;
+    }
+
+
+    public async Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId)
+    {
+        int? GotcommentCountByPostId = await this._repoLayer.GetCountofCommentsByPostIdAsync(postId);
+        return GotcommentCountByPostId;
+    }
+
+
+    public async Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id)
+    {
+        AllUpdatedRowsDto aurdto = new AllUpdatedRowsDto();
+
+        if(u.Symbol != null && u.Price != null)
+        {
+            bool updateBuys = await this._repoLayer.UpdateBuysCurrentPriceAsync(u);
+
+            List<Buy> allUpdatedBuys = await this._repoLayer.GetAllBuyBySymbolNoPortfolioAsync(u.Symbol);
+            
+            List<Guid?> uniquePortfolioIDs = allUpdatedBuys.Select(b => b.Fk_PortfolioID).Distinct().ToList();
+            
+            bool updateInvestments = await this._repoLayer.UpdateInvestmentsCurrentPriceAsync(u);
+
+            bool updatePortfolios = await this._repoLayer.UpdatePortfoliosCurrentPriceAsync(uniquePortfolioIDs);
+
+            List<Portfolio?> myPortfolios = await this._repoLayer.GetALL_PortfoliosByUserIDAsync(auth0id);
+
+            foreach (Portfolio? myP in myPortfolios)
+            {
+                if(uniquePortfolioIDs.Contains(myP?.PortfolioID))
+                {
+                    aurdto.Portfolios.Add(myP);
+                }
+            }
+
+            foreach (Portfolio? p in aurdto.Portfolios)
+            {
+                if(p != null)
+                {
+                    GetInvestmentDto gidto = new GetInvestmentDto(p.PortfolioID, u.Symbol);
+                    Investment? i = await this._repoLayer.GetInvestmentByPortfolioIDAsync(gidto);
+                    
+                    if (i != null)
+                    {
+                        aurdto.Investments.Add(i);
+                    }
+                }
+            }
+        }
+
+        return aurdto;
+    }
+
+    public async Task<bool> DeletePortfolioAsync(string auth0id, DeletePortfolioDto portfolioID)
+    {
+        bool deleteSuccess = await this._repoLayer.DeletePortfolioByPortfolioIDAsync(auth0id, portfolioID);
+
+        return deleteSuccess;
+    }
+
+    public async Task<List<Guid>> GetPostLikesByUserID(string auth0id)
+    {
+        List<Guid> myLikes = new List<Guid>();
+        
+        myLikes = await this._repoLayer.GetPostLikesByUserID(auth0id);
+
+        return myLikes;
+    }
 }
+

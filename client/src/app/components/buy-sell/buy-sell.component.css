@@ -58,6 +58,7 @@
   border: black;
   border-radius: 25px;
   margin-right: 50px;
+
   position: absolute;
   bottom: 140px;
   left: 550px;
@@ -74,11 +75,11 @@
   letter-spacing: 1px;
   border: black;
   border-radius: 25px;
+
   position: absolute;
   top: 500px;
   bottom: 140px;
   left: 800px;
-
 }
 
 /* The Calculation button and background */
@@ -95,4 +96,22 @@
   margin-left: 1px;
   bottom: 140px;
 
+}
+
+.table-info {
+  width: 100px;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+}
+
+.sm-txt-container {
+  font-size: 12px;
+  margin-left: 15px;
+}
+
+#sm-txt {
+  text-decoration: none;
 }

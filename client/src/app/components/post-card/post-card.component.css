@@ -2,5 +2,13 @@
     margin: 20px 20px;
     padding: 20px 20px;
     height: fit-content;
-    width: fit-content;
+    width: 100%;
+}
+
+.black {
+    color: black;
+}
+
+.pink {
+    color: #ff6991;
 }

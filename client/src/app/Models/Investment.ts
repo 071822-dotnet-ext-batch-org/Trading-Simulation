@@ -7,7 +7,7 @@ export interface Investment {
     currentPrice: number;
     totalAmountBought: number;
     totalAmountSold: number;
-    averageBuyPrice: number;
+    averagedBuyPrice: number;
     totalPNL: number;
     dateCreated: Date;
     dateModified: Date;

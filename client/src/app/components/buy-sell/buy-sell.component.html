@@ -5,16 +5,17 @@
       <div class="dropdown-fields"> <!-- Just dropdown boxes -->
         <div> <!-- Chose which portfolio to use drop down box -->
           <mat-form-field>
-            <mat-label>Chose Portfolio</mat-label>
+            <mat-label>Portfolio</mat-label>
             <mat-select [required]="true" [(value)]="portfolioID">
               <mat-option *ngFor="let port of portfolios" value="{{port.portfolioID}}">
-                {{ port.name }}
+                {{ port.name + ' - ' + (port.liquid | currency) }} 
               </mat-option>
             </mat-select>
           </mat-form-field>
+
         </div>
         <mat-form-field> <!-- Chose either buy or sell drop down box -->
-          <mat-label>Chose Buy or Sell</mat-label>
+          <mat-label>Choose Buy or Sell</mat-label>
           <mat-select [required]="true" [(value)]="selected">
             <mat-option *ngFor="let option of options" value="{{option.value}}">
               {{ option.viewValue }}
@@ -35,6 +36,9 @@
             <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty"
               [ngModelOptions]="{standalone: true}" [required]="true">
           </mat-form-field>
+          <div class="sm-txt-container">
+            <p id="sm-text" *ngIf="invQty != 0">Amount held: {{invQty}}</p>
+          </div>
         </div>
       </div>
       <div class="total"> <!-- Total order cost -->
@@ -43,11 +47,17 @@
           <p> Total Price: {{ totalPrice | currency }} </p> <!--WORK IN PROGRESS-->
         </div>
       </div>
+
       <div> <!-- Payment and cancel buttons -->
         <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
         <button class="buy-btn" (click)="onPayment()" [routerLink]="'/Portfolio'">Payment</button>
+
       </div>
     </form> <!-- End of Buy/sell form -->
+    <div>
+      <mat-progress-spinner mode="indeterminate" *ngIf="txLoading"></mat-progress-spinner>
+      <p>{{success}}</p>
+    </div>
   </div> <!-- End form container -->
   <div class="search-container"> <!-- Container with the search box/function and ticker data-->
     <form class="search-form"> <!-- Contians the search box-->
@@ -60,7 +70,7 @@
         </button>
       </mat-form-field>
     </form>
-    <div class="table-responsive" *ngFor="let data of tickerData"> <!-- The data displayed from ticker-->
+    <div class="table-responsive"> <!-- The data displayed from ticker-->
       <table class="table">
         <thead>
           <tr>

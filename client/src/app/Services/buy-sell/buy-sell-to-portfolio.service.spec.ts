@@ -17,14 +17,12 @@ describe('BuySellToPortfolioService', () => {
     expect(service).toBeTruthy();
   });
 
-  // Test for creating a but order
-  it('createBuy', () => {
-
+  it('should create a buy', () => {
+    expect(service.createBuy).toBeTruthy();
   });
 
-  // Test for creating a sell order
-  it('createSell', () => {
-
+  it('should create a sell', () => {
+    expect(service.createSell).toBeTruthy();
   });
+});
 
-}); // End of describe

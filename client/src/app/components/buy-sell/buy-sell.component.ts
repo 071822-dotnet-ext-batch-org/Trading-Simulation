@@ -8,6 +8,7 @@ import { Portfolio } from 'src/app/Models/Portfolio';
 import { BuySellToPortfolioService } from 'src/app/Services/buy-sell/buy-sell-to-portfolio.service';
 import { BuyDto } from 'src/app/Models/buy-sell/buySellApiCall';
 
+
 @Component({
   selector: 'app-buy-sell',
   templateUrl: './buy-sell.component.html',
@@ -20,7 +21,8 @@ export class BuySellComponent implements OnInit {
   constructor(
     private buySell: BuySellService,
     private GMP: GetMyPortfoliosService,
-    private BSP: BuySellToPortfolioService
+    private BSP: BuySellToPortfolioService,
+    private GSI: GetSingleInvestmentService
   ) { }
 
   title = 'Buy and Sell'; // Page title
@@ -36,6 +38,11 @@ export class BuySellComponent implements OnInit {
   buyResult: any; // Used in createBuy below
   sellResult: any; // Used in createSell below
   totalPrice: number = 0; // Used in the calculateTotal method
+  errorMessage: string = '';
+  invQty: number = 0;
+  txLoading: boolean = false;
+  success: string = '';
+
 
   // What is shown in the dropdown box on web page options.
   options: Options[] = [
@@ -54,6 +61,8 @@ export class BuySellComponent implements OnInit {
   // sell option then it will chose the createSell() method and send a data transfer object to
   // our database and removes the order from the database.
   public onPayment() {
+    this.success = '';
+    this.txLoading = true;
 
     if (!this.symbol.value) return;
 
@@ -62,16 +71,43 @@ export class BuySellComponent implements OnInit {
       console.log(this.portfolioID, this.symbol.value, this.qty, res.results[0].c)
       console.log(this.selected);
 
-      // Buy condition
-      if (this.selected === 'Buy') {
-        if (!this.symbol.value) return;
-        this.createBuy(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
-      }
+      const currentPort = this.portfolios.find(p => p.portfolioID === this.portfolioID);
 
-      // Sell condition
-      if (this.selected === 'Sell') {
-        if (!this.symbol.value) return;
-        this.createSell(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
+      if (currentPort){
+        
+        // Buy condition
+        if (this.selected === 'Buy') {
+
+          if (!this.symbol.value) return;
+
+          if (this.qty * res.results[0].c > currentPort.liquid) {
+            this.errorMessage = 'Cannot make purchase - not enough available cash';
+            this.txLoading = false;
+            return;
+          }
+
+          this.createBuy(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
+        }
+
+        // Sell condition
+        if (this.selected === 'Sell') {
+
+          if (!this.symbol.value) return;
+          this.GSI.getSingleInvestment(this.portfolioID, this.symbol.value).subscribe(inv => {
+
+            this.invQty = inv.currentAmount;
+            if (inv.currentAmount < this.qty){
+              this.errorMessage = 'Cannot sell stock - quantity held not enough';
+              this.txLoading = false;
+              return;
+            }
+            
+            if (!this.symbol.value) return;
+            this.createSell(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
+          });
+
+          
+        }
       }
     })
   }// End on payment
@@ -85,8 +121,8 @@ export class BuySellComponent implements OnInit {
   public getTickerData(tickerSymbol: any) {
     if (!tickerSymbol) return;
     this.buySell.getTickerData(tickerSymbol).subscribe(tickerData => {
-      this.tickerData = (tickerData.results)
-      console.log(tickerData.results)
+      this.tickerData = (tickerData.results);
+      console.log(tickerData.results);
     });
   }
 
@@ -95,6 +131,8 @@ export class BuySellComponent implements OnInit {
   public createBuy(portfolioID: string, symbol: string, qty: number, buyPrice: number): void {
     this.BSP.createBuy(portfolioID, symbol, qty, buyPrice).subscribe(br => {
       this.buyResult = br;
+      this.success = 'Transaction completed';
+      this.txLoading = false;
       console.log(br);
     });
   }
@@ -104,6 +142,8 @@ export class BuySellComponent implements OnInit {
   public createSell(portfolioID: string, symbol: string, qty: number, sellPrice: number): void {
     this.BSP.createSell(portfolioID, symbol, qty, sellPrice).subscribe(sr => {
       this.sellResult = sr
+      this.success = 'Transaction completed';
+      this.txLoading = false;
     })
   }
 
@@ -121,5 +161,11 @@ export class BuySellComponent implements OnInit {
     });
 
   };
+
+  resetForms(): void {
+    this.symbol.reset();
+    this.qty = 0;
+    this.selected = 'Buy';
+  }
 
 }//End BuySellComponent

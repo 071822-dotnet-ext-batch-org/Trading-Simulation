@@ -154,6 +154,9 @@ namespace Models
     /// <summary>
     /// This is the Model to create a new GetInvestmentDto - contains  PortfolioId, Symbol
     /// </summary>
+    
+    
+    
     public class GetInvestmentDto
     {
         public Guid? PortfolioId { get; set; }
@@ -238,6 +241,7 @@ namespace Models
             this.PriceSold  = PriceSold;
         }
     }//End of SELL
+
 
     /// <summary>
     /// This is the Model to create a new CreatePostDto - contains Content, PrivacyLevel
@@ -364,4 +368,107 @@ namespace Models
         }
     }
 
+    /// <summary>
+    /// This is the Model to create a new CommentDto - contains PostId, Content
+    /// </summary>
+    public class CommentDto
+    {
+        public Guid? PostId { get; set; }
+        public string? Content { get; set; }
+
+        /// <summary>
+        /// This is the Constructor to create a new CommentDto that is empty
+        /// </summary>
+        public CommentDto() { }
+
+        /// <summary>
+        /// This is the Constructor to create a new CommentDto - contains PostId, Content
+        /// </summary>
+        /// <param name="PostId"></param>
+        /// <param name="Content"></param>
+        public CommentDto(Guid? PostId, string? Content)
+        {
+            this.PostId = PostId;
+            this.Content = Content;
+        }
+    }
+
+    /// <summary>
+    /// This is the Model to create a new EditCommentDto - contains CommentId, Content.
+    /// </summary>
+    public class EditCommentDto
+    {
+        public Guid? CommentId { get; set; }
+        public string? Content { get; set; }
+
+        /// <summary>
+        /// This is the Constructor to create an EditCommentDto that is empty.
+        /// </summary>
+        public EditCommentDto() { }
+
+        /// <summary>
+        /// This is the Constructor to create an EditCommentDto - contains CommentId, Content.
+        /// </summary>
+        /// <param name="CommentId"></param>
+        /// <param name="Content"></param>
+        public EditCommentDto(Guid CommentId, string Content)
+        {
+            this.CommentId = CommentId;
+            this.Content = Content;
+        }
+    }
+
+
+
+    public class LikeForCommentDto
+    {
+        public Guid? CommentId { get; set; }
+
+        public LikeForCommentDto() { }
+
+        public LikeForCommentDto(Guid CommentId, string UserID)
+        {
+            this.CommentId= CommentId;
+ 
+        }
+    }
+
+    public class UpdatePriceDto
+    {
+        public UpdatePriceDto()
+        {
+        }
+
+        public UpdatePriceDto(decimal price, string symbol)
+        {
+            Price = price;
+            Symbol = symbol;
+        }
+
+        public decimal? Price { get; set; }
+        public string? Symbol { get; set; }
+
+    }
+
+    public class DeletePortfolioDto 
+    {
+        public Guid PortfolioID { get; set; }
+
+        /// <summary>
+        /// This is the Constructor to create a new DeletePortfolioDto that is empty
+        /// </summary>
+        public DeletePortfolioDto ()
+        {
+        }
+
+        /// <summary>
+        /// This is the Constructor to create a new DeletePortfolioDto - contains PortfolioID
+        /// </summary>
+        /// <param name="portfolioID"></param>
+        public DeletePortfolioDto (Guid portfolioID)
+        {
+            PortfolioID = portfolioID;
+        }
+
+    }
 }

@@ -21,11 +21,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
+
 
 
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
@@ -49,7 +49,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
  
-import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxPaginationModule} from 'ngx-pagination';
  
  
  
@@ -57,10 +57,18 @@ import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { InvestmentsComponent } from './components/investments/investments.component';
+ 
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
+ 
+ 
+
 
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
-import { CommentsComponent } from './components/comments/comments.component'
+import { CommentsComponent } from './components/comment/comments.component';
+import { AboutUsComponent } from './components/about-us/about-us.component'
 
+
+ 
 
 @NgModule({
   declarations: [
@@ -83,17 +91,17 @@ import { CommentsComponent } from './components/comments/comments.component'
     InvestmentsComponent,
     EditProfileComponent,
     CommentsComponent,
+    AboutUsComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
- 
+    MatProgressBarModule,
     NgxPaginationModule,
  
- 
     CdkAccordionModule,
- 
     FormsModule,
     HttpClientModule,
     MatDialogModule,
@@ -114,8 +122,14 @@ import { CommentsComponent } from './components/comments/comments.component'
           env.baseURL + '/create-portfolio',
           env.baseURL + '/all-investments',
           env.baseURL + '/create-buy',
-
-          env.baseURL + '/create-sell'
+          env.baseURL + '/create-sell',
+          env.baseURL + '/update-current-price',
+          env.baseURL + '/single-investment',
+          env.baseURL + '/delete-portfolio',
+          env.baseURL + '/remove-like-on-post',
+          env.baseURL + '/add-like-on-post',
+          env.baseURL + '/get-post-likes',
+          env.baseURL + '/create-post'
         ],
 
       }
