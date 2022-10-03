@@ -52,18 +52,10 @@ describe('ProfileComponent', () => {
     const data = fixture.nativeElement;
     expect(data.querySelector("button").textContent).toContain(" ")
   });
-<<<<<<< HEAD
-  it('should create header2',()=>{
-    const fixture = TestBed.createComponent(ProfileComponent);
-    fixture.detectChanges();
-    const complied = fixture.debugElement.nativeElement.querySelector('#titleInterpolation');
-    expect(complied).toBeTruthy;
-=======
   //
   xit('Testing header2', ()=>{
     const data = fixture.nativeElement;
     expect(data.querySelector("p").textContent).toContain(" ")
->>>>>>> 7e277965108141950845721be26d1a89653e75b9
   });
   //Test checks to see if the variable isClicked boolean value is false
   it('should be false',()=>{
