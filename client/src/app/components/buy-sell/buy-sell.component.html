@@ -8,7 +8,7 @@
             <mat-label>Portfolio</mat-label>
             <mat-select [required]="true" [(value)]="portfolioID">
               <mat-option *ngFor="let port of portfolios" value="{{port.portfolioID}}">
-                {{ port.name + ' - ' + (port.liquid | currency) }} 
+                {{ port.name + ' - ' + (port.liquid | currency) }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -70,7 +70,7 @@
         </button>
       </mat-form-field>
     </form>
-    <div class="table-responsive"> <!-- The data displayed from ticker-->
+    <div class="table-responsive" *ngFor="let data of tickerData"> <!-- The data displayed from ticker-->
       <table class="table">
         <thead>
           <tr>
