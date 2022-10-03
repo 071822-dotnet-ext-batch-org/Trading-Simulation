@@ -7,6 +7,7 @@ import { GetMyPortfoliosService } from 'src/app/Services/get-my-portfolios/get-m
 import { CreatePortfolioModalComponent } from '../create-portfolio-modal/create-portfolio-modal.component';
 
 import {MatDialog} from '@angular/material/dialog';
+import { DeletePortfolioService } from 'src/app/Services/delete-portfolio/delete-portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -22,10 +23,12 @@ export class PortfolioComponent {
   portfolioID:string = '';
   loading:boolean = false;
   showPortfolios:boolean = true;
+  errorMessage: string = '';
 
   constructor(
     private GMP: GetMyPortfoliosService,
     private CP: CreatePortfolioService,
+    private DPS: DeletePortfolioService,
     public dialog: MatDialog
   ) {
   }
@@ -50,7 +53,9 @@ export class PortfolioComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('closed');
       if(!result) return;
-      this.CP.createPortfolio(result.name, result.originalLiquid, result.privacyLevel).subscribe(ports => this.portfolios = ports);
+      this.CP.createPortfolio(result.name, result.originalLiquid, result.privacyLevel).subscribe(port => {
+        this.portfolios.unshift(port);
+      });
     })
   }
 
@@ -61,6 +66,17 @@ export class PortfolioComponent {
 
   displayPortfolios(): void {
     this.showPortfolios = true;
+  }
+
+  deletePortfolio(portfolioID: string): void {
+    this.DPS.deletePortfolio(portfolioID).subscribe(success => {
+      if (!success) {
+        this.errorMessage="Failed to delete portfolio";
+        return;
+      }
+    
+      this.portfolios = this.portfolios.filter(port => port.portfolioID != portfolioID);
+    })
   }
 
 }

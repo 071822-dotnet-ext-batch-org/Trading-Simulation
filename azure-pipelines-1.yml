@@ -70,3 +70,10 @@ steps:
 
 
 
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure for Students (747e92f3-665f-48dd-825f-1f21323087e8)'
+    appType: 'webApp'
+    WebAppName: 'Yoinka'
+    packageForLinux: '$(build.artifactstagingdirectory)/*.zip'

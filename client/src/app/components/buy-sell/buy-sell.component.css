@@ -1,33 +1,22 @@
-table {
-  width: 100%;
-}
-
+/* Buy and Sell title*/
 .title {
   text-align: center;
   text-decoration: underline;
 }
 
+/* <Div> that has everything inside of it */
 .component-container {
   display: flex;
   justify-content: space-evenly;
 }
 
+/* Search box */
 .search-form-field {
   display: flex;
   justify-content: space-between;
 }
 
-.example-container .mat-form-field+.mat-form-field {
-  margin-left: 8px;
-}
-
-.panel-body {
-  text-align: center;
-  color: black;
-  text-decoration: underline;
-  padding-bottom: 10px;
-}
-
+/* The portfolio and buy/sell dropdown boxes */
 .dropdown-fields {
   text-align: left;
   font-size: large;
@@ -35,14 +24,15 @@ table {
   text-decoration: underline;
 }
 
+/* The enter ticker and quantity boxes */
 .input-fields {
   text-align: left;
   font-size: large;
   margin-left: 15px;
   text-decoration: underline;
-
 }
 
+/* The total amount of the order */
 .total {
   text-align: center;
   font-size: x-large;
@@ -52,9 +42,10 @@ table {
   text-decoration: underline;
   margin-left: 20px;
   position: absolute;
-  bottom: 150px;
+  bottom: 140px;
 }
 
+/* The red cancel button */
 .back-btn {
   background-color: red;
   font-size: 15px;
@@ -65,11 +56,10 @@ table {
   border: black;
   border-radius: 25px;
   margin-right: 50px;
-  position: absolute;
-  bottom: 140px;
-  left: 550px;
+
 }
 
+/* The green payment button */
 .buy-btn {
   background-color: rgb(8, 199, 8);
   font-size: 15px;
@@ -79,8 +69,35 @@ table {
   letter-spacing: 1px;
   border: black;
   border-radius: 25px;
-  margin-right: 50px;
-  position: absolute;
-  bottom: 140px;
-  left: 800px;
+}
+
+.calc-Btn {
+  background-color: rgb(229, 215, 215);
+  font-size: 15px;
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  border: white;
+  border-radius: 25px;
+  margin-bottom: 30px;
+  margin-left: 10px;
+}
+
+.table-info {
+  width: 100px;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+}
+
+.sm-txt-container {
+  font-size: 12px;
+  margin-left: 15px;
+}
+
+#sm-txt {
+  text-decoration: none;
 }

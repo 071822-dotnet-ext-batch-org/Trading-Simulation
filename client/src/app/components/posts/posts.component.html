@@ -1,5 +1,25 @@
 <div class="post-list-container">
 
+    <mat-card>
+        <mat-card-header>
+            <img mat-card-avatar [src]="myProfile.picture" alt="My avatar" referrerpolicy="noreferrer">
+            <mat-card-title>{{myProfile.name}}</mat-card-title>
+            <mat-card-subtitle>{{myProfile.email}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <form (ngSubmit)="createPost()">
+                <mat-form-field class="long">
+                    <mat-label for="postText">New Post</mat-label>
+                    <textarea matInput [formControl]="postText"></textarea>
+                </mat-form-field>
+            </form>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+            <button mat-raised-button (click)="createPost()">Submit</button>
+        </mat-card-actions>
+    </mat-card>
+
     <mat-progress-spinner class="spinner" mode="indeterminate" *ngIf="loadingPosts"></mat-progress-spinner>
     
     <mat-list class="post-list">

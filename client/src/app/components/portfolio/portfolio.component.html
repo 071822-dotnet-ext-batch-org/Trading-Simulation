@@ -6,11 +6,14 @@
   <mat-progress-spinner class="progress-spinner" mode="indeterminate"></mat-progress-spinner>
 </div>
 
+<div class="centered">
+  <button mat-button color="primary" *ngIf="!loading && !showPortfolios" (click)="displayPortfolios()">
+    <mat-icon>arrow_back</mat-icon>
+    Return to portfolios
+  </button>
+</div>
 
 <div class="list-container">
-  <button mat-icon-button *ngIf="!loading && !showPortfolios" (click)="displayPortfolios()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
   <mat-action-list *ngIf="!loading && showPortfolios">
     <div mat-subheader id="subheading">My Portfolios</div>
     <mat-divider></mat-divider>
@@ -39,8 +42,20 @@
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-action-list>
+  <mat-action-list *ngIf="!loading && showPortfolios" class="delete-list">
+    <div mat-subheader id="subheading"></div>
+    <mat-divider></mat-divider>
+    <mat-list-item *ngFor="let portfolio of portfolios" (click)="deletePortfolio(portfolio.portfolioID)">
+      <div class="portfolio-col">
+        <div mat-line class="portfolio-row"><mat-icon class="danger">delete</mat-icon></div>
+        <div mat-line class="portfolio-row"></div>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-action-list>
   <div class="investment-container" *ngIf="!loading && !showPortfolios">
     <app-investments [portfolioID]="portfolioID"></app-investments>
   </div>
 </div>
+<div>{{this.errorMessage}}</div>
 
