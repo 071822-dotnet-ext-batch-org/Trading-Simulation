@@ -7,6 +7,7 @@ import { GetMyPortfoliosService } from 'src/app/Services/get-my-portfolios/get-m
 import { Portfolio } from 'src/app/Models/Portfolio';
 import { BuySellToPortfolioService } from 'src/app/Services/buy-sell/buy-sell-to-portfolio.service';
 import { BuyDto } from 'src/app/Models/buy-sell/buySellApiCall';
+import { GetSingleInvestmentService } from 'src/app/Services/get-single-investment/get-single-investment.service';
 
 
 @Component({
