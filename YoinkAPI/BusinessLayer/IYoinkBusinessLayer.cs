@@ -248,7 +248,7 @@ namespace BusinessLayer
         Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId);
 
         Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id);
-
+        Task<bool> DeletePortfolioAsync(string auth0id, DeletePortfolioDto portfolioID);
     }
 
 }

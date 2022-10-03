@@ -346,6 +346,6 @@ namespace RepoLayer
         Task<bool> UpdateInvestmentAsync(Investment i);
         Task<bool> UpdateInvestmentsCurrentPriceAsync(UpdatePriceDto u);
         Task<bool> UpdatePortfoliosCurrentPriceAsync(List<Guid?> uniquePortfolioIDs);
-
+        Task<bool> DeletePortfolioByPortfolioIDAsync(string auth0id, DeletePortfolioDto portfolioID);
     }
 }

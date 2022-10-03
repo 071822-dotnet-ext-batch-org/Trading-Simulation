@@ -570,5 +570,11 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
         return aurdto;
     }
 
+    public async Task<bool> DeletePortfolioAsync(string auth0id, DeletePortfolioDto portfolioID)
+    {
+        bool deleteSuccess = await this._repoLayer.DeletePortfolioByPortfolioIDAsync(auth0id, portfolioID);
+
+        return deleteSuccess;
+    }
 }
 

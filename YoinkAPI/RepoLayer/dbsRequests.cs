@@ -1292,5 +1292,21 @@ namespace RepoLayer
             }
         }
 
+        public async Task<bool> DeletePortfolioByPortfolioIDAsync(string auth0id, DeletePortfolioDto portfolioID)
+        {
+            string sql = "DELETE FROM Portfolios WHERE portfolioID = @portfolioID AND fk_userID = @auth0id";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioID", portfolioID);
+                command.Parameters.AddWithValue("@auth0id", auth0id);
+
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                return (ret > 0);
+            }
+        }
     }
 }

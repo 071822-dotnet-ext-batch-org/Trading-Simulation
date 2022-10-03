@@ -8,10 +8,11 @@
             <mat-label>Portfolio</mat-label>
             <mat-select [required]="true" [(value)]="portfolioID">
               <mat-option *ngFor="let port of portfolios" value="{{port.portfolioID}}">
-                {{ port.name }}
+                {{ port.name + ' - ' + (port.liquid | currency) }} 
               </mat-option>
             </mat-select>
           </mat-form-field>
+
         </div>
         <mat-form-field> <!-- Chose either buy or sell drop down box -->
           <mat-label>Choose Buy or Sell</mat-label>
@@ -35,6 +36,9 @@
             <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty"
               [ngModelOptions]="{standalone: true}" [required]="true">
           </mat-form-field>
+          <div class="sm-txt-container">
+            <p id="sm-text" *ngIf="invQty != 0">Amount held: {{invQty}}</p>
+          </div>
         </div>
       </div>
       <div class="total"> <!-- Total order cost -->
@@ -44,8 +48,9 @@
         </div>
       </div>
       <div class="payment-btn"> <!-- Confirm and cancel buttons -->
-        <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
-        <button class="buy-btn" (click)="onPayment()" [routerLink]="'/Portfolio'">Payment</button>
+        <button class="back-btn" (click)="resetForms()">Cancel</button>
+        <button class="buy-btn" (click)="onPayment()">Payment</button>
+        <p class="error-message"> {{this.errorMessage}}</p>
       </div>
     </form> <!-- End of Buy/sell form -->
   </div> <!-- End form container -->

@@ -112,7 +112,8 @@ import { CommentsComponent } from './components/comment/comments.component'
           env.baseURL + '/all-investments',
           env.baseURL + '/create-buy',
           env.baseURL + '/create-sell',
-          env.baseURL + '/update-current-price'
+          env.baseURL + '/update-current-price',
+          env.baseURL + '/single-investment'
         ],
 
       }

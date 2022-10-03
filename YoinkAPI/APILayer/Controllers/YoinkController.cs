@@ -595,6 +595,20 @@ namespace APILayer.Controllers
             return BadRequest(u);
         }
 
+        [HttpDelete("delete-portfolio")]
+        public async Task<ActionResult<bool>> DeletePortfolioAsync(DeletePortfolioDto portfolioID)
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    bool deleteSuccess = await this._businessLayer.DeletePortfolioAsync(auth0id, portfolioID);
+                    return Ok(deleteSuccess);
+                }
+            }
+            return BadRequest(false);
+        }
 
     }
 }
