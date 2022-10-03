@@ -21,11 +21,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
+
 
 
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
@@ -88,12 +88,9 @@ import { CommentsComponent } from './components/comment/comments.component'
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
- 
+    MatProgressBarModule,
     NgxPaginationModule,
- 
- 
     CdkAccordionModule,
- 
     FormsModule,
     HttpClientModule,
     MatDialogModule,
@@ -114,8 +111,14 @@ import { CommentsComponent } from './components/comment/comments.component'
           env.baseURL + '/create-portfolio',
           env.baseURL + '/all-investments',
           env.baseURL + '/create-buy',
-
-          env.baseURL + '/create-sell'
+          env.baseURL + '/create-sell',
+          env.baseURL + '/update-current-price',
+          env.baseURL + '/single-investment',
+          env.baseURL + '/delete-portfolio',
+          env.baseURL + '/remove-like-on-post',
+          env.baseURL + '/add-like-on-post',
+          env.baseURL + '/get-post-likes',
+          env.baseURL + '/create-post'
         ],
 
       }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using System.Xml.Linq;
 
 
 namespace RepoLayer
@@ -435,6 +436,25 @@ namespace RepoLayer
 
 
 
+        public async Task<bool> UpdateCurrentPriceAsync(Models.GetInvestmentDto investmentDto, decimal currentPrice)
+        {
+            using (SqlCommand command = new SqlCommand($"UPDATE Investments SET currentPrice = @currentPrice Where fk_PortfolioID = @portfolioId AND symbol = @symbol", _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioId", investmentDto.PortfolioId);
+                command.Parameters.AddWithValue("@symbol", investmentDto.Symbol);
+                command.Parameters.AddWithValue("@currentPrice", currentPrice);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
 
 
 
@@ -668,9 +688,9 @@ namespace RepoLayer
         /// </summary>
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-        public async Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
+        public async Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID)
         {
-            List<Investment?> invList = new List<Investment?>();
+            List<Investment> invList = new List<Investment>();
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Investments WHERE fk_portfolioID = @portfolioID", _conn))
             {
                 command.Parameters.AddWithValue("@portfolioID", portfolioID);
@@ -1176,6 +1196,232 @@ namespace RepoLayer
                 _conn.Close();
                 return commList;
             }
+<<<<<<< HEAD
         }//End of Get comment by Post ID
+=======
+        }
+
+
+        public async Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO LikesComments (fk_commentID, fk_userID) VALUES (@commentId, @auth0Id) Select TOP (1) * FROM LikesComments WHERE fk_userID = @userId ORDER BY dateCreated DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", createLikeForCommentDto.CommentId);
+                command.Parameters.AddWithValue("@userId", auth0UserId);
+
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                
+                return (ret > 0);
+            }
+        }
+
+
+
+        public async Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesComments WHERE likesCommentsID = @commentId AND fk_userID = @userId", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", deleteLikeForCommentDto.CommentId);
+                command.Parameters.AddWithValue("@userId", auth0UserId);
+
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }
+
+
+        public async Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId)
+        {
+            int? count = 0;
+            using (SqlCommand cmdCount = new SqlCommand("SELECT COUNT(commentID) FROM Comments WHERE fk_postID=@postId", _conn))
+            {
+                cmdCount.Parameters.AddWithValue("@postId", postId);
+                _conn.Open();
+                count = (int?)(await cmdCount.ExecuteScalarAsync());
+                _conn.Close();
+            }
+
+            return count;
+        }
+
+
+
+        public async Task<bool> UpdateBuysCurrentPriceAsync(UpdatePriceDto u)
+        {
+            string sql = @"
+                UPDATE Buys
+                SET currentPrice = @currentPrice
+                WHERE symbol = @symbol
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@currentPrice", u.Price);
+                command.Parameters.AddWithValue("@symbol", u.Symbol);
+
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                return (ret > 0);
+            }
+        }
+
+        public async Task<List<Buy>> GetAllBuyBySymbolNoPortfolioAsync(string symbol)
+        {
+            List<Buy> buys = new List<Buy>();
+
+            string sql = @"
+                SELECT *
+                FROM Buys
+                WHERE symbol = @symbol
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@symbol", symbol);
+
+                _conn.Open();
+                
+                SqlDataReader ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    Buy b = new Buy(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetDecimal(4), ret.GetDecimal(5), ret.GetDateTime(6));
+                    buys.Add(b);
+                }
+
+                _conn.Close();
+                return buys;
+            }
+        }
+
+        public async Task<bool> UpdateInvestmentAsync(Investment i)
+        {
+            string sql = @"
+                UPDATE Investments
+                SET currentPrice = @currentPrice,
+                    pnl = @pnl
+                WHERE investmentID = @investmentID
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@currentPrice", i.CurrentPrice);
+                command.Parameters.AddWithValue("@pnl", i.TotalPNL);
+                command.Parameters.AddWithValue("@investmentID", i.InvestmentID);
+                
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                return (ret > 0);
+            }
+        }
+
+        public async Task<bool> UpdateInvestmentsCurrentPriceAsync(UpdatePriceDto u)
+        {
+            string sql = @"
+                UPDATE Investments
+                SET currentPrice = @currentPrice,
+                    pnl = (@currentPrice * currentAmount) - moneyInvested
+                WHERE symbol = @symbol
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@currentPrice", u.Price);
+                command.Parameters.AddWithValue("@symbol", u.Symbol);
+                
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                return (ret > 0);
+            }
+        }
+
+        public async Task<bool> UpdatePortfoliosCurrentPriceAsync(List<Guid?> uniquePortfolioIDs)
+        {
+            string sql = @"
+                UPDATE Portfolios
+                SET currentInvestment = (SELECT SUM(currentAmount * currentPrice) FROM Investments WHERE fk_portfolioID = @portfolioID),
+                    currentTotal = liquid + (SELECT SUM(currentAmount * currentPrice) FROM Investments WHERE fk_portfolioID = @portfolioID),
+                    pnl = liquid + (SELECT SUM(currentAmount * currentPrice) FROM Investments WHERE fk_portfolioID = @portfolioID) - originalLiquid
+                WHERE portfolioID = @portfolioID
+            ";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                _conn.Open();
+                foreach(Guid? pid in uniquePortfolioIDs)
+                {
+                    command.Parameters.Clear();
+                    if (pid != null) 
+                    {
+                        command.Parameters.AddWithValue("@portfolioID", pid);
+                        int ret = await command.ExecuteNonQueryAsync();
+
+                        if (ret == 0) 
+                        {
+                            _conn.Close();
+                            return false;
+                        }
+                    }
+                }
+                
+                _conn.Close();
+                return true;
+            }
+        }
+
+        public async Task<bool> DeletePortfolioByPortfolioIDAsync(string auth0id, DeletePortfolioDto dp)
+        {
+            string sql = "DELETE FROM Portfolios WHERE portfolioID = @portfolioID AND fk_userID = @auth0id";
+
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@portfolioID", dp.PortfolioID);
+                command.Parameters.AddWithValue("@auth0id", auth0id);
+
+                _conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                _conn.Close();
+
+                return (ret > 0);
+            }
+        }
+
+        public async Task<List<Guid>> GetPostLikesByUserID(string auth0id)
+        {
+            List<Guid> myLikes = new List<Guid>();
+            string sql = $"SELECT fk_postID FROM LikesPosts WHERE fk_userID = @auth0id";
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@auth0id", auth0id);
+
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    myLikes.Add(ret.GetGuid(0));
+                }
+
+                _conn.Close();
+                return myLikes;
+            } 
+        }
+>>>>>>> 7e277965108141950845721be26d1a89653e75b9
     }
 }

@@ -154,6 +154,9 @@ namespace Models
     /// <summary>
     /// This is the Model to create a new GetInvestmentDto - contains  PortfolioId, Symbol
     /// </summary>
+    
+    
+    
     public class GetInvestmentDto
     {
         public Guid? PortfolioId { get; set; }
@@ -238,6 +241,7 @@ namespace Models
             this.PriceSold  = PriceSold;
         }
     }//End of SELL
+
 
     /// <summary>
     /// This is the Model to create a new CreatePostDto - contains Content, PrivacyLevel
@@ -412,5 +416,59 @@ namespace Models
             this.CommentId = CommentId;
             this.Content = Content;
         }
+    }
+
+
+
+    public class LikeForCommentDto
+    {
+        public Guid? CommentId { get; set; }
+
+        public LikeForCommentDto() { }
+
+        public LikeForCommentDto(Guid CommentId, string UserID)
+        {
+            this.CommentId= CommentId;
+ 
+        }
+    }
+
+    public class UpdatePriceDto
+    {
+        public UpdatePriceDto()
+        {
+        }
+
+        public UpdatePriceDto(decimal price, string symbol)
+        {
+            Price = price;
+            Symbol = symbol;
+        }
+
+        public decimal? Price { get; set; }
+        public string? Symbol { get; set; }
+
+    }
+
+    public class DeletePortfolioDto 
+    {
+        public Guid PortfolioID { get; set; }
+
+        /// <summary>
+        /// This is the Constructor to create a new DeletePortfolioDto that is empty
+        /// </summary>
+        public DeletePortfolioDto ()
+        {
+        }
+
+        /// <summary>
+        /// This is the Constructor to create a new DeletePortfolioDto - contains PortfolioID
+        /// </summary>
+        /// <param name="portfolioID"></param>
+        public DeletePortfolioDto (Guid portfolioID)
+        {
+            PortfolioID = portfolioID;
+        }
+
     }
 }

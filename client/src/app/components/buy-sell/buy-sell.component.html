@@ -1,20 +1,21 @@
-<h2 class='title' style="font-size:xx-large">Buy and Sell</h2>
+<h2 class='title' style="font-size:xx-large">{{ title }}</h2>
 <div class="component-container"> <!-- entire container -->
   <div class="form-container"> <!-- Has portfolio, order type, ticker, quantity, total and buttons -->
     <form class="BuySell-Panel"> <!-- What's needed for a buy or sell order-->
       <div class="dropdown-fields"> <!-- Just dropdown boxes -->
         <div> <!-- Chose which portfolio to use drop down box -->
           <mat-form-field>
-            <mat-label>Chose Portfolio</mat-label>
+            <mat-label>Portfolio</mat-label>
             <mat-select [required]="true" [(value)]="portfolioID">
               <mat-option *ngFor="let port of portfolios" value="{{port.portfolioID}}">
-                {{ port.name }}
+                {{ port.name + ' - ' + (port.liquid | currency) }} 
               </mat-option>
             </mat-select>
           </mat-form-field>
+
         </div>
         <mat-form-field> <!-- Chose either buy or sell drop down box -->
-          <mat-label>Chose Buy or Sell</mat-label>
+          <mat-label>Choose Buy or Sell</mat-label>
           <mat-select [required]="true" [(value)]="selected">
             <mat-option *ngFor="let option of options" value="{{option.value}}">
               {{ option.viewValue }}
@@ -35,6 +36,9 @@
             <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty"
               [ngModelOptions]="{standalone: true}" [required]="true">
           </mat-form-field>
+          <div class="sm-txt-container">
+            <p id="sm-text" *ngIf="invQty != 0">Amount held: {{invQty}}</p>
+          </div>
         </div>
       </div>
       <div class="total"> <!-- Total order cost -->
@@ -44,65 +48,61 @@
         </div>
       </div>
       <div class="payment-btn"> <!-- Confirm and cancel buttons -->
-        <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
-        <button class="buy-btn" (click)="onPayment()" >Payment</button>
+        <button class="back-btn" (click)="resetForms()">Cancel</button>
+        <button class="buy-btn" (click)="onPayment()">Payment</button>
+        <p class="error-message"> {{this.errorMessage}}</p>
       </div>
     </form> <!-- End of Buy/sell form -->
+    <div>
+      <mat-progress-spinner mode="indeterminate" *ngIf="txLoading"></mat-progress-spinner>
+      <p>{{success}}</p>
+    </div>
   </div> <!-- End form container -->
-  <div class="search-container">
-    <form class="search-form"> <!-- Search box -->
+  <div class="search-container"> <!-- Container with the search box/function and ticker data-->
+    <form class="search-form"> <!-- Contians the search box-->
       <mat-form-field class="search-form-field" appearance="fill">
         <mat-label>Symbol search</mat-label>
-        <input matInput placeholder="Ex. AAPL" [formControl]="symbolSearch">
+        <input matInput maxlength="5" placeholder="Ex. AAPL" [formControl]="symbolSearch"> <!--Ticker search box-->
         <button matSuffix mat-icon-button (click)="getTickerData(symbolSearch.value)"
-          (submit)="getTickerData(symbolSearch.value)">
+          (submit)="getTickerData(symbolSearch.value)"> <!-- returns the ticker data from Polygon.io atter running getTickerData-->
           <mat-icon>search</mat-icon>
         </button>
       </mat-form-field>
-    <div class="table-responsive">
+    </form>
+    <div class="table-responsive"> <!-- The data displayed from ticker-->
       <table class="table">
         <thead>
           <tr>
             <th></th>
             <th></th>
-            <th>Stock Information</th>
+            <th>Stock Information</th> <!-- Table title-->
             <th></th>
           </tr>
         </thead>
       </table>
-      <table>
+      <table> <!--Data chart interperlated from tickerData in getTickerData from component page-->
+        <thead>
+          <tr>
+            <th class="table-info">Ticker</th>
+            <th class="table-info">Close</th>
+            <th class="table-info">High</th>
+            <th class="table-info">Low</th>
+            <th class="table-info">Open</th>
+            <th class="table-info">Vol.</th>
+          </tr>
+        </thead>
+        
         <tbody>
-          <tr>
-            <td>Ticker:</td>
-            <td>{{symbolSearch}}</td>
-          </tr>
-          <tr>
-            <td>Close:</td>
-            <td>{{symbolSearch}}</td>
-          </tr>
-          <tr>
-            <td>High:</td>
-            <td>{{symbolSearch}}</td>
-          </tr>
-          <tr>
-            <td>Low:</td>
-            <td>{{symbolSearch}}</td>
-          </tr>
-          <tr>
-            <td>Open:</td>
-            <td>{{symbolSearch}}</td>
-          </tr>
-          <tr>
-            <td>Volume:</td>
-            <td>{{symbolSearch}}</td>
-          </tr>
-          <tr>
-            <td>Market Cap:</td>
-            <td>{{symbolSearch}}</td>
+          <tr *ngFor="let data of tickerData">
+            <td class="table-info">{{data.T}}</td>
+            <td class="table-info">{{data.c | currency}}</td>
+            <td class="table-info">{{data.h | currency}}</td>
+            <td class="table-info">{{data.l | currency}}</td>
+            <td class="table-info">{{data.o | currency}}</td>
+            <td class="table-info">{{data.v}}</td>
           </tr>
         </tbody>
       </table>
-    </div> <!-- End table response container -->
-    </form>
+    </div> <!-- Container for table-->
   </div> <!-- End search container -->
 </div><!--Component Container-->

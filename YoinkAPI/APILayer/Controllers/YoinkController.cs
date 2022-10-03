@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Models;
 using BusinessLayer;
-using Models.ModelDTOs.BackToFrontEnd;
 using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using Microsoft.Extensions.Hosting;
 
 namespace APILayer.Controllers
 {
@@ -109,10 +109,15 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0Id = User.Identity?.Name;
-                Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
-                return Created("", newPortfolio);
+
+                if (auth0Id != null && p != null)
+                {
+                    Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
+                    return Created("", newPortfolio);
+                }
             }
-            else return BadRequest(p);
+            
+            return BadRequest(p);
         }
 
         /// <summary>
@@ -145,6 +150,10 @@ namespace APILayer.Controllers
             List<Portfolio?> retrievedPortfolios = await this._businessLayer.GetALLPortfoliosByUserIDAsync(auth0UserId);
             return Ok(retrievedPortfolios);
         }
+
+
+
+
 
         /// <summary>
         /// Allows user to edit their portfolio, things like name, privacyLevel, etc.
@@ -256,11 +265,11 @@ namespace APILayer.Controllers
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
         [HttpPost("all-investments")]
-        public async Task<ActionResult<List<Investment?>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
+        public async Task<ActionResult<List<Investment>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
         {
             if(ModelState.IsValid)
             {
-                List<Investment?> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
+                List<Investment> investment = await this._businessLayer.GetAllInvestmentsByPortfolioIDAsync(investmentDto.PortfolioID);
                 return Ok(investment);
             }
             return BadRequest(investmentDto);
@@ -343,8 +352,14 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0UserId = User.Identity?.Name;
-                Post? createdPost = await this._businessLayer.CreatePostAsync(auth0UserId, post);
-                return Created("", createdPost);
+                if(auth0UserId != null)
+                {
+                    Post? createdPost = await this._businessLayer.CreatePostAsync(auth0UserId, post);
+                    if (createdPost != null)
+                    {
+                        return Created("", createdPost);
+                    }
+                }
             }
             return BadRequest(post);
         }
@@ -519,7 +534,7 @@ namespace APILayer.Controllers
         /// </summary>
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
-        [HttpPost("get-all-comment")]
+        [HttpGet("get-all-comment")]
         public async Task<ActionResult<List<Comment>>> GetCommentsByPostIdAsync(Guid postId)
         {
             if (ModelState.IsValid)
@@ -528,6 +543,95 @@ namespace APILayer.Controllers
                 return Ok(comments);
             }
             else return BadRequest(postId);
+        }
+
+
+
+
+        [HttpPost("create-like-for-comment")]
+        public async Task<ActionResult<LikeComment?>> CreateLikeForCommentAsync(LikeForCommentDto? createLikeForCommentDto)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+                if(createLikeForCommentDto != null && auth0UserId != null) 
+                {
+                    bool newLikeForComment = await this._businessLayer.CreateLikeForCommentAsync(createLikeForCommentDto, auth0UserId);
+                    return Ok(newLikeForComment);
+                }
+            }
+            return BadRequest("Comment was not liked");
+        }
+
+
+
+        [HttpDelete("delete-like-for-comment")]
+        public async Task<ActionResult<bool>> DeleteLikeForCommentAsync(LikeForCommentDto? deleteLikeForCommentDto)
+        {
+            if (ModelState.IsValid)
+            {
+                string? auth0UserId = User.Identity?.Name;
+
+                if (deleteLikeForCommentDto != null && auth0UserId != null)
+                {
+                    bool? deleteComment = await this._businessLayer.DeleteLikeForCommentAsync(deleteLikeForCommentDto, auth0UserId);
+                    return Ok(deleteComment);
+                }
+            }
+            return BadRequest("Comment was not unliked.");
+        }
+
+
+        [HttpGet("number-of-comments-by-postId")]
+        public async Task<ActionResult<int>> GetCountofCommentsByPostIdAsync(Guid? postId)
+        {
+            int? GotcommentCountByPostId = await this._businessLayer.GetCountofCommentsByPostIdAsync(postId);
+            return Ok(GotcommentCountByPostId);
+        }
+
+        [HttpPut("update-current-price")]
+        public async Task<ActionResult<AllUpdatedRowsDto>> UpdateCurrentPriceAsync(UpdatePriceDto u)
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    AllUpdatedRowsDto aurdto = await this._businessLayer.UpdateCurrentPriceAsync(u, auth0id);
+                    return Ok(aurdto);
+                }
+            }
+            return BadRequest(u);
+        }
+
+        [HttpDelete("delete-portfolio")]
+        public async Task<ActionResult<bool>> DeletePortfolioAsync(DeletePortfolioDto portfolioID)
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    bool deleteSuccess = await this._businessLayer.DeletePortfolioAsync(auth0id, portfolioID);
+                    return Ok(deleteSuccess);
+                }
+            }
+            return BadRequest(false);
+        }
+
+        [HttpGet("get-post-likes")]
+        public async Task<ActionResult<List<Guid>>> GetPostLikesByUserID()
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    List<Guid> likedPosts = await this._businessLayer.GetPostLikesByUserID(auth0id);
+                    return Ok(likedPosts);
+                }
+            }
+            return BadRequest();
         }
     }
 }

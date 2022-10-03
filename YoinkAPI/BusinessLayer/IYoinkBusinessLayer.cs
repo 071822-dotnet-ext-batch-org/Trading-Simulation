@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models;
-using Models.ModelDTOs.BackToFrontEnd;
 
 namespace BusinessLayer
 {
@@ -92,7 +91,7 @@ namespace BusinessLayer
         /// </summary>
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-        Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
+        Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
         //Profile Section
 
@@ -238,5 +237,19 @@ namespace BusinessLayer
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
         Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
+
+
+
+
+        Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string auth0UserId);
+
+        Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId);
+
+        Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId);
+
+        Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id);
+        Task<bool> DeletePortfolioAsync(string auth0id, DeletePortfolioDto portfolioID);
+        Task<List<Guid>> GetPostLikesByUserID(string auth0id);
     }
+
 }

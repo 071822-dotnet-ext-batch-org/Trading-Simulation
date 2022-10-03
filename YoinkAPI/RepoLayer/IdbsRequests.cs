@@ -92,10 +92,6 @@ namespace RepoLayer
         /// <returns>The most recent Sell Order</returns>
         Task<Sell?> GetRecentSellByPortfolioId(Guid? fk_PortfolioID);
 
-        
-
-
-
         //--------------------Portfolio Section------------------
 
         /// <summary>
@@ -162,7 +158,7 @@ namespace RepoLayer
         /// </summary>
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
-        Task<List<Investment?>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
+        Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
 
         /// <summary>
         /// Allows user to update the current prices of their ivestment by symbol - Needs Sybmol, Update Price, and Portfolio ID
@@ -368,5 +364,26 @@ namespace RepoLayer
         /// <param name="postId">postId</param>
         /// <returns>A list of comments.</returns>
         Task<List<Comment>> GetCommentsByPostIdAsync(Guid postId);
+
+
+
+        Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId);
+
+        Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId);
+
+        Task<int?> GetCountofCommentsByPostIdAsync(Guid? postId);
+
+        
+
+        //Updates the currentPrice column from the Investments table with new price.
+        //Inputs: "guid fk_PortfolioID" and "string Symbol" are from Investments table. "currentPrice" is from a 3rd party api?
+        //Outputs: A true/false into the BusinessLayer. The BusinessLayer will later output the portfolioID and Symbol using GetInvestmentByPortfolioIDAsync().
+        Task<bool> UpdateBuysCurrentPriceAsync(UpdatePriceDto u);
+        Task<List<Buy>> GetAllBuyBySymbolNoPortfolioAsync(string symbol);
+        Task<bool> UpdateInvestmentAsync(Investment i);
+        Task<bool> UpdateInvestmentsCurrentPriceAsync(UpdatePriceDto u);
+        Task<bool> UpdatePortfoliosCurrentPriceAsync(List<Guid?> uniquePortfolioIDs);
+        Task<bool> DeletePortfolioByPortfolioIDAsync(string auth0id, DeletePortfolioDto portfolioID);
+        Task<List<Guid>> GetPostLikesByUserID(string auth0id);
     }
 }
