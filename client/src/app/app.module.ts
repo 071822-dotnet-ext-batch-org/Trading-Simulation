@@ -50,17 +50,22 @@ import { GoogleChartsModule } from 'angular-google-charts';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
  
 import { NgxPaginationModule } from 'ngx-pagination';
- 
+import { PaginationPipe } from './components/news/pagination.pipe';
  
  
 import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { InvestmentsComponent } from './components/investments/investments.component';
+ 
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
+ 
+ 
 
-import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+//import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { CommentsComponent } from './components/comment/comments.component'
 
+ 
 
 @NgModule({
   declarations: [
@@ -82,7 +87,12 @@ import { CommentsComponent } from './components/comment/comments.component'
     PostCardComponent,
     InvestmentsComponent,
     EditProfileComponent,
+
+    PaginationPipe,
+   
+ 
     CommentsComponent,
+ 
   ],
   imports: [
     BrowserModule,
@@ -90,6 +100,7 @@ import { CommentsComponent } from './components/comment/comments.component'
     BrowserAnimationsModule,
     MatProgressBarModule,
     NgxPaginationModule,
+ 
     CdkAccordionModule,
     FormsModule,
     HttpClientModule,
