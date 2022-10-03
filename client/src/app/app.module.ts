@@ -49,8 +49,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
  
-import { NgxPaginationModule } from 'ngx-pagination';
-import { PaginationPipe } from './components/news/pagination.pipe';
+import { NgxPaginationModule} from 'ngx-pagination';
+ 
  
  
 import { environment as env } from 'src/environments/environment';
@@ -88,9 +88,6 @@ import { CommentsComponent } from './components/comment/comments.component'
     InvestmentsComponent,
     EditProfileComponent,
 
-    PaginationPipe,
-   
- 
     CommentsComponent,
  
   ],

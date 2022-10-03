@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import {NgxPaginationModule} from 'ngx-pagination';
-import{PaginationPipe} from './pagination.pipe';
+ 
 
 import { NewsComponent } from './news.component';
 
@@ -12,7 +12,7 @@ describe('NewsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientModule,  NgxPaginationModule ],
-      declarations: [ NewsComponent,  PaginationPipe ]
+      declarations: [ NewsComponent]
       
     })
     .compileComponents();
