@@ -610,5 +610,19 @@ namespace APILayer.Controllers
             return BadRequest(false);
         }
 
+        [HttpGet("get-post-likes")]
+        public async Task<ActionResult<List<Guid>>> GetPostLikesByUserID()
+        {
+            if (ModelState.IsValid)
+            {
+                if(User.Identity?.Name != null)
+                {
+                    string auth0id = User.Identity.Name;
+                    List<Guid> likedPosts = await this._businessLayer.GetPostLikesByUserID(auth0id);
+                    return Ok(likedPosts);
+                }
+            }
+            return BadRequest();
+        }
     }
 }

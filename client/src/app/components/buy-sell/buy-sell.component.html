@@ -53,6 +53,10 @@
         <p class="error-message"> {{this.errorMessage}}</p>
       </div>
     </form> <!-- End of Buy/sell form -->
+    <div>
+      <mat-progress-spinner mode="indeterminate" *ngIf="txLoading"></mat-progress-spinner>
+      <p>{{success}}</p>
+    </div>
   </div> <!-- End form container -->
   <div class="search-container"> <!-- Container with the search box/function and ticker data-->
     <form class="search-form"> <!-- Contians the search box-->
