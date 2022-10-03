@@ -14,7 +14,6 @@ export class PostsComponent implements OnInit {
 
   constructor(
     private GPS: GetPostsService,
- 
   ) { }
 
   ngOnInit(): void {

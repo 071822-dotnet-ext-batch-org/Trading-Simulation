@@ -113,7 +113,10 @@ import { CommentsComponent } from './components/comment/comments.component'
           env.baseURL + '/create-buy',
           env.baseURL + '/create-sell',
           env.baseURL + '/update-current-price',
-          env.baseURL + '/single-investment'
+          env.baseURL + '/single-investment',
+          env.baseURL + '/delete-portfolio',
+          env.baseURL + '/remove-like-on-post',
+          env.baseURL + '/add-like-on-post'
         ],
 
       }
