@@ -16,4 +16,20 @@ describe('HomeService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get buys', () => {
+    expect(service.getNumberOfBuys).toBeTruthy();
+  });
+
+  it('should get posts', () => {
+    expect(service.getNumberOfPosts).toBeTruthy();
+  });
+  
+  it('should get sells', () => {
+    expect(service.getNumberOfSells).toBeTruthy();
+  });
+
+  it('should get users', () => {
+    expect(service.getNumberOfUsers).toBeTruthy();
+  });
 });

@@ -16,4 +16,12 @@ describe('BuySellToPortfolioService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should create a buy', () => {
+    expect(service.createBuy).toBeTruthy();
+  });
+
+  it('should create a sell', () => {
+    expect(service.createSell).toBeTruthy();
+  });
 });

@@ -16,4 +16,8 @@ describe('DeletePortfolioService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should delete profile', () => {
+    expect(service.deletePortfolio).toBeTruthy();
+  });
 });
