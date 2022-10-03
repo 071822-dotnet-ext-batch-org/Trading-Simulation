@@ -59,7 +59,8 @@ import { PostCardComponent } from './components/post-card/post-card.component';
 import { InvestmentsComponent } from './components/investments/investments.component';
 
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
-import { CommentsComponent } from './components/comments/comments.component'
+import { CommentsComponent } from './components/comments/comments.component';
+import { AboutUsComponent } from './components/about-us/about-us.component'
 
 
 @NgModule({
@@ -83,6 +84,7 @@ import { CommentsComponent } from './components/comments/comments.component'
     InvestmentsComponent,
     EditProfileComponent,
     CommentsComponent,
+    AboutUsComponent,
   ],
   imports: [
     BrowserModule,
