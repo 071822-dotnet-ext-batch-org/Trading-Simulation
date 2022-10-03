@@ -449,4 +449,26 @@ namespace Models
         public string? Symbol { get; set; }
 
     }
+
+    public class DeletePortfolioDto 
+    {
+        public Guid PortfolioID { get; set; }
+
+        /// <summary>
+        /// This is the Constructor to create a new DeletePortfolioDto that is empty
+        /// </summary>
+        public DeletePortfolioDto ()
+        {
+        }
+
+        /// <summary>
+        /// This is the Constructor to create a new DeletePortfolioDto - contains PortfolioID
+        /// </summary>
+        /// <param name="portfolioID"></param>
+        public DeletePortfolioDto (Guid portfolioID)
+        {
+            PortfolioID = portfolioID;
+        }
+
+    }
 }

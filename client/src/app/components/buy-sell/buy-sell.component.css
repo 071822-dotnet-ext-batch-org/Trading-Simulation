@@ -56,9 +56,7 @@
   border: black;
   border-radius: 25px;
   margin-right: 50px;
-  position: absolute;
-  bottom: 140px;
-  left: 550px;
+
 }
 
 /* The green payment button */
@@ -71,9 +69,6 @@
   letter-spacing: 1px;
   border: black;
   border-radius: 25px;
-  position: absolute;
-  bottom: 140px;
-  left: 800px;
 }
 
 .calc-Btn {
@@ -92,4 +87,17 @@
 .table-info {
   width: 100px;
   text-align: center;
+}
+
+.error-message {
+  color: red;
+}
+
+.sm-txt-container {
+  font-size: 12px;
+  margin-left: 15px;
+}
+
+#sm-txt {
+  text-decoration: none;
 }
