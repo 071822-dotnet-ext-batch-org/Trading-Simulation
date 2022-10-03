@@ -1,6 +1,7 @@
 .post-list-container {
     display: grid;
     place-items: center center;
+    margin-top: 5vh;
 }
 
 .spinner {
@@ -9,4 +10,8 @@
 
 .post-card {
     margin: 200px;
+}
+
+.long {
+    height: 200px;
 }

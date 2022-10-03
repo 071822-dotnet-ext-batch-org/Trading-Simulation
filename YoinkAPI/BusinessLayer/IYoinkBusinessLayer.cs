@@ -249,6 +249,7 @@ namespace BusinessLayer
 
         Task<AllUpdatedRowsDto> UpdateCurrentPriceAsync(UpdatePriceDto u, string auth0id);
         Task<bool> DeletePortfolioAsync(string auth0id, DeletePortfolioDto portfolioID);
+        Task<List<Guid>> GetPostLikesByUserID(string auth0id);
     }
 
 }

@@ -1292,13 +1292,13 @@ namespace RepoLayer
             }
         }
 
-        public async Task<bool> DeletePortfolioByPortfolioIDAsync(string auth0id, DeletePortfolioDto portfolioID)
+        public async Task<bool> DeletePortfolioByPortfolioIDAsync(string auth0id, DeletePortfolioDto dp)
         {
             string sql = "DELETE FROM Portfolios WHERE portfolioID = @portfolioID AND fk_userID = @auth0id";
 
             using (SqlCommand command = new SqlCommand(sql, _conn))
             {
-                command.Parameters.AddWithValue("@portfolioID", portfolioID);
+                command.Parameters.AddWithValue("@portfolioID", dp.PortfolioID);
                 command.Parameters.AddWithValue("@auth0id", auth0id);
 
                 _conn.Open();
@@ -1307,6 +1307,27 @@ namespace RepoLayer
 
                 return (ret > 0);
             }
+        }
+
+        public async Task<List<Guid>> GetPostLikesByUserID(string auth0id)
+        {
+            List<Guid> myLikes = new List<Guid>();
+            string sql = $"SELECT fk_postID FROM LikesPosts WHERE fk_userID = @auth0id";
+            using (SqlCommand command = new SqlCommand(sql, _conn))
+            {
+                command.Parameters.AddWithValue("@auth0id", auth0id);
+
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                while (ret.Read())
+                {
+                    myLikes.Add(ret.GetGuid(0));
+                }
+
+                _conn.Close();
+                return myLikes;
+            } 
         }
     }
 }

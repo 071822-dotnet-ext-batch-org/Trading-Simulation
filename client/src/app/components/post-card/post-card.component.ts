@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog'; //coment box (sam)
 import { CommentsComponent } from '../comment/comments.component';
 import { AddLikeToPostService } from 'src/app/Services/add-like-to-post/add-like-to-post.service';
 import { DeleteLikeFromPostService } from 'src/app/Services/delete-like-from-post/delete-like-from-post.service';
+import { GetPostLikesService } from 'src/app/Services/get-post-likes/get-post-likes.service';
 @Component({
   selector: 'app-post-card',
   templateUrl: './post-card.component.html',
@@ -22,6 +23,8 @@ export class PostCardComponent implements OnInit {
     dateModified: new Date
   }
 
+  postLikes: string[] = [];
+  liked: boolean = false;
   
 
   profile: any;
@@ -30,11 +33,21 @@ export class PostCardComponent implements OnInit {
     private PSS: GetProfileByUserIDService,
     private ALP: AddLikeToPostService,
     private DLP: DeleteLikeFromPostService,
+    private GPL: GetPostLikesService,
     private dialog: MatDialog //Comment box from materials (sam)
   ) {}
 
   ngOnInit(): void {
-    this.getProfile(this.post?.fk_UserID)
+    this.getProfile(this.post?.fk_UserID);
+
+    console.log(this.postLikes);
+
+    this.GPL.getPostLikes().subscribe(pls => {
+      this.postLikes = pls;
+      if(this.postLikes.includes(this.post.postID)){
+        this.liked = true;
+      }
+    })
   }
 
   //When user clicks on comment bubble icon, it will open comment box (sam)
@@ -48,15 +61,25 @@ export class PostCardComponent implements OnInit {
     })
   }
 
+  clickLike(): void {
+    if(this.liked) {
+      this.deleteLike();
+    } else {
+      this.addLike();
+    }
+  }
+
   addLike(): void {
     this.ALP.addLike(this.post.postID).subscribe(numberOfLikes => {
       this.post.likes = numberOfLikes;
+      this.liked=true;
     })
   }
 
   deleteLike(): void {
     this.DLP.deleteLike(this.post.postID).subscribe(numberOfLikes => {
       this.post.likes = numberOfLikes;
+      this.liked=false;
     })
   }
 }

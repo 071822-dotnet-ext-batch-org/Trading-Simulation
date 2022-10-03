@@ -576,5 +576,14 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
 
         return deleteSuccess;
     }
+
+    public async Task<List<Guid>> GetPostLikesByUserID(string auth0id)
+    {
+        List<Guid> myLikes = new List<Guid>();
+        
+        myLikes = await this._repoLayer.GetPostLikesByUserID(auth0id);
+
+        return myLikes;
+    }
 }
 

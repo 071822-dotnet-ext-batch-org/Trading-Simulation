@@ -116,7 +116,9 @@ import { CommentsComponent } from './components/comment/comments.component'
           env.baseURL + '/single-investment',
           env.baseURL + '/delete-portfolio',
           env.baseURL + '/remove-like-on-post',
-          env.baseURL + '/add-like-on-post'
+          env.baseURL + '/add-like-on-post',
+          env.baseURL + '/get-post-likes',
+          env.baseURL + '/create-post'
         ],
 
       }
