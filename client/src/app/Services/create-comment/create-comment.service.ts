@@ -11,7 +11,7 @@ export class CreateCommentService {
 
   constructor(private http: HttpClient) { }
 
-  createComment(postId: string, text: string): Observable<boolean> {
-    return this.http.post<boolean>(env.baseURL + '/add-comment', {postId: postId, content: text})
+  createComment(postId: string, content: string): Observable<boolean> {
+    return this.http.post<boolean>(env.baseURL + '/add-comment', {postId: postId, content: content})
   }
 }

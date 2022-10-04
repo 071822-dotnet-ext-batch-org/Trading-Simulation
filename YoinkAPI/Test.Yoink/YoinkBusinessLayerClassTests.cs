@@ -3,6 +3,7 @@ using BusinessLayer;
 using Models;
 using Moq;
 using RepoLayer;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 
@@ -127,38 +128,63 @@ namespace Test.Yoink
                 Assert.IsType<Profile>(createdPortfolio);
                 Assert.Equal(excpectedCreatePortfolio.Name, createdPortfolio.Name);
             }
+
         }
 
 
         [Fact]
-        public async Task TestingEditPortfolioAsync()
+        public async Task TestingEditPortfolioAsyncUpdatesPortfolio()
         {
-            string auth0UserId = "sample auth0UserId";
+
+            Guid portfolioDtoGuid = Guid.NewGuid();
+
+            Portfolio expectedCreatePortfolio = new Portfolio()
+            {
+                PortfolioID = portfolioDtoGuid,
+                Fk_UserID = "Sample Fk_UserID",
+                Name = "Sample Name",
+                PrivacyLevel = 2,
+                Type = 0,
+                OriginalLiquid = 1000,
+                CurrentInvestment = 10000,
+                Liquid = 1000,
+                CurrentTotal = 10000,
+                Symbols = 1,
+                TotalPNL = 0,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
 
             PortfolioDto portfolioDto = new PortfolioDto()
             {
-                PortfolioID = Guid.NewGuid(),
+                PortfolioID = portfolioDtoGuid,
                 Name = "Sample Name",
                 OriginalLiquid = 1000,
                 PrivacyLevel = 2
             };
 
-            Portfolio? excpectedCreatePortfolio = new Portfolio();
             var dataSource = new Mock<IdbsRequests>();
+
             dataSource
                 .Setup(e => e.EditPortfolioAsync(It.IsAny<PortfolioDto>()))
                 .ReturnsAsync(true);
+            dataSource
+                .Setup(e => e.GetPortfolioByPorfolioIDAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(expectedCreatePortfolio);
+
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
             var createdPortfolio = await theClassBeingTested.EditPortfolioAsync(portfolioDto);
-
+ 
             //Assert
-            if (createdPortfolio != null)
+
+            Assert.NotNull(createdPortfolio);
+            if(createdPortfolio != null)
             {
                 Assert.IsType<Portfolio>(createdPortfolio);
-                Assert.Equal(excpectedCreatePortfolio.Name, createdPortfolio.Name);
-            }
+                Assert.Equal(expectedCreatePortfolio.Name, createdPortfolio.Name);
+            }     
         }
 
 
@@ -178,11 +204,9 @@ namespace Test.Yoink
             var gotPortfolio = await theClassBeingTested.GetPortfolioByPortfolioIDAsync(portfolioId);
 
             //Assert
-            if (gotPortfolio != null)
-            {
-                Assert.IsType<Portfolio>(gotPortfolio);
-                Assert.Equal(excpectedGetPortfolio.Name, gotPortfolio.Name);
-            }
+            Assert.NotNull(gotPortfolio);
+            Assert.IsType<Portfolio>(gotPortfolio);
+            Assert.Equal(excpectedGetPortfolio.Name, gotPortfolio.Name);
         }
 
 
@@ -203,17 +227,29 @@ namespace Test.Yoink
             var gotAllPortfolios = await theClassBeingTested.GetALLPortfoliosByUserIDAsync(auth0UserId);
 
             //Assert
-            if (gotAllPortfolios != null)
-            {
-                Assert.IsType<List<Portfolio>>(gotAllPortfolios);
-                Assert.Equal(excpectedGetAllPortfolio, gotAllPortfolios);
-            }
+            Assert.NotNull(gotAllPortfolios);
+            Assert.IsType<List<Portfolio>>(gotAllPortfolios);
+            Assert.Equal(excpectedGetAllPortfolio, gotAllPortfolios);
         }
 
 
         [Fact]
-        public async Task TestingAddNewBuyAsync()
+        public async Task TestingAddNewBuyAsyncCreatesNewRowInBuysTable()
         {
+            Guid buyIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioIdGuid = Guid.NewGuid();
+
+            Buy expectedBuy = new Buy()
+            {
+                BuyID = buyIdGuid,
+                Fk_PortfolioID = fk_PortfolioIdGuid,
+                Symbol = "Sample Symbol",
+                CurrentPrice = 10,
+                AmountBought = 10,
+                PriceBought = 10,
+                DateBought = new DateTime()
+            };      
+            
             BuyDto buyDto = new BuyDto()
             {
                 portfolioId = Guid.NewGuid(),
@@ -221,31 +257,48 @@ namespace Test.Yoink
                 CurrentPrice = 100,
                 AmountBought = 20,
                 PriceBought = 15
-
             };
 
-            Buy? excpectedAddNewBuy = new Buy();
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(a => a.AddNewBuyAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<decimal>(), It.IsAny<decimal>(), It.IsAny<decimal>()))
                 .ReturnsAsync(true);
+            dataSource
+                .Setup(a => a.GetRecentBuyByPortfolioId(It.IsAny<Guid>()))
+                .ReturnsAsync(expectedBuy);
+
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
             var addedBuy = await theClassBeingTested.AddNewBuyAsync(buyDto);
 
             //Assert
+            Assert.NotNull(addedBuy);
             if (addedBuy != null)
             {
                 Assert.IsType<Buy>(addedBuy);
-                Assert.Equal(excpectedAddNewBuy.Symbol, addedBuy.Symbol);
+                Assert.Equal(expectedBuy.Symbol, addedBuy.Symbol);
             }
         }
 
 
         [Fact]
-        public async Task TestingAddNewSellAsync()
+        public async Task TestingAddNewSellAsyncCreatesNewRowInSellsTable()
         {
+
+            Guid sellIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioIdGuid = Guid.NewGuid();
+
+            Sell expectedSell = new Sell()
+            {
+                SellID = sellIdGuid,
+                Fk_PortfolioID = fk_PortfolioIdGuid,
+                Symbol = "Sample Symbol",
+                AmountSold = 100,
+                PriceSold = 10,
+                DateSold = new DateTime()
+            };
+
             SellDto sellDto = new SellDto()
             {
                 Fk_PortfolioID = Guid.NewGuid(),
@@ -254,40 +307,61 @@ namespace Test.Yoink
                 PriceSold = 15
             };
 
-
-            Sell? excpectedAddNewSell = new Sell();
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(a => a.AddNewSellAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<decimal>(), It.IsAny<decimal>()))
                 .ReturnsAsync(true);
+            dataSource
+                .Setup(a => a.GetRecentSellByPortfolioId(It.IsAny<Guid>()))
+                .ReturnsAsync(expectedSell);
+
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
             var addedSell = await theClassBeingTested.AddNewSellAsync(sellDto);
 
             //Assert
+            Assert.NotNull(addedSell);
             if (addedSell != null)
             {
-                Assert.IsType<Buy>(addedSell);
-                Assert.Equal(excpectedAddNewSell.Symbol, addedSell.Symbol);
+                Assert.IsType<Sell>(addedSell);
+                Assert.Equal(expectedSell.Symbol, addedSell.Symbol);
             }
         }
 
 
         [Fact]
-        public async Task TestingGetAllBuyBySymbolAsync()
+        public async Task TestingGetAllBuyBySymbolAsyncReturnsAllBuysOfMatchingPortfolioIDAndSymbolOrderByDescendingDateBought()
         {
+
+            Guid buyIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioIdGuid = Guid.NewGuid();
+
+            Buy expectedBuy = new Buy()
+            {
+                BuyID = buyIdGuid,
+                Fk_PortfolioID = fk_PortfolioIdGuid,
+                Symbol = "Sample Symbol",
+                CurrentPrice = 10,
+                AmountBought = 10,
+                PriceBought = 10,
+                DateBought = new DateTime()
+            };
+
             Get_BuysDto AllBuys = new Get_BuysDto()
             {
                 Get_BuysID = Guid.NewGuid(),
                 Symbol = "Sample Symbol"
             };
 
-            List<Buy?> excpectedGetAllBuys = new List<Buy?>();
+            List<Buy> expectedBuyMockList = new List<Buy>();
+            expectedBuyMockList.Add(expectedBuy);
+
+
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
-                .ReturnsAsync(new List<Buy>());
+                .ReturnsAsync(expectedBuyMockList);
 
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
@@ -295,28 +369,45 @@ namespace Test.Yoink
             var gotAllBuys = await theClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
 
             //Assert
+            Assert.NotNull(gotAllBuys);
             if (gotAllBuys != null)
             {
                 Assert.IsType<List<Buy>>(gotAllBuys);
-                Assert.Equal(excpectedGetAllBuys, gotAllBuys);
+                Assert.Equal(expectedBuyMockList, gotAllBuys);
             }
         }
 
 
         [Fact]
-        public async Task TestingGetAllSellBySymbolAsync()
+        public async Task TestingGetAllSellBySymbolAsyncReturnsAllSellsOfMatchingPortfolioIDAndSymbolOrderByDescendingDateSold()
         {
+
+            Guid sellIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioIdGuid = Guid.NewGuid();
+
+            Sell expectedSell = new Sell()
+            {
+                SellID = sellIdGuid,
+                Fk_PortfolioID = fk_PortfolioIdGuid,
+                Symbol = "Sample Symbol",
+                AmountSold = 100,
+                PriceSold = 10,
+                DateSold = new DateTime()
+            };
+
             GetSellsDto sellsDto = new GetSellsDto()
             {
                 PortfolioId = Guid.NewGuid(),
                 Symbol = "Sample Symbol"
             };
 
-            List<Sell?> excpectedGetAllSells = new List<Sell?>();
+            List<Sell> expectedSellMockList = new List<Sell>();
+            expectedSellMockList.Add(expectedSell);
+
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetAllSellBySymbolAsync(It.IsAny<GetSellsDto>()))
-                .ReturnsAsync(new List<Sell>());
+                .ReturnsAsync(expectedSellMockList);
 
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
@@ -324,46 +415,87 @@ namespace Test.Yoink
             var gotAllSells = await theClassBeingTested.GetAllSellBySymbolAsync(sellsDto);
 
             //Assert
-            if (gotAllSells != null)
+            Assert.NotNull(gotAllSells);
+            if(gotAllSells != null)
             {
                 Assert.IsType<List<Sell>>(gotAllSells);
-                Assert.Equal(excpectedGetAllSells, gotAllSells);
+                Assert.Equal(expectedSellMockList, gotAllSells);
+
             }
         }
 
 
         [Fact]
-        public async Task TestingGetInvestmentByPortfolioIDAsync()
+        public async Task TestingGetInvestmentByPortfolioIDAsyncReturningInvestmentsMatchingPortfolioIDandSymbol()
         {
+            Guid investmentIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioID = Guid.NewGuid();
+
+            Investment expectedInvestment = new Investment()
+            {
+                InvestmentID = investmentIdGuid,
+                Fk_PortfolioID = fk_PortfolioID,
+                Symbol = "Sample Symbol",
+                AmountInvested = 1000,
+                CurrentAmount = 1500,
+                CurrentPrice = 1500,
+                TotalAmountBought = 1500,
+                TotalAmountSold = 0,
+                AveragedBuyPrice = 1,
+                TotalPNL = 500,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
+            
             GetInvestmentDto investmentDto = new GetInvestmentDto()
             {
                 PortfolioId = Guid.NewGuid(),
                 Symbol = "Sample Symbol",
             };
 
-
-            Investment? excpectedGetInvestment = new Investment();
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
-                .ReturnsAsync(new Investment());
+                .ReturnsAsync(expectedInvestment);
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
             var gotInvestment = await theClassBeingTested.GetInvestmentByPortfolioIDAsync(investmentDto);
 
             //Assert
-            if (gotInvestment != null)
+            Assert.NotNull(gotInvestment);
+            if(gotInvestment != null)
             {
                 Assert.IsType<Investment>(gotInvestment);
-                Assert.Equal(excpectedGetInvestment.Symbol, gotInvestment.Symbol);
+                Assert.Equal(expectedInvestment.Symbol, gotInvestment.Symbol);
             }
+            
         }
 
 
         [Fact]
-        public async Task TestingGetInvestmentByTimeAsync()
+        public async Task TestingGetInvestmentByTimeAsyncReturnsInvestmentsBetweenTwoDates()
         {
+
+            Guid investmentIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioID = Guid.NewGuid();
+
+            Investment expectedInvestment = new Investment()
+            {
+                InvestmentID = investmentIdGuid,
+                Fk_PortfolioID = fk_PortfolioID,
+                Symbol = "Sample Symbol",
+                AmountInvested = 1000,
+                CurrentAmount = 1500,
+                CurrentPrice = 1500,
+                TotalAmountBought = 1500,
+                TotalAmountSold = 0,
+                AveragedBuyPrice = 1,
+                TotalPNL = 500,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
+
             GetInvestmentByTimeDto investmentByTime = new GetInvestmentByTimeDto()
             {
                 PortfolioId = Guid.NewGuid(),
@@ -372,12 +504,14 @@ namespace Test.Yoink
                 EndTime = new DateTime()
             };
 
+            List<Investment> expectedMockInvestmentByTimeList = new List<Investment>();
+            expectedMockInvestmentByTimeList.Add(expectedInvestment);
 
-            List<Investment?> excpectedGetInvestment = new List<Investment?>();
+
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetInvestmentByTimeAsync(It.IsAny<GetInvestmentByTimeDto>()))
-                .ReturnsAsync(new List<Investment>());
+                .ReturnsAsync(expectedMockInvestmentByTimeList);
 
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
@@ -385,30 +519,32 @@ namespace Test.Yoink
             var gotInvestment = await theClassBeingTested.GetInvestmentByTimeAsync(investmentByTime);
 
             //Assert
-            if (gotInvestment != null)
+            Assert.NotNull(gotInvestment);
+            if(gotInvestment != null)
             {
                 Assert.IsType<List<Investment>>(gotInvestment);
-                Assert.Equal(excpectedGetInvestment, gotInvestment);
+                Assert.Equal(expectedMockInvestmentByTimeList, gotInvestment);
             }
         }
 
-
+        //mark edits
         [Fact]
-        public async Task TestingGetNumberOfUsersAsync()
+        public async Task GetNumberOfUsersAsyncReturnsTheAmountOfUsers()
         {
 
-            int? excpectedGetNumberUsers = new int();
+            int excpectedGetNumberUsers = 10;
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetNumberOfUsersAsync())
-                .ReturnsAsync(new int());
+                .ReturnsAsync(excpectedGetNumberUsers);
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
             var gotNumberUsers = await theClassBeingTested.GetNumberOfUsersAsync();
 
             //Assert
-            if (gotNumberUsers != null)
+            Assert.NotNull(gotNumberUsers);
+            if(gotNumberUsers != null)
             {
                 Assert.IsType<int>(gotNumberUsers);
                 Assert.Equal(excpectedGetNumberUsers, gotNumberUsers);
@@ -420,22 +556,21 @@ namespace Test.Yoink
         public async Task TestingGetNumberOfPostsAsync()
         {
 
-            int? excpectedGetNumberPosts = new int();
+            int? excpectedGetNumberPosts = 10;
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetNumberOfPostsAsync())
-                .ReturnsAsync(new int());
+                .ReturnsAsync(excpectedGetNumberPosts);
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
             var gotNumberPosts = await theClassBeingTested.GetNumberOfPostsAsync();
 
             //Assert
-            if (gotNumberPosts != null)
-            {
-                Assert.IsType<int>(gotNumberPosts);
-                Assert.Equal(excpectedGetNumberPosts, gotNumberPosts);
-            }
+            Assert.NotNull(gotNumberPosts);
+            Assert.IsType<int>(gotNumberPosts);
+            Assert.Equal(excpectedGetNumberPosts, gotNumberPosts);
+           
         }
 
 
@@ -443,11 +578,11 @@ namespace Test.Yoink
         public async Task TestingGetNumberOfBuysAsync()
         {
 
-            int? excpectedGetNumberBuys = new int();
+            int? excpectedGetNumberBuys = 10;
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetNumberOfBuysAsync())
-                .ReturnsAsync(new int());
+                .ReturnsAsync(excpectedGetNumberBuys);
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
@@ -466,11 +601,11 @@ namespace Test.Yoink
         public async Task TestingGetNumberOfSellsAsync()
         {
 
-            int? excpectedGetNumberSells = new int();
+            int? excpectedGetNumberSells = 10;
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetNumberOfSellsAsync())
-                .ReturnsAsync(new int());
+                .ReturnsAsync(excpectedGetNumberSells);
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
@@ -513,6 +648,144 @@ namespace Test.Yoink
                 Assert.Equal(excpectedCreatePost.Content, createdPost.Content);
             }
         }
+
+
+        [Fact]
+        public async Task TestingGetAllPostAsyncToReturnAllPostsInDescendingOrder()
+        {
+            PostWithCommentCountDto listWithCommentCount = new PostWithCommentCountDto()
+            {
+                PostID = Guid.NewGuid(),
+                Fk_UserID = "Sample UserID",
+                Content = "Sample Content",
+                Likes = 10,
+                Comments = 10,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
+
+
+            List<PostWithCommentCountDto> expectedGotAllPost = new List<PostWithCommentCountDto>();
+            List<Post> postList = new List<Post>();
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetAllPostAsync())
+                .ReturnsAsync(new List<Post>());
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var gotAllPost = await theClassBeingTested.GetAllPostAsync();
+
+            //Assert
+            if (gotAllPost != null)
+            {
+                Assert.IsType<List<PostWithCommentCountDto>>(gotAllPost);
+                Assert.Equal(expectedGotAllPost, gotAllPost);
+            }
+        }
+
+
+        [Fact]
+        public async Task TestingGetAllInvestmentsByPortfolioIDAsyncReturnsAllInvestmentsWithMatchingPortfolioID()
+        {
+            Guid investmentIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioID = Guid.NewGuid();
+            Guid portfolioID = Guid.NewGuid();
+
+            Investment expectedInvestment = new Investment()
+            {
+                InvestmentID = investmentIdGuid,
+                Fk_PortfolioID = fk_PortfolioID,
+                Symbol = "Sample Symbol",
+                AmountInvested = 1000,
+                CurrentAmount = 1500,
+                CurrentPrice = 1500,
+                TotalAmountBought = 1500,
+                TotalAmountSold = 0,
+                AveragedBuyPrice = 1,
+                TotalPNL = 500,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
+
+            List<Investment> expectedGetAllInvestments = new List<Investment>();
+            expectedGetAllInvestments.Add(expectedInvestment);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetAllInvestmentsByPortfolioIDAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(expectedGetAllInvestments);
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var gotAllInvestmentsByID = await theClassBeingTested.GetAllInvestmentsByPortfolioIDAsync(portfolioID);
+
+            //Assert
+            if (gotAllInvestmentsByID != null)
+            {
+                Assert.IsType<List<Investment>>(gotAllInvestmentsByID);
+                Assert.Equal(expectedGetAllInvestments, gotAllInvestmentsByID);
+            }
+        }
+
+
+        [Fact]
+        public async Task TestingUpdatePostAsyncReturnsUpdatedPostWithNewContentAndOrPrivacyLevel()
+        {
+            string auth0UserId = "sample auth0UserId";
+
+            EditPostDto editPostDto = new EditPostDto()
+            {
+                PostId = Guid.NewGuid(),
+                Content = "Sample Content",
+                PrivacyLevel = 2
+            };
+
+            Post expectedUpdatedPost = new Post();
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.UpdatePostAsync(It.IsAny<EditPostDto>()))
+                .ReturnsAsync(true);
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var updatedPost = await theClassBeingTested.UpdatePostAsync(auth0UserId, editPostDto);
+
+            //Assert
+            if (updatedPost != null)
+            {
+                Assert.IsType<List<Investment>>(updatedPost);
+                Assert.Equal(expectedUpdatedPost.Content, updatedPost.Content);
+            }
+        }
+
+
+        [Fact]
+        public async Task TestingDeletePostAsyncDeletesPostWithMatchingID()
+        {
+            string auth0UserId = "sample auth0UserId";
+            Guid postId = Guid.NewGuid();
+
+
+            Guid expectedDeletedPost = Guid.NewGuid();
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.DeletePostAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(true);
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var deletedPost = await theClassBeingTested.DeletePostAsync(auth0UserId, postId);
+
+            //Assert
+            if (deletedPost != null)
+            {
+                Assert.IsType<List<Investment>>(deletedPost);
+                Assert.Equal(expectedDeletedPost, deletedPost);
+            }
+        }
+
 
     }
 }
