@@ -142,4 +142,39 @@ describe('HomeComponent', () => {
     const board = fixture.debugElement.query(By.css('.explore')).nativeElement;
     expect(board.innerhtml).not.toBeNull();
   });
+
+  //tests the getTheNumberOfUsers()
+  it('should get the total number of users',() => {
+    const app = fixture.componentInstance;
+    fixture.detectChanges();
+    const result = document.getElementsByName('numberOfUsers');
+    expect(result).not.toBeNull();
+  });
+
+  //tests the getTheNumberOfPosts()
+  it('should get the total number of posts',() => {
+    const app = fixture.componentInstance;
+    fixture.detectChanges();
+    const result = document.getElementsByName('numberOfPosts');
+    expect(result).not.toBeNull();
+  });
+
+  //tests the getTheNumberOfBuys()
+  it('should get the total number of buys',() => {
+    const app = fixture.componentInstance;
+    fixture.detectChanges();
+    const result = document.getElementsByName('numberOfBuys');
+    expect(result).not.toBeNull();
+  });
+  
+  //tests the getTheNumberOfSells()
+  it('should get the total number of sells',() => {
+    const app = fixture.componentInstance;
+    fixture.detectChanges();
+    const result = document.getElementsByName('numberOfSells');
+    expect(result).not.toBeNull();
+  });
+
+
 });
+

@@ -44,4 +44,12 @@ describe('FooterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // tests class and its content 
+  it('should render `Yoink` in a class named ', () => {
+    const board = fixture.debugElement.query(By.css('')).nativeElement;
+    expect(board.innerhtml).not.toBeNull();
+  });
+  
+
 });
