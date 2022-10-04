@@ -1,15 +1,15 @@
-<div class="comments">
+<!-- <div class="comments">
     <h3 class="comments-title">Comments</h3>
     <div class="comment-form-title">Write comment</div>
     <app-comment-form submitLabel="Write" 
-    (handleSubmit)="onSendClick({ content: $event, postId:''})"></app-comment-form>
+    (handleSubmit)="({ text: $event, postId:''})"></app-comment-form>
     <div class="comments-container">
        <app-single-comment *ngFor="let comment of comments" [comment]="comment"></app-single-comment>
     </div>
 </div>
 <div id="comment-box">
 
-</div>
+</div> -->
 <!-- <div id="reply-box">
     <div *ngIf="let comment of comments" [ngClass]="{ 'comment-container': true }">
         <div>
@@ -19,10 +19,15 @@
         </div>
     </div>
 </div> -->
-<!-- <div id="reply-action-bar">
+<div id="reply-action-bar">
     <button mat-flat-button color="primary"
-    (click)="onSendClick({ content:'', postId:'' })">
+    (click)="onSendClick()">
     <mat-icon>send</mat-icon></button>
-    <input placeholder="Comment..." #commentInput>
-</div> -->
+    <textarea [(ngModel)]="content" placeholder="Comment..."></textarea>
+</div>
+
+<div id="comments" *ngFor="let comment of comments" >
+<p>{{ comment.content }}</p>
+<p>{{ comment.dateCreated | date:'short' }}</p>
+</div>
 <!-- comment box 'send' button (sam)-->

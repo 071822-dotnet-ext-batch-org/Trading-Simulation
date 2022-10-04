@@ -8,6 +8,7 @@ import { DeleteLikeFromPostService } from 'src/app/Services/delete-like-from-pos
 import { GetPostLikesService } from 'src/app/Services/get-post-likes/get-post-likes.service';
 import { CreateCommentService } from 'src/app/Services/create-comment/create-comment.service';
 import { CreateCommentModel } from 'src/app/Models/CreateCommentModel';
+import { GetCommentsService } from 'src/app/Services/get-comments/get-comments.service';
 @Component({
   selector: 'app-post-card',
   templateUrl: './post-card.component.html',
@@ -41,7 +42,8 @@ export class PostCardComponent implements OnInit {
     private DLP: DeleteLikeFromPostService,
     private GPL: GetPostLikesService,
     private dialog: MatDialog, //Comment box from materials (sam)
-    private createComment: CreateCommentService
+    private createComment: CreateCommentService,
+    private getCom: GetCommentsService
   ) {}
 
   ngOnInit(): void {
@@ -59,17 +61,22 @@ export class PostCardComponent implements OnInit {
 
   //When user clicks on comment bubble icon, it will open comment box (sam)
   onReplyClick(): void{
-    const dialogRef = this.dialog.open(CommentsComponent)
+    const dialogRef = this.dialog.open(CommentsComponent, {
+      data: {...this.post}
+    })
   
     dialogRef.afterClosed().subscribe(result => {
       console.log('closed');
-      if(!result)return;
-      this.createComment.createComment(result.postId, result.content).subscribe(comm => {
+      if(!result?.content)return; 
+      this.createComment.createComment(this.post.postID, result.content).subscribe(comm => {
        console.log(comm)
       });
       
+      
+
     })
   
+
   
   };
 

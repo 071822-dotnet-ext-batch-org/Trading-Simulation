@@ -11,7 +11,7 @@ export class GetCommentsService {
 
   constructor(private http: HttpClient) { }
 
-  getAllComments(): Observable<Comment[]> {
-    return this.http.get<Comment[]>(environment.baseURL + '/get-all-comment', )
+  getAllComments(fk_postId:string): Observable<Comment[]> {
+    return this.http.get<Comment[]>( environment.baseURL + '/get-all-comment?postId='+ fk_postId )
   }
 }
