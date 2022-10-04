@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsService } from 'src/app/Services/news/news.service';
 import { News } from 'src/app/Models/News';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-news',
@@ -9,7 +10,7 @@ import { News } from 'src/app/Models/News';
   styleUrls: ['./news.component.css']
 })
 export class NewsComponent implements OnInit {
-  title = 'Stock News';
+  title = 'News';
   newsData: any;
   newsApiData : any;
   p: any;

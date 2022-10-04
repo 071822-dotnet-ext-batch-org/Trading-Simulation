@@ -545,11 +545,14 @@ namespace APILayer.Controllers
             else return BadRequest(postId);
         }
 
-
-
-
+        /// <summary>
+        /// Allows the user to like another usr's comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="createLikeForCommentDto"></param>
+        /// <returns>Bool: True = Ok, False = Bad Request</returns>
         [HttpPost("create-like-for-comment")]
-        public async Task<ActionResult<LikeComment?>> CreateLikeForCommentAsync(LikeForCommentDto? createLikeForCommentDto)
+        public async Task<ActionResult<bool>> CreateLikeForCommentAsync(LikeForCommentDto? createLikeForCommentDto)
         {
             if (ModelState.IsValid)
             {
@@ -563,8 +566,12 @@ namespace APILayer.Controllers
             return BadRequest("Comment was not liked");
         }
 
-
-
+        /// <summary>
+        /// Allows the user to remove their like from a comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="deleteLikeForCommentDto"></param>
+        /// <returns>Bool: True = Ok, False = Bad Request</returns>
         [HttpDelete("delete-like-for-comment")]
         public async Task<ActionResult<bool>> DeleteLikeForCommentAsync(LikeForCommentDto? deleteLikeForCommentDto)
         {
@@ -581,7 +588,12 @@ namespace APILayer.Controllers
             return BadRequest("Comment was not unliked.");
         }
 
-
+        /// <summary>
+        /// Displays a count of comments on the post for the user.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns>Numerical count (int) of the number of comments on a post.</returns>
         [HttpGet("number-of-comments-by-postId")]
         public async Task<ActionResult<int>> GetCountofCommentsByPostIdAsync(Guid? postId)
         {
@@ -589,6 +601,11 @@ namespace APILayer.Controllers
             return Ok(GotcommentCountByPostId);
         }
 
+        /// <summary>
+        /// Updates the current price in every table in the database where current price is affected (pnl, ect.).
+        /// </summary>
+        /// <param name="u"></param>
+        /// <returns>A collection of collections returning the data updated from the database.</returns>
         [HttpPut("update-current-price")]
         public async Task<ActionResult<AllUpdatedRowsDto>> UpdateCurrentPriceAsync(UpdatePriceDto u)
         {
@@ -604,6 +621,11 @@ namespace APILayer.Controllers
             return BadRequest(u);
         }
 
+        /// <summary>
+        /// Allows the user to remove their from the database.
+        /// </summary>
+        /// <param name="portfolioID"></param>
+        /// <returns>Bool of delete success.</returns>
         [HttpDelete("delete-portfolio")]
         public async Task<ActionResult<bool>> DeletePortfolioAsync(DeletePortfolioDto portfolioID)
         {
@@ -619,6 +641,10 @@ namespace APILayer.Controllers
             return BadRequest(false);
         }
 
+        /// <summary>
+        /// Retrieves a list of liked posts by the user.
+        /// </summary>
+        /// <returns>returns a list of the user's liked posts.</returns>
         [HttpGet("get-post-likes")]
         public async Task<ActionResult<List<Guid>>> GetPostLikesByUserID()
         {

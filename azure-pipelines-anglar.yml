@@ -1,0 +1,49 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- development
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: 'Trading-Simulation/client'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NodeTool@0
+  displayName: 'Use Node 16.x'
+  inputs:
+    versionSpec: 16.x
+
+- task: Npm@1
+  displayName: 'Install angular-cli'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'install @angular/cli@latest'
+
+- task: Npm@1
+  displayName: 'Install Node_modules'
+  inputs:
+    workingDir: client
+    verbose: false
+
+- task: Npm@1
+  displayName: 'Build Angular Project'
+  inputs:
+    command: custom
+    workingDir: client
+    verbose: false
+    customCommand: 'run ng build --prod'
+  continueOnError: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: client/dist
+

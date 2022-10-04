@@ -1201,10 +1201,10 @@ namespace RepoLayer
 
         public async Task<bool> CreateLikeForCommentAsync(LikeForCommentDto createLikeForCommentDto, string? auth0UserId)
         {
-            using (SqlCommand command = new SqlCommand($"INSERT INTO LikesComments (fk_commentID, fk_userID) VALUES (@commentId, @auth0Id) Select TOP (1) * FROM LikesComments WHERE fk_userID = @userId ORDER BY dateCreated DESC", _conn))
+            using (SqlCommand command = new SqlCommand($"INSERT INTO LikesComments (fk_commentID, fk_userID) VALUES (@commentId, @auth0Id) Select TOP (1) * FROM LikesComments WHERE fk_userID = @auth0Id ORDER BY dateCreated DESC", _conn))
             {
                 command.Parameters.AddWithValue("@commentId", createLikeForCommentDto.CommentId);
-                command.Parameters.AddWithValue("@userId", auth0UserId);
+                command.Parameters.AddWithValue("@auth0Id", auth0UserId);
 
                 _conn.Open();
                 int ret = await command.ExecuteNonQueryAsync();
@@ -1219,9 +1219,9 @@ namespace RepoLayer
 
         public async Task<bool> DeleteLikeForCommentAsync(LikeForCommentDto deleteLikeForCommentDto, string? auth0UserId)
         {
-            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesComments WHERE likesCommentsID = @commentId AND fk_userID = @userId", _conn))
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesComments WHERE likesCommentsID = @likecommentId AND fk_userID = @userId", _conn))
             {
-                command.Parameters.AddWithValue("@commentId", deleteLikeForCommentDto.CommentId);
+                command.Parameters.AddWithValue("@likecommentId", deleteLikeForCommentDto.CommentId);
                 command.Parameters.AddWithValue("@userId", auth0UserId);
 
                 _conn.Open();

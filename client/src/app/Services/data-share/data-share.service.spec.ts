@@ -13,4 +13,13 @@ describe('DataShareService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+  
+  it('should update portfolio', () => {
+    expect(service.updatePortfolios).toBeTruthy();
+  });
+  
+  it('should get updated portfolio', () => {
+    expect(service.getUpdatedPortfolios).toBeTruthy();
+  });
+
 });
