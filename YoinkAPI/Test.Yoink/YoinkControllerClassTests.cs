@@ -273,6 +273,172 @@ namespace Test.Yoink
         }
 
 
+        /// <summary>
+        /// This test tests to see if the method returns a null investment - It's input is an InvestmentDto and returns a nullable investment
+        /// (sendes)
+        /// </summary>
+        [Fact]
+        public async Task Testing_GetSingleInvestmentByPortfolioIDAsync_Null()
+        {
+            //-------------------Arrange Section ----------------
+            //We create an input that is constant
+            GetInvestmentDto investmentDto = new GetInvestmentDto()
+                {
+                    PortfolioId = Guid.NewGuid(),
+                    Symbol = "GOOG"
+            };
+
+
+            Investment? returnedInvestment_Null =  null;
+            ActionResult<Investment?> nullReturnedPost = new  OkObjectResult(returnedInvestment_Null) ;
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource2_Null = new Mock<IYoinkBusinessLayer>();
+            dataSource2_Null
+                .Setup(s => s.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
+                .ReturnsAsync(returnedInvestment_Null);
+
+            var ControllerClass_Null = new YoinkController(dataSource2_Null.Object);
+
+            //-------------------Act Section ----------------
+            var NoInvestmentwasGotten = await ControllerClass_Null.GetSingleInvestmentByPortfolioIDAsync(investmentDto);
+
+            //-------------------Assert Section ----------------
+            //The test asserts that the expected value and the returned value match
+            Assert.IsType<ActionResult<Investment?>>(NoInvestmentwasGotten);
+            Assert.Equal(nullReturnedPost.Value, NoInvestmentwasGotten.Value);
+
+        }//End of GetSingleInvestmentByPortfolioIDAsync that is NULL Test
+
+
+        /// <summary>
+        /// This test tests to see if the method returns an investment that is not null- It's input is an InvestmentDto and returns a nullable investment
+        /// (sendes)
+        /// </summary>
+        [Fact]
+        public async Task Testing_GetSingleInvestmentByPortfolioIDAsync_NOT_NULL()
+        {
+            //-------------------Arrange Section ----------------
+            //We create an input that is constant
+            GetInvestmentDto investmentDto = new GetInvestmentDto()
+                {
+                    PortfolioId = Guid.NewGuid(),
+                    Symbol = "GOOG"
+            };
+
+            //We create an output that is nullable
+            Investment? expectedInvestment = new Investment()
+                {
+                    InvestmentID = Guid.NewGuid(),
+                    Fk_PortfolioID = Guid.NewGuid(),
+                    Symbol = "AAPL",
+                    AmountInvested = 10000,
+                    CurrentAmount = 10000,
+                    CurrentPrice = 10000,
+                    TotalAmountBought = 10000,
+                    TotalAmountSold = 10000,
+                    AveragedBuyPrice = 10000,
+                    TotalPNL = 10000,
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.Now,
+            };
+
+            ActionResult<Investment?> returnedInvestment = new  OkObjectResult(expectedInvestment) ;
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource2_Null = new Mock<IYoinkBusinessLayer>();
+            dataSource2_Null
+                .Setup(s => s.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
+                .ReturnsAsync(expectedInvestment);
+
+            var ControllerClass_Null = new YoinkController(dataSource2_Null.Object);
+
+            //-------------------Act Section ----------------
+            var InvestmentwasGotten = await ControllerClass_Null.GetSingleInvestmentByPortfolioIDAsync(investmentDto);
+
+            //-------------------Assert Section ----------------
+            //The test asserts that the expected value and the returned value match
+            Assert.IsType<ActionResult<Investment?>>(InvestmentwasGotten);
+            Assert.Equal(returnedInvestment.Value, InvestmentwasGotten.Value);
+
+        }//End of GetSingleInvestmentByPortfolioIDAsync that is NOT NULL Test
+
+
+        /// <summary>
+        /// This test method tests if the Create Post Async Method returns a Post that is not null - This is a true run or CREATED
+        /// </summary>
+        [Fact]
+        public async Task Test_CreatePostAsync_Created()
+        {
+            //-------------------Arrange Section ----------------
+            //We create an input that is constant
+            CreatePostDto createPostDto = new CreatePostDto("This Is SPA TAAAAH!!", 1);
+
+            //We create an output that is nullable
+            Post? expectedCreatedPost = new Post( Guid.NewGuid(), "MyId", "My Content", 2, 1, DateTime.Now, DateTime.Now);
+
+            ActionResult<Post?> returnedPost = new  OkObjectResult(expectedCreatedPost) ;
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            if(expectedCreatedPost == null){}
+            var dataSource_Created = new Mock<IYoinkBusinessLayer>();
+            dataSource_Created
+                .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .ReturnsAsync(expectedCreatedPost);
+
+            var ControllerClass_Created = new Mock< IYoinkController>();
+            ControllerClass_Created.Setup(s => s.CreatePostAsync(It.IsAny<CreatePostDto>()))
+                .ReturnsAsync(expectedCreatedPost);
+
+            //-------------------Act Section ----------------
+            var PostwasCreated = await ControllerClass_Created.Object.CreatePostAsync(createPostDto);
+
+            //-------------------Assert Section ----------------
+            //The test asserts that the expected value and the returned value match
+            if(PostwasCreated == null){}
+            Assert.IsType<ActionResult<Post?>>(PostwasCreated);
+            Assert.NotNull(PostwasCreated);
+            Assert.Equal(returnedPost.Value, PostwasCreated);
+        }//End of Create Post Async - Created Test
+
+        /// <summary>
+        /// This test method tests if the Create Post Async Method returns a null Post - This is a false run or NOT CREATED
+        /// </summary>
+        [Fact]
+        public async Task Test_CreatePostAsync_NotCreated()
+        {
+            //-------------------Arrange Section ----------------
+            //We create an input that is constant
+            CreatePostDto createPostDto = new CreatePostDto("This Is SPA TAAAAH!!", 1);
+
+            //We create an output that is nullable
+            Post? expectedCreatedPost = null;
+
+            ActionResult<Post?> returnedPost = new  OkObjectResult(expectedCreatedPost) ;
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            if(expectedCreatedPost == null){}
+            var dataSource_Created = new Mock<IYoinkBusinessLayer>();
+            dataSource_Created
+                .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
+                .ReturnsAsync(expectedCreatedPost);
+
+            var ControllerClass_Created = new Mock< IYoinkController>();
+            ControllerClass_Created.Setup(s => s.CreatePostAsync(It.IsAny<CreatePostDto>()))
+                .ReturnsAsync(expectedCreatedPost);
+
+            //-------------------Act Section ----------------
+            var PostwasCreated = await ControllerClass_Created.Object.CreatePostAsync(createPostDto);
+
+            //-------------------Assert Section ----------------
+            //The test asserts that the expected value and the returned value match
+            if(PostwasCreated == null){}
+            Assert.IsType<ActionResult<Post?>>(PostwasCreated);
+            Assert.Null(PostwasCreated.Value);
+            Assert.Equal(returnedPost.Value, PostwasCreated);
+        }//End of Create Post Async - Not Created Test
+
+
 
     }
 
