@@ -54,6 +54,13 @@ import { CommentsComponent } from './components/comment/comments.component';
 import { AboutUsComponent } from './components/about-us/about-us.component'
 
 
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { CommentsComponent } from './components/comment/comments.component'
+import { CommonModule } from '@angular/common';
+import { SingleCommentComponent } from './components/single-comment/single-comment.component';
+import { CommentFormComponent } from './components/comment-form/comment-form.component';
+
+
  
 
 @NgModule({
@@ -77,11 +84,18 @@ import { AboutUsComponent } from './components/about-us/about-us.component'
     InvestmentsComponent,
     EditProfileComponent,
     CommentsComponent,
+
+    SingleCommentComponent,
+    CommentFormComponent,
+
     AboutUsComponent,
+
 
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    CommonModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatProgressBarModule,
@@ -115,7 +129,9 @@ import { AboutUsComponent } from './components/about-us/about-us.component'
           env.baseURL + '/remove-like-on-post',
           env.baseURL + '/add-like-on-post',
           env.baseURL + '/get-post-likes',
-          env.baseURL + '/create-post'
+          env.baseURL + '/create-post',
+          env.baseURL + '/get-all-comment', 
+          env.baseURL + '/add-comment'
         ],
 
       }
