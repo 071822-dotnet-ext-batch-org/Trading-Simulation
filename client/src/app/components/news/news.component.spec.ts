@@ -27,12 +27,13 @@ describe('NewsComponent', () => {
   });
 
   it('should show image slide', () => {
-    expect(fixture.nativeElement.querySelector('[data-test="imageslide"]')).toBeTrue();
+    expect(fixture.nativeElement.querySelector('[data-test="imageslide"]')).toBeTruthy();
   });
 
   it('should show Title News', () => {
-    expect(fixture.nativeElement.querySelector('[data-test="News"]')).toBeTrue();
+    expect(fixture.nativeElement.querySelector('[data-test="News"]')).toBeTruthy();
   });
+
 
 
 });
