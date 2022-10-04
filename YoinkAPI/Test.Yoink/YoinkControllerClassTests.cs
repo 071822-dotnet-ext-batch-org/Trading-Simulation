@@ -1,15 +1,19 @@
 ﻿using APILayer.Controllers;
 using BusinessLayer;
+using Microsoft.AspNetCore.Http;
 using Models;
 using Moq;
 using RepoLayer;
 using System;
-
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace Test.Yoink
 {
     public class YoinkControllerClassTests
     {
+
+
 
 
         [Fact]
@@ -439,9 +443,259 @@ namespace Test.Yoink
         }//End of Create Post Async - Not Created Test
 
 
+        private List<Guid> fakeGuidList(){
+            List<Guid> newGuids = new List<Guid>();
+            Guid newGuid = Guid.NewGuid();
+            Guid newGuid2 = Guid.NewGuid();
+            Guid newGuid3 = Guid.NewGuid();
+            Console.WriteLine(newGuid);
+            Console.WriteLine(newGuid2);
+            Console.WriteLine(newGuid3);
+            newGuids.Add(newGuid);
+            newGuids.Add(newGuid2);
+            newGuids.Add(newGuid3);
+            
+            return newGuids;
+        }
 
+        [Fact]
+        public async Task TestGetPostLikesByUserID()
+        {
+            // Arrange
+            string fakeUser = "auth0id";
+
+            List<Guid> mockGuids = fakeGuidList();
+            
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.GetPostLikesByUserID(fakeUser))
+                .ReturnsAsync(mockGuids);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.GetPostLikesByUserID();
+            var okResult = result.Result as OkObjectResult;
+            List<Guid>? glist = okResult?.Value as List<Guid>;
+
+
+
+            // Assert
+            var resultType = Assert.IsType<ActionResult<List<Guid>>>(result);
+            var resultResultType = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(200, okResult?.StatusCode);
+            Assert.IsType<List<Guid>>(okResult?.Value);
+            
+            if(glist != null)
+            {
+                Assert.Equal(3, glist.Count());
+            }
+        }
+
+
+        [Fact]
+        public async Task Testing_GetSingleInvestmentByPortfolioIDAsync_NOT_NULL()
+        {
+            //-------------------Arrange Section ----------------
+            //We create an input that is constant
+            GetInvestmentDto investmentDto = new GetInvestmentDto()
+                {
+                    PortfolioId = Guid.NewGuid(),
+                    Symbol = "GOOG"
+            };
+            //We create an output that is nullable
+            Investment? expectedCreatedPost = new Investment()
+                {
+                    InvestmentID = Guid.NewGuid(),
+                    Fk_PortfolioID = Guid.NewGuid(),
+                    Symbol = "AAPL",
+                    AmountInvested = 10000,
+                    CurrentAmount = 10000,
+                    CurrentPrice = 10000,
+                    TotalAmountBought = 10000,
+                    TotalAmountSold = 10000,
+                    AveragedBuyPrice = 10000,
+                    TotalPNL = 10000,
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.Now,
+            };
+            // Investment? returnedInvestment =  {};
+            ActionResult<Investment?> returnedInvestment = new  OkObjectResult(expectedCreatedPost) ;
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource2_Null = new Mock<IYoinkBusinessLayer>();
+            dataSource2_Null
+                .Setup(s => s.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
+                .ReturnsAsync(expectedCreatedPost);
+            var ControllerClass_Null = new YoinkController(dataSource2_Null.Object);
+            //-------------------Act Section ----------------
+            var InvestmentwasGotten = await ControllerClass_Null.GetSingleInvestmentByPortfolioIDAsync(investmentDto);
+            //-------------------Assert Section ----------------
+            //The test asserts that the expected value and the returned value match
+            Assert.IsType<ActionResult<Investment?>>(InvestmentwasGotten);
+            Assert.Equal(returnedInvestment.Value, InvestmentwasGotten.Value);
+        }//End of GetSingleInvestmentByPortfolioIDAsync that is NOT NULL Test
+
+        [Fact]
+        public async Task TestingGetInvestmentsByPortfolioIDAsync()
+        {
+            //Arrange
+            GetAllInvestmentsDto allInvestmentsDto = new GetAllInvestmentsDto()
+            {
+                PortfolioID = Guid.NewGuid(),
+            };
+
+
+            ActionResult<List<Investment>> expectedCreatedPost = new OkObjectResult(new List<Investment>());
+
+            var dataSource2 = new Mock<IYoinkBusinessLayer>();
+
+            dataSource2
+                    .Setup(s => s.GetAllInvestmentsByPortfolioIDAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(new List<Investment>());
+
+            var ControllerClass = new YoinkController(dataSource2.Object);
+
+            //Act
+            
+            var AllInvestmentswereGotten = await ControllerClass.GetInvestmentsByPortfolioIDAsync(allInvestmentsDto);
+        }
+
+
+        [Fact]
+        public async Task TestingGetInvestmentByTimeAsync()
+        {
+            //Arrange
+            GetInvestmentByTimeDto investmentByTimeDto = new GetInvestmentByTimeDto()
+            {
+                PortfolioId = Guid.NewGuid(),
+                Symbol = "GOOG",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now
+            };
+            ActionResult<List<Investment>> expectedCreatedPost = new OkObjectResult(new List<Investment>());
+
+            var dataSource2 = new Mock<IYoinkBusinessLayer>();
+
+            dataSource2
+                .Setup(s => s.GetInvestmentByTimeAsync(It.IsAny<GetInvestmentByTimeDto>()))
+                .ReturnsAsync(new List<Investment>());
+
+            var ControllerClass = new YoinkController(dataSource2.Object);
+
+            //Act
+
+            var InvestmentwasGotten = await ControllerClass.GetInvestmentByTimeAsync(investmentByTimeDto);
+
+            //Assert
+
+            Assert.IsType<ActionResult<List<Investment>>>(InvestmentwasGotten);
+            Assert.Equal(expectedCreatedPost.Value, InvestmentwasGotten.Value);
+
+        }
+
+        [Fact]
+        public async Task TestingGetNumberOfUsersAsync()
+        {
+            //Arrange
+            ActionResult<int> expectedCreatedPost = new OkObjectResult(1);
+
+            var dataSource2 = new Mock<IYoinkBusinessLayer>();
+
+            dataSource2
+                .Setup(s => s.GetNumberOfUsersAsync())
+                .ReturnsAsync(1);
+
+            var ControllerClass = new YoinkController(dataSource2.Object);
+
+            //Act
+
+            var NumberOfUsers = await ControllerClass.GetNumberOfUsersAsync();
+
+            //Assert
+
+            Assert.IsType<ActionResult<int>>(NumberOfUsers);
+            Assert.Equal(expectedCreatedPost.Value, NumberOfUsers.Value);
+
+        }
+
+        [Fact]
+        public async Task TestingGetNumberOfPostsAsync()
+        {
+            //Arrange
+            ActionResult<int> expectedCreatedPost = new OkObjectResult(1);
+
+            var dataSource2 = new Mock<IYoinkBusinessLayer>();
+
+            dataSource2
+                .Setup(s => s.GetNumberOfPostsAsync())
+                .ReturnsAsync(1);
+
+            var ControllerClass = new YoinkController(dataSource2.Object);
+
+            //Act
+
+            var NumberOfPosts = await ControllerClass.GetNumberOfPostsAsync();
+
+            //Assert
+
+            Assert.IsType<ActionResult<int>>(NumberOfPosts);
+            Assert.Equal(expectedCreatedPost.Value, NumberOfPosts.Value);
+        }
+
+        [Fact]
+        public async Task TestingGetNumberOfBuysAsync()
+        {
+            //Arrange
+            ActionResult<int> expectedCreatedPost = new OkObjectResult(1);
+
+            var dataSource2 = new Mock<IYoinkBusinessLayer>();
+
+            dataSource2
+                .Setup(s => s.GetNumberOfBuysAsync())
+                .ReturnsAsync(1);
+
+            var ControllerClass = new YoinkController(dataSource2.Object);
+
+            //Act
+
+            var NumberOfBuys = await ControllerClass.GetNumberOfBuysAsync();
+
+            //Assert
+
+            Assert.IsType<ActionResult<int>>(NumberOfBuys);
+            Assert.Equal(expectedCreatedPost.Value, NumberOfBuys.Value);
+        }
+
+        [Fact]
+        public async Task TestingGetNumberOfSellsAsync()
+        {
+            //Arrange
+            ActionResult<int> expectedCreatedPost = new OkObjectResult(1);
+
+            var dataSource2 = new Mock<IYoinkBusinessLayer>();
+
+            dataSource2
+                .Setup(s => s.GetNumberOfSellsAsync())
+                .ReturnsAsync(1);
+
+            var ControllerClass = new YoinkController(dataSource2.Object);
+
+            //Act
+
+            var NumberOfSells = await ControllerClass.GetNumberOfSellsAsync();
+
+            //Assert
+
+            Assert.IsType<ActionResult<int>>(NumberOfSells);
+            Assert.Equal(expectedCreatedPost.Value, NumberOfSells.Value);
+        }
     }
-
-
-
 }
