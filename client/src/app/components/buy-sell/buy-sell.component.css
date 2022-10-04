@@ -58,10 +58,9 @@
   border: black;
   border-radius: 25px;
   margin-right: 50px;
-
   position: absolute;
   bottom: 140px;
-  left: 550px;
+  left: 750px;
   top: 500px;
 }
 
@@ -75,11 +74,10 @@
   letter-spacing: 1px;
   border: black;
   border-radius: 25px;
-
   position: absolute;
   top: 500px;
   bottom: 140px;
-  left: 800px;
+  left: 1000px;
 }
 
 /* The Calculation button and background */
@@ -95,7 +93,6 @@
   margin-bottom: 1px;
   margin-left: 1px;
   bottom: 140px;
-
 }
 
 .table-info {
