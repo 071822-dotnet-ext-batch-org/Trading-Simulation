@@ -49,13 +49,12 @@ import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { InvestmentsComponent } from './components/investments/investments.component';
-import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { CommentsComponent } from './components/comment/comments.component';
 import { AboutUsComponent } from './components/about-us/about-us.component'
 
 
-import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
-import { CommentsComponent } from './components/comment/comments.component'
+
 import { CommonModule } from '@angular/common';
 import { SingleCommentComponent } from './components/single-comment/single-comment.component';
 import { CommentFormComponent } from './components/comment-form/comment-form.component';
