@@ -25,12 +25,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
-
-
-
 import { BuySellComponent } from './components/buy-sell/buy-sell.component';
 import { RouterModule } from '@angular/router';
-
 import { HomeService } from './Services/home/home.service';
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -48,15 +44,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { CreatePortfolioModalComponent } from './components/create-portfolio-modal/create-portfolio-modal.component';
- 
-import { NgxPaginationModule } from 'ngx-pagination';
- 
- 
- 
+import { NgxPaginationModule} from 'ngx-pagination';
 import { environment as env } from 'src/environments/environment';
 import { PostsComponent } from './components/posts/posts.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { InvestmentsComponent } from './components/investments/investments.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component'
+import { CommentsComponent } from './components/comment/comments.component';
+import { AboutUsComponent } from './components/about-us/about-us.component'
+
 
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { CommentsComponent } from './components/comment/comments.component'
@@ -64,6 +60,8 @@ import { CommonModule } from '@angular/common';
 import { SingleCommentComponent } from './components/single-comment/single-comment.component';
 import { CommentFormComponent } from './components/comment-form/comment-form.component';
 
+
+ 
 
 @NgModule({
   declarations: [
@@ -86,8 +84,13 @@ import { CommentFormComponent } from './components/comment-form/comment-form.com
     InvestmentsComponent,
     EditProfileComponent,
     CommentsComponent,
+
     SingleCommentComponent,
     CommentFormComponent,
+
+    AboutUsComponent,
+
+
   ],
   imports: [
     BrowserModule,
@@ -97,6 +100,7 @@ import { CommentFormComponent } from './components/comment-form/comment-form.com
     BrowserAnimationsModule,
     MatProgressBarModule,
     NgxPaginationModule,
+ 
     CdkAccordionModule,
     FormsModule,
     HttpClientModule,

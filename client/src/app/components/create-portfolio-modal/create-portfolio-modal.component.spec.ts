@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+
 import { CreatePortfolioModalComponent } from './create-portfolio-modal.component';
 
 describe('CreatePortfolioModalComponent', () => {
@@ -9,6 +10,7 @@ describe('CreatePortfolioModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+
       declarations: [ CreatePortfolioModalComponent ],
       providers: [
         {
@@ -28,7 +30,16 @@ describe('CreatePortfolioModalComponent', () => {
     fixture.detectChanges();
   });
 
+  it('should close a dialog after cancel', () => {
+    const app = fixture.componentInstance;
+    app.createPortfolio();
+    fixture.detectChanges();
+    const result = document.getElementsByName('mat-dialog-actions');
+    expect(result).not.toBeNull();
+  });
+  
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

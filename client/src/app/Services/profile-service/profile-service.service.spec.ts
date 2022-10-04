@@ -16,4 +16,8 @@ describe('ProfileServiceService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get profiles', () => {
+    expect(service.getProfiles).toBeTruthy();
+  });
 });

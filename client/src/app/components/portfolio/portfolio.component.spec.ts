@@ -49,4 +49,14 @@ describe('PortfolioComponent', () => {
   it('should compile', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should call openDialog', () => {
+    const fixture = TestBed.createComponent(PortfolioComponent);
+    const app = fixture.componentInstance;
+    const expected_header = "Create Portfolio";
+    app.displayCreatePortfolioModal();
+    fixture.detectChanges();
+    const popUpHeader = document.getElementsByTagName('h1')[0];
+    expect(popUpHeader.innerText).toEqual(expected_header);
+  })  
 });

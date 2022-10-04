@@ -18,4 +18,8 @@ describe('GetInvestmentsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get investments', () => {
+    expect(service.getInvestments).toBeTruthy();
+  });
 });

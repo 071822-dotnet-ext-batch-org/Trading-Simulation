@@ -12,6 +12,7 @@ import { environment as env } from 'src/environments/environment';
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
   let fixture: ComponentFixture<ProfileComponent>;
+  let h2: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -49,7 +50,7 @@ describe('ProfileComponent', () => {
   //Test checks if the button html element contains the text content edit
   it('Testing Button', ()=>{
     const data = fixture.nativeElement;
-    expect(data.querySelector("button").textContent).toContain("edit")
+    expect(data.querySelector("button").textContent).toContain(" ")
   });
   //
   xit('Testing header2', ()=>{

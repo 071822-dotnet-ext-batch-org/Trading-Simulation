@@ -18,4 +18,9 @@ describe('CuriencyapiService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get currency data', () => {
+    expect(service.getcurrencydata).toBeTruthy();
+  });
+  
 });

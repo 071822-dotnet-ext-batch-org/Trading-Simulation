@@ -16,4 +16,8 @@ describe('GetMyPortfoliosService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get my portfolios', () => {
+    expect(service.getMyPortfolios).toBeTruthy();
+  });
 });

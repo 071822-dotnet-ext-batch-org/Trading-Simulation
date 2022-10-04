@@ -18,4 +18,8 @@ describe('GetPostsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get all posts', () => {
+    expect(service.getAllPosts).toBeTruthy();
+  });
 });
