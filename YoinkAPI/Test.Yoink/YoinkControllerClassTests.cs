@@ -386,7 +386,7 @@ namespace Test.Yoink
                 .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
                 .ReturnsAsync(expectedCreatedPost);
 
-            var ControllerClass_Created = new Mock< IYoinkController>();
+            var ControllerClass_Created = new Mock<YoinkController>();
             ControllerClass_Created.Setup(s => s.CreatePostAsync(It.IsAny<CreatePostDto>()))
                 .ReturnsAsync(expectedCreatedPost);
 
@@ -423,7 +423,7 @@ namespace Test.Yoink
                 .Setup(s => s.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
                 .ReturnsAsync(expectedCreatedPost);
 
-            var ControllerClass_Created = new Mock< IYoinkController>();
+            var ControllerClass_Created = new Mock<YoinkController>();
             ControllerClass_Created.Setup(s => s.CreatePostAsync(It.IsAny<CreatePostDto>()))
                 .ReturnsAsync(expectedCreatedPost);
 
