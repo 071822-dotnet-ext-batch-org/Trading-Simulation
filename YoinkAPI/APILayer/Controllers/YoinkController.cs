@@ -654,7 +654,6 @@ namespace APILayer.Controllers
                 {
                     string auth0id = User.Identity.Name;
                     List<Guid> likedPosts = await this._businessLayer.GetPostLikesByUserID(auth0id);
-                    Console.WriteLine(Ok(likedPosts));
                     return Ok(likedPosts);
                 }
             }
