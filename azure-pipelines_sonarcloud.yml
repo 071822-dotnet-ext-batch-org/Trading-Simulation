@@ -3,8 +3,17 @@
 # Add steps that publish symbols, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
+# this pipeline will only trigger when any change on the 
+# path YoinkApi in main or the development branch occurs
+pr: none
 trigger:
-- development
+  branches:
+    include:
+    - main
+    - development
+  paths:
+    include:
+    - YoinkAPI
 
 pool:
   vmImage: 'windows-latest'
