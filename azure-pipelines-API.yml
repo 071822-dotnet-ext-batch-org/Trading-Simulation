@@ -42,15 +42,25 @@ steps:
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'Sonarcloud connection'
-    organization: 'YoinkP3b'
+    organization: '071822dotnetbatch1'
     scannerMode: 'MSBuild'
-    projectKey: 'YoinkP3b_Yoink-Pipeline2'
-    projectName: 'Yoink-Pipeline2'
+    projectKey: '071822dotnetbatch1_071822dotnetbatch1'
+    projectName: '071822dotnetbatch1'
 - task: NuGetCommand@2
   displayName: restore_the_app
   inputs:
     command: 'restore'
     restoreSolution: '$(solution)'
+
+- task: DotNetCoreCLI@2
+  displayName: build  
+  inputs:
+    command: 'build'
+    projects: '$(solution)'
+    workingDirectory: 'Demos/ReimbursementApi'
+    arguments: '--configuration $(buildConfiguration)'
+- task: SonarCloudAnalyze@1
+
 - task: DotNetCoreCLI@2
   displayName: Test
   inputs:
@@ -64,7 +74,8 @@ steps:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '**/coburtura/coverage.xml'
     # failIfCoverageEmpty: true
-- task: SonarCloudAnalyze@1
+
+# - task: SonarCloudAnalyze@1
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
