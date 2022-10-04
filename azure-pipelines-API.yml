@@ -90,17 +90,17 @@ steps:
     projects: $(solution)
     zipAfterPublish: true
 
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure forStudents(747e92f3-665f-48dd-825f-1f21323087e8)'
-    appType: 'webApp'
-    WebAppName: 'Yoink'
-    deployToSlotOrASE: true
-    ResourceGroupName: 'Yoink_group'
-    SlotName: 'production'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    enableCustomDeployment: true
-    DeploymentType: 'zipDeploy'
-    TakeAppOfflineFlag: false
+# - task: AzureRmWebAppDeployment@4
+#   inputs:
+#     ConnectionType: 'AzureRM'
+#     azureSubscription: 'Azure forStudents(747e92f3-665f-48dd-825f-1f21323087e8)'
+#     appType: 'webApp'
+#     WebAppName: 'Yoink'
+#     deployToSlotOrASE: true
+#     ResourceGroupName: 'Yoink_group'
+#     SlotName: 'production'
+#     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+#     enableCustomDeployment: true
+#     DeploymentType: 'zipDeploy'
+#     TakeAppOfflineFlag: false
 
