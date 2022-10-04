@@ -87,3 +87,5 @@ steps:
     workingDirectory: '$(workingDirectory)'
     projects: $(solution)
     zipAfterPublish: true
+
+
