@@ -39,10 +39,10 @@ export class BuySellComponent implements OnInit {
   buyResult: any; // Used in createBuy below
   sellResult: any; // Used in createSell below
   totalPrice: number = 0; // Used in the calculateTotal method
-  errorMessage: string = '';
-  invQty: number = 0;
-  txLoading: boolean = false;
-  success: string = '';
+  errorMessage: string = ''; // Used in onPayments
+  invQty: number = 0; // Used in onPayments
+  txLoading: boolean = false; // Used in onPayments
+  success: string = ''; // Used in OnPayments
 
 
   // What is shown in the dropdown box on web page options.
@@ -75,7 +75,7 @@ export class BuySellComponent implements OnInit {
       const currentPort = this.portfolios.find(p => p.portfolioID === this.portfolioID);
 
       if (currentPort){
-        
+
         // Buy condition
         if (this.selected === 'Buy') {
 
@@ -102,12 +102,11 @@ export class BuySellComponent implements OnInit {
               this.txLoading = false;
               return;
             }
-            
+
             if (!this.symbol.value) return;
             this.createSell(this.portfolioID, this.symbol.value, this.qty, res.results[0].c);
           });
 
-          
         }
       }
     })
@@ -163,6 +162,7 @@ export class BuySellComponent implements OnInit {
 
   };
 
+  // Renturns form to cleared status after order/cancel
   resetForms(): void {
     this.symbol.reset();
     this.qty = 0;

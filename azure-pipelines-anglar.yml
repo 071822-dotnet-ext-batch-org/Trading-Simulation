@@ -15,6 +15,17 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'Sonarcloud connection'
+    organization: 'yoinkp3b'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliprojectKey: 'YoinkP3b_Yoink-Pipeline2'
+    cliprojectName: 'Yoink-Pipeline2'
+    cliSources: '$(solution)/src'
+    extraProperties: 'sonar.javascript.lcov.reportPaths=$(solution)/coverage/client/lcov.info'
+
 - task: NodeTool@0
   displayName: 'Use Node 16.x'
   inputs:
@@ -42,8 +53,24 @@ steps:
     customCommand: 'run ng build --prod'
   continueOnError: true
 
+- task: Npm@1
+  displayName: 'NPM Test'
+  inputs:
+    command: 'custom'
+    workingDir: $(solution)
+    customCommand: 'run test-headless'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'SonarCloud Analyze'
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
     PathtoPublish: client/dist
+
+- task: SonarCloudPublish@1
+  displayName: 'SonarCloud Publish'
+  inputs:
+    pollingTimeoutSec: '300'
+
 

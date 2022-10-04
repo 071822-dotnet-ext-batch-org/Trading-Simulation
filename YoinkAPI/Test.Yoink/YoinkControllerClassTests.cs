@@ -277,6 +277,324 @@ namespace Test.Yoink
         }
 
 
+        /// <summary>
+        /// This test tests to see if the method returns a null investment - It's input is an InvestmentDto and returns a nullable investment
+        /// (sendes)
+        /// </summary>
+        [Fact]
+        public async Task Testing_GetSingleInvestmentByPortfolioIDAsync_Null()
+        {
+            //-------------------Arrange Section ----------------
+
+            //We create an input that is constant
+            GetInvestmentDto investmentDto = new GetInvestmentDto()
+                {
+                    PortfolioId = Guid.NewGuid(),
+                    Symbol = "GOOG"
+            };
+
+
+            Investment? returnedInvestment_Null =  null;
+            ActionResult<Investment?> nullReturnedPost = new  OkObjectResult(returnedInvestment_Null) ;
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource2_Null = new Mock<IYoinkBusinessLayer>();
+            dataSource2_Null
+                .Setup(s => s.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
+                .ReturnsAsync(returnedInvestment_Null);
+
+            var ControllerClass_Null = new YoinkController(dataSource2_Null.Object);
+
+            //-------------------Act Section ----------------
+            var NoInvestmentwasGotten = await ControllerClass_Null.GetSingleInvestmentByPortfolioIDAsync(investmentDto);
+
+            //-------------------Assert Section ----------------
+            //The test asserts that the expected value and the returned value match
+            Assert.IsType<ActionResult<Investment?>>(NoInvestmentwasGotten);
+            Assert.Equal(nullReturnedPost.Value, NoInvestmentwasGotten.Value);
+
+        }//End of GetSingleInvestmentByPortfolioIDAsync that is NULL Test
+
+
+        /// <summary>
+        /// This test tests to see if the method returns an investment that is not null- It's input is an InvestmentDto and returns a nullable investment
+        /// (sendes)
+        /// </summary>
+        [Fact]
+        public async Task Testing_GetSingleInvestmentByPortfolioIDAsync_NOT_NULL()
+        {
+            //-------------------Arrange Section ----------------
+            //We create an input that is constant
+            GetInvestmentDto investmentDto = new GetInvestmentDto()
+                {
+                    PortfolioId = Guid.NewGuid(),
+                    Symbol = "GOOG"
+            };
+
+            //We create an output that is nullable
+            Investment? expectedInvestment = new Investment()
+                {
+                    InvestmentID = Guid.NewGuid(),
+                    Fk_PortfolioID = Guid.NewGuid(),
+                    Symbol = "AAPL",
+                    AmountInvested = 10000,
+                    CurrentAmount = 10000,
+                    CurrentPrice = 10000,
+                    TotalAmountBought = 10000,
+                    TotalAmountSold = 10000,
+                    AveragedBuyPrice = 10000,
+                    TotalPNL = 10000,
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.Now,
+            };
+
+            ActionResult<Investment?> returnedInvestment = new  OkObjectResult(expectedInvestment) ;
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource2_Null = new Mock<IYoinkBusinessLayer>();
+            dataSource2_Null
+                .Setup(s => s.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
+                .ReturnsAsync(expectedInvestment);
+
+            var ControllerClass_Null = new YoinkController(dataSource2_Null.Object);
+
+            //-------------------Act Section ----------------
+            var InvestmentwasGotten = await ControllerClass_Null.GetSingleInvestmentByPortfolioIDAsync(investmentDto);
+
+            //-------------------Assert Section ----------------
+            //The test asserts that the expected value and the returned value match
+            Assert.IsType<ActionResult<Investment?>>(InvestmentwasGotten);
+            Assert.Equal(returnedInvestment.Value, InvestmentwasGotten.Value);
+
+        }//End of GetSingleInvestmentByPortfolioIDAsync that is NOT NULL Test
+
+
+        /// <summary>
+        /// This test method tests if the Create Post Async Method returns a Post that is not null - This is a true run or CREATED
+        /// </summary>
+        [Fact]
+        public async Task Test_CreatePostAsync_Created()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0id"; //We create a fake userID
+
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            CreatePostDto createPostDto = new CreatePostDto("This Is SPA TAAAAH!!", 1);
+
+            //We create an output that is nullable
+            Post? expectedCreatedPost = new  Post( Guid.NewGuid(), "MyId", "My Content", 2, 1, DateTime.Now, DateTime.Now);
+
+            var returnedPost = new  CreatedResult("",expectedCreatedPost) ;
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource_Created = new Mock<IYoinkBusinessLayer>();
+            dataSource_Created
+                .Setup(s => s.CreatePostAsync(fakeUser, It.IsAny<CreatePostDto>()))
+                .ReturnsAsync(expectedCreatedPost);
+
+            var ControllerClass_Created = new YoinkController(dataSource_Created.Object);
+            ControllerClass_Created.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            var PostwasCreated = await ControllerClass_Created.CreatePostAsync(createPostDto);
+            var okResultforPost = PostwasCreated.Result as CreatedResult;
+            Post? resultPost = okResultforPost?.Value as Post;
+
+            //-------------------Assert Section ----------------
+            if(resultPost == null)
+            {
+                Assert.Equal(null, resultPost);
+            }
+
+            //The test asserts that the expected value and the returned value match
+            Assert.IsType<ActionResult<Post?>>(PostwasCreated);
+            Assert.IsType<CreatedResult>(PostwasCreated.Result);
+            Assert.IsType<Post?>(resultPost);
+            Assert.IsType<Guid>(resultPost?.PostID);
+            Assert.NotNull(resultPost);
+            Assert.Equal(returnedPost.Value, resultPost);
+        }//End of Create Post Async - Created Test
+
+        /// <summary>
+        /// This test method tests if the Create Post Async Method returns a null Post - This is a false run or NOT CREATED
+        /// </summary>
+        [Fact]
+        public async Task Test_CreatePostAsync_NotCreated()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0id"; //We create a fake userID
+
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+            //We create an input that is constant
+            CreatePostDto createPostDto = new CreatePostDto("This Is SPA TAAAAH!!", 1);
+
+            //We create an output that is nullable
+            Post? expectedCreatedPost = null;
+            var returnedPost = new  BadRequestObjectResult(createPostDto);
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            if(expectedCreatedPost == null){}
+            var dataSource_Created = new Mock<IYoinkBusinessLayer>();
+            dataSource_Created
+                .Setup(s => s.CreatePostAsync(fakeUser, It.IsAny<CreatePostDto>()))
+                .ReturnsAsync(expectedCreatedPost);
+
+            var ControllerClass_Created = new YoinkController(dataSource_Created.Object);
+            ControllerClass_Created.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            
+
+            //-------------------Act Section ----------------
+            var PostwasCreated = await ControllerClass_Created.CreatePostAsync(createPostDto);
+            var okResultforPost = PostwasCreated.Result as BadRequestObjectResult;
+            Post? resultPost = okResultforPost?.Value as Post;
+
+            //-------------------Assert Section ----------------
+            if(resultPost == null)
+            {
+                Assert.Equal(null, resultPost);
+            }
+
+            //The test asserts that the expected value and the returned value match
+            Assert.IsType<ActionResult<Post?>>(PostwasCreated);
+            Assert.IsType<BadRequestObjectResult>(PostwasCreated.Result);
+            Assert.Null(resultPost);
+            Assert.Equal(expectedCreatedPost, resultPost);
+
+        }//End of Create Post Async - Not Created Test
+
+        /// <summary>
+        /// This tests if the GetAllPostsAsync method gets all of the posts without any credentials
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Test_GetAllPostsAsync_if_gets_all_Posts()
+        {
+            //-------------------Arrange Section ----------------
+
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+            //We create an input that is constant
+
+            //We create an input that is constant
+
+            //We create an output that is nullable
+            List<PostWithCommentCountDto>? expectedListofComments = new List<PostWithCommentCountDto>();
+            for(int i =0; i < 5; i++)
+            {
+                PostWithCommentCountDto dto = new PostWithCommentCountDto(Guid.NewGuid(), "authID", "Content", 1, 1,1,DateTime.Now, DateTime.Now);
+                expectedListofComments.Add(dto);
+
+            }
+            var returnedListofComments = new  OkObjectResult(expectedListofComments);
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.GetAllPostAsync())
+                .ReturnsAsync(expectedListofComments);
+
+            var ControllerClass_Created = new YoinkController(dataSource.Object);
+            ControllerClass_Created.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            
+
+            //-------------------Act Section ----------------
+            var returnedActionResultOBJ = await ControllerClass_Created.GetAllPostsAsync();
+            var okResultforOBJ = returnedActionResultOBJ.Result as OkObjectResult;
+            List<PostWithCommentCountDto>? resultOBJ = okResultforOBJ?.Value as List<PostWithCommentCountDto>;
+
+            //-------------------Assert Section ----------------
+            if(resultOBJ == null)
+            {
+                Assert.Equal(null, resultOBJ);
+            }
+
+            //The test asserts that the expected value and the returned value match
+            Assert.IsType<ActionResult<List<PostWithCommentCountDto>>>(returnedActionResultOBJ);
+            Assert.IsType<OkObjectResult>(returnedActionResultOBJ.Result);
+            Assert.NotNull(resultOBJ);
+            Assert.Equal(expectedListofComments, resultOBJ);
+
+        }//End of GetAllPostsAsync Test
+
+        /// <summary>
+        /// This method tests if the UpdatePostAsync successfully updates an existing post
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Test_UpdatePostAsync_if_Post_is_Updated()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+            //We create an input that is constant
+
+            //We create an input that is constant
+
+            //We create an output that is nullable
+            EditPostDto editPostDto = new EditPostDto(Guid.NewGuid(),"Content", 1);
+            Post returnedPostFromRepo = new Post(Guid.NewGuid(),fakeUser, "Content", 1, 1, DateTime.Now, DateTime.Now);
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.UpdatePostAsync(It.IsAny<string>(),It.IsAny<EditPostDto>()))
+                .ReturnsAsync(returnedPostFromRepo);
+            Console.WriteLine($"\n\nThis is a returned obj ID: { dataSource.Object.UpdatePostAsync(fakeUser, editPostDto).Result?.PostID}\n\n");
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Post?> returnedActionResultOBJ = await controller_datasource.UpdatePostAsync(editPostDto);
+            //The actual object returned will be null until converted to a variable to hold the data
+            Console.WriteLine($"\n\nThis is a returned obj ID from the controller: {returnedActionResultOBJ.Value?.PostID}\n\n");
+            var okResultforOBJ = returnedActionResultOBJ?.Result as OkObjectResult;
+            Console.WriteLine($"\n\nThis is a returned obj ID: {okResultforOBJ?.Value}\n\n");
+            Post? resultOBJ = okResultforOBJ?.Value as Post;
+            Console.WriteLine($"\n\nThis is a returned obj ID: {resultOBJ?.PostID}\n\n");
+
+
+            //-------------------Assert Section ----------------
+            if(resultOBJ?.PostID == null)
+            {
+                Assert.Null(okResultforOBJ?.Value);
+                Assert.Equal(null, resultOBJ);
+            }
+
+            //The test asserts that the expected value and the returned value matches
+            Assert.IsType<ActionResult<Post?>?>(returnedActionResultOBJ);
+            Assert.IsType<OkObjectResult>(returnedActionResultOBJ?.Result);
+            Assert.NotNull(resultOBJ);
+            Assert.Equal(returnedPostFromRepo.PostID, resultOBJ?.PostID);
+
+        }//End of UpdatePostAsync Test
+
+
+
+
         private List<Guid> fakeGuidList(){
             List<Guid> newGuids = new List<Guid>();
             Guid newGuid = Guid.NewGuid();
@@ -333,48 +651,6 @@ namespace Test.Yoink
             }
         }
 
-
-        [Fact]
-        public async Task Testing_GetSingleInvestmentByPortfolioIDAsync_NOT_NULL()
-        {
-            //-------------------Arrange Section ----------------
-            //We create an input that is constant
-            GetInvestmentDto investmentDto = new GetInvestmentDto()
-                {
-                    PortfolioId = Guid.NewGuid(),
-                    Symbol = "GOOG"
-            };
-            //We create an output that is nullable
-            Investment? expectedCreatedPost = new Investment()
-                {
-                    InvestmentID = Guid.NewGuid(),
-                    Fk_PortfolioID = Guid.NewGuid(),
-                    Symbol = "AAPL",
-                    AmountInvested = 10000,
-                    CurrentAmount = 10000,
-                    CurrentPrice = 10000,
-                    TotalAmountBought = 10000,
-                    TotalAmountSold = 10000,
-                    AveragedBuyPrice = 10000,
-                    TotalPNL = 10000,
-                    DateCreated = DateTime.Now,
-                    DateModified = DateTime.Now,
-            };
-            // Investment? returnedInvestment =  {};
-            ActionResult<Investment?> returnedInvestment = new  OkObjectResult(expectedCreatedPost) ;
-            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
-            var dataSource2_Null = new Mock<IYoinkBusinessLayer>();
-            dataSource2_Null
-                .Setup(s => s.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
-                .ReturnsAsync(expectedCreatedPost);
-            var ControllerClass_Null = new YoinkController(dataSource2_Null.Object);
-            //-------------------Act Section ----------------
-            var InvestmentwasGotten = await ControllerClass_Null.GetSingleInvestmentByPortfolioIDAsync(investmentDto);
-            //-------------------Assert Section ----------------
-            //The test asserts that the expected value and the returned value match
-            Assert.IsType<ActionResult<Investment?>>(InvestmentwasGotten);
-            Assert.Equal(returnedInvestment.Value, InvestmentwasGotten.Value);
-        }//End of GetSingleInvestmentByPortfolioIDAsync that is NOT NULL Test
 
         [Fact]
         public async Task TestingGetInvestmentsByPortfolioIDAsync()
@@ -568,5 +844,61 @@ namespace Test.Yoink
             Assert.Equal(mockBool, oKResult?.Value);
             
         }
+
+        // [Fact]
+        // public async Task TestingCreatePostAsync()
+        // {
+        //     //Arrange
+        //     string fakeUser = "auth0id";
+
+        //     CreatePostDto createPostDto = new CreatePostDto()
+        //     {
+        //         Content = "Test",
+        //         PrivacyLevel = 1,
+        //     };
+
+        //     Post createPost = new Post()
+        //     {
+        //     PostID = Guid.NewGuid(),
+        //     Fk_UserID = "UserName",
+        //     Content = "content",
+        //     Likes = 1,
+        //     DateCreated = DateTime.Now,
+        //     PrivacyLevel = 1,
+        //     DateModified = DateTime.Now,
+        //     };
+
+        //     var mockBl = new Mock<IYoinkBusinessLayer>();
+        //     mockBl
+        //         .Setup(bl => bl.CreatePostAsync(fakeUser, createPostDto))
+        //         .ReturnsAsync(createPost);
+
+        //     var ControllerClass = new YoinkController(mockBl.Object);
+
+        //     var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        //         {
+        //             new Claim(ClaimTypes.Name, "auth0id"),
+                    
+        //         }, "mock"));
+
+        //     ControllerClass.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+        //     //Act
+
+        //     var result = await ControllerClass.CreatePostAsync(createPostDto);
+        //     var okResult = result.Result as OkObjectResult;
+        //     Post? resultPost = okResult?.Value as Post;
+
+        //     //Assert
+        //     Console.WriteLine("result" + resultPost);
+        //     Assert.NotNull(resultPost);
+        //     if (resultPost != null)
+        //     {
+        //         Assert.IsType<ActionResult<Post>>(result);
+        //         Assert.Equal(createPost.PostID, resultPost.PostID);
+        //     }
+            
+        
+        
     }
 }
