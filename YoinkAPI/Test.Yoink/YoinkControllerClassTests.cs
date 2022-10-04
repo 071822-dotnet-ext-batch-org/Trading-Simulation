@@ -807,6 +807,44 @@ namespace Test.Yoink
             Assert.Equal(expectedCreatedPost.Value, NumberOfSells.Value);
         }
 
+        [Fact]
+        public async Task CreateCommentOnPostReturnCreatedComment()
+        {
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            CommentDto createComment = new (guid, "TestComment");
+
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.CreateCommentOnPostAsync(It.IsAny<CommentDto>(),fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.CreateCommentOnPostAsync(createComment);
+            var oKResult = result.Result as CreatedResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+            
+        }
+
         // [Fact]
         // public async Task TestingCreatePostAsync()
         // {
@@ -860,7 +898,7 @@ namespace Test.Yoink
         //         Assert.Equal(createPost.PostID, resultPost.PostID);
         //     }
             
-        }
-
+        
+        
     }
 }
