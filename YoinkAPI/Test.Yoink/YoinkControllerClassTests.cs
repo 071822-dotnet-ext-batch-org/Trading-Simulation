@@ -322,8 +322,6 @@ namespace Test.Yoink
 
 
             // Assert
-            var resultType = Assert.IsType<ActionResult<List<Guid>>>(result);
-            var resultResultType = Assert.IsType<OkObjectResult>(result.Result);
             Assert.True(controller.ModelState.IsValid);
             Assert.Equal(200, okResult?.StatusCode);
             Assert.IsType<List<Guid>>(okResult?.Value);
@@ -331,6 +329,7 @@ namespace Test.Yoink
             if(glist != null)
             {
                 Assert.Equal(3, glist.Count());
+                Assert.Equal(mockGuids[0], glist[0]);
             }
         }
 
@@ -402,9 +401,9 @@ namespace Test.Yoink
             var AllInvestmentswereGotten = await ControllerClass.GetInvestmentsByPortfolioIDAsync(allInvestmentsDto);
         }
 
-
+        //Testing an empty return list
         [Fact]
-        public async Task TestingGetInvestmentByTimeAsync()
+        public async Task GetInvestmentByTimeAsyncReturnsListWithinTimeRange()
         {
             //Arrange
             GetInvestmentByTimeDto investmentByTimeDto = new GetInvestmentByTimeDto()
@@ -429,7 +428,7 @@ namespace Test.Yoink
             var InvestmentwasGotten = await ControllerClass.GetInvestmentByTimeAsync(investmentByTimeDto);
 
             //Assert
-
+            
             Assert.IsType<ActionResult<List<Investment>>>(InvestmentwasGotten);
             Assert.Equal(expectedCreatedPost.Value, InvestmentwasGotten.Value);
 
