@@ -39,13 +39,15 @@ steps:
   inputs:
     versionSpec: 
     checkLatest: true
+
 - task: SonarCloudPrepare@1
   inputs:
-    SonarCloud: 'Sonarcloud connection'
+    SonarCloud: '071822sonarcloudconnection'
     organization: '071822dotnetbatch1'
     scannerMode: 'MSBuild'
     projectKey: '071822dotnetbatch1_071822dotnetbatch1'
     projectName: '071822dotnetbatch1'
+
 - task: NuGetCommand@2
   displayName: restore_the_app
   inputs:
