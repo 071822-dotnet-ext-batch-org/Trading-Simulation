@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CreateCommentModel } from 'src/app/Models/CreateCommentModel';
 import { environment as env } from 'src/environments/environment';
 
 @Injectable({
@@ -10,7 +11,7 @@ export class CreateCommentService {
 
   constructor(private http: HttpClient) { }
 
-  createComment(content: string): Observable<Comment[]> {
-    return this.http.post<Comment[]>(env.baseURL + '/add-comment', {portfolioID: null, content})
+  createComment(postId: string, text: string): Observable<boolean> {
+    return this.http.post<boolean>(env.baseURL + '/add-comment', {postId: postId, content: text})
   }
 }
