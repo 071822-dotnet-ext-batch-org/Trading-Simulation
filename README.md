@@ -1,4 +1,4 @@
-# Yoink! Trading Simulation ![Yoink! Pig](https://github.com/071822-dotnet-ext-batch-org/Trading-Simulation/blob/development/client/src/favicon-32x32.png?raw=true)
+# Yoink! Trading Simulation ![Yoink! Pig]
 
 ![GitHub language count](https://img.shields.io/github/languages/count/071822-dotnet-ext-batch-org/Trading-Simulation)
 ![GitHub top language](https://img.shields.io/github/languages/top/071822-dotnet-ext-batch-org/Trading-Simulation)
