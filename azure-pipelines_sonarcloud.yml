@@ -24,8 +24,8 @@ variables:
   buildConfiguration: 'Release'
   workingDirectory: YoinkAPI
 
-stages:
-- stage: prep
+# stages:
+# - stage: prep
   jobs:
   - job: sdk_and_nuget_download #underscores used because we can't have a space here
     displayName: download the most current SDK
