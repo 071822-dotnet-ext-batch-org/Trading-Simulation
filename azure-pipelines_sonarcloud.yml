@@ -16,46 +16,64 @@ variables:
   workingDirectory: YoinkAPI
 
 stages:
--stage:prep
+- stage: prep
+  jobs:
+  - job: sdk_and_nuget_download #underscores used because we can't have a space here
+    displayName: download the most current SDK
+    steps:
+    - task: UseDotNet@2
+      displayName: get the sdk
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'    
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: 
+        checkLatest: true
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'Sonarcloud connection'
+        organization: 'yoinkp3b'
+        scannerMode: 'MSBuild'
+        projectKey: 'YoinkP3b_Yoink-Pipeline2'
+        projectName: 'Yoink-Pipeline2'
+     
+    - task: NuGetCommand@2
+      displayName: restore_the_app
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(solution)'
 
- jobs:
- -job:sdk_and_nuget_download
-  displayName: download the most current SDK
+  # - task: VSBuild@1
+  # inputs:
+  # solution: '$(solution)'
+  # msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+  # platform: '$(buildPlatform)'
+  # configuration: '$(buildConfiguration)'
 
-  steps:
-  - task: UseDotNet@2
+    - task: DotNetCoreCLI@2
+      displayName: Test
+      inputs:
+        command: 'test'
+        projects: '$(solution)'
+        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+        testRunTitle: 'Dotnet testing in progress'
+        workingDirectory: '$(workingDirectory)'
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: '**/coburtura/coverage.xml'
+        # failIfCoverageEmpty: true
+    - task: SonarCloudAnalyze@1
 
-  - task: NuGetToolInstaller@1
-
-  - task: SonarCloudPrepare@1
-  inputs:
-  SonarCloud: 'Sonarcloud connection'
-  organization: 'yoinkp3b'
-  scannerMode: 'MSBuild'
-  projectKey: 'YoinkP3b_Yoink-Pipeline2'
-  projectName: 'Yoink-Pipeline2'
-
-  - task: NuGetCommand@2
-  inputs:
-  restoreSolution: '$(solution)'
-
-  - task: VSBuild@1
-  inputs:
-  solution: '$(solution)'
-  msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-  platform: '$(buildPlatform)'
-  configuration: '$(buildConfiguration)'
-
-  - task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-  command: test
-  projects: '**/Test.Yoink/*.csproj'
-  arguments: '--configuration $(BuildConfiguration) --collect "Code coverage"'
-  continueOnError: true
-
-  - task: SonarCloudAnalyze@1
-
-  - task: SonarCloudPublish@1
-  inputs:
-  pollingTimeoutSec: '300'
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
+    - task: DotNetCoreCLI@2
+      displayName: publishing_task
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        workingDirectory: '$(workingDirectory)'
+        projects: $(solution)
+        zipAfterPublish: true
