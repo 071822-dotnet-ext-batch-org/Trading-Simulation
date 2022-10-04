@@ -530,5 +530,61 @@ namespace Test.Yoink
             Assert.IsType<ActionResult<int>>(NumberOfSells);
             Assert.Equal(expectedCreatedPost.Value, NumberOfSells.Value);
         }
+
+        // [Fact]
+        // public async Task TestingCreatePostAsync()
+        // {
+        //     //Arrange
+        //     string fakeUser = "auth0id";
+
+        //     CreatePostDto createPostDto = new CreatePostDto()
+        //     {
+        //         Content = "Test",
+        //         PrivacyLevel = 1,
+        //     };
+
+        //     Post createPost = new Post()
+        //     {
+        //     PostID = Guid.NewGuid(),
+        //     Fk_UserID = "UserName",
+        //     Content = "content",
+        //     Likes = 1,
+        //     DateCreated = DateTime.Now,
+        //     PrivacyLevel = 1,
+        //     DateModified = DateTime.Now,
+        //     };
+
+        //     var mockBl = new Mock<IYoinkBusinessLayer>();
+        //     mockBl
+        //         .Setup(bl => bl.CreatePostAsync(fakeUser, createPostDto))
+        //         .ReturnsAsync(createPost);
+
+        //     var ControllerClass = new YoinkController(mockBl.Object);
+
+        //     var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        //         {
+        //             new Claim(ClaimTypes.Name, "auth0id"),
+                    
+        //         }, "mock"));
+
+        //     ControllerClass.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+        //     //Act
+
+        //     var result = await ControllerClass.CreatePostAsync(createPostDto);
+        //     var okResult = result.Result as OkObjectResult;
+        //     Post? resultPost = okResult?.Value as Post;
+
+        //     //Assert
+        //     Console.WriteLine("result" + resultPost);
+        //     Assert.NotNull(resultPost);
+        //     if (resultPost != null)
+        //     {
+        //         Assert.IsType<ActionResult<Post>>(result);
+        //         Assert.Equal(createPost.PostID, resultPost.PostID);
+        //     }
+            
+        }
+
     }
 }
