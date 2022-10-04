@@ -35,7 +35,7 @@ export class CommentsComponent implements OnInit {
     console.log('addComment', newComment);
     this.createComment.createComment(newComment.postId, newComment.content)
     .subscribe( newComm =>{
-      this.newComments = [...this.newComments, newComm]
+      this.newComments = newComm;
     });
 
   //   this.dialogRef.afterClosed().subscribe(result => {
