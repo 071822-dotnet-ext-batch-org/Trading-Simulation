@@ -1,15 +1,19 @@
 ﻿using APILayer.Controllers;
 using BusinessLayer;
+using Microsoft.AspNetCore.Http;
 using Models;
 using Moq;
 using RepoLayer;
 using System;
-
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace Test.Yoink
 {
     public class YoinkControllerClassTests
     {
+
+
 
 
         [Fact]
@@ -270,6 +274,63 @@ namespace Test.Yoink
             Assert.Equal("GOOGL", sell.Symbol);
             Assert.Equal(2000, sell.AmountSold);
             Assert.Equal("GOOGL", sellDto.Symbol);
+        }
+
+        private List<Guid> fakeGuidList(){
+            List<Guid> newGuids = new List<Guid>();
+            Guid newGuid = Guid.NewGuid();
+            Guid newGuid2 = Guid.NewGuid();
+            Guid newGuid3 = Guid.NewGuid();
+            Console.WriteLine(newGuid);
+            Console.WriteLine(newGuid2);
+            Console.WriteLine(newGuid3);
+            newGuids.Add(newGuid);
+            newGuids.Add(newGuid2);
+            newGuids.Add(newGuid3);
+            
+            return newGuids;
+        }
+
+        [Fact]
+        public async Task TestGetPostLikesByUserID()
+        {
+            // Arrange
+            string fakeUser = "auth0id";
+
+            List<Guid> mockGuids = fakeGuidList();
+            
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.GetPostLikesByUserID(fakeUser))
+                .ReturnsAsync(mockGuids);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.GetPostLikesByUserID();
+            var okResult = result.Result as OkObjectResult;
+            List<Guid>? glist = okResult?.Value as List<Guid>;
+
+
+
+            // Assert
+            var resultType = Assert.IsType<ActionResult<List<Guid>>>(result);
+            var resultResultType = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(200, okResult?.StatusCode);
+            Assert.IsType<List<Guid>>(okResult?.Value);
+            
+            if(glist != null)
+            {
+                Assert.Equal(3, glist.Count());
+            }
         }
 
 

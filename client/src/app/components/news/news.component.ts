@@ -40,11 +40,5 @@ export class NewsComponent implements OnInit {
        console.log(result);
        this.topheadingDisplay = result.articles;
        })
-
-
     }
-    
-   
-
-
-  }
+}
