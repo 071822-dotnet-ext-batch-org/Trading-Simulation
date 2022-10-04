@@ -12,7 +12,6 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-
         </div>
         <mat-form-field> <!-- Chose either buy or sell drop down box -->
           <mat-label>Choose Buy or Sell</mat-label>
@@ -47,11 +46,9 @@
           <p> Total Price: {{ totalPrice | currency }} </p> <!--WORK IN PROGRESS-->
         </div>
       </div>
-
       <div> <!-- Payment and cancel buttons -->
-        <button class="back-btn" [routerLink]="'/Portfolio'">Cancel</button>
+        <button class="back-btn" (click)="resetForms()" [routerLink]="'/Portfolio'">Cancel</button>
         <button class="buy-btn" (click)="onPayment()" [routerLink]="'/Portfolio'">Payment</button>
-
       </div>
     </form> <!-- End of Buy/sell form -->
     <div>
