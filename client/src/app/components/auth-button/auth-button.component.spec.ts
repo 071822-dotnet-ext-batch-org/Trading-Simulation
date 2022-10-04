@@ -1,8 +1,8 @@
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+//import { By } from '@angular/platform-browser';
 import { Location, CommonModule} from '@angular/common';
-import { Router } from '@angular/router';
+//import { Router } from '@angular/router';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'src/environments/environment';
 
