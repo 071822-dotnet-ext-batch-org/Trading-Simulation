@@ -1196,9 +1196,6 @@ namespace RepoLayer
                 _conn.Close();
                 return commList;
             }
-<<<<<<< HEAD
-        }//End of Get comment by Post ID
-=======
         }
 
 
@@ -1422,6 +1419,5 @@ namespace RepoLayer
                 return myLikes;
             } 
         }
->>>>>>> 7e277965108141950845721be26d1a89653e75b9
     }
 }
