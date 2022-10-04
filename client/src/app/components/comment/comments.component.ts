@@ -33,21 +33,12 @@ export class CommentsComponent implements OnInit {
     })
   }
 
-<<<<<<< HEAD
-  onSendClick(newComment: CreateCommentModel): void {
-    console.log('addComment', newComment);
-    this.createComment.createComment(newComment.postId, newComment.content)
-    .subscribe( newComm =>{
-      this.newComments = newComm;
-    });
-=======
   // onSendClick(newComment: CreateCommentModel): void {
   //   console.log('addComment', newComment);
   //   this.createComment.createComment(newComment.postId, newComment.content)
   //   .subscribe( newComm =>{
   //     this.newComments = [...this.newComments, newComm]
   //   });
->>>>>>> 5cb75be262d0211b0927c725a85b8ba6b5b1146a
 
 
     onSendClick(): void{
