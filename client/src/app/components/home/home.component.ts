@@ -5,6 +5,8 @@ import { CuriencyapiService } from 'src/app/Services/currency-api/curiencyapi.se
 import { HomeService } from 'src/app/Services/home/home.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { AuthModule } from '@auth0/auth0-angular';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -22,6 +24,7 @@ numOfUsers: number = 0;
 numOfPosts: number = 0;
 numOfBuys: number = 0;
 numOfSells: number = 0;
+logo: string = environment.yoinkLogo;
 
   constructor(private currency : CuriencyapiService, private homeService: HomeService) { }
  
