@@ -147,7 +147,7 @@ namespace RepoLayer
         Task<Investment?> GetInvestmentByPortfolioIDAsync(Models.GetInvestmentDto investmentDto);
 
         /// <summary>
-        /// Retrieves (potentially) a list of Investment objects from the database by time.
+        /// Retrieves (potentially) a list of Investment objects from the database by time. - Returns a list of investments by a specific symbol
         /// </summary>
         /// <param name="investmentByTime">GetInvestmentByTimeDto</param>
         /// <returns>a list of Investment objects named returnedInvestment</returns>
@@ -159,6 +159,15 @@ namespace RepoLayer
         /// <param name="investmentDto">GetAllInvestmentsDto</param>
         /// <returns>A list of Investment objects populated with data from investmentDto named investment.</returns>
         Task<List<Investment>> GetAllInvestmentsByPortfolioIDAsync(Guid? portfolioID);
+
+        /// <summary>
+        /// Allows user to update the current prices of their ivestment by symbol - Needs Sybmol, Update Price, and Portfolio ID
+        /// </summary>
+        /// <param name="Symbol"></param>
+        /// <param name="UpdatePrice"></param>
+        /// <param name="portfolioID"></param>
+        /// <returns>true/false</returns>
+        Task<bool> UpdateSymbol_CurrentPrice_ofBuy(string? Symbol, decimal? UpdatePrice, Guid portfolioID);
 
 
 
@@ -281,6 +290,34 @@ namespace RepoLayer
         Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId);
 
         /// <summary>
+        /// Checks if a specific user already has a like on a post - Needs an auth0userID and a likeDto
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="like"></param>
+        /// <returns>true/false</returns>
+        // Task<bool> CheckIfUserAlreadyHasPostLike(string? auth0UserId, LikeDto like);
+
+        /// <summary>
+        /// Checks if a specific user already has a like on a post - Needs an auth0userID, and a post ID
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="fk_postID"></param>
+        /// <returns>true/false</returns>
+        Task<bool> CheckIfUserAlreadyHasLike_OnPost(string? auth0UserId, Guid postID);
+
+        /// <summary>
+        /// Checks if a specific user already has a like on a comment - Needs an auth0userID, and a comment ID
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="fk_postID"></param>
+        /// <returns>true/false</returns>
+        Task<bool> CheckIfUserAlreadyHasLike_OnComment(string? auth0UserId, Guid commentID);
+
+
+
+        
+
+
         /// Create a comment on a specific post.
         /// Requires logged in user via Auth0.
         /// </summary>

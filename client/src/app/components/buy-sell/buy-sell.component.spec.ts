@@ -1,18 +1,19 @@
 import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, async,  fakeAsync, TestBed, tick} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Location, CommonModule} from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment as env } from 'src/environments/environment';
-import { inject } from '@angular/core';
+import { inject, ɵcoerceToBoolean } from '@angular/core';
 import { BuySellComponent } from './buy-sell.component';
 import { HttpClientModule } from '@angular/common/http';
 // import { MatSelect } from '@angular/material/select'; // added
 // import { MatFormField } from '@angular/material/form-field'; // added
 import { HarnessLoader } from '@angular/cdk/testing'; // added
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'; // added
-import { MatButtonHarness } from '@angular/material/button/testing'; // added
+import { FormControl } from '@angular/forms';
+
 
 describe('BuySellComponent', () => {
   let component: BuySellComponent; // Component class
@@ -56,59 +57,68 @@ describe('BuySellComponent', () => {
 
   });
 
+  // Part of origional test, Passes
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  // Test to see if title = 'Buy and Sell'
-  it('should have title Buy and Sell', () => {
+  // Test to see if title = 'Buy and Sell', Passes
+  it('Should have title Buy and Sell', () => {
     expect(component.title).toEqual('Buy and Sell');
   });
 
+  // // Tests the calculate button on the buy and sell page, Passes
+  it('Calculate Total Button', () => {
+    const data = fixture.nativeElement;
+    expect(data.querySelector('button').textContent).toContain('Calculate Total')
+  });
 
-  // // Tests the calculate button on the buy and sell page
-  // it('Calculate Total Button', () => {
-  //   const data = fixture.nativeElement;
-  //   expect(data.querySelector('button').textContent).toContain('Calculate Total')
-  // });
+  // Test the payment button on the buy and sell, passes
+  it('Payment button', fakeAsync(() => {
+    const btnElement = fixture.debugElement.query(By.css('.buy-btn'));
 
-  // Tests the cancel button on the buy and sell page
-  // it('Cancel Button', () => {
-  //   const data = fixture.nativeElement;
-  //   expect(data.querySelector('button').textContent).toContain('Cancel')
-  // });
+    spyOn(component, 'onPayment')
+    btnElement.triggerEventHandler('click', null);
 
-  // // Tests the payment button on the buy and sell page
-  // it('Payment Button', () => {
-  //   const data = fixture.nativeElement;
-  //   expect(data.querySelector('button').textContent).toContain('Payment')
-  // });
+    tick();
+    expect(component.onPayment).toHaveBeenCalled();
+  }));
 
+  // // Tests the cancel button on the buy and sell page
+  it('Cancel Button', () => {
+    pending();
+  });
 
-  // Test for the total cost interprelation line on the buy sell page
-  //TODO NEED to figure out how to get around ticker symbol
-  // it('Show the total cost interprelation', () => {
-  //   expect(calculateTotal().toEqual());
-  // });
+  // Test for the total cost interprelation line on the buy sell page, passes
+  it('Show the total cost interprelation', () => {
+    expect(component.totalPrice).toEqual(0);
+  });
 
   // Test for the portfolio dropdown box on the buy sell page
   it('Portfolio box', () => {
     pending();
   });
 
-  // Test for the buy/sell dropdown box on the buy sell page
-  it('Buy Sell dropdown box', () => {
-    pending();
-  });
+  // Test for the buy/sell dropdown box on the buy sell page, NOT WORKING YET!!!!
+  // it("Buy sell dropdown box", );
 
-  // Test for the ticker symbol fill in box on the buy sell page
-  it('Ticker symbol fill in box', () => {
-    pending();
+  // Test for the ticker symbol fill in box on the buy sell page, works
+  it('Ticker symbol input', (done: DoneFn) => {
+    const tickerInput = fixture.debugElement.query(By.css('.search-form-field '));
+    tickerInput.nativeElement.value = 'A';
+    tickerInput.nativeElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      console.log('sendInput : ', tickerInput.nativeElement.value);
+      expect(tickerInput.nativeElement.value).toContain('A');
+      done();
+    });
   });
 
   // Test for the quantity box on the buy sell page
   it('Quantity box', () => {
-    pending();
+    pending()
   });
 
   // Test for the ticker information chart on the buy sell page
@@ -116,8 +126,8 @@ describe('BuySellComponent', () => {
     pending();
   });
 
-  // Test for the ticker search box on the buy sell page
-  it('Ticker search box', async () => {
+  // Test for the ticker search box on the buy sell page, works
+  it('Ticker search box', (done: DoneFn) => {
     const ticker = fixture.debugElement.query(By.css('.search-form-field'));
     ticker.nativeElement.value = 'AAPL';
     ticker.nativeElement.dispatchEvent(new Event('input'));
@@ -126,6 +136,8 @@ describe('BuySellComponent', () => {
       fixture.detectChanges();
       console.log('sendInput : ', ticker.nativeElement.value);
       expect(ticker.nativeElement.value).toContain('AAPL');
+      done();
     });
   });
-});
+
+}); // End of describe

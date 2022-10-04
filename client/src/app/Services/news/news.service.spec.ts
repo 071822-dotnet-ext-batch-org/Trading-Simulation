@@ -16,4 +16,12 @@ describe('NewsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get all news', () => {
+    expect(service.getAllNews).toBeTruthy();
+  });
+
+  it('should get news', () => {
+    expect(service.getNews).toBeTruthy();
+  });
 });

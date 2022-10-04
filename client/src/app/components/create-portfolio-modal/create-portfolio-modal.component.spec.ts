@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 import { CreatePortfolioModalComponent } from './create-portfolio-modal.component';
 
 describe('CreatePortfolioModalComponent', () => {
   let component: CreatePortfolioModalComponent;
   let fixture: ComponentFixture<CreatePortfolioModalComponent>;
-  let dialog: MatDialog;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -24,26 +23,19 @@ describe('CreatePortfolioModalComponent', () => {
         }
       ]
     })
-
-    TestBed.overrideModule(BrowserDynamicTestingModule, {
-      set: {
-        entryComponents: [CreatePortfolioModalComponent]
-      }
-    });
-    TestBed.compileComponents();
+    .compileComponents();
 
     fixture = TestBed.createComponent(CreatePortfolioModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should open a dialog with a component', () => {
-    const dialogRef = dialog.open(CreatePortfolioModalComponent, {
-      data: { param: '1' }
-    });
-
-    // verify
-    expect(dialogRef.componentInstance instanceof CreatePortfolioModalComponent).toBe(true);
+  it('should close a dialog after cancel', () => {
+    const app = fixture.componentInstance;
+    app.createPortfolio();
+    fixture.detectChanges();
+    const result = document.getElementsByName('mat-dialog-actions');
+    expect(result).not.toBeNull();
   });
   
   it('should create', () => {

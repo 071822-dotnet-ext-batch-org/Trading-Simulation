@@ -16,4 +16,8 @@ describe('GetPostLikesService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get post likes', () => {
+    expect(service.getPostLikes).toBeTruthy();
+  });
 });

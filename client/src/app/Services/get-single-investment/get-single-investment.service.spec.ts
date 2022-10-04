@@ -16,4 +16,8 @@ describe('GetSingleInvestmentService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get single investment', () => {
+    expect(service.getSingleInvestment).toBeTruthy();
+  });
 });

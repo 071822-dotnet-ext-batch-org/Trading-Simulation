@@ -928,7 +928,7 @@ namespace RepoLayer
         /// <returns>true/false</returns>
         public async Task<bool> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
         {
-            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesPosts WHERE fk_postID=@PostId AND fk_userId=@UserId", _conn))
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM LikesPosts WHERE fk_postID=@PostId AND fk_userID=@UserId", _conn))
             {
                 command.Parameters.AddWithValue("@PostId", unlike.PostId);
                 command.Parameters.AddWithValue("@UserId", auth0UserId);
@@ -945,6 +945,195 @@ namespace RepoLayer
                 return false;
             }
         }//End of Remove like from a Post
+
+        /// <summary>
+        /// Checks if a specific user already has a like on a post - Needs an auth0userID, and a post ID
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="fk_postID"></param>
+        /// <returns>true/false</returns>
+        public async Task<bool> CheckIfUserAlreadyHasLike_OnPost(string? auth0UserId, Guid postID)
+        {
+            using (SqlCommand command = new SqlCommand($"SELECT TOP (1) * FROM LikesPosts WHERE fk_postID = @fk_postID AND fk_userID = @fk_userID", _conn))
+            {
+                command.Parameters.AddWithValue("@fk_userID", auth0UserId);
+                command.Parameters.AddWithValue("@fk_postID", postID);
+                
+
+                _conn.Open();
+
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                if (ret.Read())
+                {
+                    //A like is already made by this user to this post
+                    _conn.Close();
+                    return true;
+                }
+                // This user does not have a like on this post
+                _conn.Close();
+                return false;
+            }   
+        }//End of the Check if User has like on a post
+
+        /// <summary>
+        /// Checks if a specific user already has a like on a comment - Needs an auth0userID, and a comment ID
+        /// </summary>
+        /// <param name="auth0UserId"></param>
+        /// <param name="fk_postID"></param>
+        /// <returns>true/false</returns>
+        public async Task<bool> CheckIfUserAlreadyHasLike_OnComment(string? auth0UserId, Guid commentID)
+        {
+            using (SqlCommand command = new SqlCommand($"SELECT TOP (1) * FROM LikesComments WHERE fk_userID = @UserId AND fk_commentID = @fk_commentID", _conn))
+            {
+                command.Parameters.AddWithValue("@UserId", auth0UserId);
+                command.Parameters.AddWithValue("@fk_commentID", commentID);
+                
+
+                _conn.Open();
+
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                if (ret.Read())
+                {
+                    //A like is already made by this user to this post
+                    _conn.Close();
+                    return true;
+                }
+                // This user does not have a like on this post
+                _conn.Close();
+                return false;
+            }   
+        }//End of the Check if User has a like on a comment
+
+        /// <summary>
+        /// Allows user to update the current prices of their ivestment by symbol - Needs Sybmol, Update Price, and Portfolio ID
+        /// </summary>
+        /// <param name="Symbol"></param>
+        /// <param name="UpdatePrice"></param>
+        /// <param name="portfolioID"></param>
+        /// <returns>true/false</returns>
+        public async Task<bool> UpdateSymbol_CurrentPrice_ofBuy(string? Symbol, decimal? UpdatePrice, Guid portfolioID)
+        {
+            using (SqlCommand command = new SqlCommand($"Update Investments SET currentPrice = @UpdatePrice Where fk_portfolioID = @fk_portfolioID AND symbol = @symbol", _conn))
+            {
+                command.Parameters.AddWithValue("@UpdatePrice", UpdatePrice);
+                command.Parameters.AddWithValue("@fk_portfolioID", portfolioID);
+                command.Parameters.AddWithValue("@symbol", Symbol);
+                
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }//End of Update Symbol's Current Price of Buy
+
+        /// <summary>
+        /// Edit a comment's content.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="comment">EditCommentDto</param>
+        /// <returns>True if edited, false if not edited.</returns>
+        public async Task<bool> EditCommentAsync(EditCommentDto comment)
+        {
+            using (SqlCommand command = new SqlCommand($"UPDATE Comments SET content=@content WHERE commentID=@commentId", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", comment.CommentId);
+                command.Parameters.AddWithValue("@content", comment.Content);
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }//End of Edit Comment
+
+        /// <summary>
+        /// Get a comment searching with the commentId.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Guid commentId</param>
+        /// <returns>Comment object of the updated comment.</returns>
+        public async Task<Comment?> GetCommentByCommentIdAsync(Guid? commentId)
+        {
+            Comment? comment = null;
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Comments WHERE commentID=@commentId ORDER BY dateModified DESC", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", commentId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+                    comment = new Comment(ret.GetGuid(0), ret.GetString(1), ret.GetGuid(2), ret.GetString(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
+
+                }
+
+                _conn.Close();
+                return comment;
+            }
+        }//End of Get Comment by Comment ID
+
+        /// <summary>
+        /// Gets a userId that is associated with a specific comment.
+        /// </summary>
+        /// <param name="commentId">Id of comment</param>
+        /// <returns>UserId string.</returns>
+        public async Task<string?> GetUserWithCommentIdAsync(Guid commentId)
+        {
+            string? User = "";
+            using (SqlCommand command = new SqlCommand($"SELECT fk_userID FROM Comments WHERE commentID=@commentId", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", commentId);
+                _conn.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+
+                if (ret.Read())
+                {
+                    User = ret.GetString(0);
+
+                }
+
+                _conn.Close();
+                return User;
+            }
+        }//End of Get User with Comment ID
+
+        /// <summary>
+        /// Delete a comment and ensures user can delete only their own comment.
+        /// Requires logged in user via Auth0.
+        /// </summary>
+        /// <param name="commentId">Id of comment to be deleted</param>
+        /// <returns>True if deleted, false if not.</returns>
+        public async Task<bool> DeleteCommentAsync(Guid commentId)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM Comments WHERE commentID=@commentId", _conn))
+            {
+                command.Parameters.AddWithValue("@commentId", commentId);
+
+                _conn.Open();
+
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    _conn.Close();
+                    return true;
+                }
+                _conn.Close();
+                return false;
+            }
+        }//End of Delete Comment
+
 
         /// <summary>
         /// Create a comment on a specific post.
@@ -971,108 +1160,9 @@ namespace RepoLayer
                 _conn.Close();
                 return false;
             }
-        }
+        }//End of Create a Comment on Post
 
-        /// <summary>
-        /// Edit a comment's content.
-        /// Requires logged in user via Auth0.
-        /// </summary>
-        /// <param name="comment">EditCommentDto</param>
-        /// <returns>True if edited, false if not edited.</returns>
-        public async Task<bool> EditCommentAsync(EditCommentDto comment)
-        {
-            using (SqlCommand command = new SqlCommand($"UPDATE Comments SET content=@content WHERE commentID=@commentId", _conn))
-            {
-                command.Parameters.AddWithValue("@commentId", comment.CommentId);
-                command.Parameters.AddWithValue("@content", comment.Content);
-                _conn.Open();
 
-                int ret = await command.ExecuteNonQueryAsync();
-                if (ret > 0)
-                {
-                    _conn.Close();
-                    return true;
-                }
-                _conn.Close();
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Get a comment searching with the commentId.
-        /// Requires logged in user via Auth0.
-        /// </summary>
-        /// <param name="commentId">Guid commentId</param>
-        /// <returns>Comment object of the updated comment.</returns>
-        public async Task<Comment?> GetCommentByCommentIdAsync(Guid? commentId)
-        {
-            Comment? comment = null;
-            using (SqlCommand command = new SqlCommand($"SELECT * FROM Comments WHERE commentID=@commentId ORDER BY dateModified DESC", _conn))
-            {
-                command.Parameters.AddWithValue("@commentId", commentId);
-                _conn.Open();
-                SqlDataReader? ret = await command.ExecuteReaderAsync();
-
-                if (ret.Read())
-                {
-                    comment = new Comment(ret.GetGuid(0), ret.GetString(1), ret.GetGuid(2), ret.GetString(3), ret.GetInt32(4), ret.GetDateTime(5), ret.GetDateTime(6));
-
-                }
-
-                _conn.Close();
-                return comment;
-            }
-        }
-
-        /// <summary>
-        /// Gets a userId that is associated with a specific comment.
-        /// </summary>
-        /// <param name="commentId">Id of comment</param>
-        /// <returns>UserId string.</returns>
-        public async Task<string?> GetUserWithCommentIdAsync(Guid commentId)
-        {
-            string? User = "";
-            using (SqlCommand command = new SqlCommand($"SELECT fk_userID FROM Comments WHERE commentID=@commentId", _conn))
-            {
-                command.Parameters.AddWithValue("@commentId", commentId);
-                _conn.Open();
-                SqlDataReader? ret = await command.ExecuteReaderAsync();
-
-                if (ret.Read())
-                {
-                    User = ret.GetString(0);
-
-                }
-
-                _conn.Close();
-                return User;
-            }
-        }
-
-        /// <summary>
-        /// Delete a comment and ensures user can delete only their own comment.
-        /// Requires logged in user via Auth0.
-        /// </summary>
-        /// <param name="commentId">Id of comment to be deleted</param>
-        /// <returns>True if deleted, false if not.</returns>
-        public async Task<bool> DeleteCommentAsync(Guid commentId)
-        {
-            using (SqlCommand command = new SqlCommand($"DELETE TOP (1) FROM Comments WHERE commentID=@commentId", _conn))
-            {
-                command.Parameters.AddWithValue("@commentId", commentId);
-
-                _conn.Open();
-
-                int ret = await command.ExecuteNonQueryAsync();
-                if (ret > 0)
-                {
-                    _conn.Close();
-                    return true;
-                }
-                _conn.Close();
-                return false;
-            }
-        }
 
         /// <summary>
         /// Get a lits of comment on a specific post.

@@ -16,4 +16,8 @@ describe('CreateCommentService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should create a comment', () => {
+    expect(service.createComment).toBeTruthy();
+  });
 });

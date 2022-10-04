@@ -23,6 +23,6 @@ export class BuySellService {
   public getTickerData(tickerSymbol: string): Observable<any> {
     console.log(this.lastQuote + tickerSymbol + this.lastQuoteKey);
     return this.http.get<any>(this.lastQuote + tickerSymbol.toUpperCase() + this.lastQuoteKey);
-  }
+  };
 
 }
