@@ -1,0 +1,106 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+# this pipeline will only trigger when any change on the 
+# path YoinkApi in main or the development branch occurs
+pr: none
+trigger:
+  branches:
+    include:
+    - main
+    - development
+  paths:
+    include:
+    - YoinkAPI
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: 'YoinkAPI/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  workingDirectory: YoinkAPI
+
+# stages:
+# - stage: prep
+  # jobs:
+  # - job: sdk_and_nuget_download #underscores used because we can't have a space here
+  #   displayName: download the most current SDK
+steps:
+- task: UseDotNet@2
+  displayName: get the sdk
+  inputs:
+    packageType: 'sdk'
+    version: '6.x'    
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: 
+    checkLatest: true
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: '071822sonarcloudconnection'
+    organization: '071822dotnetbatch1'
+    scannerMode: 'MSBuild'
+    projectKey: '071822dotnetbatch1_071822dotnetbatch1'
+    projectName: '071822dotnetbatch1'
+
+- task: NuGetCommand@2
+  displayName: restore_the_app
+  inputs:
+    command: 'restore'
+    restoreSolution: '$(solution)'
+
+- task: DotNetCoreCLI@2
+  displayName: build  
+  inputs:
+    command: 'build'
+    projects: '$(solution)'
+    workingDirectory: 'Demos/ReimbursementApi'
+    arguments: '--configuration $(buildConfiguration)'
+- task: SonarCloudAnalyze@1
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: 'test'
+    projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+    testRunTitle: 'Dotnet testing in progress'
+    workingDirectory: '$(workingDirectory)'
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '**/coburtura/coverage.xml'
+    # failIfCoverageEmpty: true
+
+# - task: SonarCloudAnalyze@1
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+- task: DotNetCoreCLI@2
+  displayName: publishing_task
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    workingDirectory: '$(workingDirectory)'
+    projects: $(solution)
+    zipAfterPublish: true
+
+# - task: AzureRmWebAppDeployment@4
+#   inputs:
+#     ConnectionType: 'AzureRM'
+#     azureSubscription: 'Azure forStudents(747e92f3-665f-48dd-825f-1f21323087e8)'
+#     appType: 'webApp'
+#     WebAppName: 'Yoink'
+#     deployToSlotOrASE: true
+#     ResourceGroupName: 'Yoink_group'
+#     SlotName: 'production'
+#     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+#     enableCustomDeployment: true
+#     DeploymentType: 'zipDeploy'
+#     TakeAppOfflineFlag: false
+
