@@ -397,22 +397,21 @@ namespace Test.Yoink
         public async Task TestingGetNumberOfUsersAsync()
         {
 
-            int? excpectedGetNumberUsers = new int();
+            int excpectedGetNumberUsers = 10;
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetNumberOfUsersAsync())
-                .ReturnsAsync(new int());
+                .ReturnsAsync(excpectedGetNumberUsers);
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
             var gotNumberUsers = await theClassBeingTested.GetNumberOfUsersAsync();
 
             //Assert
-            if (gotNumberUsers != null)
-            {
-                Assert.IsType<int>(gotNumberUsers);
-                Assert.Equal(excpectedGetNumberUsers, gotNumberUsers);
-            }
+            Assert.NotNull(gotNumberUsers);
+            Assert.IsType<int>(gotNumberUsers);
+            Assert.Equal(excpectedGetNumberUsers, gotNumberUsers);
+            
         }
 
 
