@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Test.Yoink
 {
@@ -112,6 +111,51 @@ namespace Test.Yoink
             // Assert
             Assert.True(result);
         }
+
+        [Fact]
+        public async Task TestingEditProfileAsyncReturnsBoolAsync()
+        {
+            // Arrange
+            Profile p = helpers.fakeProfile();
+            p.Fk_UserID = "test1";
+
+            var fakeConfig = new Mock<IConfiguration>();
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            bool result = await TheClassBeingTested.EditProfileAsync(p.Fk_UserID, p.Name, p.Email, p.Picture, p.PrivacyLevel);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task TestingGetALL_PortfoliosByUserIDAsyncReturnsListOfPortfolios()
+        {
+            // Arrange
+            string userid = "test1";
+
+            var fakeConfig = new Mock<IConfiguration>();
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            List<Portfolio?> result = await TheClassBeingTested.GetALL_PortfoliosByUserIDAsync(userid);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(userid, result[0]?.Fk_UserID);  
+
+        }
+    }
+}
+
+
 
         
         // [Fact]
@@ -1446,7 +1490,6 @@ namespace Test.Yoink
 
 
         // }
-    }
     //Need to add comments to everything!
         
-}
+
