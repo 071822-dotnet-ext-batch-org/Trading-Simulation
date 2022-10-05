@@ -134,20 +134,25 @@
   color: black;
 }
 /* For testing search By.css above */
+
+/* For the ticker data chart */
 .table-info {
   width: 100px;
   text-align: center;
 }
 
+/* If there are errors or missing requireds */
 .error-message {
   color: red;
 }
 
+/* Make sure quantity not 0 */
 .sm-txt-container {
   font-size: 12px;
   margin-left: 15px;
 }
 
+/* Make sure quantity not 0 */
 #sm-txt {
   text-decoration: none;
 }
