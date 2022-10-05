@@ -18,12 +18,26 @@ namespace RepoLayer
         public dbsRequests(IConfiguration config)
         {
             _config = config;
-            _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
+
+            Console.WriteLine("in dbsrequests: " + _config["ConnectionStrings:TestingConnection"]);
+            if (string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _conn = new SqlConnection(_config["ConnectionStrings:TestingConnection"]);
+            }
+            else
+            {
+                _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
+            }    
+
         }
 
 
         //--------------------------Profile Section-----------------------
 
+
+
+
+        
         /// <summary>
         /// This creates a new profile for a new user.
         /// Takes nullable ProfileDto (name, email, picture, privacyLevel)

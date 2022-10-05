@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { of } from 'rxjs';
 
 
 import { CreatePortfolioModalComponent } from './create-portfolio-modal.component';
@@ -7,6 +8,14 @@ import { CreatePortfolioModalComponent } from './create-portfolio-modal.componen
 describe('CreatePortfolioModalComponent', () => {
   let component: CreatePortfolioModalComponent;
   let fixture: ComponentFixture<CreatePortfolioModalComponent>;
+
+  const clickRes = [
+    false
+  ];
+  const mockMatDialogRef:
+    Pick<MatDialogRef<CreatePortfolioModalComponent>, 'close'> = {
+      close: jasmine.createSpy('close').and.returnValue(of(clickRes))
+    }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -19,7 +28,7 @@ describe('CreatePortfolioModalComponent', () => {
         },
         {
           provide: MatDialogRef,
-          useValue: {}
+          useValue: { mockMatDialogRef }
         }
       ]
     })
@@ -31,11 +40,7 @@ describe('CreatePortfolioModalComponent', () => {
   });
 
   it('should close a dialog after cancel', () => {
-    const app = fixture.componentInstance;
-    app.createPortfolio();
-    fixture.detectChanges();
-    const result = document.getElementsByName('mat-dialog-actions');
-    expect(result).not.toBeNull();
+    expect(mockMatDialogRef.close).toBeNull;
   });
   
   it('should create', () => {

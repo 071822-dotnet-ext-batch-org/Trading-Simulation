@@ -67,6 +67,7 @@ logo: string = environment.yoinkLogo;
     });
   }
 
+  
   changebase(a : string){
     this.base = a;
     console.log(this.base)
