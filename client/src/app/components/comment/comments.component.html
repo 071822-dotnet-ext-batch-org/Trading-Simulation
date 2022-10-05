@@ -1,24 +1,4 @@
-<!-- <div class="comments">
-    <h3 class="comments-title">Comments</h3>
-    <div class="comment-form-title">Write comment</div>
-    <app-comment-form submitLabel="Write" 
-    (handleSubmit)="({ text: $event, postId:''})"></app-comment-form>
-    <div class="comments-container">
-       <app-single-comment *ngFor="let comment of comments" [comment]="comment"></app-single-comment>
-    </div>
-</div>
-<div id="comment-box">
 
-</div> -->
-<!-- <div id="reply-box">
-    <div *ngIf="let comment of comments" [ngClass]="{ 'comment-container': true }">
-        <div>
-            <p class="comment-name"></p>
-            <p [ngClass]="{'comment': true}"></p>
-            <p></p>
-        </div>
-    </div>
-</div> -->
 <div id="reply-action-bar">
     <button mat-flat-button color="primary"
     (click)="onSendClick()">

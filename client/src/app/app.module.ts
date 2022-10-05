@@ -56,8 +56,7 @@ import { AboutUsComponent } from './components/about-us/about-us.component'
 
 
 import { CommonModule } from '@angular/common';
-import { SingleCommentComponent } from './components/single-comment/single-comment.component';
-import { CommentFormComponent } from './components/comment-form/comment-form.component';
+
 
 
  
@@ -84,8 +83,7 @@ import { CommentFormComponent } from './components/comment-form/comment-form.com
     EditProfileComponent,
     CommentsComponent,
 
-    SingleCommentComponent,
-    CommentFormComponent,
+ 
 
     AboutUsComponent,
 
