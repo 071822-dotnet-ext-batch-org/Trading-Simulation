@@ -41,14 +41,14 @@ steps:
 - task: Npm@1
   displayName: 'Install Node_modules'
   inputs:
-    workingDir: client
+    workingDir: './client/'
     verbose: false
 
 - task: Npm@1
   displayName: 'Build Angular Project'
   inputs:
     command: custom
-    workingDir: client
+    workingDir: './client/'
     verbose: false
     customCommand: 'run ng build --prod'
   continueOnError: true
@@ -57,8 +57,9 @@ steps:
   displayName: 'NPM Test'
   inputs:
     command: 'custom'
-    workingDir: $(solution)
+    workingDir: './client/'
     customCommand: 'run test-headless'
+  continueOnError: true
 
 - task: SonarCloudAnalyze@1
   displayName: 'SonarCloud Analyze'
