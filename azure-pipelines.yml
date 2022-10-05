@@ -17,10 +17,10 @@ variables:
 steps:
 - task: SonarCloudPrepare@1
   inputs:
-    SonarCloud: 'Yoink_SonarCloud_Connection'
-    organization: 'yoinkp3'
+    SonarCloud: 'Sonar cloud connection for Yoink'
+    organization: 'yoinkp3new'
     scannerMode: 'MSBuild'
-    projectKey: 'YoinkP3_Yoink-Pipeline'
+    projectKey: 'YoinkP3New_Yoink-Pipeline'
     projectName: 'Yoink Pipeline'
 
 - task: NuGetToolInstaller@1
