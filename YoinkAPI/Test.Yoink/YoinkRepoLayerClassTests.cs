@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Castle.Components.DictionaryAdapter;
 using Microsoft.VisualBasic;
 
@@ -274,7 +273,7 @@ namespace Test.Yoink
         }
 
         [Fact]
-        public async Task TestingGetALL_PortfoliosByUserIDAsyncReturnsListOfPortfolios()
+        public async Task TestingGetAllPortfoliosByUserIDAsyncReturnsListOfPortfolios()
         {
             // Arrange
             string userid = "test1";
@@ -308,6 +307,46 @@ namespace Test.Yoink
             //Assert
             Assert.True(updated);
 
+        }
+
+        [Fact]
+        public async Task TestingGetPortfolioByPorfolioIDAsyncReturnsPortfolio()
+        {
+            // Arrange
+            Guid portfolioID = new Guid("446eb468-eb65-45dc-8fc3-12cbce43879d");
+
+            var fakeConfig = new Mock<IConfiguration>();
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            Portfolio? result = await TheClassBeingTested.GetPortfolioByPorfolioIDAsync(portfolioID);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(portfolioID, result?.PortfolioID);
+        }
+
+        [Fact]
+        public async Task TestingGetRecentPortfoliosByUserIDAsyncReturnsAPortfolio()
+        {
+            // Arrange
+            string userid = "test1";
+
+            var fakeConfig = new Mock<IConfiguration>();
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            Portfolio? result = await TheClassBeingTested.GetRecentPortfoliosByUserIDAsync(userid);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(userid, result?.Fk_UserID);
         }
     }
 }
