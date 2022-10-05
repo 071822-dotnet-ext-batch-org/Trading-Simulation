@@ -208,7 +208,7 @@ namespace Test.Yoink
                 Symbol = "Sample Symbol"
             };
 
-            List<Buy> expectedBuyMockList = new List<Buy>();
+            List<Buy?> expectedBuyMockList = new List<Buy?>();
             expectedBuyMockList.Add(expectedBuy);
 
 
@@ -230,7 +230,7 @@ namespace Test.Yoink
             //Act
             var gotAllBuys = await theClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
             var okResult = gotAllBuys.Result as OkObjectResult;
-            List<Buy>? resultPost = okResult?.Value as List<Buy>;
+            List<Buy?>? resultPost = okResult?.Value as List<Buy?>;
 
             //Assert
             Assert.NotNull(resultPost);
@@ -262,7 +262,7 @@ namespace Test.Yoink
                 Symbol = "Sample Symbol"
             };
 
-            List<Sell> expectedSellMockList = new List<Sell>();
+            List<Sell?> expectedSellMockList = new List<Sell?>();
             expectedSellMockList.Add(expectedSell);
 
             var dataSource = new Mock<IYoinkBusinessLayer>();
@@ -283,7 +283,7 @@ namespace Test.Yoink
             //Act
             var gotAllSells = await theClassBeingTested.GetAllSellBySymbolAsync(sellsDto);
             var okResult = gotAllSells.Result as OkObjectResult;
-            List<Sell>? resultPost = okResult?.Value as List<Sell>;
+            List<Sell?>? resultPost = okResult?.Value as List<Sell?>;
 
             //Assert
             Assert.NotNull(resultPost);
