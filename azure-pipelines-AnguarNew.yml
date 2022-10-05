@@ -26,12 +26,10 @@ steps:
     cliprojectName: 'Yoink Pipeline'
     cliSources: './client/'
     extraProperties: |
-      sonar.exclusions= **/client/src/polyfills/**
-      sonar.test.inclusions=**/*.spec.ts
       sonar.typescript.lcov.reportPaths=coverage/client/lcov.info
-  continueOnError: true  
-        
-                         
+  continueOnError: true 
+      
+                       
 
 - task: NodeTool@0
   displayName: 'Use Node 16.x'
