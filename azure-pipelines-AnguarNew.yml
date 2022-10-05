@@ -62,7 +62,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: 'client'
-    customCommand: 'npm test'
+    customCommand: 'run test-headless'
   continueOnError: true
   
 - task: SonarCloudAnalyze@1
