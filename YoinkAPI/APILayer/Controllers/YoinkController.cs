@@ -609,14 +609,11 @@ namespace APILayer.Controllers
         [HttpPut("update-current-price")]
         public async Task<ActionResult<AllUpdatedRowsDto>> UpdateCurrentPriceAsync(UpdatePriceDto u)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity?.Name != null)
             {
-                if(User.Identity?.Name != null)
-                {
                     string auth0id = User.Identity.Name;
                     AllUpdatedRowsDto aurdto = await this._businessLayer.UpdateCurrentPriceAsync(u, auth0id);
                     return Ok(aurdto);
-                }
             }
             return BadRequest(u);
         }
@@ -629,14 +626,11 @@ namespace APILayer.Controllers
         [HttpDelete("delete-portfolio")]
         public async Task<ActionResult<bool>> DeletePortfolioAsync(DeletePortfolioDto portfolioID)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity?.Name != null)
             {
-                if(User.Identity?.Name != null)
-                {
-                    string auth0id = User.Identity.Name;
-                    bool deleteSuccess = await this._businessLayer.DeletePortfolioAsync(auth0id, portfolioID);
-                    return Ok(deleteSuccess);
-                }
+                string auth0id = User.Identity.Name;
+                bool deleteSuccess = await this._businessLayer.DeletePortfolioAsync(auth0id, portfolioID);
+                return Ok(deleteSuccess);
             }
             return BadRequest(false);
         }
@@ -648,14 +642,11 @@ namespace APILayer.Controllers
         [HttpGet("get-post-likes")]
         public async Task<ActionResult<List<Guid>>> GetPostLikesByUserID()
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && User.Identity?.Name != null)
             {
-                if(User.Identity?.Name != null)
-                {
                     string auth0id = User.Identity.Name;
                     List<Guid> likedPosts = await this._businessLayer.GetPostLikesByUserID(auth0id);
                     return Ok(likedPosts);
-                }
             }
             return BadRequest();
         }

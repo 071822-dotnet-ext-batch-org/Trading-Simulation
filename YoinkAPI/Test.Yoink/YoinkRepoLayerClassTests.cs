@@ -30,16 +30,63 @@ namespace Test.Yoink
             Profile profile = helpers.fakeProfile();
 
             var fakeConfig = new Mock<IConfiguration>();
-            
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns("Server=tcp:yoink.database.windows.net,1433;Initial Catalog=yoinkrepotesting;Persist Security Info=False;User ID=yoinkers;Password=Revature2022!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
+
             var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
 
+            string sql = "DELETE FROM Profiles WHERE fk_userID = @test1";
+
+            SqlConnection conn = new SqlConnection(fakeConfig.Object["ConnectionStrings:DefaultConnection"]);
+
+            bool? result = null;
+            
             // Act
-            var result = await TheClassBeingTested.CreateProfileAsync(profile.Fk_UserID, profile.Name, profile.Email, profile.Picture, profile.PrivacyLevel);
+
+            using(SqlCommand command = new SqlCommand(sql, conn))
+            {
+                command.Parameters.AddWithValue("@test1", "test1");
+
+                bool truncated = await helpers.TruncateTableAsync(command, conn);
+
+                if(truncated)
+                {
+                    result = await TheClassBeingTested.CreateProfileAsync("test1", profile.Name, profile.Email, profile.Picture, profile.PrivacyLevel);
+                }
+            }
 
 
             // Assert
-            Assert.Equal(expectedReturn, result);
+            if(result != null)
+            {
+                Assert.Equal(expectedReturn, result);
+                
+            }
+        }
 
+        public async Task TestingGetProfileByUserIDReturnsProfile()
+        {
+            // Arrange
+
+            Profile expectedReturn = helpers.fakeProfile();
+            expectedReturn.Fk_UserID = "test1";
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns("Server=tcp:yoink.database.windows.net,1433;Initial Catalog=yoinkrepotesting;Persist Security Info=False;User ID=yoinkers;Password=Revature2022!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            Profile? result = await TheClassBeingTested.GetProfileByUserIDAsync(expectedReturn.Fk_UserID);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(expectedReturn.ProfileID, result?.ProfileID);
         }
 
         
