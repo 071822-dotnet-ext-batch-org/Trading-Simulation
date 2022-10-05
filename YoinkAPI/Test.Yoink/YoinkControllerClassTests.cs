@@ -5,6 +5,7 @@ using Models;
 using Moq;
 using RepoLayer;
 using System;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Claims;
 using System.Security.Principal;
 
@@ -579,6 +580,32 @@ namespace Test.Yoink
             Assert.True(controller.ModelState.IsValid);
             Assert.Equal(mockBool, oKResult?.Value);
             
+        }
+        public async Task GetPortfolioByPortfolioIDAsync()
+        {
+            //Arrange
+
+            Guid portfolioID = Guid.NewGuid();
+
+            var MockBL = new Mock<IYoinkBusinessLayer>();
+            
+            Portfolio Portfolioget = new Portfolio(Guid.NewGuid(), "User ID 911011932", "New Portfolio", 0, 0, 10000, 10000, 10000, 10000, 0, 10000, DateTime.Now, DateTime.Now);
+                MockBL.Setup(bl => bl.GetPortfolioByPortfolioIDAsync(portfolioID))
+                .ReturnsAsync(Portfolioget);
+
+            var classcontroller = new YoinkController(MockBL.Object);
+            classcontroller.ControllerContext.HttpContext = new DefaultHttpContext();  
+
+            //Act
+            var result = await classcontroller.GetPortfolioByPortfolioIDAsync(portfolioID);
+            //Assert
+            Assert.NotNull(portfolioID);
+            Assert.True(classcontroller.ModelState.IsValid);
+            Assert.Equal(Portfolioget.PortfolioID, result.Value.PortfolioID);
+            
+
+
+
         }
 
 /// ///////////
