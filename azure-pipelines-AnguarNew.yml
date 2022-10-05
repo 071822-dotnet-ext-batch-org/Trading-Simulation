@@ -14,11 +14,12 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+
 steps:
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'Sonar cloud connection for Yoink'
-    organization: 'yoinkp3new'
+    organization: 'YoinkP3New'
     scannerMode: 'CLI'
     configMode: 'manual'
     cliprojectKey: 'YoinkP3New_Yoink-Pipeline'
@@ -58,7 +59,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: './client/'
-    customCommand: 'run test-headless'
+    customCommand: 'run ng test'
   continueOnError: true
 
 - task: SonarCloudAnalyze@1
