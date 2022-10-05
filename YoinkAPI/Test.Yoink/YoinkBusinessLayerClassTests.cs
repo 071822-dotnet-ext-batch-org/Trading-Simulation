@@ -837,8 +837,10 @@ namespace Test.Yoink
                 .Setup(g => g.CreateProfileAsync(It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<int?>()))
                 .ReturnsAsync(true);
 
+
+        
             dataSource
-                .Setup(g => g.GetProfileByUserIDAsync(It.IsAny<string?>()))
+                .Setup(g => g.GetProfileByUserIDAsync(It.IsAny<string>()))
                 .ReturnsAsync(expectedOBJ);
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 

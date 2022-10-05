@@ -32,14 +32,14 @@ namespace Test.Yoink
             var fakeConfig = new Mock<IConfiguration>();
 
             fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
-                .Returns("Server=tcp:yoink.database.windows.net,1433;Initial Catalog=yoinkrepotesting;Persist Security Info=False;User ID=yoinkers;Password=Revature2022!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                .Returns(helpers.ConnString);
 
 
             var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
 
             string sql = "DELETE FROM Profiles WHERE fk_userID = @test1";
 
-            SqlConnection conn = new SqlConnection(fakeConfig.Object["ConnectionStrings:DefaultConnection"]);
+            SqlConnection conn = new SqlConnection(helpers.ConnString);
 
             bool? result = null;
             
@@ -76,7 +76,7 @@ namespace Test.Yoink
             var fakeConfig = new Mock<IConfiguration>();
 
             fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
-                .Returns("Server=tcp:yoink.database.windows.net,1433;Initial Catalog=yoinkrepotesting;Persist Security Info=False;User ID=yoinkers;Password=Revature2022!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                .Returns(helpers.ConnString);
 
 
             var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
