@@ -1415,6 +1415,52 @@ namespace Test.Yoink
 
         }//End of GetProfileByUserIDAsync Test - NOT GOTTEN
 
+
+        [Fact]
+        public async Task Test_EditProfileAsync_IF_Edited()
+        {
+            //Task<ActionResult<Profile?>> GetProfileByUserIDAsync(GetProfileDto u)
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            ProfileDto editProfileDto = new ProfileDto("name", "email", "src/picture",1);
+            //We create an output that is nullable
+            Profile returnedProfileFromRepo = new Profile(Guid.NewGuid(),fakeUser, "name", "email", "src/picture", 1);
+            NotFoundObjectResult notFoundResult = new NotFoundObjectResult(new {userNotFound = returnedProfileFromRepo.ProfileID});
+            //ctionResult<Profile?>> EditProfileAsync(ProfileDto? p)
+            //Profile? updatedProfile = await this._businessLayer.EditProfileAsync(auth0Id, p);
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.EditProfileAsync(fakeUser, editProfileDto))
+                .ReturnsAsync(returnedProfileFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Profile?> returnedActionResultOBJ = await controller_datasource.EditProfileAsync(editProfileDto);
+
+            //-------------------Assert Section ----------------
+
+            Assert.NotNull(returnedActionResultOBJ?.Value);
+            //This must be nullable or it will say - Assert.NotNull() Failure
+            Assert.Equal(null, returnedActionResultOBJ?.Value);
+            Assert.IsType<OkObjectResult>(returnedActionResultOBJ?.Result);
+
+        }//End of EditProfileAsync Test - Edited
+
+
+
+
         // [Fact]
         // public async Task TestingCreatePostAsync()
         // {
