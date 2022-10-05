@@ -12,6 +12,8 @@ namespace Test.Yoink
 
         private Random random = new Random();
 
+        public string ConnString { get; } = "Server=tcp:yoink.database.windows.net,1433;Initial Catalog=yoinkrepotesting;Persist Security Info=False;User ID=yoinkers;Password=Revature2022!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
 
 // ------Models--------------------
 
