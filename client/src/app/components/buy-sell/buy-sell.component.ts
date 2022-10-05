@@ -6,7 +6,6 @@ import { FormControl } from '@angular/forms';
 import { GetMyPortfoliosService } from 'src/app/Services/get-my-portfolios/get-my-portfolios.service';
 import { Portfolio } from 'src/app/Models/Portfolio';
 import { BuySellToPortfolioService } from 'src/app/Services/buy-sell/buy-sell-to-portfolio.service';
-import { BuyDto } from 'src/app/Models/buy-sell/buySellApiCall';
 import { GetSingleInvestmentService } from 'src/app/Services/get-single-investment/get-single-investment.service';
 
 @Component({
@@ -43,17 +42,11 @@ export class BuySellComponent implements OnInit {
   txLoading: boolean = false; // Used in onPayments
   success: string = ''; // Used in OnPayments
 
-
   // What is shown in the dropdown box on web page options.
   options: Options[] = [
     { value: 'Buy', viewValue: 'Buy' },
     { value: 'Sell', viewValue: 'Sell' },
   ];
-
-  selectedOption = new FormControl(this.options[0]); // For testing file
-  public onBuy(){
-    console.log(this.selectedOption.value?.value)
-  };
 
   // This method uses the getTickerData() method and conencts to the Polygon.io api after which,
   // if the user choses 'Buy' in the drop down box, it will run the createBuy() method which sends the data
