@@ -30,7 +30,6 @@ steps:
   continueOnError: true 
       
                        
-
 - task: NodeTool@0
   displayName: 'Use Node 16.x'
   inputs:
@@ -63,7 +62,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: 'client'
-    customCommand: 'run test-headless'
+    customCommand: 'npm test'
   continueOnError: true
   
 - task: SonarCloudAnalyze@1
