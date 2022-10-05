@@ -27,7 +27,12 @@ steps:
     cliSources: './client/'
     extraProperties: |
       sonar.exclusions= **/client/src/polyfills/**
-  continueOnError: true          
+      sonar.tests=src
+      sonar.test.inclusions=**/*.spec.ts
+      sonar.coverage.exclusions=src/main.ts,src/polyfills.ts,**/*environment*.ts,**/*module.ts
+      sonar.javascript.lcov.reportPaths=$(solution)/coverage/client/lcov.info
+  continueOnError: true    
+                         
 
 - task: NodeTool@0
   displayName: 'Use Node 16.x'
