@@ -9,8 +9,10 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+
 using Castle.Components.DictionaryAdapter;
 using Microsoft.VisualBasic;
+
 
 
 namespace Test.Yoink
@@ -116,12 +118,77 @@ namespace Test.Yoink
         }
 
         [Fact]
+        public async Task TestingGetRecentPostByUserIdAsyncReturnsPost()
+        {
+            //Arrange 
+            Post p = helpers.fakePost();
+            string auth0MockId = "test2";
+            p.PostID =new Guid("3555b90f-4fde-45c8-a19c-1ef72af0ae6c");
+            var fakeConfig = new Mock<IConfiguration>();
+            
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+            dbsRequests TestedClass = new dbsRequests(fakeConfig.Object);
+            // Act
+            Post? result = await TestedClass.GetRecentPostByUserId(auth0MockId);
+            //Assert
+            Assert.Equal(p.PostID,result?.PostID);
+        }
+        [Fact]
+        public async Task TestingGetAllPostAsync()
+        {
+        //Arrange
+        Post p = helpers.fakePost();
+        p.PostID = new Guid("48f34239-7bb8-4d3b-92eb-0100e83277cf");
+        var fakeConfig = new Mock<IConfiguration>();
+            
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+            dbsRequests TestedClass = new dbsRequests(fakeConfig.Object);
+        //Act
+        List<Post> result = await TestedClass.GetAllPostAsync();
+        //Assert
+        Assert.NotEqual(p.PostID,result[0].PostID);
+        }
+        [Fact]
+       public async Task TestingGetAllInvestmentsByPortfolioIDAsync()
+       {
+        //Arrange 
+         Guid TestporfolioID =new Guid("86d66000-5874-427a-8682-1ed02f4bb2ca");
+         var fakeConfig = new Mock<IConfiguration>();
+         fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+            dbsRequests TestedClass = new dbsRequests(fakeConfig.Object);
+        //Act
+        List<Investment> result = await TestedClass.GetAllInvestmentsByPortfolioIDAsync(TestporfolioID);
+        //Assert
+        Assert.Equal(TestporfolioID,result[0].Fk_PortfolioID);
+       }
+       [Fact]
+        public async Task TestingGetNumberOfCommentsByPostIdAsync()
+        {
+            //Arrange
+         Post p = helpers.fakePost();
+         p.PostID = new Guid("3555b90f-4fde-45c8-a19c-1ef72af0ae6c"); 
+          var fakeConfig = new Mock<IConfiguration>();
+         fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+            dbsRequests TestedClass = new dbsRequests(fakeConfig.Object);
+            //Act
+            int? result = await TestedClass.GetNumberOfCommentsByPostIdAsync(p.PostID);
+            //Assert
+            Assert.NotNull(result);
+        }
+        
+
+        [Fact]
         public async Task CreateLikeOnPostAsyncReturnsTrueOnSuccessfulCreate()
         {
             // Arrange
             Guid postId = new Guid("e367da77-cdde-4930-8d44-2f180c90ab69");
             LikeDto likeDto = new LikeDto(postId);
             string auth0UserId = "test1";
+
 
 
             var fakeConfig = new Mock<IConfiguration>();
