@@ -1066,6 +1066,48 @@ namespace Test.Yoink
 
         }
 
+        [Fact]
+        public async Task TestingDeleteLikeOnPostAsync()
+        {
+            // The method DeleteLikeOnPostAsync in the YoinkController.cs takes in a PostId and returns an int of the number of likes on the post.
+
+            // Arrange
+
+            string userId = "auth0id";
+
+            LikeDto likeDto = new LikeDto(Guid.NewGuid());
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+
+            int likeCount = 1;
+
+            mockBl.Setup(bl => bl.DeleteLikeOnPostAsync(likeDto, userId))
+                .ReturnsAsync(likeCount);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+
+            var result = await controller.DeleteLikeOnPostAsync(likeDto);
+            var okResult = result.Result as CreatedResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<int?>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.NotNull(okResult);
+            Assert.Equal(okResult?.Value, likeCount);
+
+        }
+
 
         /// ///////////
 
