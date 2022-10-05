@@ -59,10 +59,10 @@ namespace Test.Yoink
 
 
             // Assert
+            Assert.NotNull(result);
             if(result != null)
             {
                 Assert.Equal(expectedReturn, result);
-                
             }
         }
 
@@ -87,6 +87,30 @@ namespace Test.Yoink
             // Assert
             Assert.NotNull(result);
             Assert.Equal(expectedReturn.ProfileID, result?.ProfileID);
+        }
+
+        [Fact]
+        public async Task TestingUpdateInvestmentAsyncReturnsInvestment()
+        {
+            // Arrange
+            Investment i = helpers.fakeInvestment();
+            i.InvestmentID = new Guid("11322563-cf3a-462e-90f6-03bd0d7e0fdb");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            bool result = await TheClassBeingTested.UpdateInvestmentAsync(i);
+
+            // Assert
+            Assert.True(result);
         }
 
         
