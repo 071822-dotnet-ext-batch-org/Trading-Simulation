@@ -1,13 +1,21 @@
 import { formatDate } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { getMap } from 'echarts';
-import { observable, of } from 'rxjs';
+import { of } from 'rxjs';
+import { CreatePostService } from 'src/app/Services/create-post/create-post.service';
 import { GetPostsService } from 'src/app/Services/get-posts/get-posts.service';
+import { ProfileServiceService } from 'src/app/Services/profile-service/profile-service.service';
 
 import { PostsComponent } from './posts.component';
 
-let postCard1 = [
+const myProf = [
+  'link-to-avatar',
+  'guid',
+  'me',
+  'myself@me.com',
+  '0'
+]
+const postCard1 = [
   'my guid',
   'my guid ref',
   'wow! I made money!',
@@ -15,11 +23,25 @@ let postCard1 = [
   '0',
   Date.now,
   Date.now
-]
+] // mocks the return information of the Post Model object in the Get Post Service
+const postCard2 = [
+  'its my comment!',
+  '0'
+] // mocks the return information of the Post Model object in the Create Post Service
 const mockGetPostsService:
   Pick<GetPostsService, 'getAllPosts'> = {
    getAllPosts: jasmine.createSpy('getAllPosts').and.returnValue(of(postCard1))
-}
+} //mocks the Get Post Service
+
+const mockCreatePostsService:
+  Pick<CreatePostService, 'createPost'> = {
+   createPost: jasmine.createSpy('createPost').and.returnValue(of(postCard2))
+} //mocks the Create Post Service
+
+const mockGetProfileServiceService:
+  Pick<ProfileServiceService, 'getProfiles'> = {
+   getProfiles: jasmine.createSpy('getProfiles').and.returnValue(of(myProf))
+} //mocks the Create Post Service
 
 // // postID: string;
 // // fk_UserID: string;
@@ -34,6 +56,12 @@ const mockGetPostsService:
 //   statusText: 'OK',
 // });
 
+// picture: string ;
+// profileID: string ;
+// name: string ;
+// email: string ;
+// privacyLevel: number ;
+
 describe('PostsComponent', () => {
   let component: PostsComponent;
   let fixture: ComponentFixture<PostsComponent>;
@@ -45,7 +73,9 @@ describe('PostsComponent', () => {
       ],
       declarations: [ PostsComponent ],
       providers: [
-        {provide: GetPostsService, useValue: mockGetPostsService }
+        {provide: GetPostsService, useValue: mockGetPostsService },
+        {provide: CreatePostService, useValue: mockCreatePostsService },
+        {provide: ProfileServiceService, useValue: mockGetProfileServiceService}
       ]
     })
     .compileComponents();
@@ -56,11 +86,18 @@ describe('PostsComponent', () => {
   });
 
   it('should get posts', () => {
-    // const postSpy = jasmine.createSpy('get')
-    // .and.returnValue(okResponse)
     expect(mockGetPostsService.getAllPosts).toHaveBeenCalled();
   });
 
+
+  it('should create post', () => {
+    expect(mockCreatePostsService.createPost).toHaveBeenCalled();
+  });
+  
+  xit('should get my profile', () => {
+    expect(mockGetProfileServiceService.getProfiles)
+  });
+  
   it('should create', () => {
     expect(component).toBeTruthy();
   });
