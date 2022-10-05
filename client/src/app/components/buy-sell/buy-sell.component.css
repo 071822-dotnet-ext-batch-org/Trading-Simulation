@@ -94,7 +94,46 @@
   margin-left: 1px;
   bottom: 140px;
 }
+/* For testing search By.css below */
+.ticker-order-box {
+  color: black;
+}
 
+.dataT {
+  color: black;
+}
+
+.dataO {
+  color: black;
+}
+.dataC {
+  color: black;
+}
+
+.dataL {
+  color: black;
+}
+
+.dataH {
+  color: black;
+}
+
+.dataV {
+  color: black;
+}
+
+.quantity-input {
+  color: black;
+}
+
+.buy-sell-dropdown {
+  color: black;
+}
+
+.portfolio-dropdown {
+  color: black;
+}
+/* For testing search By.css above */
 .table-info {
   width: 100px;
   text-align: center;
