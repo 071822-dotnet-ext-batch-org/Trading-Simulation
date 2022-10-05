@@ -10,11 +10,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 
-using Castle.Components.DictionaryAdapter;
-using Microsoft.VisualBasic;
-
-
-
 namespace Test.Yoink
 {
     public class YoinkRepoLayerClassTests
