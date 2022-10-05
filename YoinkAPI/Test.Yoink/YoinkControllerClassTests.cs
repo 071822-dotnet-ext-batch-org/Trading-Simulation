@@ -588,13 +588,13 @@ namespace Test.Yoink
             //Act
             var result = await classcontroller.GetPortfolioByPortfolioIDAsync(portfolioID);
             //Assert
-            Assert.NotNull(portfolioID);
+            Assert.NotNull(result.Value);
             Assert.True(classcontroller.ModelState.IsValid);
-            Assert.Equal(Portfolioget.PortfolioID, result.Value.PortfolioID);
-            
 
-
-
+            if(result.Value != null)
+            {
+                Assert.Equal(Portfolioget.PortfolioID, result.Value.PortfolioID);
+            }
         }
 
 

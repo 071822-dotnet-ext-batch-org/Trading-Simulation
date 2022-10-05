@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+     <InternalsVisibleTo Include="Test.Yoink" />
+  </ItemGroup>
+
 </Project>

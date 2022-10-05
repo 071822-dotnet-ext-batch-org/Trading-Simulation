@@ -33,6 +33,7 @@ namespace RepoLayer
 
         //--------------------------Profile Section-----------------------
 
+        
         /// <summary>
         /// This creates a new profile for a new user.
         /// Takes nullable ProfileDto (name, email, picture, privacyLevel)

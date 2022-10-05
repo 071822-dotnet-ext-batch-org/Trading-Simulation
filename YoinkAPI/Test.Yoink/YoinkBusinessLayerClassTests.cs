@@ -416,7 +416,7 @@ namespace Test.Yoink
                 Symbol = "Sample Symbol"
             };
 
-            List<Sell> expectedSellMockList = new List<Sell>();
+            List<Sell?> expectedSellMockList = new List<Sell?>();
             expectedSellMockList.Add(expectedSell);
 
             var dataSource = new Mock<IdbsRequests>();
