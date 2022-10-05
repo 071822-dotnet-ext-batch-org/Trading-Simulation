@@ -608,7 +608,316 @@ namespace Test.Yoink
 
         }
 
-/// ///////////
+
+        [Fact]
+        public async Task EditCommentAsyncReturnsEditedComment()
+        {
+            //public async Task<ActionResult<Comment?>> EditCommentAsync(EditCommentDto comment)
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            Guid guid2 = new Guid();
+            DateTime date1 = new DateTime();
+            DateTime date2 = DateTime.Now;
+
+            EditCommentDto editedComment = new(guid, "TestComment");
+
+            Comment mockComment = new(guid, fakeUser, guid2, "TestComment", 0, date1, date2);
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.EditCommentAsync(It.IsAny<EditCommentDto>()))
+                .ReturnsAsync(mockComment);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.EditCommentAsync(editedComment);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockComment, oKResult?.Value);
+
+        }
+
+        [Fact]
+        public async Task DeleteCommentAsyncReturnsTrueOnSucceededDelete()
+        {
+            //public async Task<ActionResult<bool>> DeleteCommentAsync(Guid commentId)
+
+            // Arrange
+            string fakeUser = "auth0id";
+            Guid guid = new Guid();
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.DeleteCommentAsync(It.IsAny<Guid>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.DeleteCommentAsync(guid);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+
+        }
+
+
+        [Fact]
+        public async Task GetCommentByPostIdAsyncReturnsAListOfComments()
+        {
+            //        public async Task<ActionResult<List<Comment>>> GetCommentsByPostIdAsync(Guid postId)
+
+            // Arrange
+            Guid mockPostId = new Guid();
+            List<Comment> mockCommentList = new List<Comment>();
+
+            //add element 0 to test list
+            string fakeUser = "auth0id";
+            Guid guid = new Guid();
+            Guid guid2 = new Guid();
+            DateTime date1 = new DateTime();
+            DateTime date2 = DateTime.Now;
+            Comment comment1 = new Comment(guid, fakeUser, guid2, "TestComment", 0, date1, date2);
+            mockCommentList.Add(comment1);
+
+            //add element 1 to test list
+            string fakeUser2 = "auth0id";
+            Guid guid3 = new Guid();
+            Guid guid4 = new Guid();
+            DateTime date3 = new DateTime();
+            DateTime date4 = DateTime.Now;
+            Comment comment2 = new Comment(guid3, fakeUser2, guid4, "TestComment2", 1, date3, date4);
+            mockCommentList.Add(comment2);
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.GetCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(mockCommentList);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.GetCommentsByPostIdAsync(mockPostId);
+            var oKResult = result.Result as OkObjectResult;
+            List<Comment>? clist = oKResult?.Value as List<Comment>;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockCommentList, oKResult?.Value);
+
+            if (clist != null)
+            {
+                Assert.Equal(2, clist.Count());
+                Assert.Equal(mockCommentList[0], clist[0]);
+            }
+
+
+        }
+
+        [Fact]
+        public async Task CreateLikeForCommentAsyncReturnTrueIfCreated()
+        {
+            //public async Task<ActionResult<bool>> CreateLikeForCommentAsync(LikeForCommentDto? createLikeForCommentDto)
+
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            LikeForCommentDto createLikeOnComment = new(guid);
+
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.CreateLikeForCommentAsync(It.IsAny<LikeForCommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.CreateLikeForCommentAsync(createLikeOnComment);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+
+        }
+
+
+        [Fact]
+        public async Task DeleteLikeForCommentAsyncReturnTrueIfDeleted()
+        {
+            //public async Task<ActionResult<bool>> DeleteLikeForCommentAsync(LikeForCommentDto? deleteLikeForCommentDto)
+
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            LikeForCommentDto deleteLikeOnComment = new(guid);
+
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.CreateLikeForCommentAsync(It.IsAny<LikeForCommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.CreateLikeForCommentAsync(deleteLikeOnComment);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+
+        }
+
+
+
+        [Fact]
+        public async Task GetCountOfCommentsByPostIdAsyncReturnsIntegerOfCommentAmount()
+        {
+            //public async Task<ActionResult<int>> GetCountofCommentsByPostIdAsync(Guid? postId)
+
+            // Arrange
+            //string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+
+            int mockInt = 10;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.GetCountofCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(mockInt);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.GetCountofCommentsByPostIdAsync(guid);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockInt, oKResult?.Value);
+
+        }
+
+
+
+        [Fact]
+        public async Task DeletePortfolioAsyncReturnTrueIfDeleted()
+        {
+            //public async Task<ActionResult<bool>> DeletePortfolioAsync(DeletePortfolioDto portfolioID)
+
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            DeletePortfolioDto deletePortfolio = new(guid);
+
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.DeletePortfolioAsync(fakeUser, It.IsAny<DeletePortfolioDto>()))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.DeletePortfolioAsync(deletePortfolio);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+
+        }
+
+
+
+        /// ///////////
 
 
         // [Fact]
@@ -907,7 +1216,7 @@ namespace Test.Yoink
         //     var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
         //         {
         //             new Claim(ClaimTypes.Name, "auth0id"),
-                    
+
         //         }, "mock"));
 
         //     ControllerClass.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
@@ -926,8 +1235,8 @@ namespace Test.Yoink
         //         Assert.IsType<ActionResult<Post>>(result);
         //         Assert.Equal(createPost.PostID, resultPost.PostID);
         //     }
-            
-        
-        
+
+
+
     }
 }
