@@ -5,6 +5,7 @@ using Models;
 using Moq;
 using RepoLayer;
 using System;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Claims;
 using System.Security.Principal;
 
@@ -957,7 +958,7 @@ namespace Test.Yoink
         //     var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
         //         {
         //             new Claim(ClaimTypes.Name, "auth0id"),
-                    
+
         //         }, "mock"));
 
         //     ControllerClass.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
@@ -976,8 +977,8 @@ namespace Test.Yoink
         //         Assert.IsType<ActionResult<Post>>(result);
         //         Assert.Equal(createPost.PostID, resultPost.PostID);
         //     }
-            
-        
-        
+
+
+
     }
 }

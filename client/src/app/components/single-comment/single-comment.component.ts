@@ -10,7 +10,7 @@ import { Profile } from 'src/app/Models/Profile';
   styleUrls: ['./single-comment.component.css']
 })
 export class SingleCommentComponent implements OnInit{
-  @Input() comment!: Comment;
+  // @Input() comment!: Comment;
   
 
   constructor(
