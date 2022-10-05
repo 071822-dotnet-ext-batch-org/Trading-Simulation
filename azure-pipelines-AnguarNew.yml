@@ -28,7 +28,7 @@ steps:
     extraProperties: |
       sonar.exclusions= **/client/src/polyfills/**
       sonar.test.inclusions=**/*.spec.ts
-      sonar.javascript.lcov.reportPaths=$(solution)/coverage/client/lcov.info
+      sonar.javascript.lcov.reportPaths=$(System.DefaultWorkingDirectory)/client/coverage/lcov.info
   continueOnError: true  
         
                          
