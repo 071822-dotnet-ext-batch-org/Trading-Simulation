@@ -1,9 +1,11 @@
 ﻿using APILayer.Controllers;
 using BusinessLayer;
+using Microsoft.AspNetCore.Http;
 using Models;
 using Moq;
 using RepoLayer;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Xml.Linq;
 
 
@@ -791,6 +793,58 @@ namespace Test.Yoink
         }
 
 
+        [Fact]
+        public async Task CreateCommentOnPostAsyncReturnsTrueOnCreatedComment()
+        {
+            //    public async Task<bool> CreateCommentOnPostAsync(CommentDto comment, string? auth0UserId)
+            // Arrange
+            string fakeUser = "auth0id";
+            Guid guid = Guid.NewGuid();
+            CommentDto createComment = new(guid, "TestComment");
+            bool mockBool = true;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.CreateCommentOnPostAsync(It.IsAny<CommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await controller.CreateCommentOnPostAsync(createComment, fakeUser);
+
+            //Assert
+            Assert.Equal(mockBool, result);
+        }
+
+        [Fact]
+        public async Task EditCommentAsyncReturnsEditedCommentWhenSucceeded()
+        {
+            //    public async Task<Comment?> EditCommentAsync(EditCommentDto comment)
+            // Arrange
+
+            Guid guid = new Guid();
+            
+
+            EditCommentDto editedComment = new(guid, "TestComment");
+
+            Comment mockComment = helpers.fakeComment();
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(a => a.EditCommentAsync(It.IsAny<EditCommentDto>()))
+                .ReturnsAsync(true);
+            dataSource
+                .Setup(a => a.GetCommentByCommentIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(mockComment);
+
+            var controller = new YoinkBusinessLayer(dataSource.Object);
+
+            // Act
+            var result = await controller.EditCommentAsync(editedComment);
+
+            //Assert
+            Assert.Equal(mockComment, result);
+        }
     }
 }
 
