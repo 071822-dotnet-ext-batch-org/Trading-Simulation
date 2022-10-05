@@ -873,8 +873,6 @@ namespace Test.Yoink
 
         }
 
-
-
         [Fact]
         public async Task DeletePortfolioAsyncReturnTrueIfDeleted()
         {
@@ -946,9 +944,9 @@ namespace Test.Yoink
 
             // Assert
 
-            Assert.IsType<ActionResult<bool>>(result);
+            Assert.IsType<OkObjectResult>(okResult);
             Assert.True(controller.ModelState.IsValid);
-            Assert.Equal(true, okResult?.Value);
+            Assert.Equal(200, okResult?.StatusCode);
             Assert.NotNull(okResult);
         }
 
