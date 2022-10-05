@@ -6,6 +6,7 @@ namespace Test.Yoink
     public class ModelsTests
     {
 
+
         // This method would test the Investment models 
         [Fact]
         public void InvestmentWorksCorrectly()
