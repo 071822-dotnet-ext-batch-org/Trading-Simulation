@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Models;
@@ -267,5 +268,22 @@ namespace Test.Yoink
             
             return newGuids;
         }
+
+        public async Task<bool> TruncateTableAsync(SqlCommand command, SqlConnection conn)
+        {
+            using (command)
+            {
+                conn.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret > 0)
+                {
+                    conn.Close();
+                    return true;
+                }
+                conn.Close();
+                return false;
+            }
+        }
+
     }
 }

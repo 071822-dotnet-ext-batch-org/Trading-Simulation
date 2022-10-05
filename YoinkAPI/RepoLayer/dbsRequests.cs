@@ -19,6 +19,7 @@ namespace RepoLayer
         {
             _config = config;
 
+            Console.WriteLine("in dbsrequests: " + _config["ConnectionStrings:TestingConnection"]);
             if (string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase))
             {
                 _conn = new SqlConnection(_config["ConnectionStrings:TestingConnection"]);
@@ -33,6 +34,10 @@ namespace RepoLayer
 
         //--------------------------Profile Section-----------------------
 
+
+
+
+        
         /// <summary>
         /// This creates a new profile for a new user.
         /// Takes nullable ProfileDto (name, email, picture, privacyLevel)
