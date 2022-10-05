@@ -113,7 +113,13 @@ namespace APILayer.Controllers
                 if (auth0Id != null && p != null)
                 {
                     Portfolio? newPortfolio = await this._businessLayer.CreatePortfolioAsync(auth0Id, p);
-                    return Created("", newPortfolio);
+                    if(newPortfolio != null)
+                    {
+                        return Created("", newPortfolio);
+                    }else
+                    {
+                        return BadRequest("Your portfolio could not be created");
+                    }
                 }
             }
             
