@@ -581,6 +581,83 @@ namespace Test.Yoink
             
         }
 
+        [Fact]
+        public async Task TestingDeletePostAsync()
+        {
+            // The method DeletePostAsync in the YoinkController.cs takes in a PostId and returns a bool.
+
+            // Arrange
+
+            Guid postId = Guid.NewGuid();
+
+            string fakeUser = "auth0id";
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.DeletePostAsync(fakeUser, postId));
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+
+            var result = await controller.DeletePostAsync(postId);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<bool>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(true, okResult?.Value);
+            Assert.NotNull(okResult);
+        }
+
+        [Fact]
+        public async Task TestingGetAllPostByUserIdAsync()
+        {
+            // The method GetAllPostByUserIdAsync in the YoinkController.cs takes in a UserId and returns a list of PostWithCommentCountDto.
+
+            // Arrange
+
+            string userId = "auth0id";
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            
+            List<PostWithCommentCountDto> postWithCommentCountDtos = new List<PostWithCommentCountDto>();
+
+            mockBl.Setup(bl => bl.GetAllPostByUserIdAsync(userId))
+                .ReturnsAsync(postWithCommentCountDtos);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+
+            var result = await controller.GetAllPostByUserIdAsync(userId);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<List<PostWithCommentCountDto>>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.NotNull(okResult);
+            Assert.Equal(okResult?.Value, postWithCommentCountDtos);
+        }
+
+
 /// ///////////
 
 
