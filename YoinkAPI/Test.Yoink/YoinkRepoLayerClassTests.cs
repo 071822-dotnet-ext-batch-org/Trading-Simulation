@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Mvc.Testing;
+
 
 namespace Test.Yoink
 {
@@ -111,6 +111,33 @@ namespace Test.Yoink
 
             // Assert
             Assert.True(result);
+        }
+        [Fact]
+        public async Task TestingGetRecentPostByUserIdAsyncReturnsPost()
+        {
+            //Arrange 
+            Post p = helpers.fakePost();
+            string auth0MockId = "test2";
+            p.PostID =new Guid("3555b90f-4fde-45c8-a19c-1ef72af0ae6c");
+            var fakeConfig = new Mock<IConfiguration>();
+            
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+            dbsRequests TestedClass = new dbsRequests(fakeConfig.Object);
+            // Act
+            Post? result = await TestedClass.GetRecentPostByUserId(auth0MockId);
+            //Assert
+            Assert.Equal(p.PostID,result?.PostID);
+        }
+        [Fact]
+        public async Task TestingGetAllPostAsync()
+        {
+        //Arrange
+        
+        //Act
+
+        //Assert
+
         }
 
         
