@@ -133,14 +133,47 @@ namespace Test.Yoink
         public async Task TestingGetAllPostAsync()
         {
         //Arrange
-        
+        Post p = helpers.fakePost();
+        p.PostID = new Guid("48f34239-7bb8-4d3b-92eb-0100e83277cf");
+        var fakeConfig = new Mock<IConfiguration>();
+            
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+            dbsRequests TestedClass = new dbsRequests(fakeConfig.Object);
         //Act
-
+        List<Post> result = await TestedClass.GetAllPostAsync();
         //Assert
-
+        Assert.NotEqual(p.PostID,result[0].PostID);
         }
-
-        
+        [Fact]
+       public async Task TestingGetAllInvestmentsByPortfolioIDAsync()
+       {
+        //Arrange 
+         Guid TestporfolioID =new Guid("86d66000-5874-427a-8682-1ed02f4bb2ca");
+         var fakeConfig = new Mock<IConfiguration>();
+         fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+            dbsRequests TestedClass = new dbsRequests(fakeConfig.Object);
+        //Act
+        List<Investment> result = await TestedClass.GetAllInvestmentsByPortfolioIDAsync(TestporfolioID);
+        //Assert
+        Assert.Equal(TestporfolioID,result[0].Fk_PortfolioID);
+       }
+       [Fact]
+        public async Task TestingGetNumberOfCommentsByPostIdAsync()
+        {
+            //Arrange
+         Post p = helpers.fakePost();
+         p.PostID = new Guid("3555b90f-4fde-45c8-a19c-1ef72af0ae6c"); 
+          var fakeConfig = new Mock<IConfiguration>();
+         fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+            dbsRequests TestedClass = new dbsRequests(fakeConfig.Object);
+            //Act
+            int? result = await TestedClass.GetNumberOfCommentsByPostIdAsync(p.PostID);
+            //Assert
+            Assert.NotNull(result);
+        }
         // [Fact]
         // public void TestingCreateUserProfile()
         // {
