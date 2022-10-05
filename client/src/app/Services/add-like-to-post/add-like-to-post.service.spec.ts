@@ -11,7 +11,7 @@ describe('AddLikeToPostService', () => {
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
   beforeEach(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
     service = new AddLikeToPostService(httpClientSpy);
 
     TestBed.configureTestingModule({
