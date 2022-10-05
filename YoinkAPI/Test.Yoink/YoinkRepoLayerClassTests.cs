@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Castle.Components.DictionaryAdapter;
 
 namespace Test.Yoink
 {
@@ -113,7 +114,142 @@ namespace Test.Yoink
             Assert.True(result);
         }
 
-        
+        [Fact]
+        public async Task CreateLikeOnPostAsyncReturnsTrueOnSuccessfulCreate()
+        {
+            // Arrange
+            Guid postId = new Guid("e367da77-cdde-4930-8d44-2f180c90ab69");
+            LikeDto likeDto = new LikeDto(postId);
+            string auth0UserId = "test1";
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            string sql = "Delete FROM LikesPosts WHERE fk_userID = @test1 AND fk_postID=@postId";
+
+            SqlConnection conn = new SqlConnection(helpers.ConnString);
+
+            bool? result = null;
+
+            // Act
+
+            using (SqlCommand command = new SqlCommand(sql, conn))
+            {
+                command.Parameters.AddWithValue("@test1", auth0UserId);
+                command.Parameters.AddWithValue("@postId", postId);
+
+                bool truncated = await helpers.TruncateTableAsync(command, conn);
+
+                if (truncated)
+                {
+                    result = await TheClassBeingTested.CreateLikeOnPostAsync(likeDto, auth0UserId);
+                }
+            }
+            // Assert
+            Assert.True(result);
+        }
+
+
+        [Fact]
+        public async Task DeleteLikeOnPostAsyncReturnsTrueOnSuccessfulDelete()
+        {
+            // Arrange
+            Guid postId = new Guid("e367da77-cdde-4930-8d44-2f180c90ab69");
+            LikeDto unlikeDto = new LikeDto(postId);
+            string auth0UserId = "test3";
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            string sql = "INSERT INTO LikesPosts (fk_userID, fk_postID) VALUES (@auth0UserId, @postId)";
+
+            SqlConnection conn = new SqlConnection(helpers.ConnString);
+
+            bool? result = null;
+
+            // Act
+
+            using (SqlCommand command = new SqlCommand(sql, conn))
+            {
+                command.Parameters.AddWithValue("@auth0UserId", auth0UserId);
+                command.Parameters.AddWithValue("@postId", postId);
+
+                bool truncated = await helpers.TruncateTableAsync(command, conn);
+
+                if (truncated)
+                {
+                    result = await TheClassBeingTested.DeleteLikeOnPostAsync(unlikeDto, auth0UserId);
+                }
+            }
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task CheckIfUserAlreadyHasLikeOnPostReturnsTrueIfExists()
+        {
+            // Arrange
+            string auth0UserId = "test1";
+            Guid postId = new Guid("e367da77-cdde-4930-8d44-2f180c90ab69");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            bool result = await TheClassBeingTested.CheckIfUserAlreadyHasLike_OnPost(auth0UserId, postId);
+
+            // Assert
+            Assert.True(result);
+        }
+
+
+        [Fact]
+        public async Task CheckIfUserAlreadyHasLikeOnCommentReturnsTrueIfExists()
+        {
+            // Arrange
+            string auth0UserId = "test1";
+            Guid postId = new Guid("dc935607-d264-4b1c-bfb4-2ecd80dec5a0");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            bool result = await TheClassBeingTested.CheckIfUserAlreadyHasLike_OnComment(auth0UserId, postId);
+
+            // Assert
+            Assert.True(result);
+        }
+
         // [Fact]
         // public void TestingCreateUserProfile()
         // {
@@ -146,7 +282,7 @@ namespace Test.Yoink
 
 
         //     // dataSource will decouple the tested method from the database and use the local data set above for the test
-            
+
         //     var dataSource = new Mock<IdbsRequests>();
         //     dataSource
         //         .Setup(m => m.CreateProfileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
@@ -198,7 +334,7 @@ namespace Test.Yoink
         // {
         //     //Hardcode data for mock ProfileDto
 
-         
+
 
         //     ProfileDto? profiledto2 = new ProfileDto("Tony", "Rodin@yahoo.com", "ghhhtbnn", 2);
 
@@ -223,7 +359,7 @@ namespace Test.Yoink
 
         //     };
 
-            
+
 
         //     // dataSource will decouple the tested method from the database and use the local data set above for the test
 
@@ -304,7 +440,7 @@ namespace Test.Yoink
 
         //     };
 
-            
+
 
         //     var dataSource = new Mock<IdbsRequests>();
         //     dataSource
@@ -329,12 +465,12 @@ namespace Test.Yoink
 
 
         //     //Assert
-            
-           
+
+
         //     Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
         //     Assert.Equal(profiledto.Name, profile.Name);
         //     Assert.True(true);
-            
+
         // }
 
 
@@ -596,7 +732,7 @@ namespace Test.Yoink
 
 
         //     var dataSource3 = new Mock<IConfiguration>();
-            
+
         //     if(buy == null) {}
 
         //     dataSource
@@ -1448,5 +1584,5 @@ namespace Test.Yoink
         // }
     }
     //Need to add comments to everything!
-        
+
 }
