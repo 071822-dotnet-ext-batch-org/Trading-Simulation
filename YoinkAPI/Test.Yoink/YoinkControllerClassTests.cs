@@ -14,6 +14,8 @@ namespace Test.Yoink
     public class YoinkControllerClassTests
     {
 
+        private Helpers helpers = new Helpers();
+
         /// <summary>
         /// This test tests to see if the method returns a null investment - It's input is an InvestmentDto and returns a nullable investment
         /// (sendes)
@@ -332,20 +334,7 @@ namespace Test.Yoink
 
 
 
-        private List<Guid> fakeGuidList(){
-            List<Guid> newGuids = new List<Guid>();
-            Guid newGuid = Guid.NewGuid();
-            Guid newGuid2 = Guid.NewGuid();
-            Guid newGuid3 = Guid.NewGuid();
-            Console.WriteLine(newGuid);
-            Console.WriteLine(newGuid2);
-            Console.WriteLine(newGuid3);
-            newGuids.Add(newGuid);
-            newGuids.Add(newGuid2);
-            newGuids.Add(newGuid3);
-            
-            return newGuids;
-        }
+
 
         [Fact]
         public async Task TestGetPostLikesByUserID()
@@ -353,7 +342,7 @@ namespace Test.Yoink
             // Arrange
             string fakeUser = "auth0id";
 
-            List<Guid> mockGuids = fakeGuidList();
+            List<Guid> mockGuids = helpers.fakeGuidList();
             
             var mockBl = new Mock<IYoinkBusinessLayer>();
             mockBl.Setup(bl => bl.GetPostLikesByUserID(fakeUser))
