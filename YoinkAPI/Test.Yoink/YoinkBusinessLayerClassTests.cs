@@ -1,9 +1,12 @@
 ﻿using APILayer.Controllers;
 using BusinessLayer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Moq;
 using RepoLayer;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Xml.Linq;
 
 
@@ -568,7 +571,7 @@ namespace Test.Yoink
 
 
         [Fact]
-        public async Task TestingGetNumberOfPostsAsync()
+        public async Task TestingGetNumberOfPostsAsyncReturnsNumberOfTotalPosts()
         {
 
             int? excpectedGetNumberPosts = 10;
@@ -590,7 +593,7 @@ namespace Test.Yoink
 
 
         [Fact]
-        public async Task TestingGetNumberOfBuysAsync()
+        public async Task TestingGetNumberOfBuysAsyncReturnsTotalNumberOfBuys()
         {
 
             int? excpectedGetNumberBuys = 10;
@@ -613,7 +616,7 @@ namespace Test.Yoink
 
 
         [Fact]
-        public async Task TestingGetNumberOfSellsAsync()
+        public async Task TestingGetNumberOfSellsAsyncReturnTotalNumberOfSells()
         {
 
             int? excpectedGetNumberSells = 10;
@@ -636,9 +639,22 @@ namespace Test.Yoink
 
 
         [Fact]
-        public async Task TestingCreatePostAsync()
+        public async Task TestingCreatePostAsyncCreatesPostAndReturnsTheNewleyMadePost()
         {
             string auth0UserId = "sample auth0UserId";
+
+            Guid PostIdGuid = Guid.NewGuid();
+
+            Post expectedPost = new Post()//THIS IS NOT NULL - BECAUSE IT IS FILLED WITH PROPERTIES
+            {
+                PostID = PostIdGuid,
+                Fk_UserID = "Sample Fk_UserID",
+                Content = "Sample Content",
+                Likes = 10,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
 
             CreatePostDto post = new CreatePostDto()
             {
@@ -646,22 +662,23 @@ namespace Test.Yoink
                 PrivacyLevel = 2
             };
 
-            Post? excpectedCreatePost = new Post();
+            Post? expectedCreatePost = new Post();//THIS IS NULL - SO IT WILL EXPECT NULL POST
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
                 .ReturnsAsync(true);
+            dataSource
+                .Setup(g => g.GetRecentPostByUserId(It.IsAny<string>()))
+                .ReturnsAsync(expectedPost);
+
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
             var createdPost = await theClassBeingTested.CreatePostAsync(auth0UserId, post);
-
+            Post? returnedOBJ = createdPost as Post;//
             //Assert
-            if (createdPost != null)
-            {
-                Assert.IsType<Post>(createdPost);
-                Assert.Equal(excpectedCreatePost.Content, createdPost.Content);
-            }
+            Assert.IsType<Post>(returnedOBJ);
+            Assert.Equal(expectedPost.Content, returnedOBJ?.Content);
         }
 
 
@@ -801,6 +818,622 @@ namespace Test.Yoink
             }
         }
 
+        /// <summary>
+        /// This method tests to see if a user created a profile 
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_CreateProfileAsync_if_Created()
+        {
+            string auth0UserId = "sample auth0UserId";
+            Guid postId = Guid.NewGuid();
+            ProfileDto dto = new ProfileDto("name", "email", "string", 1);
+            Profile expectedOBJ = new Profile(Guid.NewGuid(), "auth0ID", "name", "email", "src/picture", 1);
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.CreateProfileAsync(It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<int?>()))
+                .ReturnsAsync(true);
+
+            dataSource
+                .Setup(g => g.GetProfileByUserIDAsync(It.IsAny<string?>()))
+                .ReturnsAsync(expectedOBJ);
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.CreateProfileAsync(auth0UserId, dto);
+            Profile? profile = returnedResult as Profile;
+
+
+            //Assert
+            Assert.NotNull(profile);
+            Assert.IsType<Guid>(profile?.ProfileID);
+            Assert.Equal(expectedOBJ, profile);
+        }//End of CreateProfileAsync Test - Created
+
+
+        /// <summary>
+        /// This method tests to see if a user created a profile 
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_GetProfileByUserIDAsync_if_Gotten()
+        {
+            string auth0UserId = "sample auth0UserId";
+            Guid postId = Guid.NewGuid();
+            ProfileDto dto = new ProfileDto("name", "email", "string", 1);
+            Profile expectedOBJ = new Profile(Guid.NewGuid(), "auth0ID", "name", "email", "src/picture", 1);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetProfileByUserIDAsync(It.IsAny<string>()))
+                .ReturnsAsync(expectedOBJ);
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.GetProfileByUserIDAsync(auth0UserId);
+            Profile? profile = returnedResult as Profile;
+
+
+            //Assert
+            Assert.NotNull(profile);
+            Assert.IsType<Guid>(profile.ProfileID);
+            Assert.Equal(expectedOBJ, profile);
+        }//End of CreateProfileAsync Test - Created
+
+        /// <summary>
+        /// This method tests to see if a user successfully editted a profile if they have a user ID and an already existing profile
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_EditProfileAsync_if_Editted()
+        {
+            string auth0UserId = "sample auth0UserId";
+            ProfileDto dto = new ProfileDto("name", "email", "string", 1);
+            Profile expectedOBJ = new Profile(Guid.NewGuid(), "auth0ID", "name", "email", "src/picture", 1);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.EditProfileAsync(It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<int?>()))
+                .ReturnsAsync(true);
+            dataSource
+                .Setup(g => g.GetProfileByUserIDAsync(It.IsAny<string>()))
+                .ReturnsAsync(expectedOBJ);
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.EditProfileAsync(auth0UserId, dto);
+            Profile? profile = returnedResult as Profile;
+
+            //Assert
+            Assert.NotNull(profile);
+            Assert.IsType<Profile?>(profile);
+            Assert.Equal(expectedOBJ, profile);
+        }//End of EditProfileAsync Test - Edited
+
+        /// <summary>
+        /// This method tests to see if a user unsuccessfully editted a profile if even with a user ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_EditProfileAsync_if_NOT_Editted()
+        {
+            string auth0UserId = "sample auth0UserId";
+            ProfileDto dto = new ProfileDto("name", "email", "string", 1);
+            Profile? expectedOBJ = null;
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.EditProfileAsync(It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<int?>()))
+                .ReturnsAsync(false);
+            dataSource
+                .Setup(g => g.GetProfileByUserIDAsync(It.IsAny<string>()))
+                .ReturnsAsync(expectedOBJ);
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.EditProfileAsync(auth0UserId, dto);
+            Profile? profile = returnedResult as Profile;
+
+            //Assert
+            Assert.Null(profile);
+            Assert.Equal(null, profile);
+        }//End of EditProfileAsync Test - NOT Edited
+
+        /// <summary>
+        /// This method tests to see if a user successfully creates a portfolio with a user ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_CreatePortfolioAsync_if_Created()
+        {
+            string auth0UserId = "sample auth0UserId";
+            PortfolioDto dto = new PortfolioDto( Guid.NewGuid(), "name", 1, 1);
+            Portfolio? expectedOBJ = new Portfolio(Guid.NewGuid(), auth0UserId, "Name", 1, 1, 1, 1, 1, 1, 1, 1, DateTime.Now, DateTime.Now);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.CreatePortfolioAsync(It.IsAny<string>(), It.IsAny<PortfolioDto>()))
+                .ReturnsAsync(true);
+            dataSource
+                .Setup(g => g.GetRecentPortfoliosByUserIDAsync(It.IsAny<string>()))
+                .ReturnsAsync(expectedOBJ);
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.CreatePortfolioAsync(auth0UserId, dto);
+            Portfolio? obj = returnedResult as Portfolio;
+
+            //Assert
+            Assert.NotNull(obj);
+            Assert.IsType<Guid>(obj?.PortfolioID);
+            Assert.Equal(expectedOBJ, obj);
+        }//End of CreatePortfolioAsync Test - CREATED
+
+
+        /// <summary>
+        /// This method tests to see if a user attempts to unsuccessfully creates a portfolio with a user ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_CreatePortfolioAsync_if_NOT_Created()
+        {
+            string auth0UserId = "sample auth0UserId";
+            PortfolioDto dto = new PortfolioDto( Guid.NewGuid(), "name", 1, 1);
+            Portfolio? expectedOBJ = null;
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.CreatePortfolioAsync(It.IsAny<string>(), It.IsAny<PortfolioDto>()))
+                .ReturnsAsync(false);
+            dataSource
+                .Setup(g => g.GetRecentPortfoliosByUserIDAsync(It.IsAny<string>()))
+                .ReturnsAsync(expectedOBJ);
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.CreatePortfolioAsync(auth0UserId, dto);
+            Portfolio? obj = returnedResult as Portfolio;
+
+            //Assert
+            Assert.Null(obj);
+            Assert.Equal(expectedOBJ, obj);
+        }//End of CreatePortfolioAsync Test - NOT CREATED
+
+
+        /// <summary>
+        /// This method tests to see if a user successfully gets a portfolio with a portfolio ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_GetPortfolioByPortfolioIDAsync_if_GOTTEN()
+        {
+            string auth0UserId = "sample auth0UserId";
+            Guid portfolioId = Guid.NewGuid();
+            Portfolio? expectedOBJ = new Portfolio(Guid.NewGuid(), auth0UserId, "Name", 1, 1, 1, 1, 1, 1, 1, 1, DateTime.Now, DateTime.Now);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetPortfolioByPorfolioIDAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(expectedOBJ);
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.GetPortfolioByPortfolioIDAsync(portfolioId);
+            Portfolio? obj = returnedResult as Portfolio;
+
+            //Assert
+            Assert.NotNull(obj);
+            Assert.IsType<Guid>(obj?.PortfolioID);
+            Assert.Equal(expectedOBJ, obj);
+        }//End of GetPortfolioByPortfolioIDAsync Test - GOTTEN
+
+        /// <summary>
+        /// This method tests to see if a user did not successfully gets a portfolio with a portfolio ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_GetPortfolioByPortfolioIDAsync_if_NOT_GOTTEN()
+        {
+            Guid portfolioId = Guid.NewGuid();
+            Portfolio? expectedOBJ = null;
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetPortfolioByPorfolioIDAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(expectedOBJ);
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.GetPortfolioByPortfolioIDAsync(portfolioId);
+            Portfolio? obj = returnedResult as Portfolio;
+
+            //Assert
+            Assert.Null(obj);
+            Assert.Equal(expectedOBJ, obj);
+        }//End of GetPortfolioByPortfolioIDAsync Test - NOT GOTTEN
+
+    
+
+        /// <summary>
+        /// This method tests to see if a user successfully gets a list of portfolios with a user ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_GetALLPortfoliosByUserIDAsync_if_GOTTEN()
+        {
+            string auth0UserId = "sample auth0UserId";
+            List<Portfolio?> expectedList = new List<Portfolio?>();
+            for(int i =0; i < 5; i++)
+            {
+                Portfolio? expectedOBJ = new Portfolio(Guid.NewGuid(), auth0UserId, "Name", 1, 1, 1, 1, 1, 1, 1, 1, DateTime.Now, DateTime.Now);
+                expectedList.Add(expectedOBJ);
+
+            }
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetALL_PortfoliosByUserIDAsync(It.IsAny<string?>()))
+                .ReturnsAsync(expectedList);
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.GetALLPortfoliosByUserIDAsync(auth0UserId);
+            List<Portfolio?>? obj = returnedResult as List<Portfolio?>;
+
+            //Assert
+            Assert.NotNull(obj);
+            Assert.NotEmpty(obj);
+            Assert.IsType<List<Portfolio?>>(obj);
+            Assert.Equal(expectedList.Count(), obj?.Count());
+        }//End of GetALLPortfoliosByUserIDAsync Test - GOTTEN
+
+
+        /// <summary>
+        /// This method tests to see if a user did not successfully get a list of portfolios with a user ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_GetALLPortfoliosByUserIDAsync_if_NOT_GOTTEN()
+        {
+            string auth0UserId = "sample auth0UserId";
+            List<Portfolio?> expectedList = new List<Portfolio?>();
+            
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetALL_PortfoliosByUserIDAsync(It.IsAny<string?>()))
+                .ReturnsAsync(expectedList);
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.GetALLPortfoliosByUserIDAsync(auth0UserId);
+            List<Portfolio?>? obj = returnedResult as List<Portfolio?>;
+
+            //Assert
+            Assert.NotNull(obj);
+            Assert.Empty(obj);
+            Assert.IsType<List<Portfolio?>>(obj);
+            Assert.Equal(0, obj?.Count());
+        }//End of GetALLPortfoliosByUserIDAsync Test - NOT GOTTEN
+
+        /// <summary>
+        /// This method tests to see if a user successfully gets a list of posts with a user ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_GetAllPostAsync_if_GOTTEN()
+        {
+            string auth0UserId = "sample auth0UserId";
+            List<Post> expectedPostList = new List<Post>();
+            List<PostWithCommentCountDto> expectedList = new List<PostWithCommentCountDto>();
+            for(int i =0; i < 5; i++)
+            {
+                Post? expectedOBJ = new Post(Guid.NewGuid(), auth0UserId, "content", 1, 1, DateTime.Now, DateTime.Now);
+                PostWithCommentCountDto? expectedOBJgotten = new PostWithCommentCountDto(Guid.NewGuid(), auth0UserId, "content", 1, 1, 1, DateTime.Now, DateTime.Now);
+                expectedList.Add(expectedOBJgotten);
+                expectedPostList.Add(expectedOBJ);
+
+            }
+
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetAllPostAsync())
+                .ReturnsAsync(expectedPostList);
+
+            dataSource
+                .Setup(g => g.GetNumberOfCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<int>());
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.GetAllPostAsync();
+            List<PostWithCommentCountDto>? obj = returnedResult as List<PostWithCommentCountDto>;
+
+            //Assert
+            Assert.NotNull(obj);
+            Assert.NotEmpty(obj);
+            Assert.IsType<List<PostWithCommentCountDto?>>(obj);
+            Assert.Equal(expectedList.Count(), obj?.Count());
+        }//End of GetALLPortfoliosByUserIDAsync Test - GOTTEN
+
+
+        /// <summary>
+        /// This method tests to see if a user successfully gets a list of posts with a user ID
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_GetAllPostAsync_if_NOT_GOTTEN()
+        {
+            List<Post> expectedPostList = new List<Post>();
+            List<PostWithCommentCountDto> expectedList = new List<PostWithCommentCountDto>();
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetAllPostAsync())
+                .ReturnsAsync(expectedPostList);
+
+            dataSource
+                .Setup(g => g.GetNumberOfCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<int>());
+            
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.GetAllPostAsync();
+            List<PostWithCommentCountDto>? obj = returnedResult as List<PostWithCommentCountDto>;
+
+            //Assert
+            Assert.NotNull(obj);
+            Assert.Empty(obj);
+            Assert.IsType<List<PostWithCommentCountDto?>>(obj);
+            Assert.Equal(0, obj?.Count());
+        }//End of GetALLPortfoliosByUserIDAsync Test - NOT GOTTEN
+
+
+
+        /// <summary>
+        /// This method tests to see if a user unsuccessfully editted a profile 
+        /// <returns>an async Task</returns>
+        // [Fact]
+        // public async Task Testing_EditProfileAsync_if_NOT_Editted()
+        // {
+        //     string auth0UserId = "sample auth0UserId";
+        //     Guid postId = Guid.NewGuid();
+        //     ProfileDto dto = new ProfileDto("name", "email", "string", 1);
+        //     Profile expectedOBJ = new Profile();
+
+        //     var dataSource = new Mock<IdbsRequests>();
+        //     dataSource
+        //         .Setup(g => g.EditProfileAsync(It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<int?>()))
+        //         .ReturnsAsync(false);
+        //     var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+        //     //Act
+        //     var returnedResult = await theClassBeingTested.EditProfileAsync(auth0UserId, dto);
+
+        //     //Assert
+        //     // if (returnedResult != null)
+        //     // {
+        //         Assert.IsType<Profile?>(returnedResult);
+        //         Assert.Equal(expectedOBJ, returnedResult);
+        //     // }
+        // }//End of EditProfileAsync Test - Edited
+
+
+
+
+        [Fact]
+        public async Task CreateCommentOnPostAsyncReturnsTrueOnCreatedComment()
+        {
+            // Arrange
+            string fakeUser = "auth0id";
+            Guid guid = Guid.NewGuid();
+            CommentDto createComment = new(guid, "TestComment");
+            bool mockBool = true;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.CreateCommentOnPostAsync(It.IsAny<CommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.CreateCommentOnPostAsync(createComment, fakeUser);
+
+            //Assert
+            Assert.Equal(mockBool, result);
+        }
+
+        [Fact]
+        public async Task EditCommentAsyncReturnsEditedCommentWhenSucceeded()
+        {
+            // Arrange
+
+            Guid guid = Guid.NewGuid();
+
+
+            EditCommentDto editedComment = new(guid, "TestComment");
+
+            Comment mockComment = helpers.fakeComment();
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(a => a.EditCommentAsync(It.IsAny<EditCommentDto>()))
+                .ReturnsAsync(true);
+            dataSource
+                .Setup(a => a.GetCommentByCommentIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(mockComment);
+
+            var bl = new YoinkBusinessLayer(dataSource.Object);
+
+            // Act
+            var result = await bl.EditCommentAsync(editedComment);
+
+            //Assert
+            Assert.Equal(mockComment, result);
+        }
+
+
+        [Fact]
+        public async Task DeleteCommentAsyncAuthorizeUserReturnTrueIfDeleted()
+        {
+            // Arrange
+
+            Guid guid = Guid.NewGuid();
+            string userId = "userId";
+            bool trueCheck = true;
+
+            EditCommentDto editedComment = new(guid, "TestComment");
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(a => a.GetUserWithCommentIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(userId);
+            dataSource
+                .Setup(a => a.DeleteCommentAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(trueCheck);
+
+            var bl = new YoinkBusinessLayer(dataSource.Object);
+
+            // Act
+            var result = await bl.DeleteCommentAsync(guid, userId);
+
+            //Assert
+            Assert.True(result);
+        }
+
+
+        [Fact]
+        public async Task CreateLikeForCommentAsyncReturnsTrueWhenLikeSucceeded()
+        {
+
+            // Arrange
+            string fakeUser = "auth0id";
+            Guid guid = Guid.NewGuid();
+            LikeForCommentDto likeComment = new(guid);
+            bool mockBool = true;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.CreateLikeForCommentAsync(It.IsAny<LikeForCommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.CreateLikeForCommentAsync(likeComment, fakeUser);
+
+            //Assert
+            Assert.Equal(mockBool, result);
+        }
+
+ 
+        [Fact]
+        public async Task DeleteLikeForCommentAsyncReturnsTrueWhenLikeSucceeded()
+        {
+            // Arrange
+            string fakeUser = "auth0id";
+            Guid guid = Guid.NewGuid();
+            LikeForCommentDto unlikeComment = new(guid);
+            bool mockBool = true;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.DeleteLikeForCommentAsync(It.IsAny<LikeForCommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.DeleteLikeForCommentAsync(unlikeComment, fakeUser);
+
+            //Assert
+            Assert.Equal(mockBool, result);
+        }
+
+
+        [Fact]
+        public async Task GetCountofCommentsByPostIdAsyncReturnsNumberOfCommentsAssociatedWithAValidPostId()
+        {
+            // Arrange
+            Guid guid = Guid.NewGuid();
+            LikeForCommentDto unlikeComment = new(guid);
+            int mockInt = 10;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.GetCountofCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(mockInt);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.GetCountofCommentsByPostIdAsync(guid);
+
+            //Assert
+            Assert.Equal(mockInt, result);
+        }
+
+
+        [Fact]
+        public async Task DeletePortfolioAsyncReturnTrueIfSuccessfulDelete()
+        {
+            // Arrange
+            string userId = "userId";
+            Guid guid = Guid.NewGuid();
+            DeletePortfolioDto deleteDto = new(guid);
+            bool mockBool = true;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.DeletePortfolioByPortfolioIDAsync(It.IsAny<string>(),It.IsAny<DeletePortfolioDto>()))
+                .ReturnsAsync(mockBool);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.DeletePortfolioAsync(userId, deleteDto);
+
+            //Assert
+            Assert.Equal(mockBool, result);
+        }
+
+
+        [Fact]
+        public async Task GetPostLikesByUserIdReturnsListOfUserIdsThatHaveLikedAPost()
+        {
+
+            // Arrange
+            string fakeUser = "auth0id";
+
+            List<Guid> mockGuids = helpers.fakeGuidList();
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.GetPostLikesByUserID(It.IsAny<string>()))
+                .ReturnsAsync(mockGuids);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.GetPostLikesByUserID(fakeUser);
+            
+
+            //Assert
+            if (result != null)
+            {
+                Assert.Equal(mockGuids, result);
+            }
+        }
 
     }
 }
