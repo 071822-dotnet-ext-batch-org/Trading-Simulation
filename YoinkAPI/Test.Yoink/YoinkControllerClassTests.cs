@@ -1,7 +1,6 @@
 ﻿using APILayer.Controllers;
 using BusinessLayer;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Models;
 using Moq;
 using RepoLayer;
@@ -14,7 +13,8 @@ namespace Test.Yoink
 {
     public class YoinkControllerClassTests
     {
-    private Helpers helpers = new Helpers();
+
+private Helpers helpers = new Helpers();
 
         [Fact]
         public async Task TestingEditPortfolioAsyncUpdatesPortfolio()
@@ -122,7 +122,7 @@ namespace Test.Yoink
 
 
             //Assert
-     
+
             Assert.NotNull(resultPost);
             Assert.True(theClassBeingTested.ModelState.IsValid);
             Assert.Equal(expectedBuy, resultPost);
@@ -289,8 +289,6 @@ namespace Test.Yoink
             Assert.True(theClassBeingTested.ModelState.IsValid);
             Assert.Equal(expectedSellMockList, resultPost);
         }
-  
-
 
         /// <summary>
         /// This test tests to see if the method returns a null investment - It's input is an InvestmentDto and returns a nullable investment
@@ -1138,6 +1136,8 @@ namespace Test.Yoink
 
         }
 
+
+
         [Fact]
         public async Task DeletePortfolioAsyncReturnTrueIfDeleted()
         {
@@ -1209,6 +1209,10 @@ namespace Test.Yoink
             var okResult = result.Result as OkObjectResult;
 
             // Assert
+
+            Assert.IsType<ActionResult<bool>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(true, okResult?.Value);
 
             Assert.NotNull(okResult);
             Assert.True(controller.ModelState.IsValid);
@@ -1300,34 +1304,83 @@ namespace Test.Yoink
             // The method CreateLikeOnPostAsync in the YoinkController.cs takes in a PostId and returns an int of the number of likes on the post.
 
             // Arrange
-            
-            Guid postId = Guid.NewGuid();
 
-            LikeDto fake = new LikeDto(Guid.NewGuid());
+            string userId = "auth0id";
+
+            LikeDto likeDto = new LikeDto(Guid.NewGuid());
 
             var mockBl = new Mock<IYoinkBusinessLayer>();
 
             int likeCount = 1;
 
-            mockBl.Setup(bl => bl.CreateLikeOnPostAsync(It.IsAny<LikeDto>(), It.IsAny<String>()))
+            mockBl.Setup(bl => bl.CreateLikeOnPostAsync(likeDto, userId))
                 .ReturnsAsync(likeCount);
 
             var controller = new YoinkController(mockBl.Object);
 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
             // Act
 
-            var result = await controller.CreateLikeOnPostAsync(fake);
-            var okResult = result.Result as OkObjectResult;
+            var result = await controller.CreateLikeOnPostAsync(likeDto);
+            var okResult = result.Result as CreatedResult;
 
             // Assert
 
-            Assert.IsType<ActionResult<int>>(result);
+            Assert.IsType<ActionResult<int?>>(result);
             Assert.True(controller.ModelState.IsValid);
             Assert.NotNull(okResult);
             Assert.Equal(okResult?.Value, likeCount);
 
         }
 
+        [Fact]
+        public async Task TestingDeleteLikeOnPostAsync()
+        {
+            // The method DeleteLikeOnPostAsync in the YoinkController.cs takes in a PostId and returns an int of the number of likes on the post.
+
+            // Arrange
+
+            string userId = "auth0id";
+
+            LikeDto likeDto = new LikeDto(Guid.NewGuid());
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+
+            int likeCount = 1;
+
+            mockBl.Setup(bl => bl.DeleteLikeOnPostAsync(likeDto, userId))
+                .ReturnsAsync(likeCount);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+
+            var result = await controller.DeleteLikeOnPostAsync(likeDto);
+            var okResult = result.Result as CreatedResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<int?>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.NotNull(okResult);
+            Assert.Equal(okResult?.Value, likeCount);
+
+        }
 
 
         /// ///////////
