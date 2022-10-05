@@ -59,7 +59,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: './client/'
-    customCommand: 'run ng test'
+    customCommand: 'run test-headless'
   continueOnError: true
 
 - task: SonarCloudAnalyze@1
