@@ -133,7 +133,7 @@ namespace Test.Yoink
         }
 
         [Fact]
-        public async Task TestingGetALL_PortfoliosByUserIDAsyncReturnsListOfPortfolios()
+        public async Task TestingGetAllPortfoliosByUserIDAsyncReturnsListOfPortfolios()
         {
             // Arrange
             string userid = "test1";
@@ -152,11 +152,48 @@ namespace Test.Yoink
             Assert.Equal(userid, result[0]?.Fk_UserID);  
 
         }
+
+        [Fact]
+        public async Task TestingGetPortfolioByPorfolioIDAsyncReturnsPortfolio()
+        {
+            // Arrange
+            Guid portfolioID = new Guid("11322563-cf3a-462e-90f6-03bd0d7e0fdb");
+
+            var fakeConfig = new Mock<IConfiguration>();
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            Portfolio? result = await TheClassBeingTested.GetPortfolioByPorfolioIDAsync(portfolioID);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(portfolioID, result?.PortfolioID);
+        }
+
+        [Fact]
+        public async Task TestingGetRecentPortfoliosByUserIDAsyncReturnsAPortfolio()
+        {
+            // Arrange
+            string userid = "test1";
+
+            var fakeConfig = new Mock<IConfiguration>();
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            Portfolio? result = await TheClassBeingTested.GetRecentPortfoliosByUserIDAsync(userid);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(userid, result?.Fk_UserID);
+        }
     }
 }
-
-
-
         
         // [Fact]
         // public void TestingCreateUserProfile()
