@@ -28,6 +28,7 @@ describe('AddLikeToPostService', () => {
     expect(service).toBeTruthy();
   });
 
+  //tests if the http request updates the like and returns a new post object with the updated likes
   it('should add update to a post', () => {
    (done: DoneFn) => {
     const numOfLikes : number = 1 
@@ -48,7 +49,7 @@ describe('AddLikeToPostService', () => {
   }
   });
 
-
+  //tests i the addLike method is truthy
   it('add-like-to-post',()=>{
     expect(service.addLike).toBeTruthy();
   });
