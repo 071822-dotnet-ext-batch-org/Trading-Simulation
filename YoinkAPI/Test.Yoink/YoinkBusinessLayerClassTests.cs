@@ -571,7 +571,7 @@ namespace Test.Yoink
 
 
         [Fact]
-        public async Task TestingGetNumberOfPostsAsync()
+        public async Task TestingGetNumberOfPostsAsyncReturnsNumberOfTotalPosts()
         {
 
             int? excpectedGetNumberPosts = 10;
@@ -593,7 +593,7 @@ namespace Test.Yoink
 
 
         [Fact]
-        public async Task TestingGetNumberOfBuysAsync()
+        public async Task TestingGetNumberOfBuysAsyncReturnsTotalNumberOfBuys()
         {
 
             int? excpectedGetNumberBuys = 10;
@@ -616,7 +616,7 @@ namespace Test.Yoink
 
 
         [Fact]
-        public async Task TestingGetNumberOfSellsAsync()
+        public async Task TestingGetNumberOfSellsAsyncReturnTotalNumberOfSells()
         {
 
             int? excpectedGetNumberSells = 10;
@@ -639,9 +639,22 @@ namespace Test.Yoink
 
 
         [Fact]
-        public async Task TestingCreatePostAsync()
+        public async Task TestingCreatePostAsyncCreatesPostAndReturnsTheNewleyMadePost()
         {
             string auth0UserId = "sample auth0UserId";
+
+            Guid PostIdGuid = Guid.NewGuid();
+
+            Post expectedPost = new Post()
+            {
+                PostID = PostIdGuid,
+                Fk_UserID = "Sample Fk_UserID",
+                Content = "Sample Content",
+                Likes = 10,
+                PrivacyLevel = 2,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
 
             CreatePostDto post = new CreatePostDto()
             {
@@ -654,6 +667,10 @@ namespace Test.Yoink
             dataSource
                 .Setup(g => g.CreatePostAsync(It.IsAny<string>(), It.IsAny<CreatePostDto>()))
                 .ReturnsAsync(true);
+            dataSource
+                .Setup(g => g.GetRecentPostByUserId(It.IsAny<string>()))
+                .ReturnsAsync(expectedPost);
+
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
             //Act
