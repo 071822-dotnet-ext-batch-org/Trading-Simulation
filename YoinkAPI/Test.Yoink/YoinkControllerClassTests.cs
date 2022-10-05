@@ -1181,7 +1181,7 @@ namespace Test.Yoink
         [Fact]
         public async Task TestingDeletePostAsync()
         {
-            // The method DeletePostAsync in the YoinkController.cs takes in a PostId and returns a bool.
+            // The method DeletePostAsync in the YoinkController.cs takes in a PostId and returns a guid of the deleted post.
 
             // Arrange
 
@@ -1190,7 +1190,8 @@ namespace Test.Yoink
             string fakeUser = "auth0id";
 
             var mockBl = new Mock<IYoinkBusinessLayer>();
-            mockBl.Setup(bl => bl.DeletePostAsync(fakeUser, postId));
+            mockBl.Setup(bl => bl.DeletePostAsync(fakeUser, postId))
+                .ReturnsAsync(postId);
 
             var controller = new YoinkController(mockBl.Object);
 
@@ -1209,10 +1210,10 @@ namespace Test.Yoink
 
             // Assert
 
-            Assert.IsType<OkObjectResult>(okResult);
-            Assert.True(controller.ModelState.IsValid);
-            Assert.Equal(200, okResult?.StatusCode);
             Assert.NotNull(okResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(postId, okResult?.Value);
+
         }
 
         [Fact]
@@ -1252,7 +1253,80 @@ namespace Test.Yoink
             Assert.True(controller.ModelState.IsValid);
             Assert.NotNull(okResult);
             Assert.Equal(okResult?.Value, postWithCommentCountDtos);
-        }      
+        }
+
+        [Fact]
+        public async Task TestingGetPostByPostIdAsync()
+        {
+            // The method GetPostByPostIdAsync in the YoinkController.cs takes in a PostId and returns a PostWithCommentCountDto.
+
+            // Arrange
+
+            Guid postId = Guid.NewGuid();
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+
+            PostWithCommentCountDto postWithCommentCountDto = new PostWithCommentCountDto();
+
+            mockBl.Setup(bl => bl.GetPostByPostIdAsync(postId))
+                .ReturnsAsync(postWithCommentCountDto);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+
+            var result = await controller.GetPostByPostIdAsync(postId);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<PostWithCommentCountDto>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.NotNull(okResult);
+            Assert.Equal(okResult?.Value, postWithCommentCountDto);
+        }  
+    
+        [Fact]
+        public async Task TestingCreateLikeOnPostAsync()
+        {
+            // The method CreateLikeOnPostAsync in the YoinkController.cs takes in a PostId and returns an int of the number of likes on the post.
+
+            // Arrange
+            
+            Guid postId = Guid.NewGuid();
+
+            LikeDto fake = new LikeDto(Guid.NewGuid());
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+
+            int likeCount = 1;
+
+            mockBl.Setup(bl => bl.CreateLikeOnPostAsync(It.IsAny<LikeDto>(), It.IsAny<String>()))
+                .ReturnsAsync(likeCount);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            // Act
+
+            var result = await controller.CreateLikeOnPostAsync(fake);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<int>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.NotNull(okResult);
+            Assert.Equal(okResult?.Value, likeCount);
+
+        }
 
 
 
