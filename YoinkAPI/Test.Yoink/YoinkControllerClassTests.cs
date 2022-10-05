@@ -14,7 +14,8 @@ namespace Test.Yoink
     public class YoinkControllerClassTests
     {
 
-private Helpers helpers = new Helpers();
+        private Helpers helpers = new Helpers();
+
 
         [Fact]
         public async Task TestingEditPortfolioAsyncUpdatesPortfolio()
@@ -289,6 +290,7 @@ private Helpers helpers = new Helpers();
             Assert.True(theClassBeingTested.ModelState.IsValid);
             Assert.Equal(expectedSellMockList, resultPost);
         }
+
 
         /// <summary>
         /// This test tests to see if the method returns a null investment - It's input is an InvestmentDto and returns a nullable investment
@@ -1210,7 +1212,6 @@ private Helpers helpers = new Helpers();
             Assert.NotNull(okResult);
             Assert.True(controller.ModelState.IsValid);
             Assert.Equal(postId, okResult?.Value);//a guid is equal to a guid
-
         }
 
         [Fact]
