@@ -14,11 +14,12 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+
 steps:
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'Sonar cloud connection for Yoink'
-    organization: 'yoinkp3new'
+    organization: 'YoinkP3New'
     scannerMode: 'CLI'
     configMode: 'manual'
     cliprojectKey: 'YoinkP3New_Yoink-Pipeline'
@@ -41,14 +42,14 @@ steps:
 - task: Npm@1
   displayName: 'Install Node_modules'
   inputs:
-    workingDir: client
+    workingDir: './client/'
     verbose: false
 
 - task: Npm@1
   displayName: 'Build Angular Project'
   inputs:
     command: custom
-    workingDir: client
+    workingDir: './client/'
     verbose: false
     customCommand: 'run ng build --prod'
   continueOnError: true
@@ -57,8 +58,9 @@ steps:
   displayName: 'NPM Test'
   inputs:
     command: 'custom'
-    workingDir: $(solution)
-    customCommand: 'run test-headless'
+    workingDir: './client/'
+    customCommand: 'run ng test'
+  continueOnError: true
 
 - task: SonarCloudAnalyze@1
   displayName: 'SonarCloud Analyze'

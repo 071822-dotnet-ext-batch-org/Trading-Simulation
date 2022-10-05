@@ -4,7 +4,7 @@
     <form class="BuySell-Panel"> <!-- What's needed for a buy or sell order-->
       <div class="dropdown-fields"> <!-- Just dropdown boxes -->
         <div> <!-- Chose which portfolio to use drop down box -->
-          <mat-form-field>
+          <mat-form-field class="portfolio-dropdown">
             <mat-label>Portfolio</mat-label>
             <mat-select [required]="true" [(value)]="portfolioID">
               <mat-option *ngFor="let port of portfolios" value="{{port.portfolioID}}">
@@ -13,7 +13,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <mat-form-field> <!-- Chose either buy or sell drop down box -->
+        <mat-form-field class="buy-sell-dropdown"> <!-- Chose either buy or sell drop down box -->
           <mat-label>Choose Buy or Sell</mat-label>
           <mat-select [required]="true" [(value)]="selected">
             <mat-option *ngFor="let option of options" value="{{option.value}}">
@@ -24,13 +24,13 @@
       </div>
       <div class="input-fields"> <!-- Order Fill in boxes -->
         <div class="Row-2"> <!-- Enter ticker fill in box -->
-          <mat-form-field appearance="fill">
+          <mat-form-field class="ticker-order-box" appearance="fill">
             <mat-label>Enter Ticker Symbol</mat-label>
             <input matInput #input maxlength="5" placeholder="Ticker Symbol" [required]="true" [formControl]="symbol">
           </mat-form-field>
         </div>
         <div class="Row-3"> <!-- Enter quantity fillin box -->
-          <mat-form-field appearance="fill">
+          <mat-form-field class="quantity-input" appearance="fill">
             <mat-label>Enter Quantity</mat-label>
             <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty"
               [ngModelOptions]="{standalone: true}" [required]="true">
@@ -82,27 +82,27 @@
         <tbody>
           <tr>
             <td>Ticker:</td> <!-- The ticker symbol-->
-            <td>{{data.T}}</td>
+            <td class="dataT">{{data.T}}</td>
           </tr>
           <tr>
             <td>Price at open:</td>  <!-- Stock price at opening of the trading day from getTickerData-->
-            <td>{{data.o}}</td>
+            <td class='dataO'>{{data.o}}</td>
           </tr>
           <tr>
             <td>High of the day:</td> <!-- Highest of the trading day from getTickerData-->
-            <td>{{data.h}}</td>
+            <td class="dataH">{{data.h}}</td>
           </tr>
           <tr>
             <td>Low of the day:</td> <!-- Lowest stock price of the trading day from getTickerData-->
-            <td>{{data.l}}</td>
+            <td class="dataL">{{data.l}}</td>
           </tr>
           <tr>
             <td>Price at close:</td> <!-- Stock price at closingof the trading day from getTickerData-->
-            <td>{{data.c}}</td>
+            <td class="dataC">{{data.c}}</td>
           </tr>
           <tr>
             <td>Trading volume per day:</td> <!-- The total number of stock that were traded during the day from getTickerData-->
-            <td>{{data.v}}</td>
+            <td class="dataV">{{data.v}}</td>
           </tr>
         </tbody>
       </table>
