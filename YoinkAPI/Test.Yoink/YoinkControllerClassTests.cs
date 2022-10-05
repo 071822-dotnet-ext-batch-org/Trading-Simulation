@@ -907,7 +907,7 @@ namespace Test.Yoink
         [Fact]
         public async Task TestingDeletePostAsync()
         {
-            // The method DeletePostAsync in the YoinkController.cs takes in a PostId and returns a bool.
+            // The method DeletePostAsync in the YoinkController.cs takes in a PostId and returns a guid of the deleted post.
 
             // Arrange
 
@@ -916,7 +916,8 @@ namespace Test.Yoink
             string fakeUser = "auth0id";
 
             var mockBl = new Mock<IYoinkBusinessLayer>();
-            mockBl.Setup(bl => bl.DeletePostAsync(fakeUser, postId));
+            mockBl.Setup(bl => bl.DeletePostAsync(fakeUser, postId))
+                .ReturnsAsync(postId);
 
             var controller = new YoinkController(mockBl.Object);
 
@@ -938,7 +939,11 @@ namespace Test.Yoink
             Assert.IsType<ActionResult<bool>>(result);
             Assert.True(controller.ModelState.IsValid);
             Assert.Equal(true, okResult?.Value);
+
             Assert.NotNull(okResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(postId, okResult?.Value);
+
         }
 
         [Fact]
@@ -978,7 +983,80 @@ namespace Test.Yoink
             Assert.True(controller.ModelState.IsValid);
             Assert.NotNull(okResult);
             Assert.Equal(okResult?.Value, postWithCommentCountDtos);
-        }      
+        }
+
+        [Fact]
+        public async Task TestingGetPostByPostIdAsync()
+        {
+            // The method GetPostByPostIdAsync in the YoinkController.cs takes in a PostId and returns a PostWithCommentCountDto.
+
+            // Arrange
+
+            Guid postId = Guid.NewGuid();
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+
+            PostWithCommentCountDto postWithCommentCountDto = new PostWithCommentCountDto();
+
+            mockBl.Setup(bl => bl.GetPostByPostIdAsync(postId))
+                .ReturnsAsync(postWithCommentCountDto);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+
+            var result = await controller.GetPostByPostIdAsync(postId);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<PostWithCommentCountDto>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.NotNull(okResult);
+            Assert.Equal(okResult?.Value, postWithCommentCountDto);
+        }  
+    
+        [Fact]
+        public async Task TestingCreateLikeOnPostAsync()
+        {
+            // The method CreateLikeOnPostAsync in the YoinkController.cs takes in a PostId and returns an int of the number of likes on the post.
+
+            // Arrange
+            
+            Guid postId = Guid.NewGuid();
+
+            LikeDto fake = new LikeDto(Guid.NewGuid());
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+
+            int likeCount = 1;
+
+            mockBl.Setup(bl => bl.CreateLikeOnPostAsync(It.IsAny<LikeDto>(), It.IsAny<String>()))
+                .ReturnsAsync(likeCount);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            // Act
+
+            var result = await controller.CreateLikeOnPostAsync(fake);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<int>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.NotNull(okResult);
+            Assert.Equal(okResult?.Value, likeCount);
+
+        }
 
 
 
@@ -1309,7 +1387,6 @@ namespace Test.Yoink
         [Fact]
         public async Task Test_GetProfileByUserIDAsync_if_UsersProfile_is_GOTTEN()
         {
-            //Task<ActionResult<Profile?>> GetProfileByUserIDAsync(GetProfileDto u)
             //-------------------Arrange Section ----------------
             string fakeUser = "auth0ID";
             //We then create a mock Identity User using Claims 
@@ -1361,11 +1438,10 @@ namespace Test.Yoink
         /// <summary>
         /// This method checks if a user got a profile successfully - GOTTEN
         /// </summary>
-        /// <returns></returns>
+        /// <returns>an async Task</returns>
         [Fact]
         public async Task Test_GetProfileByUserIDAsync_if_UsersProfile_is_NOT_GOTTEN()
         {
-            //Task<ActionResult<Profile?>> GetProfileByUserIDAsync(GetProfileDto u)
             //-------------------Arrange Section ----------------
             string fakeUser = "auth0ID";
             //We then create a mock Identity User using Claims 
@@ -1403,6 +1479,280 @@ namespace Test.Yoink
             }
 
         }//End of GetProfileByUserIDAsync Test - NOT GOTTEN
+
+        /// <summary>
+        /// This method tests to see if a profile was successfully edited
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Test_EditProfileAsync_IF_Edited()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            ProfileDto editProfileDto = new ProfileDto("name", "email", "src/picture",1);
+            //We create an output that is nullable
+            Profile returnedProfileFromRepo = new Profile(Guid.NewGuid(),fakeUser, "name", "email", "src/picture", 1);
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.EditProfileAsync(fakeUser, editProfileDto))
+                .ReturnsAsync(returnedProfileFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Profile?> returnedActionResultOBJ = await controller_datasource.EditProfileAsync(editProfileDto);
+            Profile? profile = returnedActionResultOBJ.Value as Profile;
+
+            //-------------------Assert Section ----------------
+            if(profile != null){
+                Assert.NotNull(returnedActionResultOBJ);
+                Assert.Equal(returnedProfileFromRepo.ProfileID, profile.ProfileID);
+                Assert.IsType<OkObjectResult>(returnedActionResultOBJ?.Result);
+            }
+
+        }//End of EditProfileAsync Test - Edited
+
+        /// <summary>
+        /// This method tests to see if a profile was not edited
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Test_EditProfileAsync_IF_NOT_Edited()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            ProfileDto editProfileDto = new ProfileDto();
+            //We create an output that is nullable
+            Profile returnedProfileFromRepo = new Profile();
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.EditProfileAsync(fakeUser, editProfileDto))
+                .ReturnsAsync(returnedProfileFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Profile?> returnedActionResultOBJ = await controller_datasource.EditProfileAsync(editProfileDto);
+            Profile? profile = returnedActionResultOBJ.Value as Profile;
+
+            //-------------------Assert Section ----------------
+            if(profile == null){
+                Assert.Null(returnedActionResultOBJ.Value);
+                //This must be nullable or it will say - Assert.NotNull() Failure
+                Assert.Equal(null, profile?.ProfileID);
+                Assert.IsType<OkObjectResult>(returnedActionResultOBJ?.Result);
+            }
+
+        }//End of EditProfileAsync Test - Not Edited
+
+        /// <summary>
+        /// This method tests to see if a portfolio was successfully created
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Test_CreatePortfolioAsync_IS_Created()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            PortfolioDto dtoOBJ = new PortfolioDto(Guid.NewGuid(), "email", 10,1);
+            //We create an output that is nullable
+            Portfolio returnedOBJFromRepo = new Portfolio(Guid.NewGuid(),fakeUser, "name",1, 1, 10,10,10,10,1,1, DateTime.Now, DateTime.Now);
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.CreatePortfolioAsync(fakeUser, dtoOBJ))
+                .ReturnsAsync(returnedOBJFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Portfolio?> returnedActionResult = await controller_datasource.CreatePortfolioAsync(dtoOBJ);
+            Portfolio? thisresultOBJ = returnedActionResult.Value as Portfolio;
+
+            //-------------------Assert Section ----------------
+            if(thisresultOBJ != null){
+                Assert.NotNull(returnedActionResult);
+                //This must be nullable or it will say - Assert.NotNull() Failure
+                Assert.Equal(returnedOBJFromRepo.PortfolioID, thisresultOBJ.PortfolioID);
+                Assert.IsType<CreatedResult>(returnedActionResult?.Result);
+            }
+
+        }//End of CreatePortfolioAsync Test - Created
+
+
+        /// <summary>
+        /// This method tests to see if a portfolio was not created
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Test_CreatePortfolioAsync_IS_NOT_Created()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            PortfolioDto dtoOBJ = new PortfolioDto();
+            //We create an output that is nullable
+            Portfolio expectedOBJFromRepo = new Portfolio();
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.CreatePortfolioAsync(fakeUser, dtoOBJ))
+                .ReturnsAsync(expectedOBJFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Portfolio?> returnedActionResult = await controller_datasource.CreatePortfolioAsync(dtoOBJ);
+            Portfolio? thisresultOBJ = returnedActionResult.Value as Portfolio;
+
+            //-------------------Assert Section ----------------
+            if(thisresultOBJ == null){
+                Assert.Null(returnedActionResult.Value);
+                //This must be nullable or it will say - Assert.NotNull() Failure
+                Assert.Equal(expectedOBJFromRepo.PortfolioID, thisresultOBJ?.PortfolioID);
+                //Supposed to be BadRequest if not created or 204 or something other than created
+                Assert.IsType<BadRequestObjectResult>(returnedActionResult?.Result);
+            }
+
+        }//End of CreatePortfolioAsync Test - Not Created
+
+        /// <summary>
+        /// This method tests to see if the user's portfolios was gotten successfully
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Test_GetPortfoliosByUserIDAsync_to_see_if_they_were_GOTTEN()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            PortfolioDto dtoOBJ = new PortfolioDto(Guid.NewGuid(), "name", 1,1);
+            //We create an output that is nullable
+            List<Portfolio?> expectedOBJFromRepo = new List<Portfolio?>();
+            for(int i =0; i < 5; i++)
+            {
+                Portfolio portfolio = new Portfolio(Guid.NewGuid(),fakeUser, "name",1, 1, 10,10,10,10,1,1, DateTime.Now, DateTime.Now);
+                expectedOBJFromRepo.Add(portfolio);
+
+            }
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.GetALLPortfoliosByUserIDAsync(fakeUser))
+                .ReturnsAsync(expectedOBJFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<List<Portfolio?>> returnedActionResult = await controller_datasource.GetPortfoliosByUserIDAsync();
+            List<Portfolio?>? thisresultOBJ = returnedActionResult.Value as List<Portfolio?>;
+
+            //-------------------Assert Section ----------------
+            if(thisresultOBJ != null){
+                Assert.NotNull(returnedActionResult.Value);
+                //This must be nullable or it will say - Assert.NotNull() Failure
+                Assert.Equal(expectedOBJFromRepo, thisresultOBJ);
+                //Supposed to be BadRequest if not created or 204 or something other than created
+                Assert.IsType<OkObjectResult>(returnedActionResult?.Result);
+            }
+        }//End of GetPortfoliosByUserIDAsync Test - GOTTEN
+
+
+        /// <summary>
+        /// This method tests to see if the user's portfolios was not gotten
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Test_GetPortfoliosByUserIDAsync_to_see_if_they_were_NOT_GOTTEN()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            PortfolioDto dtoOBJ = new PortfolioDto();
+            //We create an output that is nullable
+            List<Portfolio?> expectedOBJFromRepo = new List<Portfolio?>();
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.GetALLPortfoliosByUserIDAsync(fakeUser))
+                .ReturnsAsync(expectedOBJFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<List<Portfolio?>> returnedActionResult = await controller_datasource.GetPortfoliosByUserIDAsync();
+            // List<Portfolio?>? thisresultOBJ = returnedActionResult.Value as List<Portfolio?>;
+
+            //-------------------Assert Section ----------------
+            if(returnedActionResult.Value != null){
+                Assert.Null(returnedActionResult.Value);
+                //This must be nullable or it will say - Assert.NotNull() Failure
+                Assert.Equal(expectedOBJFromRepo, returnedActionResult.Value);
+                //Supposed to be BadRequest if not created or 204 or something other than created
+                Assert.IsType<OkObjectResult>(returnedActionResult?.Result);
+            }
+        }//End of GetPortfoliosByUserIDAsync Test - NOT GOTTEN
+
+
 
         // [Fact]
         // public async Task TestingCreatePostAsync()
