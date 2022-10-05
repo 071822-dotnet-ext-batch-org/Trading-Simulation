@@ -426,7 +426,8 @@ namespace Models
 
         public LikeForCommentDto() { }
 
-        public LikeForCommentDto(Guid CommentId, string UserID)
+        
+        public LikeForCommentDto(Guid CommentId)//removed unused string userID from constructor
         {
             this.CommentId= CommentId;
  
