@@ -1,6 +1,7 @@
 ﻿using APILayer.Controllers;
 using BusinessLayer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Moq;
 using RepoLayer;
@@ -796,7 +797,6 @@ namespace Test.Yoink
         [Fact]
         public async Task CreateCommentOnPostAsyncReturnsTrueOnCreatedComment()
         {
-            //    public async Task<bool> CreateCommentOnPostAsync(CommentDto comment, string? auth0UserId)
             // Arrange
             string fakeUser = "auth0id";
             Guid guid = Guid.NewGuid();
@@ -807,10 +807,10 @@ namespace Test.Yoink
             mockRl.Setup(bl => bl.CreateCommentOnPostAsync(It.IsAny<CommentDto>(), fakeUser))
                 .ReturnsAsync(mockBool);
 
-            var controller = new YoinkBusinessLayer(mockRl.Object);
+            var bl = new YoinkBusinessLayer(mockRl.Object);
 
             // Act
-            var result = await controller.CreateCommentOnPostAsync(createComment, fakeUser);
+            var result = await bl.CreateCommentOnPostAsync(createComment, fakeUser);
 
             //Assert
             Assert.Equal(mockBool, result);
@@ -819,11 +819,10 @@ namespace Test.Yoink
         [Fact]
         public async Task EditCommentAsyncReturnsEditedCommentWhenSucceeded()
         {
-            //    public async Task<Comment?> EditCommentAsync(EditCommentDto comment)
             // Arrange
 
-            Guid guid = new Guid();
-            
+            Guid guid = Guid.NewGuid();
+
 
             EditCommentDto editedComment = new(guid, "TestComment");
 
@@ -837,14 +836,163 @@ namespace Test.Yoink
                 .Setup(a => a.GetCommentByCommentIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(mockComment);
 
-            var controller = new YoinkBusinessLayer(dataSource.Object);
+            var bl = new YoinkBusinessLayer(dataSource.Object);
 
             // Act
-            var result = await controller.EditCommentAsync(editedComment);
+            var result = await bl.EditCommentAsync(editedComment);
 
             //Assert
             Assert.Equal(mockComment, result);
         }
+
+
+        [Fact]
+        public async Task DeleteCommentAsyncAuthorizeUserReturnTrueIfDeleted()
+        {
+            // Arrange
+
+            Guid guid = Guid.NewGuid();
+            string userId = "userId";
+            bool trueCheck = true;
+
+            EditCommentDto editedComment = new(guid, "TestComment");
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(a => a.GetUserWithCommentIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(userId);
+            dataSource
+                .Setup(a => a.DeleteCommentAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(trueCheck);
+
+            var bl = new YoinkBusinessLayer(dataSource.Object);
+
+            // Act
+            var result = await bl.DeleteCommentAsync(guid, userId);
+
+            //Assert
+            Assert.True(result);
+        }
+
+
+        [Fact]
+        public async Task CreateLikeForCommentAsyncReturnsTrueWhenLikeSucceeded()
+        {
+
+            // Arrange
+            string fakeUser = "auth0id";
+            Guid guid = Guid.NewGuid();
+            LikeForCommentDto likeComment = new(guid);
+            bool mockBool = true;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.CreateLikeForCommentAsync(It.IsAny<LikeForCommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.CreateLikeForCommentAsync(likeComment, fakeUser);
+
+            //Assert
+            Assert.Equal(mockBool, result);
+        }
+
+ 
+        [Fact]
+        public async Task DeleteLikeForCommentAsyncReturnsTrueWhenLikeSucceeded()
+        {
+            // Arrange
+            string fakeUser = "auth0id";
+            Guid guid = Guid.NewGuid();
+            LikeForCommentDto unlikeComment = new(guid);
+            bool mockBool = true;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.DeleteLikeForCommentAsync(It.IsAny<LikeForCommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.DeleteLikeForCommentAsync(unlikeComment, fakeUser);
+
+            //Assert
+            Assert.Equal(mockBool, result);
+        }
+
+
+        [Fact]
+        public async Task GetCountofCommentsByPostIdAsyncReturnsNumberOfCommentsAssociatedWithAValidPostId()
+        {
+            // Arrange
+            Guid guid = Guid.NewGuid();
+            LikeForCommentDto unlikeComment = new(guid);
+            int mockInt = 10;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.GetCountofCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(mockInt);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.GetCountofCommentsByPostIdAsync(guid);
+
+            //Assert
+            Assert.Equal(mockInt, result);
+        }
+
+
+        [Fact]
+        public async Task DeletePortfolioAsyncReturnTrueIfSuccessfulDelete()
+        {
+            // Arrange
+            string userId = "userId";
+            Guid guid = Guid.NewGuid();
+            DeletePortfolioDto deleteDto = new(guid);
+            bool mockBool = true;
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.DeletePortfolioByPortfolioIDAsync(It.IsAny<string>(),It.IsAny<DeletePortfolioDto>()))
+                .ReturnsAsync(mockBool);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.DeletePortfolioAsync(userId, deleteDto);
+
+            //Assert
+            Assert.Equal(mockBool, result);
+        }
+
+
+        [Fact]
+        public async Task GetPostLikesByUserIdReturnsListOfUserIdsThatHaveLikedAPost()
+        {
+
+            // Arrange
+            string fakeUser = "auth0id";
+
+            List<Guid> mockGuids = helpers.fakeGuidList();
+
+            var mockRl = new Mock<IdbsRequests>();
+            mockRl.Setup(bl => bl.GetPostLikesByUserID(It.IsAny<string>()))
+                .ReturnsAsync(mockGuids);
+
+            var bl = new YoinkBusinessLayer(mockRl.Object);
+
+            // Act
+            var result = await bl.GetPostLikesByUserID(fakeUser);
+            
+
+            //Assert
+            if (result != null)
+            {
+                Assert.Equal(mockGuids, result);
+            }
+        }
+
     }
 }
 
