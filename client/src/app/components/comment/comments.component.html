@@ -1,13 +1,21 @@
-
-<div id="reply-action-bar">
-    <button mat-flat-button color="primary"
-    (click)="onSendClick()">
-    <mat-icon>send</mat-icon></button>
-    <textarea [(ngModel)]="content" placeholder="Comment..."></textarea>
-</div>
-
-<div id="comments" *ngFor="let comment of comments" >
-<p>{{ comment.content }}</p>
-<p>{{ comment.dateCreated | date:'short' }}</p>
-</div>
 <!-- comment box 'send' button (sam)-->
+<div class="comments">
+    <h3 class="comment-title">Comments</h3>
+    <div class="comments-container">
+    <div class="comment-right-part" id="comments" *ngFor="let comment of comments" >
+        <mat-card> <div class="comment-content">
+        <p>{{ comment.content }}</p>
+        <p>{{ comment.dateCreated | date:'short' }}</p>
+    </div></mat-card>
+        <div class="comment-form-title">Write comment</div>
+    </div>
+</div>
+<div id="reply-action-bar">
+    <div>
+        <textarea id="commentBox" name="Comments" rows="4" cols="50" [(ngModel)]="content"></textarea>
+    </div>
+    <div><button mat-flat-button color="primary"
+     (click)="onSendClick()">
+     Send</button></div>
+    </div>
+</div>

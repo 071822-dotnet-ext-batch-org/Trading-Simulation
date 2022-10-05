@@ -1,6 +1,7 @@
 ﻿using APILayer.Controllers;
 using BusinessLayer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Moq;
 using RepoLayer;
@@ -653,6 +654,8 @@ namespace Test.Yoink
         [Fact]
         public async Task TestingGetInvestmentsByPortfolioIDAsync()
         {
+            //public async Task<ActionResult<List<Investment>>> GetInvestmentsByPortfolioIDAsync(GetAllInvestmentsDto investmentDto)
+
             //Arrange
             GetAllInvestmentsDto allInvestmentsDto = new GetAllInvestmentsDto()
             {
@@ -660,19 +663,36 @@ namespace Test.Yoink
             };
 
 
-            ActionResult<List<Investment>> expectedCreatedPost = new OkObjectResult(new List<Investment>());
+            List<Investment> expectedCreatedPostList = new List<Investment>();
+
+            Investment investment1 = helpers.fakeInvestment();
+            investment1.Fk_PortfolioID = allInvestmentsDto.PortfolioID;
+            expectedCreatedPostList.Add(investment1);
+            Investment investment2 = helpers.fakeInvestment();
+            investment2.Fk_PortfolioID = allInvestmentsDto.PortfolioID;
+            expectedCreatedPostList.Add(investment2);
+
 
             var dataSource2 = new Mock<IYoinkBusinessLayer>();
 
             dataSource2
                     .Setup(s => s.GetAllInvestmentsByPortfolioIDAsync(It.IsAny<Guid>()))
-                    .ReturnsAsync(new List<Investment>());
+                    .ReturnsAsync(expectedCreatedPostList);
 
             var ControllerClass = new YoinkController(dataSource2.Object);
 
             //Act
             
             var AllInvestmentswereGotten = await ControllerClass.GetInvestmentsByPortfolioIDAsync(allInvestmentsDto);
+            var okResult = AllInvestmentswereGotten.Result as OkObjectResult;
+            List<Investment>? AllInvestmentswereGottenList = okResult?.Value as List<Investment>;
+
+
+            //Assert
+            if (AllInvestmentswereGottenList != null)
+            {
+                Assert.Equal(expectedCreatedPostList[0].AmountInvested, AllInvestmentswereGottenList[0].AmountInvested);
+            }
         }
 
         //Testing an empty return list
