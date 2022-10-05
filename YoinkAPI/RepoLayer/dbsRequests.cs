@@ -19,8 +19,6 @@ namespace RepoLayer
         {
             _config = config;
 
-            Console.WriteLine($"Environt is {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
-
             if (string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase))
             {
                 _conn = new SqlConnection(_config["ConnectionStrings:TestingConnection"]);

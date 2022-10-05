@@ -15,6 +15,8 @@ namespace Test.Yoink
     public class YoinkRepoLayerClassTests
     {
 
+        private Helpers helpers = new Helpers();
+
         // This method would test the CreateUserProfile 
 
         [Fact]
