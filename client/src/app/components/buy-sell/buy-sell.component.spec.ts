@@ -8,20 +8,10 @@ import { environment as env } from 'src/environments/environment';
 import { inject, ɵcoerceToBoolean } from '@angular/core';
 import { BuySellComponent } from './buy-sell.component';
 import { HttpClientModule } from '@angular/common/http';
-import { HarnessLoader } from '@angular/cdk/testing'; // added
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'; // added
-import { FormControl } from '@angular/forms';
 
 describe('BuySellComponent', () => {
   let component: BuySellComponent; // Component class
   let fixture: ComponentFixture<BuySellComponent>; // Fixture to hold component
-  // let chosePortfolio: MatFormField; // added
-  // let choseBuySell: MatFormField; // added
-  // let tickerBoxQty: MatFormField; // added
-  // let quantity: MatFormField; // added
-  // let searchBox: MatFormField; // added
-  let loader: HarnessLoader; // added
-  let bedHarness: TestbedHarnessEnvironment; //added
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -95,20 +85,26 @@ describe('BuySellComponent', () => {
     expect(component.totalPrice).toEqual(0);
   });
 
-  // Test for the portfolio dropdown box on the buy sell page
-  // it('Portfolio box', () => {
-  //   const buySellOption = {
-  //     value: 'Buy',
-  //     valueView: 'Sell'
-  //   }
-  //   fixture.detectChanges();
+  // Test for the buy/sell dropdown box on the buy sell page, passes
+  it("Should check or sell from dropdown box starts empty", () => {
+    const bsDropbox = fixture.debugElement.query(By.css('.buy-sell-dropdown')).nativeElement;
+    expect(bsDropbox.innerhtml).not.toBeNull();
+  });
 
+  // Checks to see if there is anything in the portfolio box, passes
+  it("Checks if portfolio dropdown box starts empty", () => {
+    const portDropbox = fixture.debugElement.query(By.css('.portfolio-dropdown')).nativeElement;
+    expect(portDropbox.innerhtml).not.toBeNull();
+  });
 
-  // });
-
-  // Test for the buy/sell dropdown box on the buy sell page
-  it("Should be able to choose Buy or sell from dropdown box", () => {
-    pending()
+  // Not yet working
+  it("Checks if portfolio dropdown box when changed", () => {
+    const portDropbox = fixture.debugElement.query(By.css('.portfolio-dropdown')).nativeElement;
+    fixture.nativeElement.value = 'Buy';
+    fixture.detectChanges()
+    fixture.whenStable().then(() => {
+      expect(portDropbox.nativeElement.value).toBe('Buy');
+    })
   });
 
   // Test for the ticker symbol fill in box on the buy sell page, passes
@@ -125,24 +121,36 @@ describe('BuySellComponent', () => {
     });
   });
 
+  // Test to check ticker search box starts empty, passes
+  it('Ticker search box should start empty', () => {
+    const searchBox = fixture.debugElement.query(By.css('.search-form-field')).nativeElement;
+    expect(searchBox.innerhtml).not.toBeNull();
+  });
+
+  // Test to check ticker order box starts empty, passes
+  it('Ticker order box should start empty', () => {
+    const tickOrderBox = fixture.debugElement.query(By.css('.ticker-order-box')).nativeElement;
+    expect(tickOrderBox.innerhtml).not.toBeNull();
+  });
+
+  // Test to make sure quantity box begins empty, passes
+  it('Quantity should start empty', () => {
+    const qtyBox = fixture.debugElement.query(By.css('.quantity-input')).nativeElement;
+    expect(qtyBox.innerhtml).not.toBeNull();
+  });
+
   // Test for the quantity box on the buy sell page
-  // it('Shpuld receive quantity in box', (done: DoneFn) => {
-  //   let quantityInput = fixture.debugElement.query(By.css('.Row-3'));
-  //   let num = 1;
-  //   quantityInput.nativeElement.value = 1;
-  //   quantityInput.nativeElement.dispatchEvent(new Event('input'));
+  // it('Should receive quantity in box', (done:DoneFn) => {
+  //   const numInput = fixture.debugElement.query(By.css('.quantity-input'));
+  //   numInput.nativeElement.value = '';
+  //   numInput.nativeElement.dispatchEvent(new Event('input'));
   //   fixture.detectChanges();
   //   fixture.whenStable().then(() => {
   //     fixture.detectChanges();
-  //     console.log('sendInput : ', quantityInput.nativeElement.value);
-  //     expect(quantityInput.nativeElement.value).toContain(num);
+  //     console.log('sendInput: ', numInput.nativeElement.value);
+  //     expect(numInput.nativeElement.vale).toContain(1);
   //     done();
-  //   });
-  // });
-
-  // Test for the ticker information chart on the buy sell page
-  // it('Should show the ticker information chart', () => {
-  //   pending();
+  //   })
   // });
 
   // Test for the ticker search box on the buy sell page, passes
@@ -158,5 +166,10 @@ describe('BuySellComponent', () => {
       done();
     });
   });
+
+  // Test for the ticker information chart on the buy sell page
+  // it('Should show the ticker information chart', () => {
+  //   pending();
+  // });
 
 }); // End of describe
