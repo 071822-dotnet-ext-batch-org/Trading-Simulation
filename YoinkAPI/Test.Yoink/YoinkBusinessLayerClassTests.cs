@@ -821,6 +821,69 @@ namespace Test.Yoink
             }
         }
 
+        /// <summary>
+        /// This method tests to see if a user created a profile 
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_CreateProfileAsync_if_Created()
+        {
+            string auth0UserId = "sample auth0UserId";
+            Guid postId = Guid.NewGuid();
+            ProfileDto dto = new ProfileDto("name", "email", "string", 1);
+            Profile expectedOBJ = new Profile(Guid.NewGuid(), "auth0ID", "name", "email", "src/picture", 1);
+
+
+            Guid expectedDeletedPost = Guid.NewGuid();
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.CreateProfileAsync(It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<int?>()))
+                .ReturnsAsync(true);
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.CreateProfileAsync(auth0UserId, dto);
+
+            //Assert
+            if (returnedResult != null)
+            {
+                Assert.IsType<Profile?>(returnedResult);
+                Assert.Equal(expectedOBJ, returnedResult);
+            }
+        }//End of CreateProfileAsync Test - Created
+
+
+        /// <summary>
+        /// This method tests to see if a user created a profile 
+        /// </summary>
+        /// <returns>an async Task</returns>
+        [Fact]
+        public async Task Testing_GetProfileByUserIDAsync_if_Gotten()
+        {
+            string auth0UserId = "sample auth0UserId";
+            Guid postId = Guid.NewGuid();
+            ProfileDto dto = new ProfileDto("name", "email", "string", 1);
+            Profile expectedOBJ = new Profile(Guid.NewGuid(), "auth0ID", "name", "email", "src/picture", 1);
+
+            var dataSource = new Mock<IdbsRequests>();
+            dataSource
+                .Setup(g => g.GetProfileByUserIDAsync(It.IsAny<string>()))
+                .ReturnsAsync(expectedOBJ);
+            var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
+
+            //Act
+            var returnedResult = await theClassBeingTested.GetProfileByUserIDAsync(auth0UserId);
+
+            //Assert
+            if (returnedResult != null)
+            {
+                Assert.IsType<Profile?>(returnedResult);
+                Assert.Equal(expectedOBJ, returnedResult);
+            }
+        }//End of CreateProfileAsync Test - Created
+
+
+
 
         [Fact]
         public async Task CreateCommentOnPostAsyncReturnsTrueOnCreatedComment()
