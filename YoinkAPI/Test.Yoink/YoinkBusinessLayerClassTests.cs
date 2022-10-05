@@ -210,7 +210,10 @@ namespace Test.Yoink
             //Assert
             Assert.NotNull(gotPortfolio);
             Assert.IsType<Portfolio>(gotPortfolio);
-            Assert.Equal(excpectedGetPortfolio.Name, gotPortfolio.Name);
+            if (gotPortfolio != null)
+            {
+                Assert.Equal(excpectedGetPortfolio.Name, gotPortfolio.Name);
+            }
         }
 
 
@@ -219,11 +222,16 @@ namespace Test.Yoink
         {
             string auth0UserId = "sample auth0UserId";
 
-            List<Portfolio?> excpectedGetAllPortfolio = new List<Portfolio?>();
+            List<Portfolio?> expectedGetAllPortfolio = new List<Portfolio?>();
+
+            expectedGetAllPortfolio.Add(helpers.fakePortfolio());
+            expectedGetAllPortfolio.Add(helpers.fakePortfolio());
+            expectedGetAllPortfolio.Add(helpers.fakePortfolio());
+
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(g => g.GetALL_PortfoliosByUserIDAsync(It.IsAny<string>()))
-                .ReturnsAsync(new List<Portfolio>());
+                .ReturnsAsync(expectedGetAllPortfolio);
 
             var theClassBeingTested = new YoinkBusinessLayer(dataSource.Object);
 
@@ -233,7 +241,7 @@ namespace Test.Yoink
             //Assert
             Assert.NotNull(gotAllPortfolios);
             Assert.IsType<List<Portfolio>>(gotAllPortfolios);
-            Assert.Equal(excpectedGetAllPortfolio, gotAllPortfolios);
+            Assert.Equal(expectedGetAllPortfolio, gotAllPortfolios);
         }
 
 
@@ -358,8 +366,10 @@ namespace Test.Yoink
                 Symbol = "Sample Symbol"
             };
 
-            List<Buy> expectedBuyMockList = new List<Buy>();
+            List<Buy?> expectedBuyMockList = new List<Buy?>();
             expectedBuyMockList.Add(expectedBuy);
+            expectedBuyMockList.Add(helpers.fakeBuy());
+            expectedBuyMockList.Add(helpers.fakeBuy());
 
 
             var dataSource = new Mock<IdbsRequests>();
@@ -377,7 +387,8 @@ namespace Test.Yoink
             if (gotAllBuys != null)
             {
                 Assert.IsType<List<Buy>>(gotAllBuys);
-                Assert.Equal(expectedBuyMockList, gotAllBuys);
+                Assert.Equal(expectedBuyMockList.Count, gotAllBuys.Count);
+                Assert.Equal(expectedBuyMockList[0]?.BuyID, gotAllBuys[0]?.BuyID);
             }
         }
 

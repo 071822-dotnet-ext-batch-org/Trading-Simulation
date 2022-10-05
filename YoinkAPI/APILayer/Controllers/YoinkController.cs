@@ -397,7 +397,7 @@ namespace APILayer.Controllers
         /// <param name="postId">nullable Guid</param>
         /// <returns>Confirmation of deletion.</returns>
         [HttpDelete("delete-post")]
-        public async Task<ActionResult<Post?>> DeletePostAsync(Guid? postId)
+        public async Task<ActionResult<Guid?>> DeletePostAsync(Guid? postId)
         {
             string? auth0UserId = User.Identity?.Name;
             Guid? deletedPostId = await this._businessLayer.DeletePostAsync(auth0UserId, postId);
