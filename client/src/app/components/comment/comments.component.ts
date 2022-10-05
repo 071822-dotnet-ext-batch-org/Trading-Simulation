@@ -33,48 +33,13 @@ export class CommentsComponent implements OnInit {
     })
   }
 
-  // onSendClick(newComment: CreateCommentModel): void {
-  //   console.log('addComment', newComment);
-  //   this.createComment.createComment(newComment.postId, newComment.content)
-  //   .subscribe( newComm =>{
-  //     this.newComments = [...this.newComments, newComm]
-  //   });
-
-
     onSendClick(): void{
-      // const dialogRef = this.dialog.open(CommentsComponent)
-    
-      // dialogRef.afterClosed().subscribe(result => {
-      //   console.log('closed');
-      //   if(!result)return;
-      //   this.createComment.createComment(result.postId, result.content).subscribe(comm => {
-      //     this.comment = comm
-      //    console.log(comm)
-      //   });
-        
-      // })
+  
       this.dialogRef.close({
         content: this.content
       });
 
     };
 
-
-    
-  //   this.dialogRef.afterClosed().subscribe(result => {
-  //     console.log('closed');
-  //     if(!result)return;
-  //     this.createComment.createComment(result.postId, result.content).subscribe(comm => {
-  //      this.comment.unshift(comm);
-  //     });
-      
-  //   })
-  // }
- 
-  // dialogRef.afterClosed().subscribe(result => {
-  //   console.log('closed');
-  //   if(!result)return;
-    
-  // });
   }
 
