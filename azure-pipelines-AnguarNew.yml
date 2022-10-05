@@ -26,7 +26,7 @@ steps:
     cliprojectName: 'Yoink Pipeline'
     cliSources: './client/'
     extraProperties: |
-      'sonar.javascript.lcov.reportPaths=coverage/client/lcov-report/lcov.info'
+      'sonar.javascript.lcov.reportPaths=$(solution)/coverage/client/lcov-report/lcov.info'
   continueOnError: true 
       
                        
