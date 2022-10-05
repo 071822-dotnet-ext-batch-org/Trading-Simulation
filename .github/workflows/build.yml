@@ -42,7 +42,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"aliciadavisrevature1_Trading-Simulation" /o:"tradingsimulation" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"tradingsimulation-api" /o:"tradingsimulation-api" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet restore YoinkAPI/YoinkAPI.sln
           dotnet build YoinkAPI/YoinkAPI.sln --configuration Release
           dotnet test /YoinkAPI/Test.Yoink/Test.Yoink.csproj --collect:"XPlat Code Coverage" --logger trx --results-directory $GITHUB_WORKSPACE/test/testresults
