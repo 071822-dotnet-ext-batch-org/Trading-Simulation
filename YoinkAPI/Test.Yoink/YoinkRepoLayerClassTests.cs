@@ -9,6 +9,10 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Castle.Components.DictionaryAdapter;
+using Microsoft.VisualBasic;
+
 
 namespace Test.Yoink
 {
@@ -44,13 +48,13 @@ namespace Test.Yoink
 
             // Act
 
-            using(SqlCommand command = new SqlCommand(sql, conn))
+            using (SqlCommand command = new SqlCommand(sql, conn))
             {
                 command.Parameters.AddWithValue("@test1", "test1");
 
                 bool truncated = await helpers.TruncateTableAsync(command, conn);
 
-                if(truncated)
+                if (truncated)
                 {
                     result = await TheClassBeingTested.CreateProfileAsync("test1", profile.Name, profile.Email, profile.Picture, profile.PrivacyLevel);
                 }
@@ -59,7 +63,7 @@ namespace Test.Yoink
 
             // Assert
             Assert.NotNull(result);
-            if(result != null)
+            if (result != null)
             {
                 Assert.Equal(expectedReturn, result);
             }
@@ -113,6 +117,143 @@ namespace Test.Yoink
         }
 
         [Fact]
+        public async Task CreateLikeOnPostAsyncReturnsTrueOnSuccessfulCreate()
+        {
+            // Arrange
+            Guid postId = new Guid("e367da77-cdde-4930-8d44-2f180c90ab69");
+            LikeDto likeDto = new LikeDto(postId);
+            string auth0UserId = "test1";
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            string sql = "Delete FROM LikesPosts WHERE fk_userID = @test1 AND fk_postID=@postId";
+
+            SqlConnection conn = new SqlConnection(helpers.ConnString);
+
+            bool? result = null;
+
+            // Act
+
+            using (SqlCommand command = new SqlCommand(sql, conn))
+            {
+                command.Parameters.AddWithValue("@test1", auth0UserId);
+                command.Parameters.AddWithValue("@postId", postId);
+
+                bool truncated = await helpers.TruncateTableAsync(command, conn);
+
+                if (truncated)
+                {
+                    result = await TheClassBeingTested.CreateLikeOnPostAsync(likeDto, auth0UserId);
+                }
+            }
+            // Assert
+            Assert.True(result);
+        }
+
+
+        [Fact]
+        public async Task DeleteLikeOnPostAsyncReturnsTrueOnSuccessfulDelete()
+        {
+            // Arrange
+            Guid postId = new Guid("e367da77-cdde-4930-8d44-2f180c90ab69");
+            LikeDto unlikeDto = new LikeDto(postId);
+            string auth0UserId = "test3";
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            string sql = "INSERT INTO LikesPosts (fk_userID, fk_postID) VALUES (@auth0UserId, @postId)";
+
+            SqlConnection conn = new SqlConnection(helpers.ConnString);
+
+            bool? result = null;
+
+            // Act
+
+            using (SqlCommand command = new SqlCommand(sql, conn))
+            {
+                command.Parameters.AddWithValue("@auth0UserId", auth0UserId);
+                command.Parameters.AddWithValue("@postId", postId);
+
+                bool truncated = await helpers.TruncateTableAsync(command, conn);
+
+                if (truncated)
+                {
+                    result = await TheClassBeingTested.DeleteLikeOnPostAsync(unlikeDto, auth0UserId);
+                }
+            }
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task CheckIfUserAlreadyHasLikeOnPostReturnsTrueIfExists()
+        {
+            // Arrange
+            string auth0UserId = "test1";
+            Guid postId = new Guid("e367da77-cdde-4930-8d44-2f180c90ab69");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            bool result = await TheClassBeingTested.CheckIfUserAlreadyHasLike_OnPost(auth0UserId, postId);
+
+            // Assert
+            Assert.True(result);
+        }
+
+
+        [Fact]
+        public async Task CheckIfUserAlreadyHasLikeOnCommentReturnsTrueIfExists()
+        {
+            // Arrange
+            string auth0UserId = "test1";
+            Guid postId = new Guid("dc935607-d264-4b1c-bfb4-2ecd80dec5a0");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            bool result = await TheClassBeingTested.CheckIfUserAlreadyHasLike_OnComment(auth0UserId, postId);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+
         public async Task TestingEditProfileAsyncReturnsBoolAsync()
         {
             // Arrange
@@ -153,28 +294,20 @@ namespace Test.Yoink
 
         }
 
-    [Fact]
-    public async Task UpdatePostAsync()
-    {
-      //Arrange
-      var postId = "9fa85f64-5717-4562-b3fc-2c963f66afa6";
-      var content = "update";
-      var privacyLevel = 0;
+        [Fact]
+        public async Task UpdatePostAsync()
+        {
+            //Arrange
+            Guid postId = new Guid("9fa85f64-5717-4562-b3fc-2c963f66afa6");
+            EditPostDto p = new EditPostDto(postId, "edited", 0);
+            var fakeconfig = new Mock<IConfiguration>();
+            fakeconfig.SetupGet(fConf => fConf["ConnectionStrings: DefaultConnection"]).Returns(helpers.ConnString);
+            var TheClassBeingTested = new dbsRequests(fakeconfig.Object);
+            //Act
+            bool updated = await TheClassBeingTested.UpdatePostAsync(p);
+            //Assert
+            Assert.True(updated);
 
-      Post p = helpers.fakePost();
-
-      var fakeconfig = new Mock<IConfiguration>();
-      fakeconfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"]).Returns(helpers.ConnString);
-      var TheClassBeingTested = new dbsRequests(fakeconfig.Object);
-
-      //Act
-      Post updated = await TheClassBeingTested.TestingUpdatePostAsyncReturnsUpdatedPostWithNewContentAndOrPrivacyLevel(p);
-
-      //Assert
-      Assert.Equal(p);
+        }
     }
-
-    }// End of class
-    //Need to add comments to everything!
-
 }
