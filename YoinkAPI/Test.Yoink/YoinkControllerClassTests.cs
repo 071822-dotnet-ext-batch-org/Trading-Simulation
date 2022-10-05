@@ -1,6 +1,7 @@
 ﻿using APILayer.Controllers;
 using BusinessLayer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Moq;
 using RepoLayer;
@@ -13,8 +14,283 @@ namespace Test.Yoink
 {
     public class YoinkControllerClassTests
     {
+    private Helpers helpers = new Helpers();
 
-        private Helpers helpers = new Helpers();
+        [Fact]
+        public async Task TestingEditPortfolioAsyncUpdatesPortfolio()
+        {
+
+            Guid portfolioDtoGuid = Guid.NewGuid();
+
+            Portfolio expectedEditPortfolio = new Portfolio()
+            {
+                PortfolioID = portfolioDtoGuid,
+                Fk_UserID = "Sample Fk_UserID",
+                Name = "Sample Name",
+                PrivacyLevel = 2,
+                Type = 0,
+                OriginalLiquid = 1000,
+                CurrentInvestment = 10000,
+                Liquid = 1000,
+                CurrentTotal = 10000,
+                Symbols = 1,
+                TotalPNL = 0,
+                DateCreated = new DateTime(),
+                DateModified = new DateTime()
+            };
+
+            PortfolioDto portfolioDto = new PortfolioDto()
+            {
+                PortfolioID = portfolioDtoGuid,
+                Name = "Sample Name",
+                OriginalLiquid = 1000,
+                PrivacyLevel = 2
+            };
+
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+
+            dataSource
+                .Setup(e => e.EditPortfolioAsync(It.IsAny<PortfolioDto>()))
+                .ReturnsAsync(expectedEditPortfolio);
+
+            var theClassBeingTested = new YoinkController(dataSource.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                }, "mock"));
+
+            theClassBeingTested.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //Act
+            var createdPortfolio = await theClassBeingTested.EditPortfolioAsync(portfolioDto);
+            var oKResult = createdPortfolio.Result as OkObjectResult;
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(theClassBeingTested.ModelState.IsValid);
+            Assert.Equal(expectedEditPortfolio, oKResult?.Value);
+        }
+
+
+        [Fact]
+        public async Task TestingAddNewBuyAsyncCreatesNewRowInBuysTable()
+        {
+            Guid buyIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioIdGuid = Guid.NewGuid();
+
+            Buy expectedBuy = new Buy()
+            {
+                BuyID = buyIdGuid,
+                Fk_PortfolioID = fk_PortfolioIdGuid,
+                Symbol = "Sample Symbol",
+                CurrentPrice = 10,
+                AmountBought = 10,
+                PriceBought = 10,
+                DateBought = new DateTime()
+            };
+
+            BuyDto buyDto = new BuyDto()
+            {
+                portfolioId = Guid.NewGuid(),
+                Symbol = "Sample Symbol",
+                CurrentPrice = 100,
+                AmountBought = 20,
+                PriceBought = 15
+            };
+
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(a => a.AddNewBuyAsync(It.IsAny<BuyDto>()))
+                .ReturnsAsync(expectedBuy);
+
+
+            var theClassBeingTested = new YoinkController(dataSource.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            theClassBeingTested.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //Act
+            var addedBuy = await theClassBeingTested.AddNewBuyAsync(buyDto);
+            var okResult = addedBuy.Result as CreatedResult;
+            Buy? resultPost = okResult?.Value as Buy;
+
+
+            //Assert
+     
+            Assert.NotNull(resultPost);
+            Assert.True(theClassBeingTested.ModelState.IsValid);
+            Assert.Equal(expectedBuy, resultPost);
+        }
+
+
+        [Fact]
+        public async Task TestingAddNewSellAsyncCreatesNewRowInSellsTable()
+        {
+
+            Guid sellIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioIdGuid = Guid.NewGuid();
+
+            Sell expectedSell = new Sell()
+            {
+                SellID = sellIdGuid,
+                Fk_PortfolioID = fk_PortfolioIdGuid,
+                Symbol = "Sample Symbol",
+                AmountSold = 100,
+                PriceSold = 10,
+                DateSold = new DateTime()
+            };
+
+            SellDto sellDto = new SellDto()
+            {
+                Fk_PortfolioID = Guid.NewGuid(),
+                Symbol = "Sample Symbol",
+                AmountSold = 20,
+                PriceSold = 15
+            };
+
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(a => a.AddNewSellAsync(It.IsAny<SellDto>()))
+                .ReturnsAsync(expectedSell);
+
+            var theClassBeingTested = new YoinkController(dataSource.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+               {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+               }, "mock"));
+
+            theClassBeingTested.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //Act
+            var addedSell = await theClassBeingTested.AddNewSellAsync(sellDto);
+            var okResult = addedSell.Result as CreatedResult;
+            Sell? resultPost = okResult?.Value as Sell;
+
+
+            //Assert
+
+            Assert.NotNull(resultPost);
+            Assert.True(theClassBeingTested.ModelState.IsValid);
+            Assert.Equal(expectedSell, resultPost);
+        }
+
+
+        [Fact]
+        public async Task TestingGetAllBuyBySymbolAsyncReturnsAllBuysOfMatchingPortfolioIDAndSymbolOrderByDescendingDateBought()
+        {
+
+            Guid buyIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioIdGuid = Guid.NewGuid();
+
+            Buy expectedBuy = new Buy()
+            {
+                BuyID = buyIdGuid,
+                Fk_PortfolioID = fk_PortfolioIdGuid,
+                Symbol = "Sample Symbol",
+                CurrentPrice = 10,
+                AmountBought = 10,
+                PriceBought = 10,
+                DateBought = new DateTime()
+            };
+
+            Get_BuysDto AllBuys = new Get_BuysDto()
+            {
+                Get_BuysID = Guid.NewGuid(),
+                Symbol = "Sample Symbol"
+            };
+
+            List<Buy> expectedBuyMockList = new List<Buy>();
+            expectedBuyMockList.Add(expectedBuy);
+
+
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(g => g.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
+                .ReturnsAsync(expectedBuyMockList);
+
+            var theClassBeingTested = new YoinkController(dataSource.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+               {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+               }, "mock"));
+
+            theClassBeingTested.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //Act
+            var gotAllBuys = await theClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
+            var okResult = gotAllBuys.Result as OkObjectResult;
+            List<Buy>? resultPost = okResult?.Value as List<Buy>;
+
+            //Assert
+            Assert.NotNull(resultPost);
+            Assert.True(theClassBeingTested.ModelState.IsValid);
+            Assert.Equal(expectedBuyMockList, resultPost);
+        }
+
+
+        [Fact]
+        public async Task TestingGetAllSellBySymbolAsyncReturnsAllSellsOfMatchingPortfolioIDAndSymbolOrderByDescendingDateSold()
+        {
+
+            Guid sellIdGuid = Guid.NewGuid();
+            Guid fk_PortfolioIdGuid = Guid.NewGuid();
+
+            Sell expectedSell = new Sell()
+            {
+                SellID = sellIdGuid,
+                Fk_PortfolioID = fk_PortfolioIdGuid,
+                Symbol = "Sample Symbol",
+                AmountSold = 100,
+                PriceSold = 10,
+                DateSold = new DateTime()
+            };
+
+            GetSellsDto sellsDto = new GetSellsDto()
+            {
+                PortfolioId = Guid.NewGuid(),
+                Symbol = "Sample Symbol"
+            };
+
+            List<Sell> expectedSellMockList = new List<Sell>();
+            expectedSellMockList.Add(expectedSell);
+
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(g => g.GetAllSellBySymbolAsync(It.IsAny<GetSellsDto>()))
+                .ReturnsAsync(expectedSellMockList);
+
+            var theClassBeingTested = new YoinkController(dataSource.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+               {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+               }, "mock"));
+
+            theClassBeingTested.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //Act
+            var gotAllSells = await theClassBeingTested.GetAllSellBySymbolAsync(sellsDto);
+            var okResult = gotAllSells.Result as OkObjectResult;
+            List<Sell>? resultPost = okResult?.Value as List<Sell>;
+
+            //Assert
+            Assert.NotNull(resultPost);
+            Assert.True(theClassBeingTested.ModelState.IsValid);
+            Assert.Equal(expectedSellMockList, resultPost);
+        }
+  
+
 
         /// <summary>
         /// This test tests to see if the method returns a null investment - It's input is an InvestmentDto and returns a nullable investment
