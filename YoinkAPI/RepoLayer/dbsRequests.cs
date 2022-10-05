@@ -18,7 +18,18 @@ namespace RepoLayer
         public dbsRequests(IConfiguration config)
         {
             _config = config;
-            _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
+
+            Console.WriteLine($"Environt is {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
+
+            if (string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _conn = new SqlConnection(_config["ConnectionStrings:TestingConnection"]);
+            }
+            else
+            {
+                _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
+            }    
+
         }
 
 

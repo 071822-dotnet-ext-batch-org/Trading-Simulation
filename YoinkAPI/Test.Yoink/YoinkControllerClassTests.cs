@@ -5,6 +5,7 @@ using Models;
 using Moq;
 using RepoLayer;
 using System;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Claims;
 using System.Security.Principal;
 
@@ -12,270 +13,6 @@ namespace Test.Yoink
 {
     public class YoinkControllerClassTests
     {
-
-
-
-
-        [Fact]
-        public void TestingAllMethodsAssociatedWithUserProfile()
-        {
-            //Arrange
-
-            ProfileDto? profiledto = new ProfileDto()
-            {
-
-                Name = "Tony",
-                Email = "Rodin@yahoo.com",
-                Picture = "src/Picture",
-                PrivacyLevel = 2,
-
-            };
-
-            Profile? profile = new Profile()
-            {
-                ProfileID = Guid.NewGuid(),
-                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
-                Name = "Tony",
-                Email = "Rodin@yahoo.com",
-                Picture = "src/Picture",
-                PrivacyLevel = 2
-
-            };
-
-            var dataSource = new Mock<IYoinkBusinessLayer>();
-            dataSource
-                .Setup(m => m.GetProfileByUserIDAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(profile));
-
-            var TheClassBeingTested = new YoinkController(dataSource.Object);
-
-
-            //Act
-
-            var TheUserProfileWasGot = TheClassBeingTested.GetMyProfileAsync();
-
-            var TheUserProfileWasCreated = TheClassBeingTested.CreateProfileAsync(profiledto);
-
-            var TheUserProfileWasedited = TheClassBeingTested.EditProfileAsync(profiledto);
-
-
-            //Assert
-
-            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
-            Assert.Equal(profiledto.Name, profile.Name);
-        }
-
-
-
-        [Fact]
-        public void TestingAllMethodsAssociatedWithUserPortfolio()
-        {
-
-            //Arrange
-            Guid guid = Guid.NewGuid();
-
-            PortfolioDto? portfoliodto = new PortfolioDto()
-            {
-
-                Name = "Tony",
-                PrivacyLevel = 2,
-
-            };
-
-            Portfolio? portfolio = new Portfolio()
-            {
-                PortfolioID = guid,
-                Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
-                Name = "Tony",
-                PrivacyLevel = 2,
-                Type = 2,
-                OriginalLiquid = 2000,
-                CurrentInvestment = 1000,
-                Liquid = 2500,
-                CurrentTotal = 2300,
-                Symbols = 34,
-                TotalPNL = 600,
-                DateCreated = new DateTime(),
-                DateModified = new DateTime(),
-            };
-
-            List<Portfolio?> portmockList = new List<Portfolio?>();
-
-            portmockList.Add(portfolio);
-
-            var dataSource = new Mock<IYoinkBusinessLayer>();
-            dataSource
-                .Setup(p => p.GetALLPortfoliosByUserIDAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(portmockList));
-
-            var TheClassBeingTested = new YoinkController(dataSource.Object);
-
-
-            //Act
-
-            var AllTheUserPortfolioWasGotByUserID = TheClassBeingTested.GetPortfoliosByUserIDAsync();
-
-            var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync(portfoliodto);
-
-            var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);
-
-            var TheUserPortfolioWasGotByPortfolioID = TheClassBeingTested.GetPortfolioByPortfolioIDAsync(guid);
-
-
-
-            //Assert
-
-            Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfolio.Fk_UserID);
-            Assert.Equal(portfoliodto.Name, portfolio.Name);
-            Assert.Equal(2, portfolio.PrivacyLevel);
-            Assert.Equal(portfolio.PortfolioID, guid);
-        }
-
-
-        [Fact]
-        public void TestingAllMethodsAssociatedWithBuy()
-        {
-
-            //Arrange
-            Guid guid = Guid.NewGuid();
-
-            Get_BuysDto AllBuys = new Get_BuysDto()
-            {
-                Symbol = "GOOGL",
-
-            };
-
-            BuyDto buydto = new BuyDto()
-            {
-                Symbol = "GOOGL",
-
-            };
-
-            Buy? buy = new Buy()
-            {
-                BuyID = new Guid(),
-                Fk_PortfolioID = new Guid(),
-                Symbol = "GOOGL",
-                CurrentPrice = 2000,
-                AmountBought = 100,
-                PriceBought = 50,
-                DateBought = new DateTime(),
-
-            };
-
-            BuyDto buyDTO = new BuyDto()
-            {
-                portfolioId = new Guid(),
-                Symbol = "GOOGL",
-                CurrentPrice = 2000,
-                AmountBought = 100,
-                PriceBought = 50,
-            };
-
-            List<Buy?> buymockList = new List<Buy?>();
-
-            buymockList.Add(buy);
-
-            var dataSource = new Mock<IYoinkBusinessLayer>();
-            dataSource
-                .Setup(b => b.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
-                .Returns(Task.FromResult(buymockList));
-
-            var dataSource2 = new Mock<IYoinkBusinessLayer>();
-
-            if(buy == null){}
-            dataSource
-                .Setup(b => b.AddNewBuyAsync(It.IsAny<BuyDto>()))
-                .Returns(Task.FromResult(buy));
-
-            var TheClassBeingTested = new YoinkController(dataSource.Object);
-
-            var TheClassBeingTested2 = new YoinkController(dataSource2.Object);
-
-            //Act
-
-            var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
-
-            var NewBuyWasAdded = TheClassBeingTested2.AddNewBuyAsync(buydto);
-
-
-            //Assert
-
-            Assert.Equal("GOOGL", AllBuys.Symbol);
-            if (buy != null)
-            {
-                Assert.Equal(2000, buy.CurrentPrice);
-            }
-
-        }
-
-        // }
-
-
-
-        [Fact]
-        public void TestingAllMethodsAssociatedWithSell()
-        {
-
-            //Arrange
-
-            GetSellsDto getselldto1 = new GetSellsDto(new Guid(), "GOOGL");
-
-            GetSellsDto getselldto = new GetSellsDto()
-            {
-                PortfolioId = new Guid(),
-                Symbol = "GOOGL",
-
-            };
-
-            SellDto  sellDto = new SellDto()
-            {
-                Fk_PortfolioID = new Guid("2be4e71a-c21f-4b2c-9719-bb8a86b55e2b"),
-                Symbol = "GOOGL",
-                AmountSold = 1,
-                PriceSold = 190
-            };
-
-            Sell? sell = new Sell()
-            {
-                SellID = new Guid(),
-                Fk_PortfolioID = new Guid(),
-                Symbol = "GOOGL",
-                AmountSold = 2000,
-                PriceSold = 1000,
-                DateSold = new DateTime(),
-            };
-
-            List<Sell?> SellmockList = new List<Sell?>();
-
-            SellmockList.Add(sell);
-
-            var dataSource = new Mock<IYoinkBusinessLayer>();
-            dataSource
-                .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<GetSellsDto>()))
-                .Returns(Task.FromResult(SellmockList));
-
-            var TheClassBeingTested = new YoinkController(dataSource.Object);
-
-        //     var TheClassBeingTested = new YoinkController(dataSource.Object);
-
-            //Act
-
-            var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(getselldto);
-
-            // var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
-
-            var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sellDto);
-
-        //     var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
-
-            //Assert
-
-            Assert.Equal("GOOGL", sell.Symbol);
-            Assert.Equal(2000, sell.AmountSold);
-            Assert.Equal("GOOGL", sellDto.Symbol);
-        }
-
 
         /// <summary>
         /// This test tests to see if the method returns a null investment - It's input is an InvestmentDto and returns a nullable investment
@@ -844,6 +581,683 @@ namespace Test.Yoink
             Assert.Equal(mockBool, oKResult?.Value);
             
         }
+        public async Task GetPortfolioByPortfolioIDAsync()
+        {
+            //Arrange
+
+            Guid portfolioID = Guid.NewGuid();
+
+            var MockBL = new Mock<IYoinkBusinessLayer>();
+            
+            Portfolio Portfolioget = new Portfolio(Guid.NewGuid(), "User ID 911011932", "New Portfolio", 0, 0, 10000, 10000, 10000, 10000, 0, 10000, DateTime.Now, DateTime.Now);
+                MockBL.Setup(bl => bl.GetPortfolioByPortfolioIDAsync(portfolioID))
+                .ReturnsAsync(Portfolioget);
+
+            var classcontroller = new YoinkController(MockBL.Object);
+            classcontroller.ControllerContext.HttpContext = new DefaultHttpContext();  
+
+            //Act
+            var result = await classcontroller.GetPortfolioByPortfolioIDAsync(portfolioID);
+            //Assert
+            Assert.NotNull(portfolioID);
+            Assert.True(classcontroller.ModelState.IsValid);
+            Assert.Equal(Portfolioget.PortfolioID, result.Value.PortfolioID);
+            
+
+
+
+        }
+
+
+        [Fact]
+        public async Task EditCommentAsyncReturnsEditedComment()
+        {
+            //public async Task<ActionResult<Comment?>> EditCommentAsync(EditCommentDto comment)
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            Guid guid2 = new Guid();
+            DateTime date1 = new DateTime();
+            DateTime date2 = DateTime.Now;
+
+            EditCommentDto editedComment = new(guid, "TestComment");
+
+            Comment mockComment = new(guid, fakeUser, guid2, "TestComment", 0, date1, date2);
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.EditCommentAsync(It.IsAny<EditCommentDto>()))
+                .ReturnsAsync(mockComment);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.EditCommentAsync(editedComment);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockComment, oKResult?.Value);
+
+        }
+
+        [Fact]
+        public async Task DeleteCommentAsyncReturnsTrueOnSucceededDelete()
+        {
+            //public async Task<ActionResult<bool>> DeleteCommentAsync(Guid commentId)
+
+            // Arrange
+            string fakeUser = "auth0id";
+            Guid guid = new Guid();
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.DeleteCommentAsync(It.IsAny<Guid>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.DeleteCommentAsync(guid);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+
+        }
+
+
+        [Fact]
+        public async Task GetCommentByPostIdAsyncReturnsAListOfComments()
+        {
+            //        public async Task<ActionResult<List<Comment>>> GetCommentsByPostIdAsync(Guid postId)
+
+            // Arrange
+            Guid mockPostId = new Guid();
+            List<Comment> mockCommentList = new List<Comment>();
+
+            //add element 0 to test list
+            string fakeUser = "auth0id";
+            Guid guid = new Guid();
+            Guid guid2 = new Guid();
+            DateTime date1 = new DateTime();
+            DateTime date2 = DateTime.Now;
+            Comment comment1 = new Comment(guid, fakeUser, guid2, "TestComment", 0, date1, date2);
+            mockCommentList.Add(comment1);
+
+            //add element 1 to test list
+            string fakeUser2 = "auth0id";
+            Guid guid3 = new Guid();
+            Guid guid4 = new Guid();
+            DateTime date3 = new DateTime();
+            DateTime date4 = DateTime.Now;
+            Comment comment2 = new Comment(guid3, fakeUser2, guid4, "TestComment2", 1, date3, date4);
+            mockCommentList.Add(comment2);
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.GetCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(mockCommentList);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.GetCommentsByPostIdAsync(mockPostId);
+            var oKResult = result.Result as OkObjectResult;
+            List<Comment>? clist = oKResult?.Value as List<Comment>;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockCommentList, oKResult?.Value);
+
+            if (clist != null)
+            {
+                Assert.Equal(2, clist.Count());
+                Assert.Equal(mockCommentList[0], clist[0]);
+            }
+
+
+        }
+
+        [Fact]
+        public async Task CreateLikeForCommentAsyncReturnTrueIfCreated()
+        {
+            //public async Task<ActionResult<bool>> CreateLikeForCommentAsync(LikeForCommentDto? createLikeForCommentDto)
+
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            LikeForCommentDto createLikeOnComment = new(guid);
+
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.CreateLikeForCommentAsync(It.IsAny<LikeForCommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.CreateLikeForCommentAsync(createLikeOnComment);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+
+        }
+
+
+        [Fact]
+        public async Task DeleteLikeForCommentAsyncReturnTrueIfDeleted()
+        {
+            //public async Task<ActionResult<bool>> DeleteLikeForCommentAsync(LikeForCommentDto? deleteLikeForCommentDto)
+
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            LikeForCommentDto deleteLikeOnComment = new(guid);
+
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.CreateLikeForCommentAsync(It.IsAny<LikeForCommentDto>(), fakeUser))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.CreateLikeForCommentAsync(deleteLikeOnComment);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+
+        }
+
+
+
+        [Fact]
+        public async Task GetCountOfCommentsByPostIdAsyncReturnsIntegerOfCommentAmount()
+        {
+            //public async Task<ActionResult<int>> GetCountofCommentsByPostIdAsync(Guid? postId)
+
+            // Arrange
+            //string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+
+            int mockInt = 10;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.GetCountofCommentsByPostIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(mockInt);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.GetCountofCommentsByPostIdAsync(guid);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockInt, oKResult?.Value);
+
+        }
+
+
+
+        [Fact]
+        public async Task DeletePortfolioAsyncReturnTrueIfDeleted()
+        {
+            //public async Task<ActionResult<bool>> DeletePortfolioAsync(DeletePortfolioDto portfolioID)
+
+            // Arrange
+            string fakeUser = "auth0id";
+
+            Guid guid = new Guid();
+            DeletePortfolioDto deletePortfolio = new(guid);
+
+            bool mockBool = true;
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.DeletePortfolioAsync(fakeUser, It.IsAny<DeletePortfolioDto>()))
+                .ReturnsAsync(mockBool);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+            var result = await controller.DeletePortfolioAsync(deletePortfolio);
+            var oKResult = result.Result as OkObjectResult;
+            //bool glist = okResult.Value as bool;
+
+
+            //Assert
+            Assert.NotNull(oKResult);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(mockBool, oKResult?.Value);
+
+        }
+
+        [Fact]
+        public async Task TestingDeletePostAsync()
+        {
+            // The method DeletePostAsync in the YoinkController.cs takes in a PostId and returns a bool.
+
+            // Arrange
+
+            Guid postId = Guid.NewGuid();
+
+            string fakeUser = "auth0id";
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            mockBl.Setup(bl => bl.DeletePostAsync(fakeUser, postId));
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+
+            var result = await controller.DeletePostAsync(postId);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<bool>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.Equal(true, okResult?.Value);
+            Assert.NotNull(okResult);
+        }
+
+        [Fact]
+        public async Task TestingGetAllPostByUserIdAsync()
+        {
+            // The method GetAllPostByUserIdAsync in the YoinkController.cs takes in a UserId and returns a list of PostWithCommentCountDto.
+
+            // Arrange
+
+            string userId = "auth0id";
+
+            var mockBl = new Mock<IYoinkBusinessLayer>();
+            
+            List<PostWithCommentCountDto> postWithCommentCountDtos = new List<PostWithCommentCountDto>();
+
+            mockBl.Setup(bl => bl.GetAllPostByUserIdAsync(userId))
+                .ReturnsAsync(postWithCommentCountDtos);
+
+            var controller = new YoinkController(mockBl.Object);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+
+                }, "mock"));
+
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            // Act
+
+            var result = await controller.GetAllPostByUserIdAsync(userId);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+
+            Assert.IsType<ActionResult<List<PostWithCommentCountDto>>>(result);
+            Assert.True(controller.ModelState.IsValid);
+            Assert.NotNull(okResult);
+            Assert.Equal(okResult?.Value, postWithCommentCountDtos);
+        }      
+
+
+
+        /// ///////////
+
+
+        // [Fact]
+        // public void TestingAllMethodsAssociatedWithUserProfile()
+        // {
+        //     //Arrange
+
+        //     ProfileDto? profiledto = new ProfileDto()
+        //     {
+
+        //         Name = "Tony",
+        //         Email = "Rodin@yahoo.com",
+        //         Picture = "src/Picture",
+        //         PrivacyLevel = 2,
+
+        //     };
+
+        //     Profile? profile = new Profile()
+        //     {
+        //         ProfileID = Guid.NewGuid(),
+        //         Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+        //         Name = "Tony",
+        //         Email = "Rodin@yahoo.com",
+        //         Picture = "src/Picture",
+        //         PrivacyLevel = 2
+
+        //     };
+
+        //     var dataSource = new Mock<IYoinkBusinessLayer>();
+        //     dataSource
+        //         .Setup(m => m.GetProfileByUserIDAsync(It.IsAny<string>()))
+        //         .Returns(Task.FromResult(profile));
+
+        //     var TheClassBeingTested = new YoinkController(dataSource.Object);
+
+
+        //     //Act
+
+        //     var TheUserProfileWasGot = TheClassBeingTested.GetMyProfileAsync();
+
+        //     var TheUserProfileWasCreated = TheClassBeingTested.CreateProfileAsync(profiledto);
+
+        //     var TheUserProfileWasedited = TheClassBeingTested.EditProfileAsync(profiledto);
+
+
+        //     //Assert
+
+        //     Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
+        //     Assert.Equal(profiledto.Name, profile.Name);
+        // }
+
+
+
+        // [Fact]
+        // public void TestingAllMethodsAssociatedWithUserPortfolio()
+        // {
+
+        //     //Arrange
+        //     Guid guid = Guid.NewGuid();
+
+        //     PortfolioDto? portfoliodto = new PortfolioDto()
+        //     {
+
+        //         Name = "Tony",
+        //         PrivacyLevel = 2,
+
+        //     };
+
+        //     Portfolio? portfolio = new Portfolio()
+        //     {
+        //         PortfolioID = guid,
+        //         Fk_UserID = "d44d63fc-ffa8-4eb7-b81d-644547136d30",
+        //         Name = "Tony",
+        //         PrivacyLevel = 2,
+        //         Type = 2,
+        //         OriginalLiquid = 2000,
+        //         CurrentInvestment = 1000,
+        //         Liquid = 2500,
+        //         CurrentTotal = 2300,
+        //         Symbols = 34,
+        //         TotalPNL = 600,
+        //         DateCreated = new DateTime(),
+        //         DateModified = new DateTime(),
+        //     };
+
+        //     List<Portfolio?> portmockList = new List<Portfolio?>();
+
+        //     portmockList.Add(portfolio);
+
+        //     var dataSource = new Mock<IYoinkBusinessLayer>();
+        //     dataSource
+        //         .Setup(p => p.GetALLPortfoliosByUserIDAsync(It.IsAny<string>()))
+        //         .Returns(Task.FromResult(portmockList));
+
+        //     var TheClassBeingTested = new YoinkController(dataSource.Object);
+
+
+        //     //Act
+
+        //     var AllTheUserPortfolioWasGotByUserID = TheClassBeingTested.GetPortfoliosByUserIDAsync();
+
+        //     var TheUserPortfolioWasCreated = TheClassBeingTested.CreatePortfolioAsync(portfoliodto);
+
+        //     var TheUserPortfolioWasedited = TheClassBeingTested.EditPortfolioAsync(portfoliodto);
+
+        //     var TheUserPortfolioWasGotByPortfolioID = TheClassBeingTested.GetPortfolioByPortfolioIDAsync(guid);
+
+
+
+        //     //Assert
+
+        //     Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", portfolio.Fk_UserID);
+        //     Assert.Equal(portfoliodto.Name, portfolio.Name);
+        //     Assert.Equal(2, portfolio.PrivacyLevel);
+        //     Assert.Equal(portfolio.PortfolioID, guid);
+        // }
+
+
+        // [Fact]
+        // public void TestingAllMethodsAssociatedWithBuy()
+        // {
+
+        //     //Arrange
+        //     Guid guid = Guid.NewGuid();
+
+        //     Get_BuysDto AllBuys = new Get_BuysDto()
+        //     {
+        //         Symbol = "GOOGL",
+
+        //     };
+
+        //     BuyDto buydto = new BuyDto()
+        //     {
+        //         Symbol = "GOOGL",
+
+        //     };
+
+        //     Buy? buy = new Buy()
+        //     {
+        //         BuyID = new Guid(),
+        //         Fk_PortfolioID = new Guid(),
+        //         Symbol = "GOOGL",
+        //         CurrentPrice = 2000,
+        //         AmountBought = 100,
+        //         PriceBought = 50,
+        //         DateBought = new DateTime(),
+
+        //     };
+
+        //     BuyDto buyDTO = new BuyDto()
+        //     {
+        //         portfolioId = new Guid(),
+        //         Symbol = "GOOGL",
+        //         CurrentPrice = 2000,
+        //         AmountBought = 100,
+        //         PriceBought = 50,
+        //     };
+
+        //     List<Buy?> buymockList = new List<Buy?>();
+
+        //     buymockList.Add(buy);
+
+        //     var dataSource = new Mock<IYoinkBusinessLayer>();
+        //     dataSource
+        //         .Setup(b => b.GetAllBuyBySymbolAsync(It.IsAny<Get_BuysDto>()))
+        //         .Returns(Task.FromResult(buymockList));
+
+        //     var dataSource2 = new Mock<IYoinkBusinessLayer>();
+
+        //     if(buy == null){}
+        //     dataSource
+        //         .Setup(b => b.AddNewBuyAsync(It.IsAny<BuyDto>()))
+        //         .Returns(Task.FromResult(buy));
+
+        //     var TheClassBeingTested = new YoinkController(dataSource.Object);
+
+        //     var TheClassBeingTested2 = new YoinkController(dataSource2.Object);
+
+        //     //Act
+
+        //     var AllBuyWasGotBySymbol = TheClassBeingTested.GetAllBuyBySymbolAsync(AllBuys);
+
+        //     var NewBuyWasAdded = TheClassBeingTested2.AddNewBuyAsync(buydto);
+
+
+        //     //Assert
+
+        //     Assert.Equal("GOOGL", AllBuys.Symbol);
+        //     if (buy != null)
+        //     {
+        //         Assert.Equal(2000, buy.CurrentPrice);
+        //     }
+
+        // }
+
+        // // }
+
+
+
+        // [Fact]
+        // public void TestingAllMethodsAssociatedWithSell()
+        // {
+
+        //     //Arrange
+
+        //     GetSellsDto getselldto1 = new GetSellsDto(new Guid(), "GOOGL");
+
+        //     GetSellsDto getselldto = new GetSellsDto()
+        //     {
+        //         PortfolioId = new Guid(),
+        //         Symbol = "GOOGL",
+
+        //     };
+
+        //     SellDto  sellDto = new SellDto()
+        //     {
+        //         Fk_PortfolioID = new Guid("2be4e71a-c21f-4b2c-9719-bb8a86b55e2b"),
+        //         Symbol = "GOOGL",
+        //         AmountSold = 1,
+        //         PriceSold = 190
+        //     };
+
+        //     Sell? sell = new Sell()
+        //     {
+        //         SellID = new Guid(),
+        //         Fk_PortfolioID = new Guid(),
+        //         Symbol = "GOOGL",
+        //         AmountSold = 2000,
+        //         PriceSold = 1000,
+        //         DateSold = new DateTime(),
+        //     };
+
+        //     List<Sell?> SellmockList = new List<Sell?>();
+
+        //     SellmockList.Add(sell);
+
+        //     var dataSource = new Mock<IYoinkBusinessLayer>();
+        //     dataSource
+        //         .Setup(s => s.GetAllSellBySymbolAsync(It.IsAny<GetSellsDto>()))
+        //         .Returns(Task.FromResult(SellmockList));
+
+        //     var TheClassBeingTested = new YoinkController(dataSource.Object);
+
+        // //     var TheClassBeingTested = new YoinkController(dataSource.Object);
+
+        //     //Act
+
+        //     var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync(getselldto);
+
+        //     // var AllSellWasGotBySymbol = TheClassBeingTested.GetAllSellBySymbolAsync("GOOGL", new Guid());
+
+        //     var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sellDto);
+
+        // //     var NewSellWasAdded = TheClassBeingTested.AddNewSellAsync(sell);
+
+        //     //Assert
+
+        //     Assert.Equal("GOOGL", sell.Symbol);
+        //     Assert.Equal(2000, sell.AmountSold);
+        //     Assert.Equal("GOOGL", sellDto.Symbol);
+        // }
+
+
+
 
         /// <summary>
         /// This method tests to see if a user's profile was created
@@ -1034,7 +1448,7 @@ namespace Test.Yoink
         //     var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
         //         {
         //             new Claim(ClaimTypes.Name, "auth0id"),
-                    
+
         //         }, "mock"));
 
         //     ControllerClass.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
@@ -1053,8 +1467,8 @@ namespace Test.Yoink
         //         Assert.IsType<ActionResult<Post>>(result);
         //         Assert.Equal(createPost.PostID, resultPost.PostID);
         //     }
-            
-        
-        
+
+
+
     }
 }
