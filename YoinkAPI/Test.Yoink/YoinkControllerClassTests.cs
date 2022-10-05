@@ -14,6 +14,8 @@ namespace Test.Yoink
     public class YoinkControllerClassTests
     {
 
+        private Helpers helpers = new Helpers();
+
         /// <summary>
         /// This test tests to see if the method returns a null investment - It's input is an InvestmentDto and returns a nullable investment
         /// (sendes)
@@ -332,20 +334,7 @@ namespace Test.Yoink
 
 
 
-        private List<Guid> fakeGuidList(){
-            List<Guid> newGuids = new List<Guid>();
-            Guid newGuid = Guid.NewGuid();
-            Guid newGuid2 = Guid.NewGuid();
-            Guid newGuid3 = Guid.NewGuid();
-            Console.WriteLine(newGuid);
-            Console.WriteLine(newGuid2);
-            Console.WriteLine(newGuid3);
-            newGuids.Add(newGuid);
-            newGuids.Add(newGuid2);
-            newGuids.Add(newGuid3);
-            
-            return newGuids;
-        }
+
 
         [Fact]
         public async Task TestGetPostLikesByUserID()
@@ -353,7 +342,7 @@ namespace Test.Yoink
             // Arrange
             string fakeUser = "auth0id";
 
-            List<Guid> mockGuids = fakeGuidList();
+            List<Guid> mockGuids = helpers.fakeGuidList();
             
             var mockBl = new Mock<IYoinkBusinessLayer>();
             mockBl.Setup(bl => bl.GetPostLikesByUserID(fakeUser))
@@ -1256,6 +1245,162 @@ namespace Test.Yoink
 
 
 
+
+        /// <summary>
+        /// This method tests to see if a user's profile was created
+        /// </summary>
+        /// <returns>Returns as an Asyncronous Task</returns>
+        [Fact]
+        public async Task Test_CreateProfileAsync_if_Profile_is_CREATED()
+        {
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            ProfileDto createProfileDto = new ProfileDto("name","email", "src/Picture", 1);
+            //We create an output that is nullable
+            Profile returnedProfileFromRepo = new Profile(Guid.NewGuid(),fakeUser, "name", "email", "src/picture", 1);
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.CreateProfileAsync(It.IsAny<string>(),It.IsAny<ProfileDto>()))
+                .ReturnsAsync(returnedProfileFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Profile?> returnedActionResultOBJ = await controller_datasource.CreateProfileAsync(createProfileDto);
+            //The actual object returned will be null until converted to a variable to hold the data
+            var okResultforOBJ = returnedActionResultOBJ?.Result as CreatedResult;
+            Profile? resultOBJ = okResultforOBJ?.Value as Profile;
+
+
+            //-------------------Assert Section ----------------
+            if(resultOBJ?.ProfileID == null)
+            {
+                Assert.Null(okResultforOBJ?.Value);
+                Assert.Equal(null, resultOBJ);
+            }else
+            {
+                //The test asserts that the expected value and the returned value matches
+                Assert.IsType<ActionResult<Profile?>?>(returnedActionResultOBJ);
+                Assert.IsType<CreatedResult>(returnedActionResultOBJ?.Result);
+                Assert.NotNull(resultOBJ);
+                Assert.Equal(returnedProfileFromRepo.ProfileID, resultOBJ?.ProfileID);
+            }
+
+
+        }//End of CreateProfileAsync Test
+
+        /// <summary>
+        /// This method checks if a user got a profile successfully - GOTTEN
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Test_GetProfileByUserIDAsync_if_UsersProfile_is_GOTTEN()
+        {
+            //Task<ActionResult<Profile?>> GetProfileByUserIDAsync(GetProfileDto u)
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            GetProfileDto getProfileDto = new GetProfileDto(fakeUser);
+            //We create an output that is nullable
+            Profile returnedProfileFromRepo = new Profile(Guid.NewGuid(),fakeUser, "name", "email", "src/picture", 1);
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.GetProfileByUserIDAsync(It.IsAny<string>()))
+                .ReturnsAsync(returnedProfileFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Profile?> returnedActionResultOBJ = await controller_datasource.GetProfileByUserIDAsync(getProfileDto);
+            //The actual object returned will be null until converted to a variable to hold the data
+            var okResultforOBJ = returnedActionResultOBJ?.Result as OkObjectResult;
+            Profile? resultOBJ = okResultforOBJ?.Value as Profile;
+
+
+            //-------------------Assert Section ----------------
+            if(resultOBJ?.ProfileID == null)
+            {
+                Assert.Null(okResultforOBJ?.Value);
+                Assert.Equal(null, resultOBJ);
+            }else
+            {
+                //The test asserts that the expected value and the returned value matches
+                Assert.IsType<ActionResult<Profile?>?>(returnedActionResultOBJ);
+                Assert.IsType<OkObjectResult>(returnedActionResultOBJ?.Result);
+                Assert.NotNull(resultOBJ);
+                Assert.Equal(returnedProfileFromRepo.ProfileID, resultOBJ?.ProfileID);
+            }
+
+
+        }//End of GetProfileByUserIDAsync Test - GOTTEN
+
+
+        /// <summary>
+        /// This method checks if a user got a profile successfully - GOTTEN
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task Test_GetProfileByUserIDAsync_if_UsersProfile_is_NOT_GOTTEN()
+        {
+            //Task<ActionResult<Profile?>> GetProfileByUserIDAsync(GetProfileDto u)
+            //-------------------Arrange Section ----------------
+            string fakeUser = "auth0ID";
+            //We then create a mock Identity User using Claims 
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, "auth0id"),
+                    
+                }, "mock")); 
+
+            //We create an input that is constant
+            GetProfileDto getProfileDto = new GetProfileDto(fakeUser);
+            //We create an output that is nullable
+            Profile returnedProfileFromRepo = new Profile(Guid.NewGuid(),fakeUser, "name", "email", "src/picture", 1);
+            NotFoundObjectResult notFoundResult = new NotFoundObjectResult(new {userNotFound = returnedProfileFromRepo.ProfileID});
+
+            //We mock the IYoinkBusinessLayer to be able to de-couple database from the tested Interface
+            var dataSource = new Mock<IYoinkBusinessLayer>();
+            dataSource
+                .Setup(s => s.GetProfileByUserIDAsync(It.IsAny<string>()))
+                .ReturnsAsync(returnedProfileFromRepo);
+
+            var controller_datasource = new YoinkController(dataSource.Object){};
+            controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+
+            //-------------------Act Section ----------------
+            ActionResult<Profile?> returnedActionResultOBJ = await controller_datasource.GetProfileByUserIDAsync(getProfileDto);
+
+            //-------------------Assert Section ----------------
+            if(returnedActionResultOBJ.Value?.ProfileID == null)
+            {
+                Assert.Null(returnedActionResultOBJ?.Value);
+                //This must be nullable or it will say - Assert.NotNull() Failure
+                Assert.Equal(null, returnedActionResultOBJ?.Value);
+                Assert.IsType<OkObjectResult>(returnedActionResultOBJ?.Result);
+            }
+
+        }//End of GetProfileByUserIDAsync Test - NOT GOTTEN
 
         // [Fact]
         // public async Task TestingCreatePostAsync()

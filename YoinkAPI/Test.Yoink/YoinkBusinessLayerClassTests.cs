@@ -11,6 +11,10 @@ namespace Test.Yoink
 {
     public class YoinkBusinessLayerClassTests
     {
+
+        private Helpers helpers = new Helpers();
+
+        
         [Fact]
         public async Task TestingCreateProfileAsync()
         {
