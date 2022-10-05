@@ -15,7 +15,7 @@ namespace Test.Yoink
     public class YoinkRepoLayerClassTests
     {
 
-        // This method would test the CreateUserProfile 
+        // This method would test the CreateUserProfile
 
         [Fact]
         public void TestingCreateUserProfile()
@@ -49,7 +49,7 @@ namespace Test.Yoink
 
 
             // dataSource will decouple the tested method from the database and use the local data set above for the test
-            
+
             var dataSource = new Mock<IdbsRequests>();
             dataSource
                 .Setup(m => m.CreateProfileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
@@ -101,7 +101,7 @@ namespace Test.Yoink
         {
             //Hardcode data for mock ProfileDto
 
-         
+
 
             ProfileDto? profiledto2 = new ProfileDto("Tony", "Rodin@yahoo.com", "ghhhtbnn", 2);
 
@@ -126,7 +126,7 @@ namespace Test.Yoink
 
             };
 
-            
+
 
             // dataSource will decouple the tested method from the database and use the local data set above for the test
 
@@ -207,7 +207,7 @@ namespace Test.Yoink
 
             };
 
-            
+
 
             var dataSource = new Mock<IdbsRequests>();
             dataSource
@@ -232,12 +232,12 @@ namespace Test.Yoink
 
 
             //Assert
-            
-           
+
+
             Assert.Equal("d44d63fc-ffa8-4eb7-b81d-644547136d30", profile.Fk_UserID);
             Assert.Equal(profiledto.Name, profile.Name);
             Assert.True(true);
-            
+
         }
 
 
@@ -499,7 +499,7 @@ namespace Test.Yoink
 
 
             var dataSource3 = new Mock<IConfiguration>();
-            
+
             if(buy == null) {}
 
             dataSource
@@ -608,7 +608,7 @@ namespace Test.Yoink
                 .Setup(I => I.GetInvestmentByPortfolioIDAsync(It.IsAny<GetInvestmentDto>()))
                 .Returns(Task.FromResult(newinvestment));
 
-            if(investmentmockList != null) 
+            if(investmentmockList != null)
             {
                 var dataSource3 = new Mock<IdbsRequests>();
                 dataSource
@@ -1349,7 +1349,13 @@ namespace Test.Yoink
 
 
         }
-    }
+
+        [Fact]
+        public async Task UpdatePostAsync(){
+
+        }
+
+    }// End of class
     //Need to add comments to everything!
-        
+
 }
