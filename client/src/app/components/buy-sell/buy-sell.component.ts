@@ -9,7 +9,6 @@ import { BuySellToPortfolioService } from 'src/app/Services/buy-sell/buy-sell-to
 import { BuyDto } from 'src/app/Models/buy-sell/buySellApiCall';
 import { GetSingleInvestmentService } from 'src/app/Services/get-single-investment/get-single-investment.service';
 
-
 @Component({
   selector: 'app-buy-sell',
   templateUrl: './buy-sell.component.html',
