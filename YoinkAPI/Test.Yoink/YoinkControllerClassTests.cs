@@ -575,7 +575,6 @@ private Helpers helpers = new Helpers();
             dataSource
                 .Setup(s => s.UpdatePostAsync(It.IsAny<string>(),It.IsAny<EditPostDto>()))
                 .ReturnsAsync(returnedPostFromRepo);
-            Console.WriteLine($"\n\nThis is a returned obj ID: { dataSource.Object.UpdatePostAsync(fakeUser, editPostDto).Result?.PostID}\n\n");
 
             var controller_datasource = new YoinkController(dataSource.Object){};
             controller_datasource.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
@@ -583,11 +582,8 @@ private Helpers helpers = new Helpers();
             //-------------------Act Section ----------------
             ActionResult<Post?> returnedActionResultOBJ = await controller_datasource.UpdatePostAsync(editPostDto);
             //The actual object returned will be null until converted to a variable to hold the data
-            Console.WriteLine($"\n\nThis is a returned obj ID from the controller: {returnedActionResultOBJ.Value?.PostID}\n\n");
             var okResultforOBJ = returnedActionResultOBJ?.Result as OkObjectResult;
-            Console.WriteLine($"\n\nThis is a returned obj ID: {okResultforOBJ?.Value}\n\n");
             Post? resultOBJ = okResultforOBJ?.Value as Post;
-            Console.WriteLine($"\n\nThis is a returned obj ID: {resultOBJ?.PostID}\n\n");
 
 
             //-------------------Assert Section ----------------
@@ -1210,13 +1206,10 @@ private Helpers helpers = new Helpers();
 
             // Assert
 
-            Assert.IsType<ActionResult<bool>>(result);
-            Assert.True(controller.ModelState.IsValid);
-            Assert.Equal(true, okResult?.Value);
-
+            Assert.IsType<ActionResult<Guid?>>(result);//The controller method returns a guid
             Assert.NotNull(okResult);
             Assert.True(controller.ModelState.IsValid);
-            Assert.Equal(postId, okResult?.Value);
+            Assert.Equal(postId, okResult?.Value);//a guid is equal to a guid
 
         }
 
