@@ -245,6 +245,14 @@ namespace Test.Yoink
             );
         }
 
+        public GetInvestmentDto fakeGetInvestmentDto()
+        {
+            return new GetInvestmentDto(
+                Guid.NewGuid(),
+                "AAPL"
+            );
+        }
+
 
 
         public SellDto fakeSellDto()

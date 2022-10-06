@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Test.Yoink
 {
@@ -113,7 +112,237 @@ namespace Test.Yoink
             Assert.True(result);
         }
 
-        
+        /// <summary>
+        /// This method tests to see if the user has gotten their recently bought order from the database by their portfolio ID
+        /// </summary>
+        /// <returns>returns an asyc Task as a Buy Object</returns>
+        [Fact]
+        public async Task Testing_GetRecentBuyByPortfolioId_if_GOTTEN()
+        {
+            // Arrange
+            Buy expectedOBJ = helpers.fakeBuy();
+            expectedOBJ.Fk_PortfolioID = new Guid("86d66000-5874-427a-8682-1ed02f4bb2ca");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            Buy? result = null;
+            
+            // Act
+            result = await TheClassBeingTested.GetRecentBuyByPortfolioId(expectedOBJ.Fk_PortfolioID);
+
+
+            // Assert
+            Assert.NotNull(result);
+            if(result != null)
+            {
+                Assert.IsType<Guid>(result?.BuyID);
+                Assert.Equal(expectedOBJ.Fk_PortfolioID, result?.Fk_PortfolioID);
+            }
+        }//End of GetRecentBuyByPortfolioId GOTTEN
+
+
+        /// <summary>
+        /// This method tests to see if the user did not get their recently bought order from the database by their portfolio ID
+        /// </summary>
+        /// <returns>returns an asyc Task as a Buy Object</returns>
+        [Fact]
+        public async Task Testing_GetRecentBuyByPortfolioId_if_NOT_GOTTEN()
+        {
+            // Arrange
+            Buy expectedOBJ = helpers.fakeBuy();
+            //This portfolioID will be incorrect and therefore will return a null OBJ
+            expectedOBJ.Fk_PortfolioID = Guid.NewGuid();
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            Buy? result = await TheClassBeingTested.GetRecentBuyByPortfolioId(expectedOBJ.Fk_PortfolioID);
+
+            // Assert
+            Assert.Null(result);
+            if(result == null)
+            {
+                Assert.Equal(null, result?.Fk_PortfolioID);
+            }
+        }//End of GetRecentBuyByPortfolioId NOT GOTTEN
+
+
+        /// <summary>
+        /// This method tests to see if the user has gotten their recently sold order from the database by their portfolio ID
+        /// </summary>
+        /// <returns>returns an asyc Task as a Sell Object</returns>
+        [Fact]
+        public async Task Testing_GetRecentSellByPortfolioId_if_GOTTEN()
+        {
+            // Arrange
+            Sell expectedOBJ = helpers.fakeSell();
+            expectedOBJ.Fk_PortfolioID = new Guid("218e6e41-3932-4eb4-a12d-dce5ff367b73");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            Sell? result = await TheClassBeingTested.GetRecentSellByPortfolioId(expectedOBJ.Fk_PortfolioID);
+
+            // Assert
+            Assert.NotNull(result);
+            if(result != null)
+            {
+                Assert.IsType<Guid>(result?.SellID);
+                Assert.Equal(expectedOBJ.Fk_PortfolioID, result?.Fk_PortfolioID);
+            }
+        }//End of GetRecentSellByPortfolioId Test - GOTTEN
+
+
+
+        /// <summary>
+        /// This method tests to see if the user did not get their recently sold order from the database by their portfolio ID
+        /// </summary>
+        /// <returns>returns an asyc Task as a Sell Object</returns>
+        [Fact]
+        public async Task Testing_GetRecentSellByPortfolioId_if_NOT_GOTTEN()
+        {
+            // Arrange
+            Sell expectedOBJ = helpers.fakeSell();
+            expectedOBJ.Fk_PortfolioID = new Guid("000e6e41-3932-4eb4-a12d-dce5ff367b00");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+
+            Sell? result = await TheClassBeingTested.GetRecentSellByPortfolioId(expectedOBJ.Fk_PortfolioID);
+
+            // Assert
+            Assert.Null(result);
+            if(result == null)
+            {
+                Assert.Equal(null, result?.Fk_PortfolioID);
+            }
+        }//End of GetRecentSellByPortfolioId Test - NOT GOTTEN
+
+
+        /// <summary>
+        /// This method tests to see if the user has successfully updated their investment's current stock price
+        /// </summary>
+        /// <returns>returns an asyc Task as a Sell Object</returns>
+        [Fact]
+        public async Task Testing_UpdateCurrentPriceAsync_if_Updated()
+        {
+            // Arrange
+            GetInvestmentDto dto = helpers.fakeGetInvestmentDto();
+            dto.PortfolioId = new Guid("218e6e41-3932-4eb4-a12d-dce5ff367b73");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            bool result = await TheClassBeingTested.UpdateCurrentPriceAsync(dto, 101);
+
+            // Assert
+            Assert.True(result);
+            if(result == true)
+            {
+                Assert.Equal(true, result);
+            }
+        }//End of UpdateCurrentPriceAsync Test - Updated
+
+
+        /// <summary>
+        /// This method tests to see if the user has successfully updated their investment's current stock price
+        /// </summary>
+        /// <returns>returns an asyc Task as a Sell Object</returns>
+        [Fact]
+        public async Task Testing_UpdateCurrentPriceAsync_if_Not_Updated()
+        {
+            // Arrange
+            GetInvestmentDto dto = helpers.fakeGetInvestmentDto();
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            bool result = await TheClassBeingTested.UpdateCurrentPriceAsync(dto, 101);
+
+            // Assert
+            Assert.False(result);
+            if(result == false)
+            {
+                Assert.Equal(false, result);
+            }
+        }//End of UpdateCurrentPriceAsync Test - Not Updated
+
+
+        /// <summary>
+        /// This method tests to see if the user has successfully updated their investment's current stock price
+        /// </summary>
+        /// <returns>returns an asyc Task as a Sell Object</returns>
+        [Fact]
+        public async Task Testing_GetInvestmentByPortfolioIDAsync_if_Updated()
+        {
+            // Arrange
+            GetInvestmentDto dto = helpers.fakeGetInvestmentDto();
+            dto.PortfolioId = new Guid("218e6e41-3932-4eb4-a12d-dce5ff367b73");
+
+
+            var fakeConfig = new Mock<IConfiguration>();
+
+            fakeConfig.SetupGet(fConf => fConf["ConnectionStrings:DefaultConnection"])
+                .Returns(helpers.ConnString);
+
+
+            var TheClassBeingTested = new dbsRequests(fakeConfig.Object);
+
+            // Act
+            bool result = await TheClassBeingTested.UpdateCurrentPriceAsync(dto, 101);
+
+            // Assert
+            Assert.True(result);
+            if(result == true)
+            {
+                Assert.Equal(true, result);
+            }
+        }//End of UpdateCurrentPriceAsync Test - Updated
+
+
         // [Fact]
         // public void TestingCreateUserProfile()
         // {
