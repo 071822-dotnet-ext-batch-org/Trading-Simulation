@@ -7,6 +7,8 @@ import { GetMyPortfoliosService } from 'src/app/Services/get-my-portfolios/get-m
 import { Portfolio } from 'src/app/Models/Portfolio';
 import { BuySellToPortfolioService } from 'src/app/Services/buy-sell/buy-sell-to-portfolio.service';
 import { GetSingleInvestmentService } from 'src/app/Services/get-single-investment/get-single-investment.service';
+import { Router, RouterState } from '@angular/router';
+
 
 @Component({
   selector: 'app-buy-sell',
@@ -16,12 +18,15 @@ import { GetSingleInvestmentService } from 'src/app/Services/get-single-investme
 
 export class BuySellComponent implements OnInit {
 
+  
+
   // Creates instances from services located in the Services/buy-sell folder
   constructor(
     private buySell: BuySellService,
     private GMP: GetMyPortfoliosService,
     private BSP: BuySellToPortfolioService,
-    private GSI: GetSingleInvestmentService
+    private GSI: GetSingleInvestmentService,
+    private route: Router
   ) { }
 
   title = 'Buy and Sell'; // Page title
@@ -125,7 +130,7 @@ export class BuySellComponent implements OnInit {
       this.buyResult = br;
       this.success = 'Transaction completed';
       this.txLoading = false;
-      console.log(br);
+      this.route.navigate(['Portfolio']);
     });
   }
 
@@ -136,6 +141,7 @@ export class BuySellComponent implements OnInit {
       this.sellResult = sr
       this.success = 'Transaction completed';
       this.txLoading = false;
+      this.route.navigate(['Portfolio']);
     })
   }
 
