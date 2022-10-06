@@ -53,6 +53,19 @@ export class BuySellComponent implements OnInit {
   // transfer object to our database once all required fields are filled. If the uese choses the
   // sell option then it will chose the createSell() method and send a data transfer object to
   // our database and removes the order from the database.
+  private playSound_BUY(){
+    let yoinkPigSound = new Audio();
+    yoinkPigSound.src = "../../../assets/Yoink_Sound_Effects/Yoink_BUYORDER_Pig.mp3";
+    yoinkPigSound.load();
+    yoinkPigSound.play();
+  }
+
+  private playSound_SELL(){
+    let yoinkPigSound = new Audio();
+    yoinkPigSound.src = "../../../assets/Yoink_Sound_Effects/Yoink_SELLORDER_Pig.mp3";
+    yoinkPigSound.load();
+    yoinkPigSound.play();
+  }
   public onPayment() {
     this.success = '';
     this.txLoading = true;
@@ -125,6 +138,7 @@ export class BuySellComponent implements OnInit {
       this.buyResult = br;
       this.success = 'Transaction completed';
       this.txLoading = false;
+      this.playSound_BUY();//plays the sound effect on successful buy order
       console.log(br);
     });
   }
@@ -136,6 +150,7 @@ export class BuySellComponent implements OnInit {
       this.sellResult = sr
       this.success = 'Transaction completed';
       this.txLoading = false;
+      this.playSound_SELL();//plays the sound effect on successful sell order
     })
   }
 
