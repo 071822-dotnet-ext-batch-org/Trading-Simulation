@@ -20,14 +20,14 @@ namespace RepoLayer
             _config = config;
 
             
-            if (string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Development", StringComparison.InvariantCultureIgnoreCase))
-            {
-                _conn = new SqlConnection(_config["ConnectionStrings:TestingConnection"]);
-            }
-            else
-            {
-                _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
-            }    
+            // if (!string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Development", StringComparison.InvariantCultureIgnoreCase))
+            // {
+            //     _conn = new SqlConnection(_config["ConnectionStrings:TestingConnection"]);
+            // }
+            // else
+            // {
+            _conn = new SqlConnection(_config["ConnectionStrings:DefaultConnection"]);
+            // }    
 
         }
 

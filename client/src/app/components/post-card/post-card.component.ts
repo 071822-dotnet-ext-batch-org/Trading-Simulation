@@ -98,6 +98,7 @@ export class PostCardComponent implements OnInit {
   addLike(): void {
     this.ALP.addLike(this.post.postID).subscribe(numberOfLikes => {
       this.post.likes = numberOfLikes;
+      console.log(numberOfLikes);
       this.liked=true;
     })
   }
