@@ -37,7 +37,7 @@ namespace APILayer.Controllers
             if (ModelState.IsValid)
             {
                 string? auth0Id = User.Identity?.Name;
-                Console.WriteLine(auth0Id);
+                
                 Profile? newProfile = await this._businessLayer.CreateProfileAsync(auth0Id, p);
                 return Created("", newProfile);
             }
@@ -442,7 +442,7 @@ namespace APILayer.Controllers
         /// </summary>
         /// <param name="like"></param>
         /// <returns>likeCount integer, (and triggers a +1 like to the Post on the Posts table in the database.)</returns>
-        [AllowAnonymous]
+        
         [HttpPost("add-like-on-post")]
         public async Task<ActionResult<int?>> CreateLikeOnPostAsync(LikeDto like)
         {
@@ -452,6 +452,7 @@ namespace APILayer.Controllers
                 if(auth0UserId != null)
                 {
                     int? likeCount = await this._businessLayer.CreateLikeOnPostAsync(like, auth0UserId);
+
                     return Created("", likeCount);
                 }
                 else
@@ -467,8 +468,8 @@ namespace APILayer.Controllers
         /// </summary>
         /// <param name="unlike">LikeDto</param>
         /// <returns>updated likeCount integer, (and triggers a -1 like to the Post on the Posts table in the database.)</returns>
+        
         [HttpDelete("remove-like-on-post")]
-        [AllowAnonymous]
         public async Task<ActionResult<int?>> DeleteLikeOnPostAsync(LikeDto unlike)
         {
             if (ModelState.IsValid)

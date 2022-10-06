@@ -417,7 +417,8 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     public async Task<int?> CreateLikeOnPostAsync(LikeDto like, string? auth0UserId)
     {
         bool checkIfAlreadyHaveALike = await this._repoLayer.CheckIfUserAlreadyHasLike_OnPost(auth0UserId, like.PostId);
-        if(checkIfAlreadyHaveALike == true)
+
+        if(checkIfAlreadyHaveALike == false)
         {
             bool createdLike = await this._repoLayer.CreateLikeOnPostAsync(like, auth0UserId);
             if (createdLike)
@@ -442,6 +443,7 @@ public class YoinkBusinessLayer : IYoinkBusinessLayer
     public async Task<int?> DeleteLikeOnPostAsync(LikeDto unlike, string? auth0UserId)
     {
         bool checkIfAlreadyHaveALike = await this._repoLayer.CheckIfUserAlreadyHasLike_OnPost(auth0UserId, unlike.PostId);
+        
         if(checkIfAlreadyHaveALike == true)
         {
             bool removedLike = await this._repoLayer.DeleteLikeOnPostAsync(unlike, auth0UserId);
