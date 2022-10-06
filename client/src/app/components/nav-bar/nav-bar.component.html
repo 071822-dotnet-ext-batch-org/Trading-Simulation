@@ -12,7 +12,7 @@
 
     <!-- <a><button style="font-size:large" mat-button color="primary" [routerLink]="'/BuySell'" routerLinkActive="active" *ngIf="auth.user$ | async as user">Buy/Sell</button></a> -->
     
-    <a><button style="font-size:large" mat-button color="" [routerLink]="'/Posts'">Posts</button></a>
+    <a><button style="font-size:large" mat-button color="" [routerLink]="'/Posts'" *ngIf="auth.user$ | async as user">Posts</button></a>
 
     <!-- <a><button style="font-size:large" mat-button color="primary" (click)="'/Friends'" *ngIf="auth.user$ | async as user">Friends</button></a> (Stretch goal)-->
     

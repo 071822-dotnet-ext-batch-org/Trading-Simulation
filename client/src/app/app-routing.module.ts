@@ -23,9 +23,8 @@ const routes: Routes = [
   {path: 'home', component: HomeComponent },
   {path: 'user', component: UserComponent, canActivate: [AuthGuard]},
   {path: 'News', component: NewsComponent},
-  {path: 'Profile', component: ProfileComponent },
-  {path: 'Posts', component: PostsComponent }, 
-  {path: "postfeed", component: PostsComponent},//comeback for this
+  {path: 'Profile', component: ProfileComponent, canActivate: [AuthGuard]},
+  {path: 'Posts', component: PostsComponent, canActivate: [AuthGuard]}, 
   {path: "AboutUs", component: AboutUsComponent}
 
 
