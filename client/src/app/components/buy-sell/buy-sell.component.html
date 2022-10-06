@@ -35,7 +35,7 @@
             <input type="text" matInput #input maxlength="7" placeholder="Quantity" [(ngModel)]="qty"
               [ngModelOptions]="{standalone: true}" [required]="true">
           </mat-form-field>
-          <div class="sm-txt-container">
+          <div class="sm-txt-container"> <!-- Makes sure quantity is not 0-->
             <p id="sm-text" *ngIf="invQty != 0">Amount held: {{invQty}}</p>
           </div>
         </div>
@@ -51,7 +51,7 @@
         <button class="buy-btn" (click)="onPayment()" [routerLink]="'/Portfolio'">Payment</button>
       </div>
     </form> <!-- End of Buy/sell form -->
-    <div>
+    <div> <!-- Adds spinning wheel when loading -->
       <mat-progress-spinner mode="indeterminate" *ngIf="txLoading"></mat-progress-spinner>
       <p>{{success}}</p>
     </div>
@@ -62,7 +62,7 @@
         <mat-label>Symbol search</mat-label>
         <input matInput maxlength="5" placeholder="Ex. AAPL" [formControl]="symbolSearch"> <!--Ticker search box-->
         <button matSuffix mat-icon-button (click)="getTickerData(symbolSearch.value)"
-          (submit)="getTickerData(symbolSearch.value)"> <!-- returns the ticker data from Polygon.io atter running getTickerData-->
+          (submit)="getTickerData(symbolSearch.value)"> <!-- Button returns the ticker data from Polygon.io atter running getTickerData-->
           <mat-icon>search</mat-icon>
         </button>
       </mat-form-field>

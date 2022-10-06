@@ -176,18 +176,22 @@ namespace Test.Yoink
             List<Portfolio?> PList = new List<Portfolio?>();
             List<Buy> BList = new List<Buy>();
 
+            int investmentAmt = 5;
+            int portfolioAmt = 3;
+            int buyAmt = 6;
 
-            for(int i = 0; i < random.Next(10); i++)
+
+            for(int i = 0; i < investmentAmt; i++)
             {
                 IList.Add(fakeInvestment());
             }
 
-            for(int i = 0; i < random.Next(10); i++)
+            for(int i = 0; i < portfolioAmt; i++)
             {
                 PList.Add(fakePortfolio());
             }
 
-            for(int i = 0; i < random.Next(10); i++)
+            for(int i = 0; i < buyAmt; i++)
             {
                 BList.Add(fakeBuy());
             }
